@@ -9,147 +9,114 @@ public class StageEditorWindow : Editor
 {
 
 	
-
-
-
-
 	[MenuItem("Editor/StageEditorWindow")]
 	private static void Create()
 	{
 		// 生成
-		EditorWindow.GetWindow<BlockWindow>("ぶろっくえでた").init();
-		EditorWindow.GetWindow<FaceWindow>("ふぇいすえでた", typeof(BlockWindow));
-		
+		EditorWindow.GetWindow<BlockWindow>("BlockEditor").Init();
+		EditorWindow.GetWindow<FaceWindow>("FaceEditor", typeof(BlockWindow));	
 	}
 }
 
 public class BlockWindow : EditorWindow
 {
+	/// <summary>
+	/// ブロックエディタ
+	/// </summary>
 
 	// マップエディタのマスの数
-	private int mapSize = 3;
+	private int _MapSize = 3;
 	// グリッドの大きさ、小さいほど細かくなる
-	private float gridSize = 100.0f;
+	private float _GridSize = 100.0f;
 	// グリッドの四角
-	private Rect[,] gridRect;
+	private Rect[,] _GridRect;
 
-	//class BlockList
- //   {
-	//	public Texture2D tex;
-	//	public Rect r;
- //   }
+	private Texture2D[,] _BlockTex = new Texture2D[3,3];
+	private Rect[,] _BlockPos = new Rect[3,3];
 
-	// マップデータ
-	private Texture2D[,] _blockTex = new Texture2D[3,3];
-	private Rect[,] _blockPos = new Rect[3,3];
+	private Vector2 _Center;
 
-	private Vector2 center;
+	private bool _BlockChoice = false;
 
-	private bool blockChoice = false;
+	private Object _Block;
 
-	private Object _block;
+	private Vector2 _ClickPos;
 
-	private Vector2 _clickPos;
-	//private Editor _editor;
-	//private ScriptableObject _target;
+	private List<GameObject> _Palette = new List<GameObject>();
+
+	//ブロックのプレハブを取得するフォルダパス
+	private string _Path = "Assets/Scenes/TaikiOkahara/StageBlock";
+
+	private int _PaletteIndex;
+
+	bool _PaintMode;
+
+	private Texture2D _ChoicePrefabTex;
+
+
+	/// <summary>
+	/// エディタ設定
+	/// </summary>
 
 	//スクロール位置
-	private Vector2 _scrollPosition = Vector2.zero;
+	private Vector2 _ScrollPosition = Vector2.zero;
 
-	[SerializeField]
-	private List<GameObject> palette = new List<GameObject>();
+	/// <summary>
+	/// 関数
+	/// </summary>
 
-	private string path = "Assets/Scenes/TaikiOkahara/StageBlock";
-
-    private void OnFocus()
+	private void OnFocus()
     {
 		RefreshPalette();
     }
-    public void init()
+    public void Init()
 	{
-
-		center.x = position.size.x * 0.5f - (gridSize * mapSize * 0.5f);
-		center.y = 50.0f;
-
-		//_blockTex = new Texture2D[mapSize, mapSize];
-		//_blockPos = new Rect[mapSize, mapSize];
+		_Center.x = position.size.x * 0.5f - (_GridSize * _MapSize * 0.5f);
+		_Center.y = 50.0f;
 
 		// マップデータを初期化
-
-		for (int i = 0; i < mapSize; i++)
+		for (int i = 0; i < _MapSize; i++)
 		{
-			for (int j = 0; j < mapSize; j++)
+			for (int j = 0; j < _MapSize; j++)
 			{
-				_blockTex[i, j] = null;
-				//map[i, j].r = new Rect();
+				_BlockTex[i, j] = null;
 			}
 		}
-		
-		
-		
-
-		Debug.Log("通った");
 	}
-
-
-
-	// A list containing the available prefabs.
-	
 
 	private void RefreshPalette()
 	{
-		palette.Clear();
+		_Palette.Clear();
 
-		string[] prefabFiles = System.IO.Directory.GetFiles(path, "*.prefab");
+		string[] prefabFiles = System.IO.Directory.GetFiles(_Path, "*.prefab");
 		foreach (string prefabFile in prefabFiles)
-			palette.Add(AssetDatabase.LoadAssetAtPath(prefabFile, typeof(GameObject)) as GameObject);
+			_Palette.Add(AssetDatabase.LoadAssetAtPath(prefabFile, typeof(GameObject)) as GameObject);
 	}
+	
 
-	[SerializeField]
-	private int paletteIndex;
-
-	// Called to draw the MapEditor windows.
-
-	bool paintMode;
-
-	private Texture2D _choicePrefab;
 
 	private void OnGUI()
 	{
-
-
 		BeginWindows();
+		_ScrollPosition = EditorGUILayout.BeginScrollView(_ScrollPosition);
 
-		//描画範囲が足りなければスクロール出来るように
-		_scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
 
-		//paintMode = GUILayout.Toggle(paintMode, "Start painting", "Button", GUILayout.Height(420f));
-
-		// Get a list of previews, one for each of our prefabs
+		//プレハブを検出してテクスチャ取得
 		List<GUIContent> paletteIcons = new List<GUIContent>();
-		foreach (GameObject prefab in palette)
+		foreach (GameObject prefab in _Palette)
 		{
-			// Get a preview for the prefab
 			Texture2D texture = AssetPreview.GetAssetPreview(prefab);
 			paletteIcons.Add(new GUIContent(texture));
-			_choicePrefab = texture;
+			_ChoicePrefabTex = texture;
 		}
 
 		GUILayout.Space(420);
 
-		// Display the grid
-		paletteIndex = GUILayout.SelectionGrid(paletteIndex, paletteIcons.ToArray(), 2);
+		_PaletteIndex = GUILayout.SelectionGrid(_PaletteIndex, paletteIcons.ToArray(), 2);
 
-		if(paintMode)
+		if(_PaintMode)
         {
-			//Vector2 cellCenter = GetSelectedCell(); // Refactoring, I moved some code in this function
-
-
-			//DisplayVisualHelp(cellCenter);
-			//HandleSceneViewInputs(cellCenter);
-
-			// Refresh the view
-			//sceneView.Repaint();
+			//None
 		}
 
 		
@@ -157,36 +124,21 @@ public class BlockWindow : EditorWindow
 		//現在のサイズ表示
 		EditorGUILayout.LabelField($"現在のサイズ : {position.size}");
 
-
-		center.x = position.size.x * 0.5f - (gridSize * mapSize * 0.5f);
-		//face01 = (GameObject)EditorGUILayout.ObjectField("Face01",face01,typeof(GameObject))
-
-		//EditorGUI.BeginChangeCheck();
-		//_target = (ScriptableObject)EditorGUILayout.ObjectField("ScriptableObject", _target, typeof(ScriptableObject), true);
-		//if (EditorGUI.EndChangeCheck())
-		//{
-		//	_editor = Editor.CreateEditor(_target);
-		//}
-
-		//if (_editor == null)
-		//	return;
-
-		//_editor.OnInspectorGUI();
-
+		
+		_Center.x = position.size.x * 0.5f - (_GridSize * _MapSize * 0.5f);
+		
 
 		// グリッドデータを生成
-		gridRect = CreateGrid(mapSize);
+		_GridRect = CreateGrid(_MapSize);
 
 		// グリッド線を描画する
-		for (int yy = 0; yy < mapSize; yy++)
+		for (int yy = 0; yy < _MapSize; yy++)
 		{
-			for (int xx = 0; xx < mapSize; xx++)
+			for (int xx = 0; xx < _MapSize; xx++)
 			{
-				DrawGridLine(gridRect[yy, xx]);
+				DrawGridLine(_GridRect[yy, xx]);
 
-				//map = new BlockList[mapSize, mapSize];
-
-				_blockPos[yy, xx] = gridRect[yy, xx];
+				_BlockPos[yy, xx] = _GridRect[yy, xx];
 			}
 		}
 
@@ -194,41 +146,20 @@ public class BlockWindow : EditorWindow
 		Event e = Event.current;
 		if (e.type == EventType.MouseDown)
 		{
-			_clickPos =Event.current.mousePosition;
-			//int xx;
-			//// x位置を先に計算して、計算回数を減らす
-			//for (xx = 0; xx < mapSize; xx++)
-			//{
-			//	Rect r = gridRect[0, xx];
-			//	if (r.position.x + center.x <= pos.x && pos.x <= r.position.x + center.x + r.width)
-			//	{
-			//		break;
-			//	}
-			//}
+			_ClickPos =Event.current.mousePosition;
 
-            // 後はy位置だけ探す
-			for (int xx = 0;xx < mapSize; xx++)
+            
+			for (int xx = 0;xx < _MapSize; xx++)
             {
-				for (int yy = 0; yy < mapSize; yy++)
+				for (int yy = 0; yy < _MapSize; yy++)
 				{
-					if (gridRect[yy, xx].Contains(_clickPos))
+					if (_GridRect[yy, xx].Contains(_ClickPos))
 					{
-						// 消しゴムの時はデータを消す
-						//if (parent.SelectedImagePath.IndexOf("000") > -1)
-						//{
-						//	map[yy, xx] = "";
-						//}
-						//else
-						{
-							//_blockTex[yy, xx] = _choicePrefab;
-							//Debug.Log("map[" + yy + "," + xx + "]の範囲内");
-							
-						}
-
-						_blockTex[yy, xx] = _choicePrefab;
+						
+						_BlockTex[yy, xx] = _ChoicePrefabTex;
 
 						//範囲内なら右クリック可能にする
-						blockChoice = true;
+						_BlockChoice = true;
 
 						Repaint();
 						break;
@@ -238,14 +169,14 @@ public class BlockWindow : EditorWindow
            
         }
 
-		for (int i = 0; i < mapSize; i++)
+		for (int i = 0; i < _MapSize; i++)
 		{
-			for (int j = 0; j < mapSize; j++)
+			for (int j = 0; j < _MapSize; j++)
 			{
-				if(_blockTex[i,j] != null)
+				if(_BlockTex[i,j] != null)
                 {
 					
-					EditorGUI.DrawPreviewTexture(_blockPos[i,j],_blockTex[i,j]);
+					EditorGUI.DrawPreviewTexture(_BlockPos[i,j],_BlockTex[i,j]);
 				}
 			}
 		}
@@ -258,9 +189,8 @@ public class BlockWindow : EditorWindow
 		var ev = Event.current;
 		if (ev.type == EventType.ContextClick)
 		{
-			if(blockChoice)
+			if(_BlockChoice)
             {
-				// MyEditorWindowの背景でマウスを右クリックするとここに来る。 
 				var menu = new GenericMenu();
 				menu.AddItem(new GUIContent("ブロックの追加"), false, AddBlock);
 				menu.AddItem(new GUIContent("ブロックの削除"), false, DeleteBlock);
@@ -270,52 +200,25 @@ public class BlockWindow : EditorWindow
 			
 		}
 
-		// 選択した画像を描画する
-		//for (int yy = 0; yy < mapSize; yy++)
-		//{
-		//	for (int xx = 0; xx < mapSize; xx++)
-		//	{
-		//		if (map[yy, xx] != null && map[yy, xx].Length > 0)
-		//		{
-		//			Texture2D tex = (Texture2D)AssetDatabase.LoadAssetAtPath(map[yy, xx], typeof(Texture2D));
-		//			GUI.DrawTexture(gridRect[yy, xx], tex);
-		//		}
-		//	}
-		//}
 	}
 
 
 
 	void AddBlock()
 	{
-		//// GUI
-		//GUILayout.BeginHorizontal();
-		//GUILayout.Label("Block : ", GUILayout.Width(110));
-		//_block = EditorGUILayout.ObjectField(_block, typeof(UnityEngine.Object), true);
-		//GUILayout.EndHorizontal();
-		//EditorGUILayout.Space();
-
-		//新しいゲームオブジェクトを作成
-		//new GameObject("New GameObject");
-
-		EditorWindow.GetWindow<BlockCreateWindow>("CreateBlock").init();
-
-
-
+		EditorWindow.GetWindow<BlockCreateWindow>("CreateBlock").Init();
 	}
 
 	void DeleteBlock()
 	{
-		// 後はy位置だけ探す
-		for (int xx = 0; xx < mapSize; xx++)
+		
+		for (int xx = 0; xx < _MapSize; xx++)
 		{
-			for (int yy = 0; yy < mapSize; yy++)
+			for (int yy = 0; yy < _MapSize; yy++)
 			{
-				if (gridRect[yy, xx].Contains(_clickPos))
+				if (_GridRect[yy, xx].Contains(_ClickPos))
 				{
-					
-					_blockTex[yy, xx] = null;
-
+					_BlockTex[yy, xx] = null;
 					Repaint();
 					break;
 				}
@@ -324,37 +227,22 @@ public class BlockWindow : EditorWindow
 	}
 
 
-	//private void OnSceneGUI()
-	//{
-	//	_postOnSceneGUI?.Invoke();
-	//	_postOnSceneGUI = null;
-	//}
-
-
-	//void OnGUI()
-	//{
-
-
-	//}
-
-
-
 	// グリッドデータを生成
 	private Rect[,] CreateGrid(int div)
 	{
 		int sizeW = div;
 		int sizeH = div;
 
-		float x = center.x;
-		float y = center.y;
-		float w = gridSize;
-		float h = gridSize;
+		float x = _Center.x;
+		float y = _Center.y;
+		float w = _GridSize;
+		float h = _GridSize;
 
 		Rect[,] resultRects = new Rect[sizeH, sizeW];
 
 		for (int yy = 0; yy < sizeH; yy++)
 		{
-			x = center.x;
+			x = _Center.x;
 			for (int xx = 0; xx < sizeW; xx++)
 			{
 				Rect r = new Rect(new Vector2(x, y), new Vector2(w, h));
@@ -370,8 +258,6 @@ public class BlockWindow : EditorWindow
 	// グリッド線を描画
 	private void DrawGridLine(Rect r)
 	{
-		
-
 		// upper line
 		Handles.DrawLine(
 			new Vector2(r.position.x, r.position.y),
@@ -398,33 +284,10 @@ public class BlockWindow : EditorWindow
 public class FaceWindow : EditorWindow
 {
 	//スクロール位置
-	private Vector2 _scrollPosition = Vector2.zero;
+	private Vector2 _ScrollPosition = Vector2.zero;
 
-	//public static CreaterBlockWindow WillAppear(MapCreater _parent)
-	//{
-	//	MapCreaterSubWindow window = (MapCreaterSubWindow)EditorWindow.GetWindow(typeof(MapCreaterSubWindow), false);
-	//	window.Show();
-	//	window.minSize = new Vector2(WINDOW_W, WINDOW_H);
-	//	window.SetParent(_parent);
-	//	window.init();
-	//	return window;
-	//}
-	//window.SetParent(_parent);
-
-	Vector2 buttonSize = new Vector2(100, 100);
-
-	Vector2 buttonMinSize = new Vector2(100, 20);
-	Vector2 buttonMaxSize = new Vector2(1000, 200);
-
-	bool expandWidth = true;
-	bool expandHeight = true;
-
-	//bool _testToggle01 = false;
-	//bool _testToggle02 = false;
-	//bool _testToggle03 = false;
-
-	//GUISkin _skin = (GUISkin)AssetDatabase.LoadAssetAtPath("Assets/Scenes/Editor/EditorSkin", typeof(GUISkin));
-	int objectSelectionToolbar = 0;
+	
+	int _SelectFace = 0;
 
 
 	int _curView;
@@ -432,74 +295,31 @@ public class FaceWindow : EditorWindow
 
 	void OnGUI()
 	{
+		_ScrollPosition = EditorGUILayout.BeginScrollView(_ScrollPosition);
 
-		
-
-
-		//描画範囲が足りなければスクロール出来るように
-		_scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
-
-		
 		
 
 		EditorGUILayout.BeginVertical(GUI.skin.box);
 		{
+			string[] selectFacName = new string[] { "", "Face04", "", "Face02", "Face01", "Face03", "", "Face05", "", "", "Face06", "" };
+			string[] selectFacePos = new string[] { "", "", "", "", "", "", "", "", "", "", "", "" };
 
-
-			string[] stationSelectionToolbarOptions = new string[] { "", "Face04", "", "Face02", "Face01", "Face03", "", "Face05", "", "", "Face06", "" };
-			string[] stationSelectionToolbarOptions2 = new string[] { "", "", "", "", "", "", "", "", "", "", "", "" };
-
-			objectSelectionToolbar = GUILayout.Toolbar(GUILayout.SelectionGrid(objectSelectionToolbar, stationSelectionToolbarOptions, 3, GUILayout.Width(300), GUILayout.Height(400)), stationSelectionToolbarOptions2, GUILayout.Height(10));
-
-
-
-
-			//GUI.SelectionGrid(Rect.zero, objectSelectionToolbar, stationSelectionToolbarOptions, 2);
-
-			//GUILayout.Space(50);
-
+			_SelectFace = GUILayout.Toolbar(GUILayout.SelectionGrid(_SelectFace, selectFacName, 3, GUILayout.Width(300), GUILayout.Height(400)), selectFacePos, GUILayout.Height(10));
 		}
 		EditorGUILayout.EndVertical();
-
-
-		//// 自動的にサイズ変更される範囲を指定する場合は
-		//// GUILayout.MinWidth/MaxWidth/MinHeight/MaxHeightを使う。
-		//buttonMinSize = EditorGUILayout.Vector2Field("ButtonMinSize", buttonMinSize);
-		//buttonMaxSize = EditorGUILayout.Vector2Field("ButtonMaxSize", buttonMaxSize);
-
-
-		//if (GUILayout.Button("最小最大指定ボタン",
-		//					  GUILayout.MinWidth(buttonMinSize.x), GUILayout.MinHeight(buttonMinSize.y),
-		//					  GUILayout.MaxWidth(buttonMaxSize.x), GUILayout.MaxHeight(buttonMaxSize.y)))
-		//{
-		//	Debug.Log("最小最大指定ボタン");
-		//}
-
-		//// 有効範囲内全体に広げるかどうかは
-		//// GUILayout.ExpandWidth/ExpandHeightで指定する。
-		//expandWidth = EditorGUILayout.Toggle("ExpandWidth", expandWidth);
-		//expandHeight = EditorGUILayout.Toggle("ExpandHeight", expandHeight);
-		//if (GUILayout.Button("Expandボタン", GUILayout.ExpandWidth(expandWidth), GUILayout.ExpandHeight(expandHeight)))
-		//{
-		//	Debug.Log("Expandボタン");
-		//}
-
-		
-
 
 
 		//スクロール箇所終了
 		EditorGUILayout.EndScrollView();
 
-
 		using (new EditorGUILayout.HorizontalScope())
 		{
 			var sceneView = SceneView.lastActiveSceneView;
 
-			if (_curView == objectSelectionToolbar)
+			if (_curView == _SelectFace)
 				return;
 
-			switch (objectSelectionToolbar)
+			switch (_SelectFace)
             {
 				case 0:
 				case 2:
@@ -510,67 +330,49 @@ public class FaceWindow : EditorWindow
 					break;
 				case 1:
 					sceneView.pivot = new Vector3(0, 8, 0);
-					_curView = objectSelectionToolbar;
+					_curView = _SelectFace;
 					break;
 				case 3:
 					sceneView.pivot = new Vector3(-8, 0, 0);
-					_curView = objectSelectionToolbar;
-
+					_curView = _SelectFace;
 					break;
 				case 4:
 					sceneView.pivot = new Vector3(0, 0, 0);
-					_curView = objectSelectionToolbar;
-
+					_curView = _SelectFace;
 					break;
 				case 5:
 					sceneView.pivot = new Vector3(8, 0, 0);
-					_curView = objectSelectionToolbar;
-
+					_curView = _SelectFace;
 					break;
 				case 7:
 					sceneView.pivot = new Vector3(0, -8, 0);
-					_curView = objectSelectionToolbar;
-
+					_curView = _SelectFace;
 					break;
 				case 10:
 					sceneView.pivot = new Vector3(0, -16, 0);
-					_curView = objectSelectionToolbar;
-
+					_curView = _SelectFace;
 					break;
-
 				default:
 					break;
 			}
 
 			SceneView.RepaintAll();
-
 		}
-
 	}
-
-
-
-
-    
-
 }
 
 public class BlockCreateWindow : EditorWindow
 {
 	private GameObject block;
 
-	public void init()
+	public void Init()
     {
 		var window = this;
-        //ウィンドウサイズ設定(minとmaxを=しているのはウィンドウサイズを固定するため)
         window.minSize = new Vector2(400, 300);
-
-		
 	}
 
     void OnGUI()
     {
-		// GUI
 		GUILayout.BeginHorizontal();
 		GUILayout.Label("Block", GUILayout.Width(110));
 		block = (GameObject)EditorGUILayout.ObjectField(block, typeof(GameObject), true);

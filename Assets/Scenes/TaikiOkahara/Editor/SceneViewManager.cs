@@ -7,7 +7,6 @@ public class ExampleClass
     static void Example()
     {
         SceneView.duringSceneGui += OnGUI;
-        
     }
 
     static void OnGUI(SceneView sceneView)
