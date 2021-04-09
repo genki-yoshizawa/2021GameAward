@@ -7,32 +7,33 @@ public class GameSceneController : MonoBehaviour
     // 最初はプレイモードで始まるためキューブ選択モード識別フラグ
     private bool _isCubeSelectMode;
 
-    private GameObject _DesktopMaskObject;
+    [Header("HierarchyのCanvasを入れてください")]
+    [SerializeField] private GameObject _CanvasObject;
+    [Header("HierarchyのDesktopMaskを入れてください")]
+    [SerializeField] private GameObject _DesktopMaskObject;
     private Animator _DesktopMaskAnimator;
-    private GameObject _LifeWindowObject;
+    [Header("HierarchyのLifeWindowを入れてください")]
+    [SerializeField] private GameObject _LifeWindowObject;
     private Animator _LifeWindowAnimator;
-    private GameObject _ScoreWindowObject;
+    [Header("HierarchyのScoreWindowを入れてください")]
+    [SerializeField] private GameObject _ScoreWindowObject;
     private Animator _ScoreWindowAnimator;
-    private GameObject _DescriptWindowObject;
+    [Header("HierarchyのDescriptWindowを入れてください")]
+    [SerializeField] private GameObject _DescriptWindowObject;
     private Animator _DescriptWindowAnimator;
-    private GameObject _PlayWindowObject;
+    [Header("HierarchyのPlayWindowを入れてください")]
+    [SerializeField] private GameObject _PlayWindowObject;
     private Animator _PlayWindowAnimator;
 
     // Start is called before the first frame update
     void Start()
     {
         _isCubeSelectMode = false;
-
-        // find関数は重いので初期化時に行う
-        _DesktopMaskObject = GameObject.Find("DesktopMask");
+        
         _DesktopMaskAnimator = _DesktopMaskObject.GetComponent<Animator>();
-        _LifeWindowObject = GameObject.Find("LifeWindow");
         _LifeWindowAnimator = _LifeWindowObject.GetComponent<Animator>();
-        _ScoreWindowObject = GameObject.Find("ScoreWindow");
         _ScoreWindowAnimator = _ScoreWindowObject.GetComponent<Animator>();
-        _DescriptWindowObject = GameObject.Find("DescriptWindow");
         _DescriptWindowAnimator = _DescriptWindowObject.GetComponent<Animator>();
-        _PlayWindowObject = GameObject.Find("PlayWindow");
         _PlayWindowAnimator = _PlayWindowObject.GetComponent<Animator>();
     }
 
@@ -51,6 +52,11 @@ public class GameSceneController : MonoBehaviour
         _ScoreWindowAnimator.SetBool("isCubeSelectMode", true);
         _DescriptWindowAnimator.SetBool("isCubeSelectMode", true);
         _PlayWindowAnimator.SetBool("isCubeSelectMode", true);
+
+        // 親子関係の再構築
+        _PlayWindowObject.transform.parent = _DesktopMaskObject.transform;
+        // ヒエラルキー順番の再設定
+        _PlayWindowObject.transform.SetSiblingIndex(5);
     }
 
     // プレイモードへの変更
@@ -62,6 +68,11 @@ public class GameSceneController : MonoBehaviour
         _ScoreWindowAnimator.SetBool("isCubeSelectMode", false);
         _DescriptWindowAnimator.SetBool("isCubeSelectMode", false);
         _PlayWindowAnimator.SetBool("isCubeSelectMode", false);
+        
+        // 親子関係の再構築
+        _PlayWindowObject.transform.parent = _CanvasObject.transform;
+        // ヒエラルキー順番の再設定
+        _PlayWindowObject.transform.SetSiblingIndex(1);
     }
 
     public bool GetisCubeSelectMode()
