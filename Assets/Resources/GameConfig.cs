@@ -18,7 +18,7 @@ public class GameConfig : ScriptableObject
     static void CreateGameConfig()
     {
         GameConfig gameConfig = CreateInstance<GameConfig>();
-        string path = AssetDatabase.GenerateUniqueAssetPath("Assets/Scenes/TaikiOkahara/Resources/ScriptableObject/GameConfig.asset");
+        string path = AssetDatabase.GenerateUniqueAssetPath("Assets/Resources/ScriptableObject/GameConfig.asset");
         AssetDatabase.CreateAsset(gameConfig, path);
         AssetDatabase.Refresh();
     }

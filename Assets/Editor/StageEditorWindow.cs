@@ -45,7 +45,7 @@ public class BlockWindow : EditorWindow
 	private List<GameObject> _Palette = new List<GameObject>();
 
 	//ブロックのプレハブを取得するフォルダパス
-	private string _Path = "Assets/Scenes/TaikiOkahara/StageBlock";
+	private string _Path = "Assets/TaikiOkahara/StageBlock";
 
 	private int _PaletteIndex;
 
