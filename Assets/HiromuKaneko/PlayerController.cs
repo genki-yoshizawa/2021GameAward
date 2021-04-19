@@ -10,7 +10,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float JumpForce = 300.0f;    // ジャンプ時に加える力
 
     [Header("左右移動速度")]
-    [SerializeField] private float RunSpeed = 2.0f;       // 走っている間の速度
+    [SerializeField, Range(0, 5)] private float RunSpeed = 2.0f;       // 走っている間の速度
+    
+    [Header("重力加速度")]
+    [SerializeField] private Vector3 Gravity;       // 走っている間の速度
 
     [Header("プレイヤーＨＰ")]
     [SerializeField] private int PlayerHp = 5;                //プレイヤーのＨＰ
@@ -26,16 +29,14 @@ public class PlayerController : MonoBehaviour
     {
         StartPosition = this.transform.position;
         this.rb = GetComponent<Rigidbody>();
+        //Gravity = new Vector3(Physics.gravity);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!isGround)
-            PlayerPosition = this.transform.position;
 
-        if (PlayerPosition.y < -15)
-            this.transform.position = StartPosition;
+        Respawn();
 
         Jump();
 
@@ -66,6 +67,15 @@ public class PlayerController : MonoBehaviour
                 //    isGround = false;
             }
         }
+    }
+
+    void Respawn()
+    {
+        if (!isGround)
+            PlayerPosition = this.transform.position;
+
+        if (PlayerPosition.y < -15)
+            this.transform.position = StartPosition;
     }
 
     void OnTriggerStay(Collider other)
