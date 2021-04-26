@@ -36,7 +36,7 @@ public class AudioManager : MonoBehaviour
         _Source = GetComponents<AudioSource>();
 
         //_Source[0].volume = _BgVolume;
-        //_Source[1].volume = _SeVolume;
+        _Source[1].volume = _SeVolume;
         //_Source[2].volume = _BgVolume;
     }
 
@@ -51,5 +51,10 @@ public class AudioManager : MonoBehaviour
         {
             SceneManager.LoadScene("SceneB");
         }
+    }
+
+    public void PlaySE(AudioClip audioClip)
+    {
+        _Source[1].PlayOneShot(audioClip, _SeVolume);
     }
 }
