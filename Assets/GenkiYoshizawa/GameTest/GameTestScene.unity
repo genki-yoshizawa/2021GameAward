@@ -756,12 +756,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e92af95917535f4984595a561c7efeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isCubeSelectMode: 0
   _CanvasObject: {fileID: 611319043}
   _DesktopMaskObject: {fileID: 596372383}
+  _DesktopMaskAnimator: {fileID: 0}
   _LifeWindowObject: {fileID: 1300992641}
+  _LifeWindowAnimator: {fileID: 0}
   _ScoreWindowObject: {fileID: 605043982}
+  _ScoreWindowAnimator: {fileID: 0}
   _DescriptWindowObject: {fileID: 1258531814}
+  _DescriptWindowAnimator: {fileID: 0}
   _PlayWindowObject: {fileID: 1734783284}
+  _PlayWindowAnimator: {fileID: 0}
 --- !u!114 &828635372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -774,7 +780,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb776ecfa09f8944380f5361b4fafa4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _SubSceneManagerObject: {fileID: 0}
 --- !u!1 &857399957
 GameObject:
   m_ObjectHideFlags: 0
@@ -967,6 +972,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _EventSystem: {fileID: 0}
   _DoubleClickTime: 0.2
+  _isClick: 0
+  _GameSceneControllerObject: {fileID: 0}
+  _GameSceneControllerScript: {fileID: 0}
 --- !u!1 &1136844745
 GameObject:
   m_ObjectHideFlags: 0
@@ -1509,6 +1517,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _EventSystem: {fileID: 0}
   _DoubleClickTime: 0.2
+  _isClick: 0
+  _GameSceneControllerObject: {fileID: 0}
+  _GameSceneControllerScript: {fileID: 0}
 --- !u!1 &1775361637
 GameObject:
   m_ObjectHideFlags: 0
@@ -1638,6 +1649,9 @@ MonoBehaviour:
   m_FitOnLateUpdate: 0
   m_OnlyForChildren: 0
   m_ShowUnmaskGraphic: 0
+  _unmaskMaterial: {fileID: 0}
+  _revertUnmaskMaterial: {fileID: 0}
+  _graphic: {fileID: 1866034514}
 --- !u!114 &1866034514
 MonoBehaviour:
   m_ObjectHideFlags: 0
