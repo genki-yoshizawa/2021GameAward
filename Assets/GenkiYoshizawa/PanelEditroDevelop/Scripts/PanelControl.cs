@@ -11,7 +11,12 @@ public class PanelControl : MonoBehaviour
         
     }
     
-
-    //このパネルにつくギミック（子オブジェクト）をまとめて処理する方法を書きたい
-
+    //このパネルにつくギミック（子オブジェクト）をまとめて処理する
+    public void TurnEndUpdate()
+    {
+        for(int i = 0; i < transform.childCount; ++i)
+        {
+            transform.GetChild(i).GetComponent<GimmicControl>().TurnEndUpdate();
+        }
+    }
 }
