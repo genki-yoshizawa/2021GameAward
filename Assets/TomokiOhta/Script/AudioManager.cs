@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class AudioManager : MonoBehaviour
 {
-    private AudioManager am;
+    private AudioManager _AudioManager;
 
     [SerializeField] AudioSource[] _Source;
 
@@ -28,7 +28,7 @@ public class AudioManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        am = GetComponent<AudioManager>();
+        _AudioManager = GetComponent<AudioManager>();
     }
 
     public void Start()
@@ -42,15 +42,7 @@ public class AudioManager : MonoBehaviour
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            SceneManager.LoadScene("SceneA");
-        }
 
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            SceneManager.LoadScene("SceneB");
-        }
     }
 
     public void PlaySE(AudioClip audioClip)
