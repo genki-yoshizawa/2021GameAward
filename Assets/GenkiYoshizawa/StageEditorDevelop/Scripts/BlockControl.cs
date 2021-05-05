@@ -28,6 +28,14 @@ public class BlockControl : MonoBehaviour
         }
 
         this.transform.Rotate(Vector3.up,angle);
+        for (int i = 0; i < transform.GetChild(0).childCount; ++i)
+        {
+            transform.GetChild(0).GetChild(i).GetComponent<GimmicControl>().Rotate(angle);
+        }
+        for (int i = 0; i < transform.GetChild(1).childCount; ++i)
+        {
+            transform.GetChild(1).GetChild(i).GetComponent<GimmicControl>().Rotate(angle);
+        }
 
         GameManagerScript gameManagerScript = _GameManager.GetComponent<GameManagerScript>();
 
@@ -54,6 +62,15 @@ public class BlockControl : MonoBehaviour
         }
         // 右軸に180度回転（プレイヤーの向きによって変えたほうがいいかも）
         this.transform.Rotate(Vector3.right, 180);
+
+        for (int i = 0; i < transform.GetChild(0).childCount; ++i)
+        {
+            transform.GetChild(0).GetChild(i).GetComponent<GimmicControl>().TurnOver();
+        }
+        for (int i = 0; i < transform.GetChild(1).childCount; ++i)
+        {
+            transform.GetChild(1).GetChild(i).GetComponent<GimmicControl>().TurnOver();
+        }
 
         // 子オブジェクト順番を入れ替える
         transform.GetChild(1).transform.SetSiblingIndex(0);

@@ -6,9 +6,9 @@ using UnityEngine;
 // オブジェクトのGetもここから取得する
 public class BlockConfig : MonoBehaviour
 {
-    [Header("表パネルの位置(ローカル座標)")]
+    [Header("表パネルの位置(ローカル座標)(プランナーは弄らなくてもいい)")]
     [SerializeField] private Vector3 _FrontPanelLocalPosition = new Vector3(0f, 0f, 0f);
-    [Header("裏パネルの位置(ローカル座標)")]
+    [Header("裏パネルの位置(ローカル座標)(プランナーは弄らなくてもいい)")]
     [SerializeField] private Vector3 _BackPanelLocalPosition = new Vector3(0f, 0f, 0f);
 
     private Vector2Int _BlockLocalPosition;
@@ -108,17 +108,38 @@ public class BlockConfig : MonoBehaviour
         return false;
     }
     // パネルが移動可能パネルかのチェック関数
-    public bool CheckPanelMove(bool isFront)
+    public bool CheckPanelMove(/*bool isFront, Vector2Int objectPosition, Vector2 direction, int lv = 0*/)
     {
-        // ひとまずtrueを返す
-        if (isFront)
-        {
-            return true;
-        }
-        else
-        {
-            return true;
-        }
+        //GameObject playerBlock = null;
+        //if (objectPosition != _BlockLocalPosition)
+        //{// 調べるブロックにプレイヤーがいなければ
+        //    // プレイヤーのいるブロックの取得
+        //    playerBlock = _GameManager.transform.GetComponent<GameManagerScript>().GetBlocks()[objectPosition.x][objectPosition.y];
+        //}
+
+        //// プレイヤーのいないブロックを調べて通ることができればプレイヤーのいるブロックを調べる
+        //// 可読性悪い？
+        //if (isFront)
+        //{
+        //    if (transform.GetChild(0).GetComponent<PanelConfig>().CheckEnter(objectPosition, _BlockLocalPosition, direction, lv))
+        //    {
+        //        if (playerBlock == null)
+        //            return playerBlock.transform.GetChild(0).GetComponent<PanelConfig>().CheckEnter(objectPosition, objectPosition, direction, lv);
+        //        else return true;
+        //    }
+        //}
+        //else
+        //{
+        //    if (transform.GetChild(1).GetComponent<PanelConfig>().CheckEnter(objectPosition, _BlockLocalPosition, direction, lv))
+        //    {
+        //        if (playerBlock == null)
+        //            return playerBlock.transform.GetChild(1).GetComponent<PanelConfig>().CheckEnter(objectPosition, objectPosition, direction, lv);
+        //        else return true;
+        //    }
+        //}
+
+        //return false;
+        return true;
     }
 
     public Vector2Int GetBlockLocalPosition() { return _BlockLocalPosition; }

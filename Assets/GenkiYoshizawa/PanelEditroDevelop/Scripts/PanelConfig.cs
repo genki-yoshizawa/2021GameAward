@@ -26,6 +26,18 @@ public class PanelConfig : MonoBehaviour
     public bool GetCanSwap() { return _canSwap; }
     public int GetPanelIndex() { return _PanelIndex; }
 
+    // ひとまずtrueを返す
+    public bool CheckEnter(Vector2Int objectPosition, Vector2Int panelPosition,Vector2 direction,int lv = 0)
+    {
+        for(int i = 0; i < transform.childCount; ++i)
+        {
+            if (transform.GetChild(i).GetComponent<GimmicControl>().CheckEnter(objectPosition, panelPosition, direction, lv))
+                return true;
+        }
+        
+        return false;
+    }
+
     //上からn番目のギミック(子オブジェクト)を取得する
     //public GameObject GetGimmic(int n) { return transform.GetChild(n); }
 }

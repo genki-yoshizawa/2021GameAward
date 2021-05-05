@@ -12,12 +12,18 @@ public class GameManagerScript : MonoBehaviour
     //private List<List<GameObject>> _Block = new List<List<GameObject>>();
     private GameObject[][] _Block;
 
-    public List<List<GameObject>> taiouPanel;
-
     // Start is called before the first frame update
     void Start()
     {
         AssignBlockArray();
+
+        //_Player.GetComponent<PlayerControl>().SetLocalPosition(_Player.transform.parent.parent.GetComponent<BlockConfig>().GetBlockLocalPosition());
+        //_Player.GetComponent<PlayerControl>().SetIsFront(_Player.transform.parent == _Player.transform.parent.parent.GetChild(0) ? true : false);
+        //foreach (GameObject enemy in _Enemy)
+        //{
+        //    enemy.GetComponent<EnemyControl>().SetLocalPosition(enemy.transform.parent.parent.GetComponent<BlockConfig>().GetBlockLocalPosition());
+        //    enemy.GetComponent<EnemyControl>().SetIsFront(enemy.transform.parent == enemy.transform.parent.parent.GetChild(0) ? true : false);
+        //}
     }
 
     // Update is called once per frame
