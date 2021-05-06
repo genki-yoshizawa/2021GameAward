@@ -159,14 +159,19 @@ public class PlayerControl : MonoBehaviour
         _Direction = new Vector2Int(Mathf.RoundToInt(tmp.x), Mathf.RoundToInt(tmp.y));
     }
 
-    public void SwapMySelf(Vector2Int position)
+    public void SwapMySelf(List<Vector2Int> position)
     {
         //Swap時に呼び出される関数、親オブジェクトであるブロックの移動についていくだけ
-        if (position != _LocalPosition)
-            return;
+        foreach (Vector2Int pos in position)
+        {
+            if (pos == _LocalPosition)
+            {
+                var blockConfig = transform.parent.parent.GetComponent<BlockConfig>();
+                _LocalPosition = blockConfig.GetBlockLocalPosition();
+                return;
+            }
+        }
 
-        var block = _GameManagerScript.GetBlock(_LocalPosition + _Direction);
-        transform.localPosition = block.transform.localPosition;
     }
 
     public void TurnOverMySelf(Vector2Int position)

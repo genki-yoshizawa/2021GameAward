@@ -49,62 +49,34 @@ public class BlockConfig : MonoBehaviour
     // パネルが回転パネルかのチェック関数
     private bool CheckPanelRotate(bool isFront)
     {
-        if(isFront)
-            return transform.GetChild(0).GetComponent<PanelConfig>().GetCanRotate();
-        else
-            return transform.GetChild(1).GetComponent<PanelConfig>().GetCanRotate();
+        return transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetCanRotate();
     }
     // パネルがひっくり返しパネルかのチェック関数
     public bool CheckPanelTurnOver(bool isFront)
     {
-        if (isFront)
-            return transform.GetChild(0).GetComponent<PanelConfig>().GetCanTurnOver();
-        else
-            return transform.GetChild(1).GetComponent<PanelConfig>().GetCanTurnOver();
-
+        return transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetCanTurnOver();
     }
     // パネルが入れ替えパネルかのチェック関数
     public bool CheckPanelSwap(bool isFront)
     {
-        if (isFront)
-        {
-            // canSwapがfalseもしくはIndexが0のときfalse
-            if (!transform.GetChild(0).GetComponent<PanelConfig>().GetCanSwap() || transform.GetChild(0).GetComponent<PanelConfig>().GetPanelIndex() == 0)
-                return false;
+        // canSwapがfalseもしくはIndexが0のときfalse
+        if (!transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetCanSwap() || transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetPanelIndex() == 0)
+            return false;
 
-            // 全ブロックの取得
-            GameObject[][] blocks = _GameManager.GetComponent<GameManagerScript>().GetBlocks();
-            foreach (GameObject[] blockXLine in blocks)
+        // 全ブロックの取得
+        GameObject[][] blocks = _GameManager.GetComponent<GameManagerScript>().GetBlocks();
+        foreach (GameObject[] blockXLine in blocks)
+        {
+            foreach (GameObject blockZLine in blockXLine)
             {
-                foreach (GameObject blockZLine in blockXLine)
-                {
-                    if(blockZLine.transform.GetChild(0).GetComponent<PanelConfig>().GetPanelIndex() == transform.GetChild(0).GetComponent<PanelConfig>().GetPanelIndex())
-                    {
-                        return true;
-                    }
-                }
+                if (blockZLine == gameObject)
+                    continue;
+
+                if (blockZLine.transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetPanelIndex() == transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetPanelIndex())
+                    return true;
             }
         }
-        else
-        {
-            // canSwapがfalseもしくはIndexが0のときfalse
-            if (!transform.GetChild(1).GetComponent<PanelConfig>().GetCanSwap() || transform.GetChild(1).GetComponent<PanelConfig>().GetPanelIndex() == 0)
-                return false;
-
-            // 全ブロックの取得
-            GameObject[][] blocks = _GameManager.GetComponent<GameManagerScript>().GetBlocks();
-            foreach (GameObject[] blockXLine in blocks)
-            {
-                foreach (GameObject blockZLine in blockXLine)
-                {
-                    if (blockZLine.transform.GetChild(1).GetComponent<PanelConfig>().GetPanelIndex() == transform.GetChild(1).GetComponent<PanelConfig>().GetPanelIndex())
-                    {
-                        return true;
-                    }
-                }
-            }
-        }
-
+        
         return false;
     }
     // パネルが移動可能パネルかのチェック関数
@@ -118,26 +90,13 @@ public class BlockConfig : MonoBehaviour
         }
 
         // オブジェクトのいないブロックを調べて通ることができればオブジェクトのいるブロックを調べる
-        // 可読性悪い？
-        if (isFront)
+        if (transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().CheckEnter(objectPosition, _BlockLocalPosition, direction))
         {
-            if (transform.GetChild(0).GetComponent<PanelConfig>().CheckEnter(objectPosition, _BlockLocalPosition, direction))
-            {
-                if (objectBlock != null)
-                    return objectBlock.transform.GetChild(0).GetComponent<PanelConfig>().CheckEnter(objectPosition, objectPosition, direction);
-                else return true;
-            }
+            if (objectBlock != null)
+                return objectBlock.transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().CheckEnter(objectPosition, objectPosition, direction);
+            else return true;
         }
-        else
-        {
-            if (transform.GetChild(1).GetComponent<PanelConfig>().CheckEnter(objectPosition, _BlockLocalPosition, direction))
-            {
-                if (objectBlock != null)
-                    return objectBlock.transform.GetChild(1).GetComponent<PanelConfig>().CheckEnter(objectPosition, objectPosition, direction);
-                else return true;
-            }
-        }
-
+        
         return false;
     }
 
@@ -153,28 +112,14 @@ public class BlockConfig : MonoBehaviour
             objectBlock = _GameManager.transform.GetComponent<GameManagerScript>().GetBlock(objectPosition);
         }
 
-        if(objectBlock != null)
+        if (objectBlock != null)
         {
-            if (isFront)
-            {
-                wallLevel = objectBlock.transform.GetChild(0).GetComponent<PanelConfig>().CheckWallLevel(objectPosition, objectPosition, direction);
-            }
-            else
-            {
-                wallLevel = objectBlock.transform.GetChild(1).GetComponent<PanelConfig>().CheckWallLevel(objectPosition, objectPosition, direction);
-            }
+            wallLevel = objectBlock.transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().CheckWallLevel(objectPosition, objectPosition, direction);
         }
 
-        if(wallLevel == 0)
+        if (wallLevel == 0)
         {
-            if (isFront)
-            {
-                wallLevel = transform.GetChild(0).GetComponent<PanelConfig>().CheckWallLevel(objectPosition, _BlockLocalPosition, direction);
-            }
-            else
-            {
-                wallLevel = transform.GetChild(1).GetComponent<PanelConfig>().CheckWallLevel(objectPosition, _BlockLocalPosition, direction);
-            }
+            wallLevel = transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().CheckWallLevel(objectPosition, _BlockLocalPosition, direction);
         }
 
         return wallLevel;
