@@ -31,11 +31,13 @@ public class BlockControl : MonoBehaviour
             this.transform.Rotate(Vector3.up, angle);
             for (int i = 0; i < transform.GetChild(0).childCount; ++i)
             {
-                transform.GetChild(0).GetChild(i).GetComponent<GimmicControl>().Rotate(angle);
+                if (transform.GetChild(0).GetChild(i).gameObject != _GameManager.GetComponent<GameManagerScript>().GetPlayer())
+                    transform.GetChild(0).GetChild(i).GetComponent<GimmicControl>().Rotate(angle);
             }
             for (int i = 0; i < transform.GetChild(1).childCount; ++i)
             {
-                transform.GetChild(1).GetChild(i).GetComponent<GimmicControl>().Rotate(angle);
+                if (transform.GetChild(0).GetChild(i).gameObject != _GameManager.GetComponent<GameManagerScript>().GetPlayer())
+                    transform.GetChild(1).GetChild(i).GetComponent<GimmicControl>().Rotate(angle);
             }
 
             GameManagerScript gameManagerScript = _GameManager.GetComponent<GameManagerScript>();
@@ -69,11 +71,13 @@ public class BlockControl : MonoBehaviour
 
             for (int i = 0; i < transform.GetChild(0).childCount; ++i)
             {
-                transform.GetChild(0).GetChild(i).GetComponent<GimmicControl>().TurnOver(rotAxis);
+                if (transform.GetChild(0).GetChild(i).gameObject != _GameManager.GetComponent<GameManagerScript>().GetPlayer())
+                    transform.GetChild(0).GetChild(i).GetComponent<GimmicControl>().TurnOver(rotAxis);
             }
             for (int i = 0; i < transform.GetChild(1).childCount; ++i)
             {
-                transform.GetChild(1).GetChild(i).GetComponent<GimmicControl>().TurnOver(rotAxis);
+                if (transform.GetChild(0).GetChild(i).gameObject != _GameManager.GetComponent<GameManagerScript>().GetPlayer())
+                    transform.GetChild(1).GetChild(i).GetComponent<GimmicControl>().TurnOver(rotAxis);
             }
 
             // 子オブジェクト順番を入れ替える
@@ -96,9 +100,20 @@ public class BlockControl : MonoBehaviour
         List<GameObject> targetBlock = null;
         if (transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetPanelIndex() != 0)
             targetBlock = ScanTargetBlock(isFront);
-
+        
         if (targetBlock == null)
             return;
+        else
+        {
+            foreach(GameObject target in targetBlock)
+            {
+                if (gameObject == target)
+                {
+                    targetBlock.Remove(target);
+                    break;
+                }
+            }
+        }
 
         GameManagerScript gameManagerScript = _GameManager.GetComponent<GameManagerScript>();
 
@@ -112,11 +127,14 @@ public class BlockControl : MonoBehaviour
         // ゲームマネージャー内の配列入れ替え
         gameManagerScript.SwapBlockArray(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition(), targetBlock[0].GetComponent<BlockConfig>().GetBlockLocalPosition());
         // それぞれのブロックのローカルポジションを入れ替え
-        Vector2Int temp = gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition();
+        Vector2Int localTemp = gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition();
         gameObject.GetComponent<BlockConfig>().SetBlockLocalPosition(targetBlock[0].GetComponent<BlockConfig>().GetBlockLocalPosition());
-        targetBlock[0].GetComponent<BlockConfig>().SetBlockLocalPosition(temp);
+        targetBlock[0].GetComponent<BlockConfig>().SetBlockLocalPosition(localTemp);
 
         // ブロックのグローバル座標を入れ替える
+        Vector3 globalTemp = gameObject.transform.position;
+        gameObject.transform.position = targetBlock[0].transform.position;
+        targetBlock[0].transform.position = globalTemp;
     }
 
     // 壁を壊す関数(破壊に失敗するとfalse)
