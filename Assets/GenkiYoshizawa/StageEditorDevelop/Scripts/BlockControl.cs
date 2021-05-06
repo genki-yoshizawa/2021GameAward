@@ -113,14 +113,7 @@ public class BlockControl : MonoBehaviour
                 break;
             }
         }
-
-
-        // プレイヤー、エネミーのパネル入れ替え関数を呼び出す
-        // ここに書いてあるスクリプト、関数で用意してもらえるとコメントアウトだけで済むので助かる
-        gameManagerScript.GetPlayer().GetComponent<PlayerControl>().SwapMySelf(targetBlockLocalPosition);
-        //foreach (GameObject enemy in gameManagerScript.GetEnemys())
-        //    enemy.GetComponent<EnemyControl>().SwapMySelf(targetBlockLocalPosition);
-
+        
         // 配列要素入れ替え処理
         // ゲームマネージャー内の配列入れ替え
         gameManagerScript.SwapBlockArray(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition(), targetBlock[0].GetComponent<BlockConfig>().GetBlockLocalPosition());
@@ -133,6 +126,13 @@ public class BlockControl : MonoBehaviour
         Vector3 globalTemp = gameObject.transform.position;
         gameObject.transform.position = targetBlock[0].transform.position;
         targetBlock[0].transform.position = globalTemp;
+
+        // プレイヤー、エネミーのパネル入れ替え関数を呼び出す
+        // ここに書いてあるスクリプト、関数で用意してもらえるとコメントアウトだけで済むので助かる
+        gameManagerScript.GetPlayer().GetComponent<PlayerControl>().SwapMySelf(targetBlockLocalPosition);
+        //foreach (GameObject enemy in gameManagerScript.GetEnemys())
+        //    enemy.GetComponent<EnemyControl>().SwapMySelf(targetBlockLocalPosition);
+
     }
 
     // 壁を壊す関数(破壊に失敗するとfalse)
