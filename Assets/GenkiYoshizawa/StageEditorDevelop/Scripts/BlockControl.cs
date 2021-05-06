@@ -38,15 +38,7 @@ public class BlockControl : MonoBehaviour
                 transform.GetChild(1).GetChild(i).GetComponent<GimmicControl>().Rotate(angle);
             }
 
-<<<<<<< HEAD
-        // プレイヤー、エネミーの向きを変える関数を呼び出す
-        // ここに書いてあるスクリプト、関数で用意してもらえるとコメントアウトだけで済むので助かる
-        gameManagerScript.GetPlayer().GetComponent<PlayerControl>().RotateMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition(), angle);
-        //foreach (GameObject enemy in gameManagerScript.GetEnemys())
-        //    enemy.GetComponent<EnemyControl>().RotateMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition(), angle);
-=======
             GameManagerScript gameManagerScript = _GameManager.GetComponent<GameManagerScript>();
->>>>>>> 90aad1ea2e6424b2cf8ba4daa1254fc0235c8a4f
 
             // プレイヤー、エネミーの向きを変える関数を呼び出す
             // ここに書いてあるスクリプト、関数で用意してもらえるとコメントアウトだけで済むので助かる
@@ -112,16 +104,10 @@ public class BlockControl : MonoBehaviour
 
         // プレイヤー、エネミーのパネル入れ替え関数を呼び出す
         // ここに書いてあるスクリプト、関数で用意してもらえるとコメントアウトだけで済むので助かる
-<<<<<<< HEAD
         gameManagerScript.GetPlayer().GetComponent<PlayerControl>().SwapMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition());
         //foreach (GameObject enemy in gameManagerScript.GetEnemys())
         //    enemy.GetComponent<EnemyControl>().SwapMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition());
-=======
-        /*gameManagerScript.GetPlayer().GetComponent<PlayerControl>().SwapMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition());
-        foreach (GameObject enemy in gameManagerScript.GetEnemys())
-            enemy.GetComponent<EnemyControl>().SwapMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition());*/
 
->>>>>>> 90aad1ea2e6424b2cf8ba4daa1254fc0235c8a4f
         // 配列要素入れ替え処理
         // ゲームマネージャー内の配列入れ替え
         gameManagerScript.SwapBlockArray(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition(), targetBlock[0].GetComponent<BlockConfig>().GetBlockLocalPosition());
