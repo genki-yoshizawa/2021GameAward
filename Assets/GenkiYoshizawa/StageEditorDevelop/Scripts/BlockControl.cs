@@ -102,17 +102,15 @@ public class BlockControl : MonoBehaviour
 
         if (targetBlock == null)
             return;
-        else
-        {
-            foreach (GameObject target in targetBlock)
-            {
-                targetBlockLocalPosition.Add(target.GetComponent<BlockConfig>().GetBlockLocalPosition());
 
-                if (gameObject == target)
-                {
-                    targetBlock.Remove(target);
-                    break;
-                }
+        foreach (GameObject target in targetBlock)
+        {
+            targetBlockLocalPosition.Add(target.GetComponent<BlockConfig>().GetBlockLocalPosition());
+
+            if (gameObject == target)
+            {
+                targetBlock.Remove(target);
+                break;
             }
         }
 
