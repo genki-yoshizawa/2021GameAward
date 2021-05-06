@@ -29,17 +29,14 @@ public class BlockControl : MonoBehaviour
         else
         {
             this.transform.Rotate(Vector3.up, angle);
-            for (int i = 0; i < transform.GetChild(0).childCount; ++i)
+            for (int n = 0; n < transform.childCount; ++n)// パネル枚数
             {
-                if (transform.GetChild(0).GetChild(i).gameObject != _GameManager.GetComponent<GameManagerScript>().GetPlayer())
-                    transform.GetChild(0).GetChild(i).GetComponent<GimmicControl>().Rotate(angle);
+                for (int i = 0; i < transform.GetChild(n).childCount; ++i)
+                {
+                    if (transform.GetChild(n).GetChild(i).gameObject != _GameManager.GetComponent<GameManagerScript>().GetPlayer())
+                        transform.GetChild(n).GetChild(i).GetComponent<GimmicControl>().Rotate(angle);
+                }
             }
-            for (int i = 0; i < transform.GetChild(1).childCount; ++i)
-            {
-                if (transform.GetChild(1).GetChild(i).gameObject != _GameManager.GetComponent<GameManagerScript>().GetPlayer())
-                    transform.GetChild(1).GetChild(i).GetComponent<GimmicControl>().Rotate(angle);
-            }
-
             GameManagerScript gameManagerScript = _GameManager.GetComponent<GameManagerScript>();
 
             // プレイヤー、エネミーの向きを変える関数を呼び出す
@@ -69,15 +66,13 @@ public class BlockControl : MonoBehaviour
             Vector3 rotAxis = Vector3.right;
             this.transform.Rotate(rotAxis, 180);
 
-            for (int i = 0; i < transform.GetChild(0).childCount; ++i)
+            for (int n = 0; n < transform.childCount; ++n)// パネル枚数
             {
-                if (transform.GetChild(0).GetChild(i).gameObject != _GameManager.GetComponent<GameManagerScript>().GetPlayer())
-                    transform.GetChild(0).GetChild(i).GetComponent<GimmicControl>().TurnOver(rotAxis);
-            }
-            for (int i = 0; i < transform.GetChild(1).childCount; ++i)
-            {
-                if (transform.GetChild(1).GetChild(i).gameObject != _GameManager.GetComponent<GameManagerScript>().GetPlayer())
-                    transform.GetChild(1).GetChild(i).GetComponent<GimmicControl>().TurnOver(rotAxis);
+                for (int i = 0; i < transform.GetChild(n).childCount; ++i)
+                {
+                    if (transform.GetChild(n).GetChild(i).gameObject != _GameManager.GetComponent<GameManagerScript>().GetPlayer())
+                        transform.GetChild(n).GetChild(i).GetComponent<GimmicControl>().TurnOver(rotAxis);
+                }
             }
 
             // 子オブジェクト順番を入れ替える
@@ -158,27 +153,13 @@ public class BlockControl : MonoBehaviour
         // 自身の乗ってるパネルを先に調べる
         if (objectBlock != null)
         {
-            if (isFront)
-            {
-                breakResult = objectBlock.transform.GetChild(0).GetComponent<PanelControl>().BreakWall(objectPosition, objectPosition, direction, lv);
-            }
-            else
-            {
-                breakResult = objectBlock.transform.GetChild(1).GetComponent<PanelControl>().BreakWall(objectPosition, objectPosition, direction, lv);
-            }
+            breakResult = objectBlock.transform.GetChild(isFront ? 0 : 1).GetComponent<PanelControl>().BreakWall(objectPosition, objectPosition, direction, lv);
         }
 
         switch (breakResult)
         {
             case 0:// 自身の乗ってるパネルの壁がなかった場合
-                if (isFront)
-                {
-                    breakResult = transform.GetChild(0).GetComponent<PanelControl>().BreakWall(objectPosition, blockLocalPosition, direction);
-                }
-                else
-                {
-                    breakResult = transform.GetChild(1).GetComponent<PanelControl>().BreakWall(objectPosition, blockLocalPosition, direction);
-                }
+                breakResult = transform.GetChild(isFront ? 0 : 1).GetComponent<PanelControl>().BreakWall(objectPosition, blockLocalPosition, direction);
                 break;
 
             case 1:// 自身の乗ってるパネルの壁を壊せなかった場合
@@ -205,19 +186,9 @@ public class BlockControl : MonoBehaviour
             {
                 // 同じインデックスであれば対象ブロック
                 // 現段階では3つ以上のスワップはバグる
-                if (isFront)
+                if (blockZLine.transform.GetChild(isFront ? 0 : 1).transform.GetComponent<PanelConfig>().GetPanelIndex() == gameObject.transform.GetChild(0).GetComponent<PanelConfig>().GetPanelIndex())
                 {
-                    if (blockZLine.transform.GetChild(0).transform.GetComponent<PanelConfig>().GetPanelIndex() == gameObject.transform.GetChild(0).GetComponent<PanelConfig>().GetPanelIndex())
-                    {
-                        targetBlock.Add(blockZLine);
-                    }
-                }
-                else
-                {
-                    if (blockZLine.transform.GetChild(1).transform.GetComponent<PanelConfig>().GetPanelIndex() == gameObject.transform.GetChild(1).GetComponent<PanelConfig>().GetPanelIndex())
-                    {
-                        targetBlock.Add(blockZLine);
-                    }
+                    targetBlock.Add(blockZLine);
                 }
             }
         }
