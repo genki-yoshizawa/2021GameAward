@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameManagerScript : MonoBehaviour
 {
+    [Header("ステージ上のTurnManagerオブジェクトをセットしてください(Hierarchy上のTurnManagerオブジェクト)")]
+    [SerializeField] private GameObject _TurnManager;
     [Header("ステージ上のPlayerオブジェクトをセットしてください(Hierarchy上のPlayerオブジェクト)")]
     [SerializeField] private GameObject _Player;
     [Header("ステージ上のEnemyオブジェクトの数を入れた後それぞれのElementにセットしてください(Hierarchy上のEnemyオブジェクト)")]
@@ -89,6 +91,7 @@ public class GameManagerScript : MonoBehaviour
         
     }
 
+    public GameObject GetTurnManager() { return _TurnManager; }
     public GameObject GetPlayer() { return _Player; }                               //プレイヤーの取得
     public List<GameObject> GetEnemys() { return _Enemy; }                          //エネミーの全取得
     public GameObject GetEnemy(int index) { return _Enemy[index]; }                 //index番のエネミーの取得
