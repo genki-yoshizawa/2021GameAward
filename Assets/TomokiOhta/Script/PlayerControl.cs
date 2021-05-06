@@ -76,6 +76,7 @@ public class PlayerControl : MonoBehaviour
             {
                 var blockControlScript = block.GetComponent<BlockControl>();
                 blockControlScript.Swap(_IsFront);
+                Debug.Log("Swap‚µ‚½‚æ");
             }
             else
             {
@@ -96,6 +97,7 @@ public class PlayerControl : MonoBehaviour
             {
                 var blockControlScript = block.GetComponent<BlockControl>();
                 blockControlScript.TurnOver(_IsFront);
+                Debug.Log("TurnOver‚Å‚«‚½‚æ");
             }
             else
             {
@@ -163,7 +165,8 @@ public class PlayerControl : MonoBehaviour
         if (position != _LocalPosition)
             return;
 
-        transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
+        var block = _GameManagerScript.GetBlock(_LocalPosition + _Direction);
+        transform.localPosition = block.transform.localPosition;
     }
 
     public void TurnOverMySelf(Vector2Int position)
