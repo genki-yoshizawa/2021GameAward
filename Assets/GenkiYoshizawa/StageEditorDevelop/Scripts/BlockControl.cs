@@ -106,7 +106,9 @@ public class BlockControl : MonoBehaviour
         foreach (GameObject target in targetBlock)
         {
             targetBlockLocalPosition.Add(target.GetComponent<BlockConfig>().GetBlockLocalPosition());
-            targetBlock.Remove(target);
+
+            if (gameObject == target)
+                targetBlock.Remove(target);
         }
         
         // ”z—ñ—v‘f“ü‚ê‘Ö‚¦ˆ—
