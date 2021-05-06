@@ -753,7 +753,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2041184501183777834, guid: 197a8fef8514b7a42abe8f9ce9a1f74f, type: 3}
       propertyPath: _PanelIndex
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2041184501183777834, guid: 197a8fef8514b7a42abe8f9ce9a1f74f, type: 3}
       propertyPath: _canTurnOver
@@ -820,6 +820,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 926731134}
     m_Modifications:
+    - target: {fileID: 2041184501183777834, guid: 197a8fef8514b7a42abe8f9ce9a1f74f, type: 3}
+      propertyPath: _canSwap
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2041184501183777834, guid: 197a8fef8514b7a42abe8f9ce9a1f74f, type: 3}
       propertyPath: _canRotate
       value: 1
@@ -1036,8 +1040,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 603994722}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5.31, z: 0.407}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.25, y: 5, z: 0}
+  m_LocalScale: {x: 0.25, y: 1, z: 0.25}
   m_Children: []
   m_Father: {fileID: 165974900}
   m_RootOrder: 0
@@ -1363,15 +1367,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2041184501183777834, guid: 197a8fef8514b7a42abe8f9ce9a1f74f, type: 3}
       propertyPath: _canRotate
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2041184501183777834, guid: 197a8fef8514b7a42abe8f9ce9a1f74f, type: 3}
       propertyPath: _PanelIndex
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2041184501183777834, guid: 197a8fef8514b7a42abe8f9ce9a1f74f, type: 3}
       propertyPath: _canTurnOver
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2041184501183777836, guid: 197a8fef8514b7a42abe8f9ce9a1f74f, type: 3}
       propertyPath: m_RootOrder
@@ -1496,6 +1500,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 353170018}
     m_Modifications:
+    - target: {fileID: 2041184501183777834, guid: 197a8fef8514b7a42abe8f9ce9a1f74f, type: 3}
+      propertyPath: _canSwap
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2041184501183777834, guid: 197a8fef8514b7a42abe8f9ce9a1f74f, type: 3}
+      propertyPath: _canRotate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2041184501183777834, guid: 197a8fef8514b7a42abe8f9ce9a1f74f, type: 3}
+      propertyPath: _PanelIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2041184501183777834, guid: 197a8fef8514b7a42abe8f9ce9a1f74f, type: 3}
+      propertyPath: _canTurnOver
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2041184501183777836, guid: 197a8fef8514b7a42abe8f9ce9a1f74f, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1578,8 +1598,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1481440768}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.25, y: 5.310001, z: -0.089}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.25, y: 5, z: 0}
+  m_LocalScale: {x: 0.25, y: 1, z: 0.25}
   m_Children: []
   m_Father: {fileID: 1514045404}
   m_RootOrder: 0
