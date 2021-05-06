@@ -108,39 +108,78 @@ public class BlockConfig : MonoBehaviour
         return false;
     }
     // パネルが移動可能パネルかのチェック関数
-    public bool CheckPanelMove(/*bool isFront, Vector2Int objectPosition, Vector2 direction, int lv = 0*/)
+    public bool CheckPanelMove(bool isFront, Vector2Int objectPosition, Vector2 direction)
     {
-        //GameObject playerBlock = null;
-        //if (objectPosition != _BlockLocalPosition)
-        //{// 調べるブロックにプレイヤーがいなければ
-        //    // プレイヤーのいるブロックの取得
-        //    playerBlock = _GameManager.transform.GetComponent<GameManagerScript>().GetBlocks()[objectPosition.x][objectPosition.y];
-        //}
+        GameObject objectBlock = null;
+        if (objectPosition != _BlockLocalPosition)
+        {// 調べるブロックにオブジェクトがいなければ
+            // オブジェクトのいるブロックの取得
+            objectBlock = _GameManager.transform.GetComponent<GameManagerScript>().GetBlock(objectPosition);
+        }
 
-        //// プレイヤーのいないブロックを調べて通ることができればプレイヤーのいるブロックを調べる
-        //// 可読性悪い？
-        //if (isFront)
-        //{
-        //    if (transform.GetChild(0).GetComponent<PanelConfig>().CheckEnter(objectPosition, _BlockLocalPosition, direction, lv))
-        //    {
-        //        if (playerBlock == null)
-        //            return playerBlock.transform.GetChild(0).GetComponent<PanelConfig>().CheckEnter(objectPosition, objectPosition, direction, lv);
-        //        else return true;
-        //    }
-        //}
-        //else
-        //{
-        //    if (transform.GetChild(1).GetComponent<PanelConfig>().CheckEnter(objectPosition, _BlockLocalPosition, direction, lv))
-        //    {
-        //        if (playerBlock == null)
-        //            return playerBlock.transform.GetChild(1).GetComponent<PanelConfig>().CheckEnter(objectPosition, objectPosition, direction, lv);
-        //        else return true;
-        //    }
-        //}
+        // オブジェクトのいないブロックを調べて通ることができればオブジェクトのいるブロックを調べる
+        // 可読性悪い？
+        if (isFront)
+        {
+            if (transform.GetChild(0).GetComponent<PanelConfig>().CheckEnter(objectPosition, _BlockLocalPosition, direction))
+            {
+                if (objectBlock != null)
+                    return objectBlock.transform.GetChild(0).GetComponent<PanelConfig>().CheckEnter(objectPosition, objectPosition, direction);
+                else return true;
+            }
+        }
+        else
+        {
+            if (transform.GetChild(1).GetComponent<PanelConfig>().CheckEnter(objectPosition, _BlockLocalPosition, direction))
+            {
+                if (objectBlock != null)
+                    return objectBlock.transform.GetChild(1).GetComponent<PanelConfig>().CheckEnter(objectPosition, objectPosition, direction);
+                else return true;
+            }
+        }
 
-        //return false;
-        return true;
+        return false;
     }
+
+    //壁のレベルをチェックする関数(2枚重なっている場合は自分の乗るパネルのみ(2枚重なっていることの判定はできない))(0は壁なし)
+    public int CheckWallLevel(bool isFront, Vector2Int objectPosition, Vector2 direction)
+    {
+        int wallLevel = 0;
+
+        GameObject objectBlock = null;
+        if (objectPosition != _BlockLocalPosition)
+        {// 調べるブロックにオブジェクトがいなければ
+            // オブジェクトのいるブロックの取得
+            objectBlock = _GameManager.transform.GetComponent<GameManagerScript>().GetBlock(objectPosition);
+        }
+
+        if(objectBlock != null)
+        {
+            if (isFront)
+            {
+                wallLevel = objectBlock.transform.GetChild(0).GetComponent<PanelConfig>().CheckWallLevel(objectPosition, objectPosition, direction);
+            }
+            else
+            {
+                wallLevel = objectBlock.transform.GetChild(1).GetComponent<PanelConfig>().CheckWallLevel(objectPosition, objectPosition, direction);
+            }
+        }
+
+        if(wallLevel == 0)
+        {
+            if (isFront)
+            {
+                wallLevel = transform.GetChild(0).GetComponent<PanelConfig>().CheckWallLevel(objectPosition, _BlockLocalPosition, direction);
+            }
+            else
+            {
+                wallLevel = transform.GetChild(1).GetComponent<PanelConfig>().CheckWallLevel(objectPosition, _BlockLocalPosition, direction);
+            }
+        }
+
+        return wallLevel;
+    }
+
 
     public Vector2Int GetBlockLocalPosition() { return _BlockLocalPosition; }
     public void SetBlockLocalPosition(Vector2Int localPos) { _BlockLocalPosition = localPos; }

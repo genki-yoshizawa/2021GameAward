@@ -197,7 +197,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _WallLevel: 1
   _XAxis: 0
-  _ZAxis: 0
+  _ZAxis: 1
   _LocalOffset: 0.45
 --- !u!65 &770223220
 BoxCollider:

@@ -61,15 +61,16 @@ public class BlockControl : MonoBehaviour
             }
         }
         // 右軸に180度回転（プレイヤーの向きによって変えたほうがいいかも）
-        this.transform.Rotate(Vector3.right, 180);
+        Vector3 rotAxis = Vector3.right;
+        this.transform.Rotate(rotAxis, 180);
 
         for (int i = 0; i < transform.GetChild(0).childCount; ++i)
         {
-            transform.GetChild(0).GetChild(i).GetComponent<GimmicControl>().TurnOver();
+            transform.GetChild(0).GetChild(i).GetComponent<GimmicControl>().TurnOver(rotAxis);
         }
         for (int i = 0; i < transform.GetChild(1).childCount; ++i)
         {
-            transform.GetChild(1).GetChild(i).GetComponent<GimmicControl>().TurnOver();
+            transform.GetChild(1).GetChild(i).GetComponent<GimmicControl>().TurnOver(rotAxis);
         }
 
         // 子オブジェクト順番を入れ替える
@@ -107,6 +108,56 @@ public class BlockControl : MonoBehaviour
         Vector2Int temp = gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition();
         gameObject.GetComponent<BlockConfig>().SetBlockLocalPosition(targetBlock[0].GetComponent<BlockConfig>().GetBlockLocalPosition());
         targetBlock[0].GetComponent<BlockConfig>().SetBlockLocalPosition(temp);
+    }
+
+    // 壁を壊す関数(破壊に失敗するとfalse)
+    public bool BreakWall(bool isFront, Vector2Int objectPosition, Vector2 direction, int lv = 0)
+    {
+        GameObject objectBlock = null;
+        Vector2Int blockLocalPosition = _GameManager.transform.GetComponent<BlockConfig>().GetBlockLocalPosition();
+        if (objectPosition != blockLocalPosition)
+        {// 調べるブロックにオブジェクトがいなければ
+            // オブジェクトのいるブロックの取得
+            objectBlock = _GameManager.transform.GetComponent<GameManagerScript>().GetBlock(objectPosition);
+        }
+
+        int breakResult = 0;
+
+        // 自身の乗ってるパネルを先に調べる
+        if (objectBlock != null)
+        {
+            if (isFront)
+            {
+                breakResult = objectBlock.transform.GetChild(0).GetComponent<PanelControl>().BreakWall(objectPosition, objectPosition, direction, lv);
+            }
+            else
+            {
+                breakResult = objectBlock.transform.GetChild(1).GetComponent<PanelControl>().BreakWall(objectPosition, objectPosition, direction, lv);
+            }
+        }
+
+        switch (breakResult)
+        {
+            case 0:// 自身の乗ってるパネルの壁がなかった場合
+                if (isFront)
+                {
+                    breakResult = transform.GetChild(0).GetComponent<PanelControl>().BreakWall(objectPosition, blockLocalPosition, direction);
+                }
+                else
+                {
+                    breakResult = transform.GetChild(1).GetComponent<PanelControl>().BreakWall(objectPosition, blockLocalPosition, direction);
+                }
+                break;
+
+            case 1:// 自身の乗ってるパネルの壁を壊せなかった場合
+                return false;
+
+            case 2:// 自身の乗ってるパネルの壁を壊した場合
+                return true;
+        }
+
+        if (breakResult == 2) return true;// 移動先パネルの壁が壊せた
+        else return false;// 移動先のパネルが壊せないor壁がない
     }
 
     // GameManagerを介して同じIndexが設定されているブロックを探す
