@@ -98,7 +98,7 @@ public class BlockControl : MonoBehaviour
         if (transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetPanelIndex() != 0)
             targetBlock = ScanTargetBlock(isFront);
 
-        List<Vector2Int> targetBlockLocalPosition = null;
+        List<Vector2Int> targetBlockLocalPosition = new List<Vector2Int>();
 
         if (targetBlock == null)
             return;
