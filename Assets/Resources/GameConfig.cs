@@ -6,7 +6,7 @@ using UnityEngine;
 public class GameConfig : ScriptableObject
 {
     
-    public float  GridSize = 0.25f;
+    public float  GridSize = 1.0f;
 
 
     //public bool UseLocalEffectResource = false;
