@@ -49,7 +49,7 @@ public class PlayerControl : MonoBehaviour
             var block = _GameManagerScript.GetBlock(_LocalPosition + _Direction);
 
             //前のブロックがRotate可能かどうかを調べる
-            var panelScript = block.transform.GetChild(_IsFront ? 1 : 0).GetComponent<PanelConfig>();
+            var panelScript = block.transform.GetChild(_IsFront ? 0 : 1).GetComponent<PanelConfig>();
 
             if (panelScript.GetCanRotate())
             {
@@ -71,7 +71,7 @@ public class PlayerControl : MonoBehaviour
             var block = _GameManagerScript.GetBlock(_LocalPosition + _Direction);
 
             //前のブロックがSwap可能かどうかを調べる
-            var panelScript = block.transform.GetChild(_IsFront ? 1 : 0).GetComponent<PanelConfig>();
+            var panelScript = block.transform.GetChild(_IsFront ? 0 : 1).GetComponent<PanelConfig>();
             if (panelScript.GetCanSwap())
             {
                 var blockControlScript = block.GetComponent<BlockControl>();
@@ -91,7 +91,7 @@ public class PlayerControl : MonoBehaviour
             var block = _GameManagerScript.GetBlock(_LocalPosition + _Direction);
 
             //前のブロックがTurnOver可能かどうかを調べる
-            var panelScript = block.transform.GetChild(_IsFront ? 1 : 0).GetComponent<PanelConfig>();
+            var panelScript = block.transform.GetChild(_IsFront ? 0 : 1).GetComponent<PanelConfig>();
             if (panelScript.GetCanTurnOver())
             {
                 var blockControlScript = block.GetComponent<BlockControl>();
