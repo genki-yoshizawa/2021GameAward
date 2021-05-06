@@ -6,6 +6,8 @@ public class WallConfig : MonoBehaviour
 {
     [Header("壁レベルの設定")]
     [SerializeField] private int _WallLevel = 1;
+    [Header("壁復活ターンの設定")]
+    [SerializeField] private int _WallRebornTurn = 1;
     [Header("デフォルトの壁の位置(片方は必ず0、両方0はダメ)")]
     [SerializeField, TooltipAttribute("X軸の移動"), Range(-1, 1)] private int _XAxis = 0;
     [SerializeField, TooltipAttribute("Z軸の移動"), Range(-1, 1)] private int _ZAxis = 0;
@@ -15,7 +17,10 @@ public class WallConfig : MonoBehaviour
     // 壁の向き
     private Vector2 _Direction = new Vector3(1f, 0f);
     // 壁の破壊フラグ
-    private bool _isBreak = true;
+    private bool _isBreak = false;
+    private int _BreakCount = 0;
+    // 一時的な措置用の変数
+    private Vector3 _Scale;
 
     // Start is called before the first frame update
     void Start()
@@ -26,9 +31,10 @@ public class WallConfig : MonoBehaviour
             //UnityEditor.EditorApplication.isPlaying = false;
         }
 
-        _isBreak = true;
+        _isBreak = false;
+        _BreakCount = 0;
 
-        transform.localPosition = new Vector3(_XAxis * _LocalOffset, 0f, _ZAxis * _LocalOffset);
+        transform.localPosition = new Vector3(_XAxis * _LocalOffset, transform.localPosition.y, _ZAxis * _LocalOffset);
 
         Vector3 direction = new Vector3(1f, 0f, 0f);
 
@@ -49,6 +55,9 @@ public class WallConfig : MonoBehaviour
         _Direction = new Vector2(direction.x, direction.z);
 
         transform.Rotate(Vector3.up, angle);
+
+        // 一時的な措置用の処理
+        _Scale = transform.localScale;
     }
 
     // Update is called once per frame
@@ -57,7 +66,29 @@ public class WallConfig : MonoBehaviour
         
     }
 
+    public void BreakWall()
+    {
+        _isBreak = true;
+        _BreakCount = 0;
+        // 一時的な措置
+        transform.localScale = new Vector3(0f, 0f, 0f);
+    }
+
+    private void RebornWall()
+    {
+        _isBreak = false;
+        transform.localScale = _Scale;
+    }
+
+    public void AddBreakCount()
+    {
+        _BreakCount += 1;
+        if (_BreakCount >= _WallRebornTurn) RebornWall();
+    }
 
     public Vector2 GetDirection() { return _Direction; }
+    public bool GetIsBreak() { return _isBreak; }
+    public int GetWallLevel() { return _WallLevel; }
+    public int GetBreakCount() { return _BreakCount; }
     public void SetDirection(Vector2 directiron) { _Direction = directiron; }
 }

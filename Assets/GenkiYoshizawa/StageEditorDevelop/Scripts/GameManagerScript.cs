@@ -9,7 +9,6 @@ public class GameManagerScript : MonoBehaviour
     [Header("ステージ上のEnemyオブジェクトの数を入れた後それぞれのElementにセットしてください(Hierarchy上のEnemyオブジェクト)")]
     [SerializeField] private List<GameObject> _Enemy;
     // ブロックの配列
-    //private List<List<GameObject>> _Block = new List<List<GameObject>>();
     private GameObject[][] _Block;
 
     // Start is called before the first frame update
@@ -87,6 +86,7 @@ public class GameManagerScript : MonoBehaviour
         GameObject temp = _Block[block1.x][block1.y];
         _Block[block1.x][block1.y] = _Block[block2.x][block2.y];
         _Block[block2.x][block2.y] = temp;
+        
     }
 
     public GameObject GetPlayer() { return _Player; }                               //プレイヤーの取得
@@ -94,4 +94,5 @@ public class GameManagerScript : MonoBehaviour
     public GameObject GetEnemy(int index) { return _Enemy[index]; }                 //index番のエネミーの取得
     public GameObject[][] GetBlocks() { return _Block; }                    //ブロックの全取得
     public GameObject GetBlock(Vector2Int pos) { return _Block[pos.x][pos.y]; }     //posにあるBlockの取得
+    
 }

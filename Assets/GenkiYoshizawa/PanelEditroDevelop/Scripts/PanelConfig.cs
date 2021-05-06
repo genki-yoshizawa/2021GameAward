@@ -25,17 +25,29 @@ public class PanelConfig : MonoBehaviour
     public bool GetCanTurnOver() { return _canTurnOver; }
     public bool GetCanSwap() { return _canSwap; }
     public int GetPanelIndex() { return _PanelIndex; }
-
-    // ひとまずtrueを返す
-    public bool CheckEnter(Vector2Int objectPosition, Vector2Int panelPosition,Vector2 direction,int lv = 0)
+    
+    public bool CheckEnter(Vector2Int objectPosition, Vector2Int panelPosition,Vector2 direction)
     {
         for(int i = 0; i < transform.childCount; ++i)
         {
-            if (transform.GetChild(i).GetComponent<GimmicControl>().CheckEnter(objectPosition, panelPosition, direction, lv))
+            if (transform.GetChild(i).GetComponent<GimmicControl>().CheckEnter(objectPosition, panelPosition, direction))
                 return true;
         }
         
         return false;
+    }
+
+    public int CheckWallLevel(Vector2Int objectPosition, Vector2Int panelPosition, Vector2 direction)
+    {
+        int wallLevel = 0;
+
+        for (int i = 0; i < transform.childCount; ++i)
+        {
+            wallLevel = transform.GetChild(i).GetComponent<GimmicControl>().CheckWallLevel(objectPosition, panelPosition, direction);
+            if (wallLevel != 0)
+                break;
+        }
+        return wallLevel;
     }
 
     //上からn番目のギミック(子オブジェクト)を取得する
