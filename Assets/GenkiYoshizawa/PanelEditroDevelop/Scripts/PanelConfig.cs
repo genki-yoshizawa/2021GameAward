@@ -15,10 +15,12 @@ public class PanelConfig : MonoBehaviour
     [Header("パネル同士を対応させる番号(0だと無対応)")]
     [SerializeField] private int _PanelIndex;
 
+    private GameObject _GameManager = null;
+
     // Start is called before the first frame update
     void Start()
     {
-
+        _GameManager = GameObject.FindGameObjectWithTag("Manager");
     }
 
     public bool GetCanRotate() { return _canRotate; }
@@ -28,9 +30,17 @@ public class PanelConfig : MonoBehaviour
     
     public bool CheckEnter(Vector2Int objectPosition, Vector2Int panelPosition,Vector2 direction)
     {
+        GameManagerScript gmScript = _GameManager.GetComponent<GameManagerScript>(); 
+
         for(int i = 0; i < transform.childCount; ++i)
         {
-            if (transform.GetChild(i).GetComponent<GimmicControl>().CheckEnter(objectPosition, panelPosition, direction))
+            // エネミーと一致したら次の子オブジェクトに移る
+            foreach (GameObject enemy in gmScript.GetEnemys())
+                if (enemy != transform.GetChild(i).gameObject)
+                    continue;
+
+            // プレイヤーでもなくギミックのチェックエンターも通ったら
+            if (gmScript.GetPlayer() != transform.GetChild(i).gameObject && transform.GetChild(i).GetComponent<GimmicControl>().CheckEnter(objectPosition, panelPosition, direction))
                 return true;
         }
         

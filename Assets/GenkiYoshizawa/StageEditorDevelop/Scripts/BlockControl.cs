@@ -36,7 +36,7 @@ public class BlockControl : MonoBehaviour
             }
             for (int i = 0; i < transform.GetChild(1).childCount; ++i)
             {
-                if (transform.GetChild(0).GetChild(i).gameObject != _GameManager.GetComponent<GameManagerScript>().GetPlayer())
+                if (transform.GetChild(1).GetChild(i).gameObject != _GameManager.GetComponent<GameManagerScript>().GetPlayer())
                     transform.GetChild(1).GetChild(i).GetComponent<GimmicControl>().Rotate(angle);
             }
 
@@ -76,7 +76,7 @@ public class BlockControl : MonoBehaviour
             }
             for (int i = 0; i < transform.GetChild(1).childCount; ++i)
             {
-                if (transform.GetChild(0).GetChild(i).gameObject != _GameManager.GetComponent<GameManagerScript>().GetPlayer())
+                if (transform.GetChild(1).GetChild(i).gameObject != _GameManager.GetComponent<GameManagerScript>().GetPlayer())
                     transform.GetChild(1).GetChild(i).GetComponent<GimmicControl>().TurnOver(rotAxis);
             }
 
@@ -97,16 +97,22 @@ public class BlockControl : MonoBehaviour
     //ブロックの入れ替え関数
     public void Swap(bool isFront)
     {
+        GameManagerScript gameManagerScript = _GameManager.GetComponent<GameManagerScript>();
+
         List<GameObject> targetBlock = null;
         if (transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetPanelIndex() != 0)
             targetBlock = ScanTargetBlock(isFront);
-        
+
+        List<Vector2Int> targetBlockLocalPosition = null;
+
         if (targetBlock == null)
             return;
         else
         {
-            foreach(GameObject target in targetBlock)
+            foreach (GameObject target in targetBlock)
             {
+                targetBlockLocalPosition.Add(target.GetComponent<BlockConfig>().GetBlockLocalPosition());
+
                 if (gameObject == target)
                 {
                     targetBlock.Remove(target);
@@ -115,13 +121,12 @@ public class BlockControl : MonoBehaviour
             }
         }
 
-        GameManagerScript gameManagerScript = _GameManager.GetComponent<GameManagerScript>();
 
         // プレイヤー、エネミーのパネル入れ替え関数を呼び出す
         // ここに書いてあるスクリプト、関数で用意してもらえるとコメントアウトだけで済むので助かる
-        gameManagerScript.GetPlayer().GetComponent<PlayerControl>().SwapMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition());
+        gameManagerScript.GetPlayer().GetComponent<PlayerControl>().SwapMySelf(targetBlockLocalPosition);
         //foreach (GameObject enemy in gameManagerScript.GetEnemys())
-        //    enemy.GetComponent<EnemyControl>().SwapMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition());
+        //    enemy.GetComponent<EnemyControl>().SwapMySelf(targetBlockLocalPosition);
 
         // 配列要素入れ替え処理
         // ゲームマネージャー内の配列入れ替え
