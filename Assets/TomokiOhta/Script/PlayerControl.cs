@@ -27,12 +27,14 @@ public class PlayerControl : MonoBehaviour
         {
             Debug.Log("âEÇ™âüÇ≥ÇÍÇΩÇÊ");
             RotateMySelf(_LocalPosition, 90.0f);
+            transform.Rotate(0.0f, 90.0f, 0.0f);
         }
 
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             Debug.Log("ç∂Ç™âüÇ≥ÇÍÇΩÇÊ");
             RotateMySelf(_LocalPosition, -90.0f);
+            transform.Rotate(0.0f, -90.0f, 0.0f);
         }
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
