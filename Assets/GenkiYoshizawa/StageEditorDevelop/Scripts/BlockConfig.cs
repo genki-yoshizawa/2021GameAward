@@ -96,7 +96,8 @@ public class BlockConfig : MonoBehaviour
                 return objectBlock.transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().CheckEnter(objectPosition, objectPosition, direction);
             else return true;
         }
-        
+
+        Debug.Log("ç≈å„ÇÃfalse");
         return false;
     }
 
