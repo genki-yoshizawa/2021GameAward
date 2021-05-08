@@ -27,18 +27,31 @@ public class PlayerControl : MonoBehaviour
         {
             Debug.Log("右が押されたよ");
             RotateMySelf(_LocalPosition, 90.0f);
+            transform.Rotate(0.0f, 90.0f, 0.0f);
         }
 
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             Debug.Log("左が押されたよ");
             RotateMySelf(_LocalPosition, -90.0f);
+            transform.Rotate(0.0f, -90.0f, 0.0f);
         }
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             Debug.Log("上が押されたよ");
-            Move(_Direction);
+
+            //前のブロック取得
+            var blockScript = _GameManagerScript.GetBlock(_LocalPosition + _Direction).GetComponent<BlockConfig>();
+
+            if (blockScript.CheckPanelMove(_IsFront, _LocalPosition, _Direction))
+            {
+                Move(_Direction);
+            }
+            else
+            {
+                Debug.Log("Move失敗");
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Keypad1))
@@ -133,6 +146,8 @@ public class PlayerControl : MonoBehaviour
         //Vector3 nowpos = transform.localPosition;
         //transform.localPosition = new Vector3(nowpos.x - _MoveDirection.x, nowpos.y - _MoveDirection.y, nowpos.z - _MoveDirection.z);
         //transform.localPosition = nowpos - _MoveDirection;
+
+
 
         //前のブロック取得
         var block = _GameManagerScript.GetBlock(_LocalPosition + direction);

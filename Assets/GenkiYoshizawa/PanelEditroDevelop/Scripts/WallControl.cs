@@ -54,9 +54,13 @@ public class WallControl : GimmicControl
         Vector2 wallDirection = transform.GetComponent<WallConfig>().GetDirection();
 
         // 並行条件 a1b2 - a2b1 = 0
-        if (transform.GetComponent<WallConfig>().GetIsBreak() || (wallDirection.x * direction.y - wallDirection.y * direction.x) != 0)//壊れているor自身の向きとオブジェクトの向きが平行でないなら
+        if (transform.GetComponent<WallConfig>().GetIsBreak() || //壊れているor
+            (Mathf.RoundToInt(wallDirection.x) * Mathf.RoundToInt(direction.y) - Mathf.RoundToInt(wallDirection.y) * Mathf.RoundToInt(direction.x)) != 0)//自身の向きとオブジェクトの向きが平行でないなら
+        {
+            Debug.Log(wallDirection.x * direction.y - wallDirection.y * direction.x);
+            Debug.Log(wallDirection.x * direction.y - wallDirection.y * direction.x != 0);
             return true;
-
+        }
         // 自分のパネル位置とオブジェクトパネル位置が一緒かどうかで分岐
         if (objectPosition == panelPosition)//自分のパネル位置とオブジェクトパネル位置が一緒
         {

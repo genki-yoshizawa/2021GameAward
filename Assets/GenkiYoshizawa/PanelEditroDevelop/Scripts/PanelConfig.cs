@@ -40,11 +40,12 @@ public class PanelConfig : MonoBehaviour
                     continue;
 
             // プレイヤーでもなくギミックのチェックエンターも通ったら
-            if (gmScript.GetPlayer() != transform.GetChild(i).gameObject && transform.GetChild(i).GetComponent<GimmicControl>().CheckEnter(objectPosition, panelPosition, direction))
-                return true;
+            if (gmScript.GetPlayer() != transform.GetChild(i).gameObject &&
+                !transform.GetChild(i).GetComponent<GimmicControl>().CheckEnter(objectPosition, panelPosition, direction))
+                return false;
         }
-        
-        return false;
+
+        return true;
     }
 
     public int CheckWallLevel(Vector2Int objectPosition, Vector2Int panelPosition, Vector2 direction)
