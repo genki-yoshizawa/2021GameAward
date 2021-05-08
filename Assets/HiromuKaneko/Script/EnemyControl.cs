@@ -43,14 +43,14 @@ public class EnemyControl : MonoBehaviour
     private GameObject[][] _Blocks;         // ブロックを保持する
 
     private GameObject _GameManager;        // ゲームマネージャーを保持
-    [SerializeField] protected GameObject _Up, _Down, _Left, _Right, _NextBlock = new GameObject();
+    [SerializeField] protected GameObject _Up, _Down, _Left, _Right, _NextBlock; // 移動可能ブロックの保持、進む先のブロックを保持
     protected GameObject _Player;
     private int _Count;         // ステート移行用にフレームカウント
 
     float _PosY = 0.3f;    // Y座標固定用
 
     // Start is called before the first frame update
-    void Start()
+    protected void Start()
     {
         _GameManager = GameObject.FindGameObjectWithTag("Manager");
         //Player = gameObject.GetComponent<GameManagerScript>().GetPlayer();
@@ -62,7 +62,7 @@ public class EnemyControl : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected void Update()
     {
         Wait();
         // エネミーステートを変更する関数を呼ぶ
@@ -94,13 +94,13 @@ public class EnemyControl : MonoBehaviour
         }
     }
 
-    //public virtual void ChangeState()
-    //{
-        
+    public virtual void ChangeState()
+    {
 
-    //}
 
-    void Wait()
+    }
+
+    protected void Wait()
     {
 
         // 前後左右にブロックがあるか
@@ -143,7 +143,7 @@ public class EnemyControl : MonoBehaviour
     }
 
     // 待機関数
-    void Idle()
+    protected void Idle()
     {
         // 待機モーションをさせる
         // プレイヤーのターンが終わったら次のステートに移行
@@ -162,14 +162,15 @@ public class EnemyControl : MonoBehaviour
         }
     }
 
-    void Stay()
+    protected void Stay()
     {
-
+        // なにもしない処理？
+        // 待機モーションを実行？
     }
 
 
     // 移動関数
-    void Move()
+    protected void Move()
     {
 
         GameObject o;
@@ -208,65 +209,10 @@ public class EnemyControl : MonoBehaviour
 
 
 
-        //GameObject a = up.transform.GetChild(0);
-
-        //transform.parent = a;
-
-        //if (Input.GetKeyDown(KeyCode.W))
-        //{
-
-
-        //}
-
-        //if (Input.GetKeyDown(KeyCode.S))
-        //{
-
-        //    GameObject b = _Down.transform.GetChild(0).gameObject;
-        //    transform.parent = b.transform;
-
-        //    this.transform.position = b.transform.position;
-
-        //    _EnemyBlockPosition = _NextBlock.GetComponent<BlockConfig>().GetBlockLocalPosition();
-
-        //    _EnemyState = _NextState;
-        //    _NextState = EnemyState.WAIT;
-        //}
-        //if (Input.GetKeyDown(KeyCode.A))
-        //{
-
-        //    GameObject c = _Left.transform.GetChild(0).gameObject;
-        //    transform.parent = c.transform;
-
-        //    this.transform.position = c.transform.position;
-
-        //    _EnemyBlockPosition = _Left.GetComponent<BlockConfig>().GetBlockLocalPosition();
-
-        //    _EnemyState = _NextState;
-        //    _NextState = EnemyState.WAIT;
-
-        //}
-        //if (Input.GetKeyDown(KeyCode.D))
-        //{
-
-        //    GameObject d = _Right.transform.GetChild(0).gameObject;
-        //    transform.parent = d.transform;
-
-        //    this.transform.position = d.transform.position;
-
-        //    _EnemyBlockPosition = _Right.GetComponent<BlockConfig>().GetBlockLocalPosition();
-
-        //    _EnemyState = _NextState;
-        //    _NextState = EnemyState.WAIT;
-        //}
-
-
-
-
-
     }
 
     // 壁をかじる関数
-    void Break()
+    protected void Break()
     {
 
 
@@ -308,59 +254,59 @@ public class EnemyControl : MonoBehaviour
         _isFront = isfront;
     }
 
-    public void ChangeState()
-    {
-        // プレイヤーのいるブロックを朱徳して
-        // プレイヤーから一番遠いブロックへ逃げる
-        Vector3 playerpos = _Player.transform.position;
+    //public void ChangeState()
+    //{
+    //    // プレイヤーのいるブロックを朱徳して
+    //    // プレイヤーから一番遠いブロックへ逃げる
+    //    Vector3 playerpos = _Player.transform.position;
 
-        GameObject obj = new GameObject();
-        float distance = 0.0f;
-        float tmp = 0.0f;
+    //    GameObject obj = new GameObject();
+    //    float distance = 0.0f;
+    //    float tmp = 0.0f;
 
-        if (_Up != null)
-        {
-            tmp = Vector3.Distance(playerpos, _Up.transform.position);
-            if (tmp > distance)
-            {
-                obj = _Up;
-                distance = tmp;
-            }
-        }
-        if (_Down != null)
-        {
-            tmp = Vector3.Distance(playerpos, _Down.transform.position);
-            if (tmp > distance)
-            {
-                obj = _Down;
-                distance = tmp;
-            }
-        }
+    //    if (_Up != null)
+    //    {
+    //        tmp = Vector3.Distance(playerpos, _Up.transform.position);
+    //        if (tmp > distance)
+    //        {
+    //            obj = _Up;
+    //            distance = tmp;
+    //        }
+    //    }
+    //    if (_Down != null)
+    //    {
+    //        tmp = Vector3.Distance(playerpos, _Down.transform.position);
+    //        if (tmp > distance)
+    //        {
+    //            obj = _Down;
+    //            distance = tmp;
+    //        }
+    //    }
 
-        if (_Left != null)
-        {
-            tmp = Vector3.Distance(playerpos, _Left.transform.position);
-            if (tmp > distance)
-            {
-                obj = _Left;
-                distance = tmp;
-            }
-        }
-        if (_Right != null)
-        {
-            tmp = Vector3.Distance(playerpos, _Right.transform.position);
-            if (tmp > distance)
-            {
-                obj = _Right;
-                distance = tmp;
-            }
-        }
+    //    if (_Left != null)
+    //    {
+    //        tmp = Vector3.Distance(playerpos, _Left.transform.position);
+    //        if (tmp > distance)
+    //        {
+    //            obj = _Left;
+    //            distance = tmp;
+    //        }
+    //    }
+    //    if (_Right != null)
+    //    {
+    //        tmp = Vector3.Distance(playerpos, _Right.transform.position);
+    //        if (tmp > distance)
+    //        {
+    //            obj = _Right;
+    //            distance = tmp;
+    //        }
+    //    }
 
 
 
-        _NextBlock = obj;
-        _EnemyState = EnemyState.MOVE;
-    }
+    //    _NextBlock = obj;
+    //    _EnemyState = EnemyState.MOVE;
+    //}
 
 }
 
