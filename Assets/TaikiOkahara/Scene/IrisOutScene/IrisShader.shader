@@ -42,16 +42,17 @@ Shader"Custom/IrisShader"{
                     //lの値が＿Length以下ならそのまま描画する。違うのなら黒く描画
 
 
-                    _PlayerPosition -= fixed2(0.5, 0.5);
-                    _PlayerPosition.x *= 16.0 / 9.0;
-                    i.uv -= fixed2(0.5, 0.5);
-                    i.uv.x *= 16.0 / 9.0;
+                    _PlayerPosition -= fixed2(0.5, 0.5);//位置座標を左下から中央へ移動
+                    _PlayerPosition.x *= 16.0 / 9.0;//画面アスペクト比
+
+                    i.uv -= fixed2(0.5, 0.5);//位置座標を左下から中央へ移動
+                    i.uv.x *= 16.0 / 9.0;//画面アスペクト比
+
                     fixed4 color = (distance(i.uv, _PlayerPosition) < _Radius) ? c : fixed4(0, 0, 0, 1);
-                    //fixed4 color = (distance(i.uv, fixed2(0.0,0.0)) < _Radius) ? c : fixed4(0, 0, 0, 1);
 
                 return color;
+                }
+                ENDCG
             }
-            ENDCG
-        }
         }
 }
