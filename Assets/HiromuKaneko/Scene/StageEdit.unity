@@ -2271,29 +2271,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 289711513346485271, guid: ad0608d984117cd49b90690c98e98df1, type: 3}
   m_PrefabInstance: {fileID: 985025775}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &987049145
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 987049139}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1e7557a5a1950e429b14e27a02fd64c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _EnemyState: 0
-  _NextState: 0
-  _ActCount: 0
-  _BreakLevel: 0
-  _BreakTurn: 0
-  _EnemyBlockPosition: {x: 0, y: 0}
-  _Up: {fileID: 0}
-  _Down: {fileID: 0}
-  _Left: {fileID: 0}
-  _Right: {fileID: 0}
-  _NextBlock: {fileID: 0}
 --- !u!1001 &1013054639
 PrefabInstance:
   m_ObjectHideFlags: 0

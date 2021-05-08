@@ -50,7 +50,7 @@ public class EnemyControl : MonoBehaviour
     float _PosY = 0.3f;    // Y座標固定用
 
     // Start is called before the first frame update
-    protected void Start()
+    void Start()
     {
         _GameManager = GameObject.FindGameObjectWithTag("Manager");
         //Player = gameObject.GetComponent<GameManagerScript>().GetPlayer();
@@ -62,7 +62,7 @@ public class EnemyControl : MonoBehaviour
     }
 
     // Update is called once per frame
-    protected void Update()
+    void Update()
     {
         Wait();
         // エネミーステートを変更する関数を呼ぶ
@@ -94,13 +94,13 @@ public class EnemyControl : MonoBehaviour
         }
     }
 
-    public virtual void ChangeState()
-    {
+    //public virtual void ChangeState()
+    //{
+        
 
+    //}
 
-    }
-
-    protected void Wait()
+    void Wait()
     {
 
         // 前後左右にブロックがあるか
@@ -143,7 +143,7 @@ public class EnemyControl : MonoBehaviour
     }
 
     // 待機関数
-    protected void Idle()
+    void Idle()
     {
         // 待機モーションをさせる
         // プレイヤーのターンが終わったら次のステートに移行
@@ -154,15 +154,15 @@ public class EnemyControl : MonoBehaviour
 
 
         // 現状はターン制度がないためエンターキーでステートを移行させている
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            _EnemyState = _NextState;
-            _NextState = EnemyState.MOVE;
+        //if (Input.GetKeyDown(KeyCode.Return))
+        //{
+        //    _EnemyState = _NextState;
+        //    _NextState = EnemyState.MOVE;
 
-        }
+        //}
     }
 
-    protected void Stay()
+    void Stay()
     {
         // なにもしない処理？
         // 待機モーションを実行？
@@ -170,7 +170,7 @@ public class EnemyControl : MonoBehaviour
 
 
     // 移動関数
-    protected void Move()
+    void Move()
     {
 
         GameObject o;
@@ -187,6 +187,7 @@ public class EnemyControl : MonoBehaviour
         Pos.y = _PosY;
         this.transform.position = Pos;
 
+        _EnemyState = EnemyState.IDLE;
 
         // まず、表世界にいるのか裏世界にいるのかをみて、表なら逃げる　裏なら追うように作る
         // 移動できるパネルを参照して、進める方向が多いパネルかつ
@@ -212,7 +213,7 @@ public class EnemyControl : MonoBehaviour
     }
 
     // 壁をかじる関数
-    protected void Break()
+    void Break()
     {
 
 
@@ -254,59 +255,63 @@ public class EnemyControl : MonoBehaviour
         _isFront = isfront;
     }
 
-    //public void ChangeState()
-    //{
-    //    // プレイヤーのいるブロックを朱徳して
-    //    // プレイヤーから一番遠いブロックへ逃げる
-    //    Vector3 playerpos = _Player.transform.position;
+    public void ChangeState()
+    {
+        // プレイヤーのいるブロックを朱徳して
+        // プレイヤーから一番遠いブロックへ逃げる
+        Vector3 playerpos = _Player.transform.position;
 
-    //    GameObject obj = new GameObject();
-    //    float distance = 0.0f;
-    //    float tmp = 0.0f;
+        GameObject obj = new GameObject();
+        float distance = 0.0f;
+        float tmp = 0.0f;
 
-    //    if (_Up != null)
-    //    {
-    //        tmp = Vector3.Distance(playerpos, _Up.transform.position);
-    //        if (tmp > distance)
-    //        {
-    //            obj = _Up;
-    //            distance = tmp;
-    //        }
-    //    }
-    //    if (_Down != null)
-    //    {
-    //        tmp = Vector3.Distance(playerpos, _Down.transform.position);
-    //        if (tmp > distance)
-    //        {
-    //            obj = _Down;
-    //            distance = tmp;
-    //        }
-    //    }
+        if (_Up != null)
+        {
+            tmp = Vector3.Distance(playerpos, _Up.transform.position);
+            if (tmp > distance)
+            {
+                obj = _Up;
+                distance = tmp;
+            }
+        }
+        if (_Down != null)
+        {
+            tmp = Vector3.Distance(playerpos, _Down.transform.position);
+            if (tmp > distance)
+            {
+                obj = _Down;
+                distance = tmp;
+            }
+        }
 
-    //    if (_Left != null)
-    //    {
-    //        tmp = Vector3.Distance(playerpos, _Left.transform.position);
-    //        if (tmp > distance)
-    //        {
-    //            obj = _Left;
-    //            distance = tmp;
-    //        }
-    //    }
-    //    if (_Right != null)
-    //    {
-    //        tmp = Vector3.Distance(playerpos, _Right.transform.position);
-    //        if (tmp > distance)
-    //        {
-    //            obj = _Right;
-    //            distance = tmp;
-    //        }
-    //    }
+        if (_Left != null)
+        {
+            tmp = Vector3.Distance(playerpos, _Left.transform.position);
+            if (tmp > distance)
+            {
+                obj = _Left;
+                distance = tmp;
+            }
+        }
+        if (_Right != null)
+        {
+            tmp = Vector3.Distance(playerpos, _Right.transform.position);
+            if (tmp > distance)
+            {
+                obj = _Right;
+                distance = tmp;
+            }
+        }
 
+        _NextBlock = obj;
+        _EnemyState = EnemyState.MOVE;
+    }
 
+    public void EnemyTurn( )
+    {
 
-    //    _NextBlock = obj;
-    //    _EnemyState = EnemyState.MOVE;
-    //}
+        ChangeState();
+    }
 
 }
 
