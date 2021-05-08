@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class GameManagerScript : MonoBehaviour
 {
+    [Header("ステージ上のTurnManagerオブジェクトをセットしてください(Hierarchy上のTurnManagerオブジェクト)")]
+    [SerializeField] private GameObject _TurnManager;
     [Header("ステージ上のPlayerオブジェクトをセットしてください(Hierarchy上のPlayerオブジェクト)")]
     [SerializeField] private GameObject _Player;
     [Header("ステージ上のEnemyオブジェクトの数を入れた後それぞれのElementにセットしてください(Hierarchy上のEnemyオブジェクト)")]
     [SerializeField] private List<GameObject> _Enemy;
     // ブロックの配列
-    //private List<List<GameObject>> _Block = new List<List<GameObject>>();
     private GameObject[][] _Block;
 
     // Start is called before the first frame update
@@ -17,6 +18,7 @@ public class GameManagerScript : MonoBehaviour
     {
         AssignBlockArray();
 
+<<<<<<< HEAD
         //_Player.GetComponent<PlayerControl>().SetLocalPosition(_Player.transform.parent.parent.GetComponent<BlockConfig>().GetBlockLocalPosition());
         //_Player.GetComponent<PlayerControl>().SetIsFront(_Player.transform.parent == _Player.transform.parent.parent.GetChild(0) ? true : false);
         foreach (GameObject enemy in _Enemy)
@@ -24,6 +26,15 @@ public class GameManagerScript : MonoBehaviour
             enemy.GetComponent<EnemyControl>().SetLocalPosition(enemy.transform.parent.parent.GetComponent<BlockConfig>().GetBlockLocalPosition());
             enemy.GetComponent<EnemyControl>().SetIsFront(enemy.transform.parent == enemy.transform.parent.parent.GetChild(0) ? true : false);
         }
+=======
+        _Player.GetComponent<PlayerControl>().SetLocalPosition(_Player.transform.parent.parent.GetComponent<BlockConfig>().GetBlockLocalPosition());
+        _Player.GetComponent<PlayerControl>().SetIsFront(_Player.transform.parent == _Player.transform.parent.parent.GetChild(0) ? true : false);
+        //foreach (GameObject enemy in _Enemy)
+        //{
+        //    enemy.GetComponent<EnemyControl>().SetLocalPosition(enemy.transform.parent.parent.GetComponent<BlockConfig>().GetBlockLocalPosition());
+        //    enemy.GetComponent<EnemyControl>().SetIsFront(enemy.transform.parent == enemy.transform.parent.parent.GetChild(0) ? true : false);
+        //}
+>>>>>>> 1972b585da15fd8fa73b1a3cc416c15fe73e2768
     }
 
     // Update is called once per frame
@@ -87,11 +98,14 @@ public class GameManagerScript : MonoBehaviour
         GameObject temp = _Block[block1.x][block1.y];
         _Block[block1.x][block1.y] = _Block[block2.x][block2.y];
         _Block[block2.x][block2.y] = temp;
+        
     }
 
+    public GameObject GetTurnManager() { return _TurnManager; }
     public GameObject GetPlayer() { return _Player; }                               //プレイヤーの取得
     public List<GameObject> GetEnemys() { return _Enemy; }                          //エネミーの全取得
     public GameObject GetEnemy(int index) { return _Enemy[index]; }                 //index番のエネミーの取得
     public GameObject[][] GetBlocks() { return _Block; }                    //ブロックの全取得
     public GameObject GetBlock(Vector2Int pos) { return _Block[pos.x][pos.y]; }     //posにあるBlockの取得
+    
 }
