@@ -17,7 +17,7 @@ public class TurnManager : MonoBehaviour
     {
         _GameManagerScript = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerScript>();
 
-        _PlayerTurn = false;
+        _PlayerTurn = true;
         _EnemyTurn  = false;
         _BlockTurn  = false;
 
@@ -32,29 +32,25 @@ public class TurnManager : MonoBehaviour
         {
             if (_PlayerScript.PlayerTurn())
             {
-                _PlayerTurn = false;
-                _EnemyTurn = true;
+                //_PlayerTurn = false;
+                //_EnemyTurn = true;
             }
         }
-        else if (_EnemyTurn)
-        {
-            //var enemyScript = _GameManagerScript.GetPlayer().GetComponent<EnemyControl>();
-            //_EnemyTurn = enemyScript.EnemyTurn();
-            //if (_EnemyScript.EnemyTurn())
-            //{
-            //    _EnemyTurn = false;
-            //    _BlockTurn = true;
-            //}
-        }
-        else if (_BlockTurn)
-        {
-            //var blockScript = _GameManagerScript.GetPlayer().GetComponent<BlockControl>();
-            //_EnemyTurn = blockScript.BlockTurn();
-            //if (_BlockScript.BlockTurn())
-            //{
-            //    _BlockTurn = false;
-            //    _PlayerTurn = true;
-            //}
-        }
+        //else if (_EnemyTurn)
+        //{
+        //    //var enemyScript = _GameManagerScript.GetPlayer().GetComponent<EnemyControl>();
+        //    //_EnemyTurn = enemyScript.EnemyTurn();
+        //    //if (_EnemyScript.EnemyTurn())
+        //    //{
+        //    //    _EnemyTurn = false;
+        //    //    _BlockTurn = true;
+        //    //}
+        //}
+        //else if (_BlockTurn)
+        //{
+        //    //_BlockScript.BlockTurn();
+        //    //_BlockTurn = false;
+        //    //_PlayerTurn = true;
+        //}
     }
 }

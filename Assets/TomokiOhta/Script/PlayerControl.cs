@@ -19,10 +19,13 @@ public class PlayerControl : MonoBehaviour
     //ï\ó†
     private bool _IsFront;
 
+    private bool _IsExist;
+
     void Start()
     {
         //èâéËFindWithTag
         _GameManagerScript = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerScript>();
+        _IsExist = true;
     }
 
     void Update()
