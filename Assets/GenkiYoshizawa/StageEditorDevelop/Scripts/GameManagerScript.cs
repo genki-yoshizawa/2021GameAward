@@ -13,11 +13,14 @@ public class GameManagerScript : MonoBehaviour
     // ブロックの配列
     private GameObject[][] _Block;
 
+    private void Awake()
+    {
+        AssignBlockArray();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        AssignBlockArray();
-
         foreach (GameObject enemy in _Enemy)
         {
             enemy.GetComponent<EnemyControl>().SetLocalPosition(enemy.transform.parent.parent.GetComponent<BlockConfig>().GetBlockLocalPosition());

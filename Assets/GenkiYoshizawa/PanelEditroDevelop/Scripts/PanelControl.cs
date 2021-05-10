@@ -5,10 +5,12 @@ using UnityEngine;
 // パネルの操作を行うクラス
 public class PanelControl : MonoBehaviour
 {
+    private GameObject _GameManager = null;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        _GameManager = GameObject.FindGameObjectWithTag("Manager");
     }
     
     //このパネルにつくギミック（子オブジェクト）をまとめて処理する
@@ -16,7 +18,8 @@ public class PanelControl : MonoBehaviour
     {
         for(int i = 0; i < transform.childCount; ++i)
         {
-            transform.GetChild(i).GetComponent<GimmicControl>().TurnEndUpdate();
+            if(transform.GetChild(i).gameObject != _GameManager.GetComponent<GameManagerScript>().GetPlayer())
+                transform.GetChild(i).GetComponent<GimmicControl>().TurnEndUpdate();
         }
     }
 
