@@ -48,13 +48,9 @@ public class TurnManager : MonoBehaviour
         }
         else if (_BlockTurn)
         {
-            //var blockScript = _GameManagerScript.GetPlayer().GetComponent<BlockControl>();
-            //_EnemyTurn = blockScript.BlockTurn();
-            //if (_BlockScript.BlockTurn())
-            //{
-            //    _BlockTurn = false;
-            //    _PlayerTurn = true;
-            //}
+            //_BlockScript.BlockTurn();
+            //_BlockTurn = false;
+            //_PlayerTurn = true;
         }
     }
 }
