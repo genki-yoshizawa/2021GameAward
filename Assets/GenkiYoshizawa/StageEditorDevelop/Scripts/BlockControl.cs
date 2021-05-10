@@ -194,7 +194,7 @@ public class BlockControl : MonoBehaviour
         {
             foreach (GameObject blockZLine in blockXLine)
             {
-                if (blockZLine == null) Debug.Log("デバッグチェック");
+                if (blockZLine == null) continue;
                 // 同じインデックスであれば対象ブロック
                 // 現段階では3つ以上のスワップはバグる
                 if (blockZLine.transform.GetChild(isFront ? 0 : 1).transform.GetComponent<PanelConfig>().GetPanelIndex() == gameObject.transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetPanelIndex())
