@@ -19,10 +19,13 @@ public class PlayerControl : MonoBehaviour
     //表裏
     private bool _IsFront;
 
+    private bool _IsExist;
+
     void Start()
     {
         //初手FindWithTag
         _GameManagerScript = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerScript>();
+        _IsExist = true;
     }
 
     void Update()
@@ -134,7 +137,15 @@ public class PlayerControl : MonoBehaviour
             Debug.Log("上が押されたよ");
 
             //前のブロック取得
-            var blockScript = _GameManagerScript.GetBlock(_LocalPosition + _Direction).GetComponent<BlockConfig>();
+            var block = _GameManagerScript.GetBlock(_LocalPosition + _Direction);
+            if (block == null)
+            {
+                //前にブロックがなければ
+                Debug.Log("Move失敗");
+                return turnEnd;
+            }
+
+            var blockScript = block.GetComponent<BlockConfig>();
 
             if (blockScript.CheckPanelMove(_IsFront, _LocalPosition, _Direction))
             {
@@ -147,7 +158,7 @@ public class PlayerControl : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Keypad1))
+        if (Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1))
         {
             //Rotateを行うデバッグ用
 
@@ -170,7 +181,7 @@ public class PlayerControl : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Keypad2))
+        if (Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2))
         {
             //Swapを行うデバッグ用
 
@@ -192,7 +203,7 @@ public class PlayerControl : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Keypad3))
+        if (Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3))
         {
             //TurnOverを行うデバッグ用
 
