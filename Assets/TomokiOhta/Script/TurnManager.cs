@@ -10,7 +10,7 @@ public class TurnManager : MonoBehaviour
     private bool _BlockTurn;
 
     private PlayerControl _PlayerScript;
-    private EnemyControl  _EnemyScript;
+    //private EnemyControl  _EnemyScript;
     private BlockControl  _BlockScript;
 
     void Start()
@@ -23,7 +23,7 @@ public class TurnManager : MonoBehaviour
 
         _PlayerScript = _GameManagerScript.GetPlayer().GetComponent<PlayerControl>();
         //_EnemyScript  = _GameManagerScript.GetPlayer().GetComponent<EnemyControl>();
-        //_BlockScript  = _GameManagerScript.GetPlayer().GetComponent<BlockControl>();
+        _BlockScript = _GameManagerScript.GetPlayer().GetComponent<BlockControl>();
     }
 
     void Update()
@@ -32,8 +32,9 @@ public class TurnManager : MonoBehaviour
         {
             if (_PlayerScript.PlayerTurn())
             {
-                //_PlayerTurn = false;
+                _PlayerTurn = false;
                 //_EnemyTurn = true;
+                _BlockTurn = true;
             }
         }
         //else if (_EnemyTurn)
@@ -46,11 +47,11 @@ public class TurnManager : MonoBehaviour
         //    //    _BlockTurn = true;
         //    //}
         //}
-        //else if (_BlockTurn)
-        //{
-        //    //_BlockScript.BlockTurn();
-        //    //_BlockTurn = false;
-        //    //_PlayerTurn = true;
-        //}
+        else if (_BlockTurn)
+        {
+            _BlockScript.BlockTurn();
+            _BlockTurn = false;
+            _PlayerTurn = true;
+        }
     }
 }
