@@ -5,37 +5,47 @@ using UnityEngine;
 public class TurnManager : MonoBehaviour
 {
     private GameManagerScript _GameManagerScript;
-    private bool _PlayerTurn;
-    private bool _EnemyTurn;
-    private bool _BlockTurn;
+    private bool _PlayerTurn = true;
+    private bool _EnemyTurn  = false;
+    private bool _BlockTurn  = false;
 
-    private PlayerControl _PlayerScript;
-    //private EnemyControl  _EnemyScript;
-    private BlockControl  _BlockScript;
+    private PlayerControl       _PlayerScript;
+    //private EnemyControl      _EnemyScript;
+    private List<BlockControl>  _BlockScript = new List<BlockControl>();
 
     void Start()
     {
         _GameManagerScript = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerScript>();
 
-        _PlayerTurn = true;
-        _EnemyTurn  = false;
-        _BlockTurn  = false;
-
         _PlayerScript = _GameManagerScript.GetPlayer().GetComponent<PlayerControl>();
         //_EnemyScript  = _GameManagerScript.GetPlayer().GetComponent<EnemyControl>();
-        //_BlockScript = _GameManagerScript.GetBlock().GetComponent<BlockControl>();
+
+        GameObject[][] blocks = _GameManagerScript.GetBlocks();
+
+        if (blocks == null)
+            Debug.Log("ƒLƒƒƒ“ƒZƒ‹");
+
+
+        foreach(var blocklist in blocks)
+        {
+            foreach (var block in blocklist)
+            {
+                if(block != null)
+                    _BlockScript.Add(block.GetComponent<BlockControl>());
+            }
+        }
     }
 
     void Update()
     {
         if (_PlayerTurn)
         {
-            //if (_PlayerScript.PlayerTurn())
-            //{
-            //    _PlayerTurn = false;
-            //    _EnemyTurn = true;
-            //    _BlockTurn = true;
-            //}
+            if (_PlayerScript.PlayerTurn())
+            {
+                _PlayerTurn = false;
+                //_EnemyTurn = true;
+                _BlockTurn = true;
+            }
         }
         //else if (_EnemyTurn)
         //{
@@ -47,11 +57,13 @@ public class TurnManager : MonoBehaviour
         //    //    _BlockTurn = true;
         //    //}
         //}
-        //else if (_BlockTurn)
-        //{
-        //    _BlockScript.BlockTurn();
-        //    _BlockTurn = false;
-        //    _PlayerTurn = true;
-        //}
+        else if (_BlockTurn)
+        {
+            foreach (var blockScript in _BlockScript)
+                blockScript.BlockTurn();
+
+            _BlockTurn = false;
+            _PlayerTurn = true;
+        }
     }
 }
