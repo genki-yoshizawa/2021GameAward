@@ -35,7 +35,7 @@ public class EnemyControl : MonoBehaviour
     [Header("ランダムorターン毎")]
     [SerializeField] BreakTurn _BreakTurn = BreakTurn.RANDOM;
 
-
+    [SerializeField] protected bool _EnemyTurn;
     // それぞれにGet・Setを作成？
     [SerializeField] private Vector2Int _EnemyBlockPosition;      // ネズミのいるブロックの座標
     private Vector3 _EnemyDirection;        // ネズミの向いてる方向
@@ -45,7 +45,6 @@ public class EnemyControl : MonoBehaviour
     private GameObject _GameManager;        // ゲームマネージャーを保持
     [SerializeField] protected GameObject _Up, _Down, _Left, _Right, _NextBlock; // 移動可能ブロックの保持、進む先のブロックを保持
     protected GameObject _Player;
-    private int _Count;         // ステート移行用にフレームカウント
 
     float _PosY = 0.3f;    // Y座標固定用
 
@@ -57,8 +56,8 @@ public class EnemyControl : MonoBehaviour
         _Player = GameObject.FindGameObjectWithTag("Player");
         GameObject parent = transform.root.gameObject;
         _EnemyBlockPosition = parent.GetComponent<BlockConfig>().GetBlockLocalPosition();
-        _Count = 0;
-        
+        _EnemyTurn = false;
+
     }
 
     // Update is called once per frame
@@ -71,8 +70,13 @@ public class EnemyControl : MonoBehaviour
         // 現状はターン制度がないためエンターキーでステートを移行させている
         if (Input.GetKeyDown(KeyCode.Return))
         {
+            _EnemyTurn = true;
+
+        }
+
+        if (_EnemyTurn)
+        {
             ChangeState();
-            
 
         }
 
@@ -96,7 +100,7 @@ public class EnemyControl : MonoBehaviour
 
     //public virtual void ChangeState()
     //{
-        
+
 
     //}
 
@@ -106,16 +110,16 @@ public class EnemyControl : MonoBehaviour
         // 前後左右にブロックがあるか
         Vector2Int pos = _EnemyBlockPosition;
 
-            _Up = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock(new Vector2Int(pos.x, pos.y + 1));
+        _Up = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock(new Vector2Int(pos.x, pos.y + 1));
 
 
-            _Down = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock(new Vector2Int(pos.x, pos.y - 1));
+        _Down = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock(new Vector2Int(pos.x, pos.y - 1));
 
 
 
-            _Left = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock(new Vector2Int(pos.x - 1, pos.y));
+        _Left = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock(new Vector2Int(pos.x - 1, pos.y));
 
-            _Right = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock(new Vector2Int(pos.x + 1, pos.y));
+        _Right = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock(new Vector2Int(pos.x + 1, pos.y));
 
 
 
@@ -145,6 +149,7 @@ public class EnemyControl : MonoBehaviour
     // 待機関数
     void Idle()
     {
+
         // 待機モーションをさせる
         // プレイヤーのターンが終わったら次のステートに移行
 
@@ -166,6 +171,8 @@ public class EnemyControl : MonoBehaviour
     {
         // なにもしない処理？
         // 待機モーションを実行？
+
+        _EnemyTurn = false;
     }
 
 
@@ -173,71 +180,59 @@ public class EnemyControl : MonoBehaviour
     void Move()
     {
 
+        // 
         GameObject o;
         o = _NextBlock.transform.GetChild(0).gameObject;
         transform.parent = o.transform;
 
         this.transform.position = o.transform.position;
 
+        // ネズミのローカルポジションを
         _EnemyBlockPosition = _NextBlock.GetComponent<BlockConfig>().GetBlockLocalPosition();
 
-  
+
+        // ネズミの位置を調整する
         Vector3 Pos = this.transform.position;
-        ;
         Pos.y = _PosY;
         this.transform.position = Pos;
 
+        // ステートをIDLEに移行する
         _EnemyState = EnemyState.IDLE;
 
-        // まず、表世界にいるのか裏世界にいるのかをみて、表なら逃げる　裏なら追うように作る
-        // 移動できるパネルを参照して、進める方向が多いパネルかつ
-        // プレイヤーのいるパネルの位置を見て、プレイヤーから離れられる場所に移動する
-        // 上記の条件が複数ある場合はランダム？
-        //  _Block = _GameManager.GetComponent<GameManagerScript>().GetBlocks();
-
-        // ネズミのいる位置のブロックを取得　gameeobject nowblock
-        // 取得したブロックの中にBlockConfig.GetBlockLocalPosition
-        // ４つのGameObjectを一時的に変数を用意（前後左右
-
-        // 壁があったら～等の条件が増えていく
-
-        // 移動先のブロックの中のパネルの子オブジェクトに
-
-        // 移動先の決定　
-        // 移動先のブロックの座標を取得して　中心座標へ移動
-        // Ｙ座標を後から指定する必要がある
-        // ブロックの子どもに
-
-
+        // ネズミのターンを終了する
+        _EnemyTurn = false;
 
     }
 
     // 壁をかじる関数
     void Break()
     {
-
-
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (_BreakTurn == BreakTurn.RANDOM)
         {
-            _EnemyState = _NextState;
+
         }
+
+
+        // 壁をかじる処理を作る
+
+        _EnemyTurn = false;
     }
 
 
     // ブロックで呼び出す　自分を回転させる関数
-    public void RotateMySelf()
+    public void RotateMySelf(Vector2Int position, float angle)
     {
 
     }
 
     // ブロックで呼び出す　自分をひっくり返す関数（表裏入れ替え）
-    public void TurnOverMySelf()
+    public void TurnOverMySelf(Vector2Int position)
     {
 
     }
 
     // ブロックで呼び出す　自分の位置を入れ替える関数
-    public void SwapMySelf()
+    public void SwapMySelf(Vector2Int position)
     {
 
     }
@@ -248,16 +243,21 @@ public class EnemyControl : MonoBehaviour
         _EnemyBlockPosition = position;
     }
 
-   // public void GetLocalPosition() { return _EnemyBlockPosition; }
+    // public void GetLocalPosition() { return _EnemyBlockPosition; }
     // 自分が表か裏どっちにいるか
     public void SetIsFront(bool isfront)
     {
         _isFront = isfront;
     }
 
+    public bool GetEnemyTurn()
+    {
+        return _EnemyTurn;
+    }
+
     public void ChangeState()
     {
-        // プレイヤーのいるブロックを朱徳して
+        // プレイヤーのいるブロックを取得して
         // プレイヤーから一番遠いブロックへ逃げる
         Vector3 playerpos = _Player.transform.position;
 
@@ -307,10 +307,9 @@ public class EnemyControl : MonoBehaviour
         _EnemyState = EnemyState.MOVE;
     }
 
-    public void EnemyTurn( )
+    public void EnemyTurn()
     {
-
-        ChangeState();
+        _EnemyTurn = true;
     }
 
 }
