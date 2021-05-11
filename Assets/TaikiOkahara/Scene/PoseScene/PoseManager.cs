@@ -24,8 +24,8 @@ public class PoseManager : MonoBehaviour
     [SerializeField]
     private Animator _StageModelAnimator;
 
-    [SerializeField]
-    private Animator _DetailUIAnimator;
+    //[SerializeField]
+    //private Animator _DetailUIAnimator;
 
 
     private enum FadeType
@@ -128,14 +128,14 @@ public class PoseManager : MonoBehaviour
     void PoseInAnimation()
     {
         _StageModelAnimator.SetBool("Pose", true);
-        _DetailUIAnimator.SetBool("Pose", true);
+        //_DetailUIAnimator.SetBool("Pose", true);
 
     }
 
     void PoseOutAnimation()
     {
         _StageModelAnimator.SetBool("Pose", false);
-        _DetailUIAnimator.SetBool("Pose", false);
+        //_DetailUIAnimator.SetBool("Pose", false);
 
     }
 

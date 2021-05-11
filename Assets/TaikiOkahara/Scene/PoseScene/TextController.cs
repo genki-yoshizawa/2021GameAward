@@ -3,58 +3,54 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TextController : BaseMeshEffect {
+public class TextController : MonoBehaviour {
 
-    float time = 0;
-    float radius = 1.5f;
+    [SerializeField]
+    private GameObject _TextParent;
 
-    float move = 0;
-    public override void ModifyMesh ( UnityEngine.UI.VertexHelper vh)
+    private GameObject[] _TextList;
+
+    [SerializeField]
+    private Vector2 _StartPosition;
+
+
+    [SerializeField]
+    private Vector2 _StopPosition;
+
+
+    private int _ChildCount;
+
+    private int _FontSize;
+
+
+    void Start()
     {
-        if (!IsActive())
-            return;
+        _ChildCount = _TextParent.transform.childCount;
+        _TextList = new GameObject[_ChildCount];
 
-        List<UIVertex> vertices = new List<UIVertex>();
-        vh.GetUIVertexStream(vertices);
-
-        TextMove(ref vertices);
-
-        vh.Clear();
-        vh.AddUIVertexTriangleStream(vertices);
-    }
-
-    void TextMove( ref List<UIVertex> vertices )
-    {
-        for (int c = 0; c < vertices.Count; c += 6)
+        _FontSize = 38;
+        for(int i = 0;i < _ChildCount; i++)
         {
-            float rad = Random.Range(0,360) * Mathf.Deg2Rad;
-            Vector3 dir = new Vector3 (radius * Mathf.Cos (rad), radius * Mathf.Sin (rad), 0);
-
-            Vector3 tmp;
-            //tmp = new Vector3(5f * (vertices.Count % 6), 0, 0);
-            
-            tmp = new Vector3((move * (vertices.Count % 6)),0,0);
-            Debug.Log(tmp);
-            for(int i = 0; i < 6; i++)
-            {
-                var vert       = vertices [c+i];
-                //vert.position = vert.position + dir;
-                vert.position = vert.position + tmp;
-                vertices [c+i] = vert;
-
-                //Debug.Log("vertices[" + i + "] = (" + vert.position + ")");
-            }
+            _TextList[i] = _TextParent.transform.GetChild(i).gameObject;
+            _TextList[i].GetComponent<RectTransform>().position = _StartPosition;
         }
     }
 
     void Update()
     {
-        move += 0.01f;
-        time += Time.deltaTime;
-        if (time > 0.05f)
+        //TextIn();
+    }
+
+    void TextIn()
+    {
+
+        for(int i = 0;i< _ChildCount;i++)
         {
-            time = 0;
-            base.GetComponent<Graphic> ().SetVerticesDirty ();
+            RectTransform rectTrans = _TextList[i].GetComponent<RectTransform>();
+            Vector3 pos = rectTrans.position;
+            pos.x += 1.0f;
+            rectTrans.position = pos;
         }
     }
+
 }
