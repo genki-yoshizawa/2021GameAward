@@ -10,114 +10,26 @@ public class PlayerControl : MonoBehaviour
     [Header("プレイヤーの向きを入れてください。")]
     [SerializeField]private Vector2Int _Direction;
 
+    //プレイヤーの配列座標
     private Vector2Int _LocalPosition;
 
+    //他のオブジェクトに触れるときの仲介役
     private GameManagerScript _GameManagerScript;
 
+    //表裏
     private bool _IsFront;
+
+    private bool _IsExist;
 
     void Start()
     {
+        //初手FindWithTag
         _GameManagerScript = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerScript>();
+        _IsExist = true;
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            Debug.Log("右が押されたよ");
-            RotateMySelf(_LocalPosition, 90.0f);
-            transform.Rotate(0.0f, 90.0f, 0.0f);
-        }
-
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            Debug.Log("左が押されたよ");
-            RotateMySelf(_LocalPosition, -90.0f);
-            transform.Rotate(0.0f, -90.0f, 0.0f);
-        }
-
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            Debug.Log("上が押されたよ");
-
-            //前のブロック取得
-            var blockScript = _GameManagerScript.GetBlock(_LocalPosition + _Direction).GetComponent<BlockConfig>();
-
-            if (blockScript.CheckPanelMove(_IsFront, _LocalPosition, _Direction))
-            {
-                Move(_Direction);
-            }
-            else
-            {
-                Debug.Log("Move失敗");
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.Keypad1))
-        {
-            //Rotateを行うデバッグ用
-
-            //前のブロック取得
-            var block = _GameManagerScript.GetBlock(_LocalPosition + _Direction);
-
-            //前のブロックがRotate可能かどうかを調べる
-            var panelScript = block.transform.GetChild(_IsFront ? 0 : 1).GetComponent<PanelConfig>();
-
-            if (panelScript.GetCanRotate())
-            {
-                var blockControlScript = block.GetComponent<BlockControl>();
-                blockControlScript.Rotate(_IsFront, 90);
-                Debug.Log("Rotateできたよ");
-            }
-            else
-            {
-                Debug.Log("Rotate失敗");
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.Keypad2))
-        {
-            //Swapを行うデバッグ用
-
-            //前のブロック取得
-            var block = _GameManagerScript.GetBlock(_LocalPosition + _Direction);
-
-            //前のブロックがSwap可能かどうかを調べる
-            var panelScript = block.transform.GetChild(_IsFront ? 0 : 1).GetComponent<PanelConfig>();
-            if (panelScript.GetCanSwap())
-            {
-                var blockControlScript = block.GetComponent<BlockControl>();
-                blockControlScript.Swap(_IsFront);
-                Debug.Log("Swapしたよ");
-            }
-            else
-            {
-                Debug.Log("Swap失敗");
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.Keypad3))
-        {
-            //TurnOverを行うデバッグ用
-
-            //前のブロック取得
-            var block = _GameManagerScript.GetBlock(_LocalPosition + _Direction);
-
-            //前のブロックがTurnOver可能かどうかを調べる
-            var panelScript = block.transform.GetChild(_IsFront ? 0 : 1).GetComponent<PanelConfig>();
-            if (panelScript.GetCanTurnOver())
-            {
-                var blockControlScript = block.GetComponent<BlockControl>();
-                blockControlScript.TurnOver(_IsFront);
-                Debug.Log("TurnOverできたよ");
-            }
-            else
-            {
-                Debug.Log("TurnOver失敗");
-            }
-        }
-
         //箱コンこれで動くと思う
         //if (Input.GetKeyDown("joystick button 1"))  //B
         //{
@@ -200,6 +112,120 @@ public class PlayerControl : MonoBehaviour
             _IsFront = false;
         else
             _IsFront = true;
+    }
+
+    public bool PlayerTurn()
+    {
+        bool turnEnd = false;
+
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            Debug.Log("右が押されたよ");
+            RotateMySelf(_LocalPosition, 90.0f);
+            transform.Rotate(0.0f, 90.0f, 0.0f);
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            Debug.Log("左が押されたよ");
+            RotateMySelf(_LocalPosition, -90.0f);
+            transform.Rotate(0.0f, -90.0f, 0.0f);
+        }
+
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            Debug.Log("上が押されたよ");
+
+            //前のブロック取得
+            var block = _GameManagerScript.GetBlock(_LocalPosition + _Direction);
+            if (block == null)
+            {
+                //前にブロックがなければ
+                Debug.Log("Move失敗");
+                return turnEnd;
+            }
+
+            var blockScript = block.GetComponent<BlockConfig>();
+
+            if (blockScript.CheckPanelMove(_IsFront, _LocalPosition, _Direction))
+            {
+                Move(_Direction);
+                turnEnd = true;
+            }
+            else
+            {
+                Debug.Log("Move失敗");
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            //Rotateを行うデバッグ用
+
+            //前のブロック取得
+            var block = _GameManagerScript.GetBlock(_LocalPosition + _Direction);
+
+            //前のブロックがRotate可能かどうかを調べる
+            var panelScript = block.transform.GetChild(_IsFront ? 0 : 1).GetComponent<PanelConfig>();
+
+            if (panelScript.GetCanRotate())
+            {
+                var blockControlScript = block.GetComponent<BlockControl>();
+                blockControlScript.Rotate(_IsFront, 90);
+                Debug.Log("Rotateできたよ");
+                turnEnd = true;
+            }
+            else
+            {
+                Debug.Log("Rotate失敗");
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            //Swapを行うデバッグ用
+
+            //前のブロック取得
+            var block = _GameManagerScript.GetBlock(_LocalPosition + _Direction);
+
+            //前のブロックがSwap可能かどうかを調べる
+            var panelScript = block.transform.GetChild(_IsFront ? 0 : 1).GetComponent<PanelConfig>();
+            if (panelScript.GetCanSwap())
+            {
+                var blockControlScript = block.GetComponent<BlockControl>();
+                blockControlScript.Swap(_IsFront);
+                Debug.Log("Swapしたよ");
+                turnEnd = true;
+            }
+            else
+            {
+                Debug.Log("Swap失敗");
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            //TurnOverを行うデバッグ用
+
+            //前のブロック取得
+            var block = _GameManagerScript.GetBlock(_LocalPosition + _Direction);
+
+            //前のブロックがTurnOver可能かどうかを調べる
+            var panelScript = block.transform.GetChild(_IsFront ? 0 : 1).GetComponent<PanelConfig>();
+            if (panelScript.GetCanTurnOver())
+            {
+                var blockControlScript = block.GetComponent<BlockControl>();
+                blockControlScript.TurnOver(_IsFront);
+                Debug.Log("TurnOverできたよ");
+                turnEnd = true;
+            }
+            else
+            {
+                Debug.Log("TurnOver失敗");
+            }
+        }
+
+        return turnEnd;
     }
 
     public Vector2Int GetLocalPosition() { return _LocalPosition; }

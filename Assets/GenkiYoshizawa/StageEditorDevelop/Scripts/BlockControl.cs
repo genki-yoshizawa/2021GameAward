@@ -174,6 +174,15 @@ public class BlockControl : MonoBehaviour
         else return false;// 移動先のパネルが壊せないor壁がない
     }
 
+    // ターンの終わりに呼び出す関数
+    public void BlockTurn()
+    {
+        for (int i = 0; i < transform.childCount; ++i)
+        {
+            transform.GetChild(i).GetComponent<PanelControl>().TurnEndUpdate();
+        }
+    }
+
     // GameManagerを介して同じIndexが設定されているブロックを探す
     private List<GameObject> ScanTargetBlock(bool isFront)
     {
@@ -185,9 +194,10 @@ public class BlockControl : MonoBehaviour
         {
             foreach (GameObject blockZLine in blockXLine)
             {
+                if (blockZLine == null) continue;
                 // 同じインデックスであれば対象ブロック
                 // 現段階では3つ以上のスワップはバグる
-                if (blockZLine.transform.GetChild(isFront ? 0 : 1).transform.GetComponent<PanelConfig>().GetPanelIndex() == gameObject.transform.GetChild(0).GetComponent<PanelConfig>().GetPanelIndex())
+                if (blockZLine.transform.GetChild(isFront ? 0 : 1).transform.GetComponent<PanelConfig>().GetPanelIndex() == gameObject.transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetPanelIndex())
                 {
                     targetBlock.Add(blockZLine);
                 }

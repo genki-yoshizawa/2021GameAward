@@ -13,11 +13,14 @@ public class GameManagerScript : MonoBehaviour
     // ブロックの配列
     private GameObject[][] _Block;
 
+    private void Awake()
+    {
+        AssignBlockArray();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        AssignBlockArray();
-
         foreach (GameObject enemy in _Enemy)
         {
             enemy.GetComponent<EnemyControl>().SetLocalPosition(enemy.transform.parent.parent.GetComponent<BlockConfig>().GetBlockLocalPosition());
@@ -97,6 +100,13 @@ public class GameManagerScript : MonoBehaviour
     public List<GameObject> GetEnemys() { return _Enemy; }                          //エネミーの全取得
     public GameObject GetEnemy(int index) { return _Enemy[index]; }                 //index番のエネミーの取得
     public GameObject[][] GetBlocks() { return _Block; }                    //ブロックの全取得
-    public GameObject GetBlock(Vector2Int pos) { return _Block[pos.x][pos.y]; }     //posにあるBlockの取得
+    public GameObject GetBlock(Vector2Int pos)
+    {
+        if (pos.x < 0 || pos.y < 0 // 負の配列は存在しないのでnullを返す
+            || pos.x >= _Block.Length || pos.y >= _Block[pos.x].Length) // 配列の要素を超えた値はnullを返す
+            return null;
+
+        return _Block[pos.x][pos.y];
+    }     //posにあるBlockの取得
     
 }

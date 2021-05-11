@@ -8,6 +8,10 @@
 //    {
 
 //    }
+//    void Update()
+//    {
+
+//    }
 //    public override void ChangeState()
 //    {
 //        // プレイヤーのいるブロックを朱徳して
@@ -54,6 +58,7 @@
 //                distance = tmp;
 //            }
 //        }
+
 
 
 //        _NextBlock = obj;
