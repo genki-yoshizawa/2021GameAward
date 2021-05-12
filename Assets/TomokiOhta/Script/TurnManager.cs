@@ -10,7 +10,7 @@ public class TurnManager : MonoBehaviour
     private bool _BlockTurn  = false;
 
     private PlayerControl       _PlayerScript;
-    //private EnemyControl      _EnemyScript;
+    private List<EnemyControl>  _EnemyScript = new List<EnemyControl>();
     private List<BlockControl>  _BlockScript = new List<BlockControl>();
 
     void Start()
@@ -18,14 +18,11 @@ public class TurnManager : MonoBehaviour
         _GameManagerScript = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerScript>();
 
         _PlayerScript = _GameManagerScript.GetPlayer().GetComponent<PlayerControl>();
-        //_EnemyScript  = _GameManagerScript.GetPlayer().GetComponent<EnemyControl>();
 
         GameObject[][] blocks = _GameManagerScript.GetBlocks();
+        List<GameObject> enemys = _GameManagerScript.GetEnemys();
 
-        if (blocks == null)
-            Debug.Log("キャンセル");
-
-
+        //ブロックのスクリプト取得
         foreach(var blocklist in blocks)
         {
             foreach (var block in blocklist)
@@ -33,6 +30,11 @@ public class TurnManager : MonoBehaviour
                 if(block != null)
                     _BlockScript.Add(block.GetComponent<BlockControl>());
             }
+        }
+
+        foreach (var enemy in enemys)
+        {
+            _EnemyScript.Add(enemy.GetComponent<EnemyControl>());
         }
     }
 
@@ -43,20 +45,19 @@ public class TurnManager : MonoBehaviour
             if (_PlayerScript.PlayerTurn())
             {
                 _PlayerTurn = false;
-                //_EnemyTurn = true;
-                _BlockTurn = true;
+
+                foreach (var enemy in _EnemyScript)
+                    enemy.EnemyTurn();
             }
         }
-        //else if (_EnemyTurn)
-        //{
-        //    //var enemyScript = _GameManagerScript.GetPlayer().GetComponent<EnemyControl>();
-        //    //_EnemyTurn = enemyScript.EnemyTurn();
-        //    //if (_EnemyScript.EnemyTurn())
-        //    //{
-        //    //    _EnemyTurn = false;
-        //    //    _BlockTurn = true;
-        //    //}
-        //}
+        else if (_EnemyTurn)
+        {
+            foreach (var enemy in _EnemyScript)
+                enemy.EnemyTurn();
+
+            _EnemyTurn = false;
+            _BlockTurn = true;
+        }
         else if (_BlockTurn)
         {
             foreach (var blockScript in _BlockScript)
