@@ -47,16 +47,16 @@ public class TurnManager : MonoBehaviour
                 _BlockTurn = true;
             }
         }
-        //else if (_EnemyTurn)
-        //{
-        //    //var enemyScript = _GameManagerScript.GetPlayer().GetComponent<EnemyControl>();
-        //    //_EnemyTurn = enemyScript.EnemyTurn();
-        //    //if (_EnemyScript.EnemyTurn())
-        //    //{
-        //    //    _EnemyTurn = false;
-        //    //    _BlockTurn = true;
-        //    //}
-        //}
+        else if (_EnemyTurn)
+        {
+            //var enemyScript = _GameManagerScript.GetPlayer().GetComponent<EnemyControl>();
+            //_EnemyTurn = enemyScript.EnemyTurn();
+            //if (_EnemyScript.EnemyTurn())
+            //{
+            //    _EnemyTurn = false;
+            //    _BlockTurn = true;
+            //}
+        }
         else if (_BlockTurn)
         {
             foreach (var blockScript in _BlockScript)
