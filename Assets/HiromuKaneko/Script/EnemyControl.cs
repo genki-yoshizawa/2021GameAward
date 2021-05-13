@@ -42,6 +42,7 @@ public class EnemyControl : MonoBehaviour
 
     private GameObject[][] _Blocks;                               // ブロックを保持する
     private GameObject _GameManager;                              // ゲームマネージャーを保持
+    [SerializeField]
     protected GameObject _Player;                                 // プレイヤーを保持
 
     // デバッグ用に表示させてだけなので後々SerializeFieldは消す予定
@@ -54,7 +55,6 @@ public class EnemyControl : MonoBehaviour
     void Start()
     {
         _GameManager = GameObject.FindGameObjectWithTag("Manager");
-        _Player = GameObject.FindGameObjectWithTag("Player");
         GameObject parent = transform.root.gameObject;
         _EnemyBlockPosition = parent.GetComponent<BlockConfig>().GetBlockLocalPosition();
         _isFront = true;
@@ -184,7 +184,6 @@ public class EnemyControl : MonoBehaviour
             Pos.y = _PosY;
             this.transform.position = Pos;
 
-
         }
         else
         {
@@ -202,7 +201,6 @@ public class EnemyControl : MonoBehaviour
             Vector3 Pos = this.transform.position;
             Pos.y = -_PosY;
             this.transform.position = Pos;
-
 
         }
         // ステートをIDLEに移行する
@@ -284,6 +282,7 @@ public class EnemyControl : MonoBehaviour
     {
         // プレイヤーのいるブロックを取得して
         // プレイヤーから一番遠いブロックへ逃げる
+        _Player = _GameManager.gameObject.GetComponent<GameManagerScript>().GetPlayer();
         Vector3 playerpos = _Player.transform.position;
 
         GameObject obj = new GameObject();
