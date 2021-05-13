@@ -33,8 +33,21 @@ public class BlockControl : MonoBehaviour
             {
                 for (int i = 0; i < transform.GetChild(n).childCount; ++i)
                 {
-                    if (transform.GetChild(n).GetChild(i).gameObject != _GameManager.GetComponent<GameManagerScript>().GetPlayer())
-                        transform.GetChild(n).GetChild(i).GetComponent<GimmicControl>().Rotate(angle);
+                    if (transform.GetChild(n).GetChild(i).gameObject == _GameManager.GetComponent<GameManagerScript>().GetPlayer())
+                        continue;
+
+                    List<GameObject> enemys = _GameManager.GetComponent<GameManagerScript>().GetEnemys();
+                    bool isThrow = false;
+                    foreach (GameObject enemy in enemys)
+                        if (transform.GetChild(n).GetChild(i).gameObject == enemy)
+                        {
+                            isThrow = true;
+                            break;
+                        }
+                    if (isThrow)
+                        continue;
+                    
+                    transform.GetChild(n).GetChild(i).GetComponent<GimmicControl>().Rotate(angle);
                 }
             }
             GameManagerScript gameManagerScript = _GameManager.GetComponent<GameManagerScript>();
@@ -70,8 +83,21 @@ public class BlockControl : MonoBehaviour
             {
                 for (int i = 0; i < transform.GetChild(n).childCount; ++i)
                 {
-                    if (transform.GetChild(n).GetChild(i).gameObject != _GameManager.GetComponent<GameManagerScript>().GetPlayer())
-                        transform.GetChild(n).GetChild(i).GetComponent<GimmicControl>().TurnOver(rotAxis);
+                    if (transform.GetChild(n).GetChild(i).gameObject == _GameManager.GetComponent<GameManagerScript>().GetPlayer())
+                        continue;
+
+                    List<GameObject> enemys = _GameManager.GetComponent<GameManagerScript>().GetEnemys();
+                    bool isThrow = false;
+                    foreach (GameObject enemy in enemys)
+                        if (transform.GetChild(n).GetChild(i).gameObject == enemy)
+                        {
+                            isThrow = true;
+                            break;
+                        }
+                    if (isThrow)
+                        continue;
+                    
+                    transform.GetChild(n).GetChild(i).GetComponent<GimmicControl>().TurnOver(rotAxis);
                 }
             }
 
