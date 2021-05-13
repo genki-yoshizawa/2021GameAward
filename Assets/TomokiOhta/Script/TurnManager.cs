@@ -5,6 +5,10 @@ using UnityEngine;
 public class TurnManager : MonoBehaviour
 {
     private GameManagerScript _GameManagerScript;
+
+    [Header("ターンが進んでいるかの確認用")]
+    [SerializeField] private int _TurnCount = 0;
+
     private bool _PlayerTurn = true;
     private bool _EnemyTurn  = false;
     private bool _BlockTurn  = false;
@@ -32,6 +36,7 @@ public class TurnManager : MonoBehaviour
             }
         }
 
+        //エネミーのスクリプト取得
         foreach (var enemy in enemys)
         {
             _EnemyScript.Add(enemy.GetComponent<EnemyControl>());
@@ -45,9 +50,10 @@ public class TurnManager : MonoBehaviour
             if (_PlayerScript.PlayerTurn())
             {
                 _PlayerTurn = false;
-
-                foreach (var enemy in _EnemyScript)
-                    enemy.EnemyTurn();
+                if (_EnemyScript.Count > 0)
+                    _EnemyTurn = true;
+                else
+                    _BlockTurn = true;
             }
         }
         else if (_EnemyTurn)
