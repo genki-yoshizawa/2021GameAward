@@ -35,7 +35,6 @@ public class EnemyControl : MonoBehaviour
     [Header("ランダムorターン毎")]
     [SerializeField] BreakTurn _BreakTurn = BreakTurn.RANDOM;
 
-    [SerializeField] protected bool _EnemyTurn;
     // それぞれにGet・Setを作成？
     [SerializeField] private Vector2Int _EnemyBlockPosition;      // ネズミのいるブロックの座標
     [SerializeField] private Vector2Int _EnemyDirection;          // ネズミの向いてる方向
@@ -59,7 +58,6 @@ public class EnemyControl : MonoBehaviour
         GameObject parent = transform.root.gameObject;
         _EnemyBlockPosition = parent.GetComponent<BlockConfig>().GetBlockLocalPosition();
         _isFront = true;
-        _EnemyTurn = false;
 
     }
 
@@ -161,7 +159,6 @@ public class EnemyControl : MonoBehaviour
         // なにもしない処理？
         // 待機モーションを実行？
 
-        _EnemyTurn = false;
     }
 
 
@@ -212,7 +209,6 @@ public class EnemyControl : MonoBehaviour
         _EnemyState = EnemyState.IDLE;
 
         // ネズミのターンを終了する
-        _EnemyTurn = false;
 
     }
 
@@ -227,7 +223,6 @@ public class EnemyControl : MonoBehaviour
 
         // 壁をかじる処理を作る
 
-        _EnemyTurn = false;
     }
 
 
@@ -389,13 +384,12 @@ public class EnemyControl : MonoBehaviour
 
     public void EnemyTurn()
     {
-        _EnemyTurn = true;
 
         Wait();
         // エネミーステートを変更する関数を呼ぶ
 
 
-        // 現状はターン制度がないためエンターキーでステートを移行させている
+        // 右Shiftで裏に行く（戻れない）
         if (Input.GetKeyDown(KeyCode.RightShift))
         {
             _isFront = false;
@@ -405,21 +399,12 @@ public class EnemyControl : MonoBehaviour
             GameObject parent = transform.root.gameObject;
             ob = parent.transform.GetChild(1).gameObject;
             transform.parent = ob.transform;
-
-
-        }
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            _EnemyTurn = true;
-
+            
         }
 
-        if (_EnemyTurn)
-        {
-            ChangeState();
-
-        }
-
+        
+        ChangeState();
+                
         switch (_EnemyState)
         {
             case EnemyState.IDLE:
@@ -441,9 +426,7 @@ public class EnemyControl : MonoBehaviour
 
     public void SetIsFront(bool isfront) { _isFront = isfront; }
     public void SetLocalPosition(Vector2Int position) { _EnemyBlockPosition = position; }    // 自分のいるブロックの座標を更新する
-   // public void GetLocalPosition() { return _EnemyBlockPosition; }
-
-    public bool GetEnemyTurn() { return _EnemyTurn; }
+    // public void GetLocalPosition() { return _EnemyBlockPosition; }
 
 }
 
