@@ -83,9 +83,9 @@ public class BlockControl : MonoBehaviour
 
             // プレイヤー、エネミーの表裏を変える関数を呼び出す
             // ここに書いてあるスクリプト、関数で用意してもらえるとコメントアウトだけで済むので助かる
-            gameManagerScript.GetPlayer().GetComponent<PlayerControl>().TurnOverMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition());
+            gameManagerScript.GetPlayer().GetComponent<PlayerControl>().TurnOverMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition(/*rotAxis*/));
             foreach (GameObject enemy in gameManagerScript.GetEnemys())
-                enemy.GetComponent<EnemyControl>().TurnOverMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition());
+                enemy.GetComponent<EnemyControl>().TurnOverMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition(/*rotAxis*/));
         }
     }
 
