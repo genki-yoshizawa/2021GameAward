@@ -42,8 +42,8 @@ public class BlockControl : MonoBehaviour
             // プレイヤー、エネミーの向きを変える関数を呼び出す
             // ここに書いてあるスクリプト、関数で用意してもらえるとコメントアウトだけで済むので助かる
             gameManagerScript.GetPlayer().GetComponent<PlayerControl>().RotateMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition(), angle);
-            //foreach (GameObject enemy in gameManagerScript.GetEnemys())
-            //    enemy.GetComponent<EnemyControl>().RotateMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition(), angle);
+            foreach (GameObject enemy in gameManagerScript.GetEnemys())
+                enemy.GetComponent<EnemyControl>().RotateMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition(), angle);
         }
     }
 
@@ -84,8 +84,8 @@ public class BlockControl : MonoBehaviour
             // プレイヤー、エネミーの表裏を変える関数を呼び出す
             // ここに書いてあるスクリプト、関数で用意してもらえるとコメントアウトだけで済むので助かる
             gameManagerScript.GetPlayer().GetComponent<PlayerControl>().TurnOverMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition());
-            //foreach (GameObject enemy in gameManagerScript.GetEnemys())
-            //    enemy.GetComponent<EnemyControl>().TurnOverMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition());
+            foreach (GameObject enemy in gameManagerScript.GetEnemys())
+                enemy.GetComponent<EnemyControl>().TurnOverMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition());
         }
     }
 
@@ -133,8 +133,8 @@ public class BlockControl : MonoBehaviour
         // プレイヤー、エネミーのパネル入れ替え関数を呼び出す
         // ここに書いてあるスクリプト、関数で用意してもらえるとコメントアウトだけで済むので助かる
         gameManagerScript.GetPlayer().GetComponent<PlayerControl>().SwapMySelf(targetBlockLocalPosition);
-        //foreach (GameObject enemy in gameManagerScript.GetEnemys())
-        //    enemy.GetComponent<EnemyControl>().SwapMySelf(targetBlockLocalPosition);
+        foreach (GameObject enemy in gameManagerScript.GetEnemys())
+            enemy.GetComponent<EnemyControl>().SwapMySelf(targetBlockLocalPosition);
 
     }
 
