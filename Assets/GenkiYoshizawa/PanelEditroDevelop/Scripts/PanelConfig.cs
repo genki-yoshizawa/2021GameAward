@@ -35,9 +35,16 @@ public class PanelConfig : MonoBehaviour
         for(int i = 0; i < transform.childCount; ++i)
         {
             // エネミーと一致したら次の子オブジェクトに移る
-            foreach (GameObject enemy in gmScript.GetEnemys())
-                if (enemy != transform.GetChild(i).gameObject)
-                    continue;
+            List<GameObject> enemys = _GameManager.GetComponent<GameManagerScript>().GetEnemys();
+            bool isThrow = false;
+            foreach (GameObject enemy in enemys)
+                if (transform.GetChild(i).gameObject == enemy)
+                {
+                    isThrow = true;
+                    break;
+                }
+            if (isThrow)
+                continue;
 
             // プレイヤーでもなくギミックのチェックエンターも通ったら
             if (gmScript.GetPlayer() != transform.GetChild(i).gameObject &&
