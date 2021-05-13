@@ -22,9 +22,15 @@ public class PanelControl : MonoBehaviour
                 continue;
 
             List<GameObject> enemys = _GameManager.GetComponent<GameManagerScript>().GetEnemys();
+            bool isThrow = false;
             foreach (GameObject enemy in enemys)
                 if (transform.GetChild(i).gameObject == enemy)
-                    continue;
+                {
+                    isThrow = true;
+                    break;
+                }
+            if (isThrow)
+                continue;
 
             transform.GetChild(i).GetComponent<GimmicControl>().TurnEndUpdate();
         }
