@@ -35,7 +35,6 @@ public class EnemyControl : MonoBehaviour
     [Header("ランダムorターン毎")]
     [SerializeField] BreakTurn _BreakTurn = BreakTurn.RANDOM;
 
-    [SerializeField] protected bool _EnemyTurn;
     // それぞれにGet・Setを作成？
     [SerializeField] private Vector2Int _EnemyBlockPosition;      // ネズミのいるブロックの座標
     [SerializeField] private Vector2Int _EnemyDirection;          // ネズミの向いてる方向
@@ -43,6 +42,7 @@ public class EnemyControl : MonoBehaviour
 
     private GameObject[][] _Blocks;                               // ブロックを保持する
     private GameObject _GameManager;                              // ゲームマネージャーを保持
+    [SerializeField]
     protected GameObject _Player;                                 // プレイヤーを保持
 
     // デバッグ用に表示させてだけなので後々SerializeFieldは消す予定
@@ -55,62 +55,16 @@ public class EnemyControl : MonoBehaviour
     void Start()
     {
         _GameManager = GameObject.FindGameObjectWithTag("Manager");
-        _Player = GameObject.FindGameObjectWithTag("Player");
         GameObject parent = transform.root.gameObject;
         _EnemyBlockPosition = parent.GetComponent<BlockConfig>().GetBlockLocalPosition();
         _isFront = true;
-        _EnemyTurn = false;
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        Wait();
-        // エネミーステートを変更する関数を呼ぶ
 
-
-        // 現状はターン制度がないためエンターキーでステートを移行させている
-        if (Input.GetKeyDown(KeyCode.RightShift))
-        {
-            _isFront = false;
-            this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
-
-            GameObject ob;
-            GameObject parent = transform.root.gameObject;
-            ob = parent.transform.GetChild(1).gameObject;
-            transform.parent = ob.transform;
-
-
-        }
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            _EnemyTurn = true;
-
-        }
-
-        if (_EnemyTurn)
-        {
-            ChangeState();
-
-        }
-
-        switch (_EnemyState)
-        {
-            case EnemyState.IDLE:
-                Idle();
-                break;
-            case EnemyState.STAY:
-                Stay();
-                break;
-            case EnemyState.MOVE:
-                Move();
-                break;
-            case EnemyState.BREAK:
-                Break();
-                break;
-
-        }
     }
 
     //public virtual void ChangeState()
@@ -150,9 +104,9 @@ public class EnemyControl : MonoBehaviour
 
 
 
-            _Left = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock(new Vector2Int(pos.x +1, pos.y));
+            _Left = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock(new Vector2Int(pos.x + 1, pos.y));
 
-            _Right = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock(new Vector2Int(pos.x -1, pos.y));
+            _Right = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock(new Vector2Int(pos.x - 1, pos.y));
         }
 
 
@@ -205,7 +159,6 @@ public class EnemyControl : MonoBehaviour
         // なにもしない処理？
         // 待機モーションを実行？
 
-        _EnemyTurn = false;
     }
 
 
@@ -231,7 +184,6 @@ public class EnemyControl : MonoBehaviour
             Pos.y = _PosY;
             this.transform.position = Pos;
 
-
         }
         else
         {
@@ -250,13 +202,11 @@ public class EnemyControl : MonoBehaviour
             Pos.y = -_PosY;
             this.transform.position = Pos;
 
-
         }
         // ステートをIDLEに移行する
         _EnemyState = EnemyState.IDLE;
 
         // ネズミのターンを終了する
-        _EnemyTurn = false;
 
     }
 
@@ -271,7 +221,6 @@ public class EnemyControl : MonoBehaviour
 
         // 壁をかじる処理を作る
 
-        _EnemyTurn = false;
     }
 
 
@@ -280,7 +229,17 @@ public class EnemyControl : MonoBehaviour
     public void RotateMySelf(Vector2Int position, float angle)
     {
         // 向きベクトルを更新させる処理
-       
+        //Rotate時に呼び出される関数、自分の方向を変えるときにも自分で呼ぶ
+        if (position != _EnemyBlockPosition)
+            return;
+
+        Vector3 direction = new Vector3(_EnemyDirection.x, 0f, _EnemyDirection.y);
+        direction = Quaternion.Euler(0f, angle, 0f) * direction;
+
+        Vector2 tmp = new Vector2(direction.x, direction.z);
+        //四捨五入して代入することでVector2Intにも無理やり代入させる
+        _EnemyDirection = new Vector2Int(Mathf.RoundToInt(tmp.x), Mathf.RoundToInt(tmp.y));
+
     }
 
     // ブロックで呼び出す　自分をひっくり返す関数（表裏入れ替え）
@@ -288,36 +247,42 @@ public class EnemyControl : MonoBehaviour
     {
         // _isFrontをfalse
         // 
+        //TurnOver時に呼び出される関数、ひっくり返すのはSetIsFrontで良いのでは？
+        if (position != _EnemyBlockPosition)
+            return;
+
+        //ひっくり返す
+        if (_isFront)
+            _isFront = false;
+        else
+            _isFront = true;
     }
 
     // ブロックで呼び出す　自分の位置を入れ替える関数
-    public void SwapMySelf(Vector2Int position)
+    public void SwapMySelf(List<Vector2Int> position)
     {
         // ブロックのローカル
+        //Swap時に呼び出される関数、親オブジェクトであるブロックの移動についていくだけ
+        foreach (Vector2Int pos in position)
+        {
+            if (pos == _EnemyBlockPosition)
+            {
+                var blockConfig = transform.parent.parent.GetComponent<BlockConfig>();
+                _EnemyBlockPosition = blockConfig.GetBlockLocalPosition();
+                return;
+            }
+        }
     }
 
-    // 自分のいるブロックの座標を更新する
-    public void SetLocalPosition(Vector2Int position)
-    {
-        _EnemyBlockPosition = position;
-    }
 
-    // public void GetLocalPosition() { return _EnemyBlockPosition; }
-    // 自分が表か裏どっちにいるか
-    public void SetIsFront(bool isfront)
-    {
-        _isFront = isfront;
-    }
 
-    public bool GetEnemyTurn()
-    {
-        return _EnemyTurn;
-    }
+
 
     public void ChangeState()
     {
         // プレイヤーのいるブロックを取得して
         // プレイヤーから一番遠いブロックへ逃げる
+        _Player = _GameManager.gameObject.GetComponent<GameManagerScript>().GetPlayer();
         Vector3 playerpos = _Player.transform.position;
 
         GameObject obj = new GameObject();
@@ -325,7 +290,7 @@ public class EnemyControl : MonoBehaviour
         float distance2 = 10000.0f;
         float tmp = 0.0f;
         float y = 90;
-        if(_isFront)
+        if (_isFront)
         {
             if (_Up != null)
             {
@@ -333,7 +298,7 @@ public class EnemyControl : MonoBehaviour
                 if (tmp > distance)
                 {
                     obj = _Up;
-                    this.transform.rotation = Quaternion.Euler(0.0f,0.0f, 0.0f);
+                    this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
                     distance = tmp;
                 }
             }
@@ -343,7 +308,7 @@ public class EnemyControl : MonoBehaviour
                 if (tmp > distance)
                 {
                     obj = _Down;
-                    this.transform.rotation = Quaternion.Euler(0.0f, y*2, 0.0f);
+                    this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
                     distance = tmp;
                 }
             }
@@ -418,10 +383,53 @@ public class EnemyControl : MonoBehaviour
 
     public void EnemyTurn()
     {
-        _EnemyTurn = true;
+
+        Wait();
+        // エネミーステートを変更する関数を呼ぶ
+
+
+        // 右Shiftで裏に行く（戻れない）
+        if (Input.GetKeyDown(KeyCode.RightShift))
+        {
+            _isFront = false;
+            this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
+
+            GameObject ob;
+            GameObject parent = transform.root.gameObject;
+            ob = parent.transform.GetChild(1).gameObject;
+            transform.parent = ob.transform;
+            
+        }
+
+        
+        ChangeState();
+                
+        switch (_EnemyState)
+        {
+            case EnemyState.IDLE:
+                Idle();
+                break;
+            case EnemyState.STAY:
+                Stay();
+                break;
+            case EnemyState.MOVE:
+                Move();
+                break;
+            case EnemyState.BREAK:
+                Break();
+                break;
+
+        }
     }
 
+
+    public void SetIsFront(bool isfront) { _isFront = isfront; }
+    public void SetLocalPosition(Vector2Int position) { _EnemyBlockPosition = position; }    // 自分のいるブロックの座標を更新する
+    // public void GetLocalPosition() { return _EnemyBlockPosition; }
+
 }
+
+
 
 //class Level1 :  EnemyControl
 //{
