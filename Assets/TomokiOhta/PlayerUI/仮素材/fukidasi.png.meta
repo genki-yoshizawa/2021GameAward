@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 6191a0ba48e06984381ed27a918fba4f
+guid: 8ab0cb23cfacb15479b711d44e6b24d6
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -62,153 +62,6 @@ TextureImporter:
   - first:
       213: -7618653065967729937
     second: fukidasi_19
-  - first:
-      213: -6974822293131078391
-    second: fukidasi_20
-  - first:
-      213: 7101670523040062517
-    second: fukidasi_21
-  - first:
-      213: -7762063317484763323
-    second: fukidasi_22
-  - first:
-      213: 4725797587280307227
-    second: fukidasi_23
-  - first:
-      213: 6045716667693620341
-    second: fukidasi_24
-  - first:
-      213: -8010885833997266824
-    second: fukidasi_25
-  - first:
-      213: 6134330307053445378
-    second: fukidasi_26
-  - first:
-      213: 8036098931661952978
-    second: fukidasi_27
-  - first:
-      213: 2498649811565887157
-    second: fukidasi_28
-  - first:
-      213: 3931992071737397979
-    second: fukidasi_29
-  - first:
-      213: -7777842824211933968
-    second: fukidasi_30
-  - first:
-      213: 5089169441280896004
-    second: fukidasi_31
-  - first:
-      213: -5700169397200750224
-    second: fukidasi_32
-  - first:
-      213: 5920301336474109657
-    second: fukidasi_33
-  - first:
-      213: -1414441827023008311
-    second: fukidasi_34
-  - first:
-      213: -1817264868991093649
-    second: fukidasi_35
-  - first:
-      213: 4212859644565434332
-    second: fukidasi_36
-  - first:
-      213: 4663084396498921496
-    second: fukidasi_37
-  - first:
-      213: 3785924833563992461
-    second: fukidasi_38
-  - first:
-      213: 1818967252190311542
-    second: fukidasi_39
-  - first:
-      213: 98151760836767957
-    second: fukidasi_40
-  - first:
-      213: -6360545856306641635
-    second: fukidasi_41
-  - first:
-      213: 4146503368224256679
-    second: fukidasi_42
-  - first:
-      213: 3655368438120246861
-    second: fukidasi_43
-  - first:
-      213: -930217244458621197
-    second: fukidasi_44
-  - first:
-      213: 137419625980293006
-    second: fukidasi_45
-  - first:
-      213: -8076862806544556268
-    second: fukidasi_46
-  - first:
-      213: 7627232357778212084
-    second: fukidasi_47
-  - first:
-      213: 2602721461605794374
-    second: fukidasi_48
-  - first:
-      213: -1065746186928570539
-    second: fukidasi_49
-  - first:
-      213: -537565204904263787
-    second: fukidasi_50
-  - first:
-      213: 1261484189333441271
-    second: fukidasi_51
-  - first:
-      213: -4044756009142639783
-    second: fukidasi_52
-  - first:
-      213: 1307115522928734390
-    second: fukidasi_53
-  - first:
-      213: -1704115209529889160
-    second: fukidasi_54
-  - first:
-      213: -1836150490877469528
-    second: fukidasi_55
-  - first:
-      213: -676275449877044103
-    second: fukidasi_56
-  - first:
-      213: -8843755578369913607
-    second: fukidasi_57
-  - first:
-      213: 2948123489597537414
-    second: fukidasi_58
-  - first:
-      213: 2158748258544895320
-    second: fukidasi_59
-  - first:
-      213: -2108524710742479526
-    second: fukidasi_60
-  - first:
-      213: 8412512396302150456
-    second: fukidasi_61
-  - first:
-      213: 8545393913147108364
-    second: fukidasi_62
-  - first:
-      213: 4673039959141353339
-    second: fukidasi_63
-  - first:
-      213: 4190975558908344174
-    second: fukidasi_64
-  - first:
-      213: -1532822146426724473
-    second: fukidasi_65
-  - first:
-      213: 2593646302108117021
-    second: fukidasi_66
-  - first:
-      213: -4751230474399806337
-    second: fukidasi_67
-  - first:
-      213: -110831918838952750
-    second: fukidasi_68
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -239,7 +92,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
+    filterMode: 0
     aniso: -1
     mipBias: -100
     wrapU: 1
@@ -306,7 +159,7 @@ TextureImporter:
         width: 600
         height: 600
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -327,7 +180,7 @@ TextureImporter:
         width: 600
         height: 600
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -348,7 +201,7 @@ TextureImporter:
         width: 600
         height: 600
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -369,7 +222,7 @@ TextureImporter:
         width: 600
         height: 600
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -390,7 +243,7 @@ TextureImporter:
         width: 600
         height: 600
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -411,7 +264,7 @@ TextureImporter:
         width: 600
         height: 600
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -432,7 +285,7 @@ TextureImporter:
         width: 600
         height: 600
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -453,7 +306,7 @@ TextureImporter:
         width: 600
         height: 600
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -474,7 +327,7 @@ TextureImporter:
         width: 600
         height: 600
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -495,7 +348,7 @@ TextureImporter:
         width: 600
         height: 600
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -516,7 +369,7 @@ TextureImporter:
         width: 600
         height: 600
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -537,7 +390,7 @@ TextureImporter:
         width: 600
         height: 600
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -558,7 +411,7 @@ TextureImporter:
         width: 600
         height: 600
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -579,7 +432,7 @@ TextureImporter:
         width: 600
         height: 600
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -600,7 +453,7 @@ TextureImporter:
         width: 600
         height: 600
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -621,7 +474,7 @@ TextureImporter:
         width: 600
         height: 600
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -642,7 +495,7 @@ TextureImporter:
         width: 600
         height: 600
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -663,7 +516,7 @@ TextureImporter:
         width: 600
         height: 600
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -684,7 +537,7 @@ TextureImporter:
         width: 600
         height: 600
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -705,7 +558,7 @@ TextureImporter:
         width: 600
         height: 600
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

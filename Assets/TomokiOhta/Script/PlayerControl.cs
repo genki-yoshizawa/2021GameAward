@@ -10,21 +10,38 @@ public class PlayerControl : MonoBehaviour
     [Header("プレイヤーの向きを入れてください。")]
     [SerializeField]private Vector2Int _Direction;
 
+    [Header("吹き出し")]
+    [SerializeField] private GameObject _FukidasiObj;
+
+    [Header("コマンド")]
+    [SerializeField] private GameObject _ActObj;
+
     //プレイヤーの配列座標
     private Vector2Int _LocalPosition;
 
     //他のオブジェクトに触れるときの仲介役
     private GameManagerScript _GameManagerScript;
 
+    //プレイヤーのアニメーション
+    private FukidasiAnimationUI _FukidasiAnimationUI;
+
     //表裏
     private bool _IsFront;
 
+    //生存判定
     private bool _IsExist;
+
+    //前のブロック情報
+    private GameObject _FrontBlock;
+
+    //どの行動が可能でど7の文字を格納するかを管理する
+    private List<int> _CanActionList = new List<int>();
 
     void Start()
     {
         //初手FindWithTag
         _GameManagerScript = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerScript>();
+        _FukidasiAnimationUI = GameObject.Find("fukidasi_0").GetComponent<FukidasiAnimationUI>();
         _IsExist = true;
     }
 
@@ -113,160 +130,69 @@ public class PlayerControl : MonoBehaviour
         RotateMySelf(_LocalPosition, 180.0f);
     }
 
+    private void PlayerMove()
+    {
+        Move(_Direction);
+        SetFromtBlock();
+    }
+
+    private void PlayerRotate(GameObject block)
+    {
+        var blockScript = block.GetComponent<BlockControl>();
+        blockScript.Rotate(_IsFront, 90);
+        SetFromtBlock();
+    }
+
+    private void PlayerSwap(GameObject block)
+    {
+        var blockScript = block.GetComponent<BlockControl>();
+        blockScript.Swap(_IsFront);
+        SetFromtBlock();
+    }
+
+    private void PlayerTurnOver(GameObject block)
+    {
+        var blockScript = block.GetComponent<BlockControl>();
+        blockScript.TurnOver(_IsFront);
+        SetFromtBlock();
+    }
+
     public bool PlayerTurn()
     {
+        if (_FrontBlock == null)
+            SetFromtBlock();
+
         bool turnEnd = false;
 
+        //プレイヤー左右回転
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            //Debug.Log("右が押されたよ");
             RotateMySelf(_LocalPosition, 90.0f);
             transform.Rotate(0.0f, 90.0f, 0.0f);
+            SetFromtBlock();
         }
-
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            //Debug.Log("左が押されたよ");
             RotateMySelf(_LocalPosition, -90.0f);
             transform.Rotate(0.0f, -90.0f, 0.0f);
+            SetFromtBlock();
         }
 
+        //上下矢印でコマンド選択
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            //Debug.Log("上が押されたよ");
-
-            //前のブロック取得
-            var block = _GameManagerScript.GetBlock(_LocalPosition + _Direction);
-            if (block == null)
-            {
-                //前にブロックがなければ
-                Debug.Log("正面は穴です");
-                return turnEnd;
-            }
-
-            var blockScript = block.GetComponent<BlockConfig>();
-
-            if (blockScript.CheckPanelMove(_IsFront, _LocalPosition, _Direction))
-            {
-                Move(_Direction);
-                turnEnd = true;
-            }
-            else
-            {
-                Debug.Log("Move失敗");
-            }
+            _FukidasiAnimationUI.SetCount(_CanActionList.Count);
+        }
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            _FukidasiAnimationUI.SetCount(0);
         }
 
-        if (Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1))
+        //Enterキーで行動 ターンを進める
+        if (Input.GetKeyDown(KeyCode.Return))
         {
-            //Rotateを行うデバッグ用
 
-            //前のブロック取得
-            var block = _GameManagerScript.GetBlock(_LocalPosition + _Direction);
-            var blockScript = block.GetComponent<BlockConfig>();
-
-            //回転可能かどうかを調べる
-            if (blockScript.CheckPanelRotate(_IsFront))
-            {
-                var blockControlScript = block.GetComponent<BlockControl>();
-                blockControlScript.Rotate(_IsFront, 90);
-                turnEnd = true;
-            }
-            else
-            {
-                Debug.Log("Rotate失敗");
-            }
-
-            ////前のブロック取得
-            //var block = _GameManagerScript.GetBlock(_LocalPosition + _Direction);
-
-            ////前のブロックがRotate可能かどうかを調べる
-            //var panelScript = block.transform.GetChild(_IsFront ? 0 : 1).GetComponent<PanelConfig>();
-
-            //if (panelScript.GetCanRotate())
-            //{
-            //    var blockControlScript = block.GetComponent<BlockControl>();
-            //    blockControlScript.Rotate(_IsFront, 90);
-            //    turnEnd = true;
-            //}
-            //else
-            //{
-            //    Debug.Log("Rotate失敗");
-            //}
-        }
-
-        if (Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            //Swapを行うデバッグ用
-
-            //前のブロック取得
-            var block = _GameManagerScript.GetBlock(_LocalPosition + _Direction);
-            var blockScript = block.GetComponent<BlockConfig>();
-
-            if (blockScript.CheckPanelSwap(_IsFront))
-            {
-                var blockControlScript = block.GetComponent<BlockControl>();
-                blockControlScript.Swap(_IsFront);
-                turnEnd = true;
-            }
-            else
-            {
-                Debug.Log("Swap失敗");
-            }
-
-
-            ////前のブロック取得
-            //var block = _GameManagerScript.GetBlock(_LocalPosition + _Direction);
-
-            ////前のブロックがSwap可能かどうかを調べる
-            //var panelScript = block.transform.GetChild(_IsFront ? 0 : 1).GetComponent<PanelConfig>();
-            //if (panelScript.GetCanSwap())
-            //{
-            //    var blockControlScript = block.GetComponent<BlockControl>();
-            //    blockControlScript.Swap(_IsFront);
-            //    turnEnd = true;
-            //}
-            //else
-            //{
-            //    Debug.Log("Swap失敗");
-            //}
-        }
-
-        if (Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            //TurnOverを行うデバッグ用
-
-            //前のブロック取得
-            var block = _GameManagerScript.GetBlock(_LocalPosition + _Direction);
-            var blockScript = block.GetComponent<BlockConfig>();
-
-            if (blockScript.CheckPanelTurnOver(_IsFront))
-            {
-                var blockControlScript = block.GetComponent<BlockControl>();
-                blockControlScript.TurnOver(_IsFront);
-                turnEnd = true;
-            }
-            else
-            {
-                Debug.Log("TurnOver失敗");
-            }
-
-
-            ////前のブロック取得
-            //var block = _GameManagerScript.GetBlock(_LocalPosition + _Direction);
-
-            ////前のブロックがTurnOver可能かどうかを調べる
-            //var panelScript = block.transform.GetChild(_IsFront ? 0 : 1).GetComponent<PanelConfig>();
-            //if (panelScript.GetCanTurnOver())
-            //{
-            //    var blockControlScript = block.GetComponent<BlockControl>();
-            //    blockControlScript.TurnOver(_IsFront);
-            //    turnEnd = true;
-            //}
-            //else
-            //{
-            //    Debug.Log("TurnOver失敗");
-            //}
+            turnEnd = true;
         }
 
         return turnEnd;
@@ -277,4 +203,35 @@ public class PlayerControl : MonoBehaviour
 
     public void SetLocalPosition(Vector2Int position) { _LocalPosition = position; }
     public void SetIsFront(bool isFront){ _IsFront = isFront; }
+
+    //前のブロックの情報取得
+    private void SetFromtBlock()
+    {
+        _FrontBlock = _GameManagerScript.GetBlock(_LocalPosition + _Direction);
+        if (_FrontBlock == null)
+            return;
+
+        var blockScript = _FrontBlock.GetComponent<BlockConfig>();
+
+        //中身をリセットして新たに情報を渡す
+        _CanActionList = new List<int>();
+
+        //回転可能なら0を入れる
+        if (blockScript.CheckPanelRotate(_IsFront))
+            _CanActionList.Add(0);
+
+        //移動可能なら1を入れる
+        if (blockScript.CheckPanelMove(_IsFront, _LocalPosition, _Direction))
+            _CanActionList.Add(1);
+
+        //反転可能なら2を入れる
+        if (blockScript.CheckPanelTurnOver(_IsFront))
+            _CanActionList.Add(2);
+
+        //入替可能なら3を入れる
+        if (blockScript.CheckPanelSwap(_IsFront))
+            _CanActionList.Add(3);
+    }
+
 }
+
