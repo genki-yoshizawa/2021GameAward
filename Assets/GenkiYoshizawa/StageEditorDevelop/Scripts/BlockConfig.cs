@@ -96,8 +96,7 @@ public class BlockConfig : MonoBehaviour
                 return objectBlock.transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().CheckEnter(objectPosition, objectPosition, direction);
             else return true;
         }
-
-        Debug.Log("ç≈å„ÇÃfalse");
+        
         return false;
     }
 
@@ -125,6 +124,9 @@ public class BlockConfig : MonoBehaviour
 
         return wallLevel;
     }
+
+    public void PanelAttention(bool isFront) { transform.GetChild(isFront ? 0 : 1).GetComponent<PanelControl>().AttentionPanel(true); }
+    public void PanelRemoveAttention(bool isFront) { transform.GetChild(isFront ? 0 : 1).GetComponent<PanelControl>().AttentionPanel(false); }
 
 
     public Vector2Int GetBlockLocalPosition() { return _BlockLocalPosition; }

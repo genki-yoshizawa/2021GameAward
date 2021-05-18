@@ -9,7 +9,7 @@ public class BlockDebug : MonoBehaviour
 
     [Header("ブロックの配列座標(確認用)")]
     [SerializeField] private Vector2Int _BlockLocalPosition = new Vector2Int();
-    public void Update()
+    private void Start()
     {
         _BlockLocalPosition = transform.GetComponent<BlockConfig>().GetBlockLocalPosition();
     }
