@@ -294,7 +294,9 @@ public class EnemyControl : MonoBehaviour
 
         // ï«ÇÇ©Ç∂ÇÈèàóùÇçÏÇÈ
         _EnemyDirection = new Vector2Int(0, 1);
-        _Up.gameObject.GetComponent<BlockControl>().BreakWall(_IsFront, _EnemyLocalPosition, _EnemyDirection, _BreakLevel);
+        if(_Up.gameObject.GetComponent<BlockControl>().BreakWall(_IsFront, _EnemyLocalPosition, _EnemyDirection, _BreakLevel));
+                Debug.Log("Ç©Ç◊ÇÇ±ÇÌÇ∑");
+
         //_Down.gameObject.GetComponent<BlockControl>().BreakWall(_IsFront, _EnemyLocalPosition, _EnemyDirection, _BreakLevel);
         //_Left.gameObject.GetComponent<BlockControl>().BreakWall(_IsFront, _EnemyLocalPosition, _EnemyDirection, _BreakLevel);
         //_Right.gameObject.GetComponent<BlockControl>().BreakWall(_IsFront, _EnemyLocalPosition, _EnemyDirection, _BreakLevel);
