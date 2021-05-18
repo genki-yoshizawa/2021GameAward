@@ -111,3 +111,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 781f7c11d77b8e54081312fd382bcf8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isMarker: 0
+  _CycleTime: 1
+  _isSinPulse: 0
+  _MarkerOffset: 0.2
+  _MarkerPrefab: {fileID: 0}

@@ -12,6 +12,8 @@ public class PanelConfig : MonoBehaviour
     [SerializeField] private bool _canTurnOver = false;
     [Header("入れ替えパネルかどうか")]
     [SerializeField] private bool _canSwap = false;
+    [Header("入れ替えパネルの通し番号(数字が大きくなる方に入れ替えをする)")]
+    [SerializeField] private int _SwapIndex = 0;
     [Header("パネル同士を対応させる番号(0だと無対応)")]
     [SerializeField] private int _PanelIndex;
 
@@ -26,6 +28,7 @@ public class PanelConfig : MonoBehaviour
     public bool GetCanRotate() { return _canRotate; }
     public bool GetCanTurnOver() { return _canTurnOver; }
     public bool GetCanSwap() { return _canSwap; }
+    public int GetSwapIndex() { return _SwapIndex; }
     public int GetPanelIndex() { return _PanelIndex; }
     
     public bool CheckEnter(Vector2Int objectPosition, Vector2Int panelPosition,Vector2 direction)
