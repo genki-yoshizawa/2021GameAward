@@ -83,14 +83,16 @@ public class PlayerControl : MonoBehaviour
         _LocalPosition += _Direction;
     }
 
-    public void RotateMySelf(Vector2Int position, float angle)
+    public void RotateMySelf(Vector2Int position, float angle, float axisX = 0.0f, float axisY =1.0f, float axisZ = 0.0f)
     {
+        Vector3 axis = new Vector3(axisX, axisY, axisZ);
+
         //Rotate時に呼び出される関数、自分の方向を変えるときにも自分で呼ぶ
         if (position != _LocalPosition)
             return;
 
         Vector3 direction = new Vector3(_Direction.x, 0f, _Direction.y);
-        direction = Quaternion.Euler(0f, angle, 0f) * direction;
+        direction = Quaternion.Euler(axis * angle) * direction;
 
         Vector2 tmp = new Vector2(direction.x, direction.z);
         //四捨五入して代入することでVector2Intにも無理やり代入させる
@@ -112,7 +114,7 @@ public class PlayerControl : MonoBehaviour
 
     }
 
-    public void TurnOverMySelf(Vector2Int position/*, Vector3 axis*/)
+    public void TurnOverMySelf(Vector2Int position, Vector3 axis)
     {
         //TurnOver時に呼び出される関数
         if (position != _LocalPosition)
@@ -127,7 +129,7 @@ public class PlayerControl : MonoBehaviour
         //向きを反転
         //_Direction *= -1;
         //モデルを反転
-        RotateMySelf(_LocalPosition, 180.0f);
+        RotateMySelf(_LocalPosition, 180.0f, axis.x, axis.y, axis.z);
     }
 
     private void PlayerMove()
@@ -153,7 +155,7 @@ public class PlayerControl : MonoBehaviour
     private void PlayerTurnOver(GameObject block)
     {
         var blockScript = block.GetComponent<BlockControl>();
-        blockScript.TurnOver(_IsFront);
+        blockScript.TurnOver(_IsFront, _Direction);
         SetFromtBlock();
     }
 
@@ -191,8 +193,16 @@ public class PlayerControl : MonoBehaviour
         //Enterキーで行動 ターンを進める
         if (Input.GetKeyDown(KeyCode.Return))
         {
-
+            PlayerMove();
             turnEnd = true;
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad1))
+        {
+            PlayerTurnOver(_FrontBlock);
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad2))
+        {
+            PlayerRotate(_FrontBlock);
         }
 
         return turnEnd;

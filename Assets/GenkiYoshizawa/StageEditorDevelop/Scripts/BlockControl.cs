@@ -61,7 +61,7 @@ public class BlockControl : MonoBehaviour
     }
 
     // ブロックのひっくり返し関数
-    public void TurnOver(bool isFront,/* Vector2Int direction,*/ bool isScan = true)
+    public void TurnOver(bool isFront, Vector2Int direction, bool isScan = true)
     {
         // Blockから呼び出された場合は他のBlockを調べない
         if (isScan && transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetPanelIndex() != 0)
@@ -70,16 +70,16 @@ public class BlockControl : MonoBehaviour
 
             foreach (GameObject target in targetBlock)
             {
-                target.GetComponent<BlockControl>().TurnOver(isFront,/* direction,*/ false);
+                target.GetComponent<BlockControl>().TurnOver(isFront, direction, false);
             }
         }
         else
         {
             // 右軸に180度回転（プレイヤーの向きによって変えたほうがいいかも）
             Vector3 rotAxis = Vector3.zero;
-            //if (direction.x != 0)
-            //    rotAxis = Vector3.forward;
-            //else if (direction.y != 0)
+            if (direction.x != 0)
+                rotAxis = Vector3.forward;
+            else if (direction.y != 0)
                 rotAxis = Vector3.right;
             this.transform.Rotate(rotAxis, 180);
 
@@ -113,7 +113,7 @@ public class BlockControl : MonoBehaviour
 
             // プレイヤー、エネミーの表裏を変える関数を呼び出す
             // ここに書いてあるスクリプト、関数で用意してもらえるとコメントアウトだけで済むので助かる
-            gameManagerScript.GetPlayer().GetComponent<PlayerControl>().TurnOverMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition()/*, rotAxis*/);
+            gameManagerScript.GetPlayer().GetComponent<PlayerControl>().TurnOverMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition(), rotAxis);
             foreach (GameObject enemy in gameManagerScript.GetEnemys())
                 enemy.GetComponent<EnemyControl>().TurnOverMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition()/*, rotAxis*/);
         }
