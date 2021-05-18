@@ -211,7 +211,7 @@ public class BlockControl : MonoBehaviour
         switch (breakResult)
         {
             case 0:// 自身の乗ってるパネルの壁がなかった場合
-                breakResult = transform.GetChild(isFront ? 0 : 1).GetComponent<PanelControl>().BreakWall(objectPosition, blockLocalPosition, direction);
+                breakResult = transform.GetChild(isFront ? 0 : 1).GetComponent<PanelControl>().BreakWall(objectPosition, blockLocalPosition, direction, lv);
                 break;
 
             case 1:// 自身の乗ってるパネルの壁を壊せなかった場合
