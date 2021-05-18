@@ -193,7 +193,7 @@ public class BlockControl : MonoBehaviour
     public bool BreakWall(bool isFront, Vector2Int objectPosition, Vector2 direction, int lv = 0)
     {
         GameObject objectBlock = null;
-        Vector2Int blockLocalPosition = _GameManager.transform.GetComponent<BlockConfig>().GetBlockLocalPosition();
+        Vector2Int blockLocalPosition = transform.GetComponent<BlockConfig>().GetBlockLocalPosition();
         if (objectPosition != blockLocalPosition)
         {// 調べるブロックにオブジェクトがいなければ
             // オブジェクトのいるブロックの取得
