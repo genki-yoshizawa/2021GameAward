@@ -28,7 +28,7 @@ public class PanelControl : MonoBehaviour
     private bool _isBright = false;
     private bool _isCurBright = false;
     private MeshRenderer _MeshRenderer;
-    private Material[] _SaveMaterials;
+    private List<Material> _SaveMaterials;
 
     // UIÀsŒã‚ÌŒo‰ßŠÔ
     private float _PassedTime = 0.0f;
@@ -40,7 +40,9 @@ public class PanelControl : MonoBehaviour
         _isBright = _isCurBright = false;
 
         _MeshRenderer = GetComponent<MeshRenderer>();
-        _SaveMaterials = _MeshRenderer.materials;
+        Material[] materials = new Material[_MeshRenderer.materials.Length];
+        _MeshRenderer.materials.CopyTo(materials, 0);
+        _SaveMaterials = new List<Material>(materials);
 
         _PassedTime = 0.0f;
     }
@@ -119,7 +121,7 @@ public class PanelControl : MonoBehaviour
                 // ’¼‘O‚Ü‚Å”­Œõ‚ğ‚µ‚Ä‚¢‚½‚çŒ³‚É–ß‚·
                 for (int i = 0; i < _MeshRenderer.materials.Length; ++i)
                 {
-                    _MeshRenderer.materials[i] = _SaveMaterials[i];
+                    _MeshRenderer.materials[i].color = _SaveMaterials[i].color;
                 }
                 _PassedTime = 0.0f;
             }
@@ -157,6 +159,20 @@ public class PanelControl : MonoBehaviour
 
         for (int i = 0; i < transform.childCount; ++i)
         {
+            if (transform.GetChild(i).gameObject == _GameManager.GetComponent<GameManagerScript>().GetPlayer())
+                continue;
+
+            List<GameObject> enemys = _GameManager.GetComponent<GameManagerScript>().GetEnemys();
+            bool isThrow = false;
+            foreach (GameObject enemy in enemys)
+                if (transform.GetChild(i).gameObject == enemy)
+                {
+                    isThrow = true;
+                    break;
+                }
+            if (isThrow)
+                continue;
+
             breakResult = transform.GetChild(i).GetComponent<GimmicControl>().BreakWall(objectPosition, panelPosition, direction, lv);
             if (breakResult != 0) // ”»’è‚Å‚«‚é•Ç‚ª‡‚Á‚½
                 break;
