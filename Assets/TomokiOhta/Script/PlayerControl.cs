@@ -135,49 +135,49 @@ public class PlayerControl : MonoBehaviour
     private void PlayerMove()
     {
         Move(_Direction);
-        SetFromtBlock();
+        SetFrontBlock();
     }
 
     private void PlayerRotate(GameObject block)
     {
         var blockScript = block.GetComponent<BlockControl>();
         blockScript.Rotate(_IsFront, 90);
-        SetFromtBlock();
+        SetFrontBlock();
     }
 
     private void PlayerSwap(GameObject block)
     {
         var blockScript = block.GetComponent<BlockControl>();
         blockScript.Swap(_IsFront);
-        SetFromtBlock();
+        SetFrontBlock();
     }
 
     private void PlayerTurnOver(GameObject block)
     {
         var blockScript = block.GetComponent<BlockControl>();
         blockScript.TurnOver(_IsFront, _Direction);
-        SetFromtBlock();
+        SetFrontBlock();
     }
 
     public bool PlayerTurn()
     {
         if (_FrontBlock == null)
-            SetFromtBlock();
+            SetFrontBlock();
 
         bool turnEnd = false;
 
         //プレイヤー左右回転
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            RotateMySelf(_LocalPosition, 90.0f);
+            RotateMySelf(_LocalPosition, _IsFront ? 90.0f : -90.0f);
             transform.Rotate(0.0f, 90.0f, 0.0f);
-            SetFromtBlock();
+            SetFrontBlock();
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            RotateMySelf(_LocalPosition, -90.0f);
+            RotateMySelf(_LocalPosition, _IsFront ? -90.0f : 90.0f);
             transform.Rotate(0.0f, -90.0f, 0.0f);
-            SetFromtBlock();
+            SetFrontBlock();
         }
 
         //上下矢印でコマンド選択
@@ -215,13 +215,22 @@ public class PlayerControl : MonoBehaviour
     public void SetIsFront(bool isFront){ _IsFront = isFront; }
 
     //前のブロックの情報取得
-    private void SetFromtBlock()
+    private void SetFrontBlock()
     {
+        BlockConfig blockScript;
+
+        if (_FrontBlock)
+        {
+            blockScript = _FrontBlock.GetComponent<BlockConfig>();
+            blockScript.PanelRemoveAttention(_IsFront);
+        }
+
         _FrontBlock = _GameManagerScript.GetBlock(_LocalPosition + _Direction);
         if (_FrontBlock == null)
             return;
 
-        var blockScript = _FrontBlock.GetComponent<BlockConfig>();
+        blockScript = _FrontBlock.GetComponent<BlockConfig>();
+        blockScript.PanelAttention(_IsFront);
 
         //中身をリセットして新たに情報を渡す
         _CanActionList = new List<int>();

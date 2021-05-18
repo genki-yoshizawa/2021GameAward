@@ -9,8 +9,6 @@ public class FukidasiAnimationUI : MonoBehaviour
 
     private Animator _Animator;
 
-    private int _ActionCount = 0;
-
     public void Start()
     {
         //初手FindWithTag
@@ -18,12 +16,11 @@ public class FukidasiAnimationUI : MonoBehaviour
         _Player = GameManagerScript.GetPlayer();
 
         _Animator = GetComponent<Animator>();
+
     }
 
     public void Update()
     {
-        _Animator.SetInteger("_ActionCount", _ActionCount);
-
         //ビルボード処理
         //Vector3 p = Camera.main.transform.position;
         //p.x = transform.position.x;
@@ -32,8 +29,8 @@ public class FukidasiAnimationUI : MonoBehaviour
         //transform.LookAt(p);
     }
 
-    public void SetCount(int num) { _ActionCount = num; }
+    public void SetCount(int num) { _Animator.SetInteger("_ActionCount", num); }
 
-    public void ResetCount(){ _ActionCount = 0; }
+    public void ResetCount(){ _Animator.SetInteger("_ActionCount", 0); }
 }
 
