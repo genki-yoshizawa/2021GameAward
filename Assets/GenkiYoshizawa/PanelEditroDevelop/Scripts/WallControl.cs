@@ -46,7 +46,7 @@ public class WallControl : GimmicControl
             transform.position = new Vector3(transform.position.x, transform.position.y - move, transform.position.z);
 
             float scale = (_StartLocalScale.y - 0.0f) * (time / _BreakAnimTime);
-            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y - move, transform.localScale.z);
+            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y - scale, transform.localScale.z);
         }
 
         if (_isRebornAnim)
@@ -64,7 +64,7 @@ public class WallControl : GimmicControl
             transform.position = new Vector3(transform.position.x, transform.position.y - move, transform.position.z);
 
             float scale = (0.0f - _StartLocalScale.y) * (time / _BreakAnimTime);
-            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y - move, transform.localScale.z);
+            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y - scale, transform.localScale.z);
 
         }
     }
