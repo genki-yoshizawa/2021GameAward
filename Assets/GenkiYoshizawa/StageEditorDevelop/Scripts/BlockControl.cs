@@ -22,7 +22,11 @@ public class BlockControl : MonoBehaviour
     // 入れ替えアニメーション用変数
     [Header("入れ替えアニメーションにかける秒数")]
     [SerializeField] private float _SwapAnimTime = 1.0f;
+    [Header("入れ替えアニメーション時にブロックをどれだけ浮かすか")]
+    [SerializeField] private float _SwapPanelFloat = 0.3f;
     private bool _isSwapAnim = false;
+    private Vector3 _SwapGlobalPosition = Vector3.zero;
+    private Vector3 _StartGlobalPosition = Vector3.zero;
 
     private float _PassedTime = 0.0f;
 
@@ -37,6 +41,11 @@ public class BlockControl : MonoBehaviour
         _TurnOverAxis = Vector3.zero;
 
         _isSwapAnim = false;
+        _SwapGlobalPosition = Vector3.zero;
+        _SwapPanelFloat += transform.position.y;
+        _StartGlobalPosition = transform.position;
+
+        _PassedTime = 0.0f;
     }
 
     private void Update()
@@ -74,7 +83,24 @@ public class BlockControl : MonoBehaviour
         }
 
         if (_isSwapAnim)
-        { }
+        {
+            // ここなんか回りくどい書き方してる気がする
+            transform.position = new Vector3(transform.position.x, _SwapPanelFloat, transform.position.z);
+
+            float time = Time.deltaTime;
+            if (_PassedTime + time > _SwapAnimTime)
+            {
+                transform.position = new Vector3(transform.position.x, _StartGlobalPosition.y, transform.position.z); 
+                time = _SwapAnimTime - _PassedTime;
+                _PassedTime = 0.0f;
+                _isSwapAnim = false;
+            }
+            else
+                _PassedTime += time;
+
+            Vector3 move = (_SwapGlobalPosition - _StartGlobalPosition) * (time / _TurnOverAnimTime);
+            transform.position += move;
+        }
     }
 
     // ブロックの回転関数
@@ -248,12 +274,21 @@ public class BlockControl : MonoBehaviour
         //Vector3 globalTemp = gameObject.transform.position;
         //gameObject.transform.position = targetBlock[0].transform.position;
         //targetBlock[0].transform.position = globalTemp;
-        Vector3 globalTemp = targetBlock[targetBlock.Count - 1].transform.position;
+        //Vector3 globalTemp = targetBlock[targetBlock.Count - 1].transform.position;
+        //for (int n = targetBlock.Count - 1; n > 0; --n)
+        //{
+        //    targetBlock[n].transform.position = targetBlock[n - 1].transform.position;
+        //}
+        //targetBlock[0].transform.position = globalTemp;
         for (int n = targetBlock.Count - 1; n > 0; --n)
         {
-            targetBlock[n].transform.position = targetBlock[n - 1].transform.position;
+            targetBlock[n].GetComponent<BlockControl>().SetisSwapAnim();
+            targetBlock[n].GetComponent<BlockControl>().SetSwapGlobalPosition(targetBlock[n - 1].transform.position);
+            targetBlock[n].GetComponent<BlockControl>().SetStartGlobalPosition();
         }
-        targetBlock[0].transform.position = globalTemp;
+        targetBlock[0].GetComponent<BlockControl>().SetisSwapAnim();
+        targetBlock[0].GetComponent<BlockControl>().SetSwapGlobalPosition(targetBlock[targetBlock.Count - 1].transform.position);
+        targetBlock[0].GetComponent<BlockControl>().SetStartGlobalPosition();
 
         // プレイヤー、エネミーのパネル入れ替え関数を呼び出す
         // ここに書いてあるスクリプト、関数で用意してもらえるとコメントアウトだけで済むので助かる
@@ -335,4 +370,8 @@ public class BlockControl : MonoBehaviour
         return targetBlock;
     }
     
+
+    public void SetisSwapAnim() { _isSwapAnim = true; }
+    public void SetSwapGlobalPosition(Vector3 pos) { _SwapGlobalPosition = pos; }
+    public void SetStartGlobalPosition() { _StartGlobalPosition = transform.position; }
 }
