@@ -60,11 +60,6 @@ public class PanelMarkerScript : MonoBehaviour
                 scale.z = _MaxScale - (_MaxScale - _SaveScale.z) / (_CycleTime * 0.5f) * (_PassedTime - _CycleTime * 0.5f);
             }
         }
-        Debug.Log(_MaxScale);
-        if (_MaxScale == scale.x)
-        {
-            Debug.Log(scale);
-        }
 
         transform.localScale = scale;
     }
