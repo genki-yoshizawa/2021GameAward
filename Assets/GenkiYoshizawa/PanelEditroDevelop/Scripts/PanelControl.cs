@@ -17,19 +17,20 @@ public class PanelControl : MonoBehaviour
     private bool _isMarkerCreate = false;
     private bool _isCurMarkerCreate = false;
     private GameObject _Marker;
-    [Header("マーカーの最大サイズ(倍率)")]
-    [SerializeField] private float _MarkerMaxScale = 1.0f;
+    [Header("マーカーの最大サイズ(倍率)(最初期のマーカースケールの値0.1)")]
+    [SerializeField] private float _MarkerMaxScale = 0.2f;
     [Header("マーカーの位置(プランナーはいじる必要なし)")]
     [SerializeField] private float _MarkerOffset = 0.2f;
-    [Header("Prefabから設定すつマーカーのゲームオブジェクト(プランナーはいじる必要なし)")]
+    [Header("Prefabから設定するマーカーのゲームオブジェクト(プランナーはいじる必要なし)")]
     [SerializeField] private GameObject _MarkerPrefab;
 
     // 光らせる方で必要な変数
     private bool _isBright = false;
     private bool _isCurBright = false;
     private MeshRenderer _MeshRenderer;
-    private List<Material> _SaveMaterials;
-
+    private Material[] _SaveMaterials;
+    [Header("Assetから設定するデフォルトマテリアル(プランナーはいじる必要なし)")]
+    [SerializeField] private Material _DefaultMaterial;
     // UI実行後の経過時間
     private float _PassedTime = 0.0f;
 
@@ -40,9 +41,13 @@ public class PanelControl : MonoBehaviour
         _isBright = _isCurBright = false;
 
         _MeshRenderer = GetComponent<MeshRenderer>();
-        Material[] materials = new Material[_MeshRenderer.materials.Length];
-        _MeshRenderer.materials.CopyTo(materials, 0);
-        _SaveMaterials = new List<Material>(materials);
+        _SaveMaterials = new Material[_MeshRenderer.materials.Length];
+        for(int i = 0; i < _MeshRenderer.materials.Length; ++i)
+        {
+            _SaveMaterials[i] = _DefaultMaterial;
+            _SaveMaterials[i].CopyPropertiesFromMaterial(_MeshRenderer.materials[i]);
+            //_MeshRenderer.materials[i].CopyPropertiesFromMaterial(_SaveMaterials[i]);
+        }
 
         _PassedTime = 0.0f;
     }
@@ -52,8 +57,10 @@ public class PanelControl : MonoBehaviour
         // ネストが一時的に深いけどゲーム完成時には見やすくなる（はず）
         if (_isMarker)
         {
-            if (_isMarkerCreate && _isCurMarkerCreate)
+            if (_isMarkerCreate && !_isCurMarkerCreate)
             {//マーカーを生成する処理
+                // 毎回生成デリートを繰り返すは嫌なので、ステージ毎にマーカーオブジェクトをセットして、Startでオブジェクト取得。
+                // アクティブフラグ、ポジションを切り替えて行うことにする(こっちの案になったら)
                 _Marker = Instantiate(_MarkerPrefab);
 
                 bool isFront = transform.parent.GetChild(0) == transform;
@@ -93,9 +100,9 @@ public class PanelControl : MonoBehaviour
 
                     if (_isSinPulse)
                     {
-                        color.r = _SaveMaterials[i].color.r + Mathf.Abs((1.0f - _SaveMaterials[i].color.r) * Mathf.Sin(180.0f * _PassedTime / _CycleTime));
-                        color.g = _SaveMaterials[i].color.g + Mathf.Abs((1.0f - _SaveMaterials[i].color.g) * Mathf.Sin(180.0f * _PassedTime / _CycleTime));
-                        color.b = _SaveMaterials[i].color.b + Mathf.Abs((1.0f - _SaveMaterials[i].color.b) * Mathf.Sin(180.0f * _PassedTime / _CycleTime));
+                        color.r = _SaveMaterials[i].color.r + Mathf.Abs((1.0f - _SaveMaterials[i].color.r) * Mathf.Sin(Mathf.PI * _PassedTime / _CycleTime));
+                        color.g = _SaveMaterials[i].color.g + Mathf.Abs((1.0f - _SaveMaterials[i].color.g) * Mathf.Sin(Mathf.PI * _PassedTime / _CycleTime));
+                        color.b = _SaveMaterials[i].color.b + Mathf.Abs((1.0f - _SaveMaterials[i].color.b) * Mathf.Sin(Mathf.PI * _PassedTime / _CycleTime));
                     }
                     else
                     {
@@ -112,6 +119,8 @@ public class PanelControl : MonoBehaviour
                             color.b = 1.0f - (1.0f - _SaveMaterials[i].color.b) / (_CycleTime * 0.5f) * (_PassedTime - _CycleTime * 0.5f);
                         }
                     }
+
+                    //color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
                     _MeshRenderer.materials[i].color = color;
                 }
                 
@@ -121,6 +130,7 @@ public class PanelControl : MonoBehaviour
                 // 直前まで発光をしていたら元に戻す
                 for (int i = 0; i < _MeshRenderer.materials.Length; ++i)
                 {
+                    //Debug.Log(_SaveMaterials[i]);
                     _MeshRenderer.materials[i].color = _SaveMaterials[i].color;
                 }
                 _PassedTime = 0.0f;
