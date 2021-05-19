@@ -17,6 +17,7 @@ public class BlockControl : MonoBehaviour
     [Header("ひっくり返しアニメーションにかける秒数")]
     [SerializeField] private float _TurnOverAnimTime = 1.0f;
     private bool _isTurnOverAnim = false;
+    private Vector3 _TurnOverAxis = Vector3.zero;
 
     // 入れ替えアニメーション用変数
     [Header("入れ替えアニメーションにかける秒数")]
@@ -33,6 +34,7 @@ public class BlockControl : MonoBehaviour
         _RotateAngle = 0.0f;
 
         _isTurnOverAnim = false;
+        _TurnOverAxis = Vector3.zero;
 
         _isSwapAnim = false;
     }
@@ -56,7 +58,20 @@ public class BlockControl : MonoBehaviour
         }
 
         if (_isTurnOverAnim)
-        { }
+        {
+            float time = Time.deltaTime;
+            if (_PassedTime + time > _TurnOverAnimTime)
+            {
+                time = _TurnOverAnimTime - _PassedTime;
+                _PassedTime = 0.0f;
+                _isTurnOverAnim = false;
+            }
+            else
+                _PassedTime += time;
+
+            float angle = 180.0f * (time / _TurnOverAnimTime);
+            this.transform.Rotate(_TurnOverAxis, angle);
+        }
 
         if (_isSwapAnim)
         { }
@@ -129,21 +144,25 @@ public class BlockControl : MonoBehaviour
         }
         else
         {
-            // 右軸に180度回転（プレイヤーの向きによって変えたほうがいいかも）
+            // プレイヤーの向きによって回転軸を変える
             Vector3 rotAxis = Vector3.zero;
             if (direction.x != 0)
                 rotAxis = Vector3.forward;
             else if (direction.y != 0)
                 rotAxis = Vector3.right;
-            this.transform.Rotate(rotAxis, 180);
+            _TurnOverAxis = rotAxis;
+            _isTurnOverAnim = true;
+            //this.transform.Rotate(rotAxis, 180);
 
             for (int n = 0; n < transform.childCount; ++n)// パネル枚数
             {
                 for (int i = 0; i < transform.GetChild(n).childCount; ++i)
                 {
+                    // プレイヤーならスルー
                     if (transform.GetChild(n).GetChild(i).gameObject == _GameManager.GetComponent<GameManagerScript>().GetPlayer())
                         continue;
 
+                    // エネミーならスルー
                     List<GameObject> enemys = _GameManager.GetComponent<GameManagerScript>().GetEnemys();
                     bool isThrow = false;
                     foreach (GameObject enemy in enemys)
@@ -154,7 +173,8 @@ public class BlockControl : MonoBehaviour
                         }
                     if (isThrow)
                         continue;
-                    
+
+                    // 子オブジェクトのギミックの回転関数呼び出し
                     transform.GetChild(n).GetChild(i).GetComponent<GimmicControl>().TurnOver(rotAxis);
                 }
             }
