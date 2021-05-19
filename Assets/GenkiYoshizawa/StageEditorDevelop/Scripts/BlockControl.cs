@@ -7,21 +7,65 @@ public class BlockControl : MonoBehaviour
 {
     private GameObject _GameManager = null;
 
+    // 回転アニメーション用変数
+    [Header("回転アニメーションにかける秒数")]
+    [SerializeField] private float _RotateAnimTime = 1.0f;
+    private bool _isRotateAnim = false;
+    private float _RotateAngle = 0.0f;
+
+    // ひっくり返しアニメーション用変数
+    [Header("ひっくり返しアニメーションにかける秒数")]
+    [SerializeField] private float _TurnOverAnimTime = 1.0f;
+    private bool _isTurnOverAnim = false;
+
+    // 入れ替えアニメーション用変数
+    [Header("入れ替えアニメーションにかける秒数")]
+    [SerializeField] private float _SwapAnimTime = 1.0f;
+    private bool _isSwapAnim = false;
+
+    private float _PassedTime = 0.0f;
+
     // Start is called before the first frame update
     void Start()
     {
         _GameManager = GameObject.FindGameObjectWithTag("Manager");
+        _isRotateAnim = false;
+        _RotateAngle = 0.0f;
+
+        _isTurnOverAnim = false;
+
+        _isSwapAnim = false;
     }
 
     private void Update()
     {
-        
+        if (_isRotateAnim)
+        {
+            float time = Time.deltaTime;
+            if (_PassedTime + time > _RotateAnimTime)
+            {
+                time = _RotateAnimTime - _PassedTime;
+                _PassedTime = 0.0f;
+                _isRotateAnim = false;
+            }
+            else
+                _PassedTime += time;
+
+            float angle = _RotateAngle * (time / _RotateAnimTime);
+            this.transform.Rotate(Vector3.up, angle);
+        }
+
+        if (_isTurnOverAnim)
+        { }
+
+        if (_isSwapAnim)
+        { }
     }
 
     // ブロックの回転関数
     public void Rotate(bool isFront, float angle, bool isScan = true)
     {
-        // Blockから呼び出された場合は他のBlockを調べない
+        // 最初に呼び出された時は回転させるべきブロックを一挙に調べる
         if (isScan && transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetPanelIndex() != 0)
         {
             List<GameObject> targetBlock = ScanTargetBlock(isFront);
@@ -33,14 +77,18 @@ public class BlockControl : MonoBehaviour
         }
         else
         {
-            this.transform.Rotate(Vector3.up, angle);
+            _isRotateAnim = true;
+            _RotateAngle = angle;
+            //this.transform.Rotate(Vector3.up, angle);
             for (int n = 0; n < transform.childCount; ++n)// パネル枚数
             {
                 for (int i = 0; i < transform.GetChild(n).childCount; ++i)
                 {
+                    // プレイヤーならスルー
                     if (transform.GetChild(n).GetChild(i).gameObject == _GameManager.GetComponent<GameManagerScript>().GetPlayer())
                         continue;
 
+                    // エネミーならスルー
                     List<GameObject> enemys = _GameManager.GetComponent<GameManagerScript>().GetEnemys();
                     bool isThrow = false;
                     foreach (GameObject enemy in enemys)
@@ -52,6 +100,7 @@ public class BlockControl : MonoBehaviour
                     if (isThrow)
                         continue;
                     
+                    // 子オブジェクトのギミックの回転関数呼び出し
                     transform.GetChild(n).GetChild(i).GetComponent<GimmicControl>().Rotate(angle);
                 }
             }
@@ -68,7 +117,7 @@ public class BlockControl : MonoBehaviour
     // ブロックのひっくり返し関数
     public void TurnOver(bool isFront, Vector2Int direction, bool isScan = true)
     {
-        // Blockから呼び出された場合は他のBlockを調べない
+        // 最初に呼び出された時は回転させるべきブロックを一挙に調べる
         if (isScan && transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetPanelIndex() != 0)
         {
             List<GameObject> targetBlock = ScanTargetBlock(isFront);
