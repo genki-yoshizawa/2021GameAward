@@ -13,6 +13,11 @@ public class BlockControl : MonoBehaviour
         _GameManager = GameObject.FindGameObjectWithTag("Manager");
     }
 
+    private void Update()
+    {
+        
+    }
+
     // ƒuƒƒbƒN‚Ì‰ñ“]ŠÖ”
     public void Rotate(bool isFront, float angle, bool isScan = true)
     {

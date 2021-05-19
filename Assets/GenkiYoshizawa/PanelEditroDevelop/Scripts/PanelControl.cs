@@ -29,8 +29,8 @@ public class PanelControl : MonoBehaviour
     private bool _isCurBright = false;
     private MeshRenderer _MeshRenderer;
     private Material[] _SaveMaterials;
-    [Header("Assetから設定するデフォルトマテリアル(プランナーはいじる必要なし)")]
-    [SerializeField] private Material _DefaultMaterial;
+    [Header("Assetから設定するデフォルトマテリアル(オブジェクトに設定されているマテリアルの数)(プランナーはいじる必要なし)")]
+    [SerializeField] private Material[] _DefaultMaterial;
     // UI実行後の経過時間
     private float _PassedTime = 0.0f;
 
@@ -44,7 +44,7 @@ public class PanelControl : MonoBehaviour
         _SaveMaterials = new Material[_MeshRenderer.materials.Length];
         for(int i = 0; i < _MeshRenderer.materials.Length; ++i)
         {
-            _SaveMaterials[i] = _DefaultMaterial;
+            _SaveMaterials[i] = _DefaultMaterial[i];
             _SaveMaterials[i].CopyPropertiesFromMaterial(_MeshRenderer.materials[i]);
             //_MeshRenderer.materials[i].CopyPropertiesFromMaterial(_SaveMaterials[i]);
         }
