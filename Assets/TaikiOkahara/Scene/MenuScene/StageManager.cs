@@ -153,5 +153,8 @@ public class StageManager : MonoBehaviour
         _Move = true;
     }
 
-    
+    public void GameStart()
+    {
+
+    }
 }
