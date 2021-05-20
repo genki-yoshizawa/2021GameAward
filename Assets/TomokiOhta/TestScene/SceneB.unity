@@ -922,6 +922,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2041184501183777837, guid: 197a8fef8514b7a42abe8f9ce9a1f74f, type: 3}
+      propertyPath: _isMarker
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2041184501183777837, guid: 197a8fef8514b7a42abe8f9ce9a1f74f, type: 3}
+      propertyPath: _isSinPulse
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2041184501183777837, guid: 197a8fef8514b7a42abe8f9ce9a1f74f, type: 3}
+      propertyPath: _MarkerMaxScale
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 2041184501183777838, guid: 197a8fef8514b7a42abe8f9ce9a1f74f, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -1658,6 +1670,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2041184501183777837, guid: 197a8fef8514b7a42abe8f9ce9a1f74f, type: 3}
+      propertyPath: _isSinPulse
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2041184501183777838, guid: 197a8fef8514b7a42abe8f9ce9a1f74f, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -2371,6 +2387,18 @@ PrefabInstance:
     - target: {fileID: 2041184501183777836, guid: 197a8fef8514b7a42abe8f9ce9a1f74f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2041184501183777837, guid: 197a8fef8514b7a42abe8f9ce9a1f74f, type: 3}
+      propertyPath: _isMarker
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2041184501183777837, guid: 197a8fef8514b7a42abe8f9ce9a1f74f, type: 3}
+      propertyPath: _CycleTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2041184501183777837, guid: 197a8fef8514b7a42abe8f9ce9a1f74f, type: 3}
+      propertyPath: _MarkerMaxScale
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 2041184501183777838, guid: 197a8fef8514b7a42abe8f9ce9a1f74f, type: 3}
       propertyPath: m_Materials.Array.data[0]

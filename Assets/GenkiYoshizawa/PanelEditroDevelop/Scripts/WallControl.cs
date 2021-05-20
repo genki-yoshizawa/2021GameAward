@@ -4,16 +4,69 @@ using UnityEngine;
 
 public class WallControl : GimmicControl
 {
+    // 破壊アニメーションに必要な変数
+    [Header("ブロック破壊アニメーションにかける秒数")]
+    [SerializeField] private float _BreakAnimTime = 1.0f;
+    private bool _isBreakAnim = false;
+
+    // 再建アニメーションに必要な変数
+    [Header("ブロック復活アニメーションにかける秒数")]
+    [SerializeField] private float _RebornAnimTime = 1.0f;
+    private bool _isRebornAnim = false;
+
+    private Vector3 _StartLocalScale = new Vector3(1.0f, 1.0f, 1.0f);
+    private Vector3 _StartGlobalPosition = new Vector3(0.0f, 0.0f, 0.0f);
+    private float _PassedTime = 0.0f;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        _isBreakAnim = false;
+        _isRebornAnim = false;
+
+        _StartLocalScale = transform.localScale;
+        _StartGlobalPosition = transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (_isBreakAnim)
+        {
+            float time = Time.deltaTime;
+            if (_PassedTime + time > _BreakAnimTime)
+            {
+                time = _BreakAnimTime - _PassedTime;
+                _PassedTime = 0.0f;
+                _isBreakAnim = false;
+            }
+
+            // y座標を下げながらyサイズを0に向かわせる
+            float move = (_StartGlobalPosition.y - 0.0f) * (time / _BreakAnimTime);
+            transform.position = new Vector3(transform.position.x, transform.position.y - move, transform.position.z);
+
+            float scale = (_StartLocalScale.y - 0.0f) * (time / _BreakAnimTime);
+            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y - scale, transform.localScale.z);
+        }
+
+        if (_isRebornAnim)
+        {
+            float time = Time.deltaTime;
+            if (_PassedTime + time > _RebornAnimTime)
+            {
+                time = _RebornAnimTime - _PassedTime;
+                _PassedTime = 0.0f;
+                _isRebornAnim = false;
+            }
+
+            // y座標を上げながらyサイズを元のサイズにに向かわせる
+            float move = (0.0f - _StartGlobalPosition.y) * (time / _BreakAnimTime);
+            transform.position = new Vector3(transform.position.x, transform.position.y - move, transform.position.z);
+
+            float scale = (0.0f - _StartLocalScale.y) * (time / _BreakAnimTime);
+            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y - scale, transform.localScale.z);
+
+        }
     }
 
     public override void TurnEndUpdate()
@@ -144,4 +197,7 @@ public class WallControl : GimmicControl
 
         return 0;
     }
+
+    public void SetisBreakAnim() { _isBreakAnim = true; }
+    public void SetisRebornAnim() { _isRebornAnim = true; }
 }
