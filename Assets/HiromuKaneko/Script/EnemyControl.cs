@@ -90,6 +90,8 @@ public class EnemyControl : MonoBehaviour
     private Vector3 _TargetPoint;
     private float _PassedTime;
     private bool _CheeseBite;
+    private bool _IsExist;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -99,6 +101,7 @@ public class EnemyControl : MonoBehaviour
         _EnemyAnimation = gameObject.GetComponent<Animator>();
         _IsFront = true;
         _CheeseBite = false;
+        _IsExist = false;　
         _WallCount = 0;
         _TurnCount = 0;
         _Count = 0;
@@ -446,71 +449,76 @@ public class EnemyControl : MonoBehaviour
 
     public void EnemyTurn()
     {
-        if (_StartEnemyTurn)
+        // 生きていれば動ける
+        if(_IsExist == false)
         {
-            _Count = _ActCount;
-            _StartEnemyTurn = false;
-        }
+            if (_StartEnemyTurn)
+            {
+                _Count = _ActCount;
+                _StartEnemyTurn = false;
+            }
 
-        Wait();
-        // エネミーステートを変更する関数を呼ぶ
-
-
-        // 右Shiftで裏に行く（戻れない）
-        if (Input.GetKeyDown(KeyCode.RightShift))
-        {
-            _IsFront = false;
-            this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
-
-            GameObject ob;
-            GameObject parent = transform.root.gameObject;
-            ob = parent.transform.GetChild(1).gameObject;
-            transform.parent = ob.transform;
-
-        }
-
-        // ここでレベル別に処理を書く？
-        // ChangeState();
-        switch (_EnemyLevel)
-        {
-            case EnemyLevel.LEVEL1:
-                Level1();
-                break;
-            case EnemyLevel.LEVEL2:
-                Level2();
-                break;
-            case EnemyLevel.LEVEL3:
-                Level3();
-                break;
-            case EnemyLevel.LEVEL4:
-                Level4();
-                break;
-            case EnemyLevel.LEVEL5:
-                Level5();
-                break;
-            case EnemyLevel.LEVEL6:
-                Level6();
-                break;
-            case EnemyLevel.LEVEL7:
-                Level7();
-                break;
-        }
+            Wait();
+            // エネミーステートを変更する関数を呼ぶ
 
 
-        switch (_EnemyState)
-        {
-            case EnemyState.IDLE:
-                Idle();
-                break;
-            case EnemyState.STAY:
-                Stay();
-                break;
-            case EnemyState.MOVE:
-                Move();
-                break;
-            case EnemyState.BREAK:
-                Break();
-                break;
+            // 右Shiftで裏に行く（戻れない）
+            if (Input.GetKeyDown(KeyCode.RightShift))
+            {
+                _IsFront = false;
+                this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
+
+                GameObject ob;
+                GameObject parent = transform.root.gameObject;
+                ob = parent.transform.GetChild(1).gameObject;
+                transform.parent = ob.transform;
+
+            }
+
+            // ここでレベル別に処理を書く？
+            // ChangeState();
+            switch (_EnemyLevel)
+            {
+                case EnemyLevel.LEVEL1:
+                    Level1();
+                    break;
+                case EnemyLevel.LEVEL2:
+                    Level2();
+                    break;
+                case EnemyLevel.LEVEL3:
+                    Level3();
+                    break;
+                case EnemyLevel.LEVEL4:
+                    Level4();
+                    break;
+                case EnemyLevel.LEVEL5:
+                    Level5();
+                    break;
+                case EnemyLevel.LEVEL6:
+                    Level6();
+                    break;
+                case EnemyLevel.LEVEL7:
+                    Level7();
+                    break;
+            }
+
+
+            switch (_EnemyState)
+            {
+                case EnemyState.IDLE:
+                    Idle();
+                    break;
+                case EnemyState.STAY:
+                    Stay();
+                    break;
+                case EnemyState.MOVE:
+                    Move();
+                    break;
+                case EnemyState.BREAK:
+                    Break();
+                    break;
+
+            }
 
         }
 
@@ -1991,6 +1999,7 @@ public class EnemyControl : MonoBehaviour
     }
     public void SetDestroy()
     {
+        _IsExist = true;
         transform.parent = null;
        _EnemyAnimation.SetBool("Captured", true);      
     }           
