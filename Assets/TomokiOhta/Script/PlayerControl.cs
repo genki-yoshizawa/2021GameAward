@@ -109,6 +109,17 @@ public class PlayerControl : MonoBehaviour
             }
         }
 
+        //捕まえた後waitに戻る
+        if (_Animator.GetBool("Capture"))
+        {
+            float time = Time.deltaTime;
+            if ((_PassedTime += time) > _ActionTime)
+            {
+                _Animator.SetBool("Capture", false);
+                _PassedTime = 0.0f;
+            }
+        }
+
         //箱コンこれで動くと思う
         //if (Input.GetKeyDown("joystick button 1"))  //B
         //{
@@ -297,6 +308,18 @@ public class PlayerControl : MonoBehaviour
             {
                 _CommandSelect++;
                 _IconObj.transform.Translate(0.0f, -0.3f, 0.0f);
+            }
+        }
+
+        //デバッグ用 敵がいたら捕まえる
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            var enemy = CheckEnemy(_LocalPosition + _Direction);
+            if (enemy != null)
+            {
+                _Animator.SetBool("Capture", true);
+                _GameManagerScript.KillEnemy(enemy);
+                turnEnd = true;
             }
         }
 
