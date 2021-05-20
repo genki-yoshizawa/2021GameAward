@@ -49,6 +49,7 @@ public class FukidasiAnimationUI : MonoBehaviour
     public void Update()
     {
         //ビルボード処理
+<<<<<<< HEAD
        // Vector3 p = _Camera.transform.position;
         //p.x = transform.position.x;
         //p.y = transform.position.y;
@@ -56,6 +57,13 @@ public class FukidasiAnimationUI : MonoBehaviour
       //  this.transform.LookAt(p);
 
 
+=======
+        //Vector3 p = _Camera.transform.position;
+        //p.x = transform.position.x;
+        //p.y = transform.position.y;
+        //p.z = transform.position.z;
+        //this.transform.LookAt(p);
+>>>>>>> 9e304e2c5115fedcd7d20efb1f80f0a16e72c6d0
     }
 
     public void SetCount(int num)

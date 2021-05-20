@@ -100,6 +100,10 @@ public class BlockControl : MonoBehaviour
 
             Vector3 move = (_SwapGlobalPosition - _StartGlobalPosition) * (time / _TurnOverAnimTime);
             transform.position += move;
+
+            // ‰ñ“]‚µ‚È‚ª‚çƒXƒƒbƒvˆÚ“®‚·‚é
+            float angle = 360.0f * (time / _RotateAnimTime);
+            this.transform.Rotate(Vector3.up, angle);
         }
     }
 
