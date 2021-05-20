@@ -121,11 +121,7 @@ public class GameManagerScript : MonoBehaviour
     
     public void KillEnemy(GameObject enemy)
     {
-        foreach (GameObject e in _Enemy)
-        {
-            if (e == enemy)
-                Destroy(e);
-        }
+        enemy.GetComponent<EnemyControl>().SetDestroy();
         _Enemy.Remove(enemy);
     }
 }
