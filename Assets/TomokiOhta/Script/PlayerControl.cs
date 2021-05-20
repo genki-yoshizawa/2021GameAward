@@ -15,8 +15,8 @@ public class PlayerControl : MonoBehaviour
     [Header("吹き出し")]
     [SerializeField] private GameObject _FukidasiObj;
 
-    [Header("コマンド")]
-    [SerializeField] private GameObject _ActObj;
+    [Header("選択アイコン")]
+    [SerializeField] private GameObject _IconObj;
 
     //プレイヤーの配列座標
     private Vector2Int _LocalPosition;
@@ -214,13 +214,19 @@ public class PlayerControl : MonoBehaviour
         //上下矢印でコマンド選択
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            if(_CommandSelect > 0)
-            _CommandSelect--;
+            if (_CommandSelect > 0)
+            {
+                _CommandSelect--;
+                _IconObj.transform.Translate(0.0f, 0.3f, 0.0f);
+            }
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            if(_CommandSelect < _CanActionList.Count)
-            _CommandSelect++;
+            if (_CommandSelect < _CanActionList.Count)
+            {
+                _CommandSelect++;
+                _IconObj.transform.Translate(0.0f, -0.3f, 0.0f);
+            }
         }
 
         //Enterキーで行動 ターンを進める
