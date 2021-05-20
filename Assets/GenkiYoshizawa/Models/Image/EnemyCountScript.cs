@@ -14,13 +14,16 @@ public class EnemyCountScript : MonoBehaviour
 
     private int _CurEnemyCount;
 
-    [Header("エネミー減少アニメーションにかける秒数")]
+    [Header("エネミー減少テクスチャを表示する秒数")]
     [SerializeField] private float _EnemyCountAnimTime = 1.0f;
-    [Header("エネミー減少アニメーションの際の最大倍率")]
+    [Header("エネミー減少テクスチャを表示する最大倍率")]
     [SerializeField] private float _EnemyCountMaxScale = 1.0f;
     private bool _isEnemyCountAnim = false;
 
     private Vector3 _StartLocalScale;
+
+    // スプライトを更新するべきかのフラグ(眠気に任せて書いたので変な名前)
+    private bool _SpriteUpdate = false;
 
     private float _PassedTime = 0.0f;
     // Start is called before the first frame update
@@ -31,6 +34,7 @@ public class EnemyCountScript : MonoBehaviour
         _Enemys = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerScript>().GetEnemys();
 
         _MyImage.sprite = _NumberSprite[_Enemys.Count];
+        _SpriteUpdate = false;
         _CurEnemyCount = _Enemys.Count;
 
         _StartLocalScale = gameObject.GetComponent<RectTransform>().localScale;
@@ -44,6 +48,9 @@ public class EnemyCountScript : MonoBehaviour
         {
             gameObject.GetComponent<RectTransform>().localScale = new Vector3(_EnemyCountMaxScale, _EnemyCountMaxScale, _EnemyCountMaxScale);
             _isEnemyCountAnim = true;
+            _SpriteUpdate = true;
+
+            _MyImage.sprite = _NumberSprite[_Enemys.Count + 10];
         }
 
         if (_isEnemyCountAnim)
@@ -52,16 +59,10 @@ public class EnemyCountScript : MonoBehaviour
             if ((_PassedTime += time) > _EnemyCountAnimTime) 
             {
                 gameObject.GetComponent<RectTransform>().localScale = _StartLocalScale;
+                _MyImage.sprite = _NumberSprite[_Enemys.Count];
                 _PassedTime = 0.0f;
                 _isEnemyCountAnim = false;
             }
-
-
-            _MyImage.sprite = _NumberSprite[_Enemys.Count + 10];
-        }
-        else
-        {
-            _MyImage.sprite = _NumberSprite[_Enemys.Count];
         }
 
         _CurEnemyCount = _Enemys.Count;
