@@ -2,8 +2,8 @@ Shader "Custom/AlphaGradation"
 {
 	Properties
 	{
-		[PerRendererData] _MainTex("Sprite Texture", 2D) = "white" {}
-		_FadeTex("Fade Texture", 2D) = "white" {}
+		_MainTex("Sprite Texture", 2D) = "white" {}
+		//_FadeTex("Fade Texture", 2D) = "white" {}
 		//_Color("Tint", Color) = (1,1,1,1)
 		_Alpha("Alpha",Range(0,1)) = 0
 	}
@@ -48,7 +48,7 @@ Shader "Custom/AlphaGradation"
 			//fixed4 _Color;
 			fixed _Alpha;
 			sampler2D _MainTex;
-			sampler2D _FadeTex;
+			//sampler2D _FadeTex;
 			float4 _MainTex_ST;
 
 			// 頂点シェーダーの基本
@@ -70,10 +70,11 @@ Shader "Custom/AlphaGradation"
 				//half alpha = tex2D(_MainTex, IN.texcoord).a;
 				//alpha = saturate(1 - alpha - (_Alpha * 2 - 1));
 				fixed4 color = tex2D(_MainTex, IN.texcoord);
-				half fadeAlpha = tex2D(_FadeTex, IN.texcoord).r;
-				half alpha = (1-_Alpha > fadeAlpha) ? 0 : fadeAlpha;
-				return fixed4(color.r, color.g, color.b, alpha);
-				return color;
+				//half fadeAlpha = tex2D(_FadeTex, IN.texcoord).a;
+				//half alpha = (fadeAlpha > 0.5) ? color.a : 0;
+				half alpha = (_Alpha > IN.texcoord.x)? color.a : ( 1 - IN.texcoord.x/(_Alpha)) * color.a;
+				return fixed4(color.r, color.g, color.b,alpha);
+				//return color;
 
 			}
 			ENDCG

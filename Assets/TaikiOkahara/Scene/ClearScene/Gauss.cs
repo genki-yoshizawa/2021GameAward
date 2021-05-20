@@ -57,4 +57,12 @@ public class Gauss : MonoBehaviour
 
         Graphics.ExecuteCommandBuffer(command);
     }
+
+
+    void Update()
+    {
+        Camera cam = Camera.main;
+        this.transform.position = cam.transform.position;
+        this.transform.rotation = cam.transform.rotation;
+    }
 }

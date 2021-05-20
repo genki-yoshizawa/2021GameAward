@@ -73,7 +73,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
 
         StageMove();
 
-       
+        
     }
 
 

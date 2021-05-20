@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
+
 
 public class ClearScreen : MonoBehaviour
 {
@@ -8,42 +10,99 @@ public class ClearScreen : MonoBehaviour
     Gauss _Gauss;
 
     [SerializeField]
+    Animator _StarAnimator;
+
+    [SerializeField]
     private Animator _ClearScreenAnimator;
 
     bool _PauseFlag = false;
     float _Intencity = 0;
 
-    float _PrevTime;
+    float _GaussTime = 1.0f;
+
+
+    float _StarStartCount = 0;
+    float _StarStartTime = 1.0f;
+
+    float _ClearTextStartCount = 0;
+    float _ClearTextStartTime = 4.0f;
+
+   
 
     void Start()
     {
 
+        DisplayClearScreen();
     }
 
     void Update()
     {
-        var deltaTime = Time.realtimeSinceStartup - _PrevTime;
+        GaussFilter();
+        StarAnim();
+        ClearScreenAnim();
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetKeyDown(KeyCode.Return))
+            SceneManager.LoadScene("MenuScene");
+
+    }
+
+    void StarAnim()
+    {
+        if (!_PauseFlag) return;
+
+
+        if (_StarStartCount< _StarStartTime)
         {
-            _PauseFlag = !_PauseFlag;
-            bool animBool = _ClearScreenAnimator.GetBool("Clear");
-            _ClearScreenAnimator.SetBool("Clear", !animBool);
+            _StarStartCount += Time.deltaTime;
+            return;
         }
-        if (_PauseFlag)
+
+        _StarAnimator.SetTrigger("OneStar");
+
+
+        return;
+    }
+
+    void GaussFilter()
+    {
+        if (!_PauseFlag) return;
+
+        if(_Intencity > _GaussTime)
         {
-            _Intencity += deltaTime * 8;
-            Time.timeScale = 0;
+            //_PauseFlag = false;
             
+            return;
         }
-        else
-        {
-            _Intencity -= deltaTime * 8;
-            Time.timeScale = 1;
-        }
-        _Intencity = Mathf.Clamp01(_Intencity);
-        _Gauss.Resolution = (int)(_Intencity * 10);
+         
+        
+        
+        _Intencity += Time.deltaTime;
 
-        _PrevTime = Time.realtimeSinceStartup;
+        _Gauss.Resolution = (int)((_Intencity/_GaussTime) * 20);
+
+    }
+
+    void ClearScreenAnim()
+    {
+        if (!_PauseFlag) return;
+
+
+        if (_ClearTextStartCount < _ClearTextStartTime)
+        {
+            _ClearTextStartCount += Time.deltaTime;
+            return;
+        }
+
+        _ClearScreenAnimator.SetBool("Clear", true);
+
+
+        return;
+    }
+
+
+
+    public void DisplayClearScreen()
+    {
+        _PauseFlag = true;
     }
 }

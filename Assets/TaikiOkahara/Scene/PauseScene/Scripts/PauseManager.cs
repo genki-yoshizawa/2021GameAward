@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 
 public class PauseManager : MonoBehaviour
 {
@@ -46,7 +48,6 @@ public class PauseManager : MonoBehaviour
 
     void Start()
     {
-        //_Image = this.gameObject.GetComponent<Image>();
         _FadeType = FadeType.NONE;
     }
 
@@ -156,5 +157,15 @@ public class PauseManager : MonoBehaviour
 
         _FadeType = FadeType.OUT;
         PoseOutAnimation();
+    }
+
+    public void OnClickRestart()
+    {
+       
+    }
+
+    public void OnClickMenu()
+    {
+        SceneManager.LoadScene("MenuScene");
     }
 }
