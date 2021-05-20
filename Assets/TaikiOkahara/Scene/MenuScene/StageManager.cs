@@ -36,6 +36,8 @@ public class StageManager : MonoBehaviour
 
         for (int i = 0; i < _ChidCount; i++)
         {
+            _StartPos[i] = transform.GetChild(i).position;
+
             Vector3 pos = this.transform.position;
             pos.z += -_Radius * Mathf.Cos(2 * Mathf.PI * i / _ChidCount);
             pos.x += _Radius * Mathf.Sin(2 * Mathf.PI * i / _ChidCount);

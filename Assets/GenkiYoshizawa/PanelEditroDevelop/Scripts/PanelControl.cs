@@ -18,8 +18,21 @@ public class PanelControl : MonoBehaviour
     {
         for(int i = 0; i < transform.childCount; ++i)
         {
-            if(transform.GetChild(i).gameObject != _GameManager.GetComponent<GameManagerScript>().GetPlayer())
-                transform.GetChild(i).GetComponent<GimmicControl>().TurnEndUpdate();
+            if (transform.GetChild(i).gameObject == _GameManager.GetComponent<GameManagerScript>().GetPlayer())
+                continue;
+
+            List<GameObject> enemys = _GameManager.GetComponent<GameManagerScript>().GetEnemys();
+            bool isThrow = false;
+            foreach (GameObject enemy in enemys)
+                if (transform.GetChild(i).gameObject == enemy)
+                {
+                    isThrow = true;
+                    break;
+                }
+            if (isThrow)
+                continue;
+
+            transform.GetChild(i).GetComponent<GimmicControl>().TurnEndUpdate();
         }
     }
 

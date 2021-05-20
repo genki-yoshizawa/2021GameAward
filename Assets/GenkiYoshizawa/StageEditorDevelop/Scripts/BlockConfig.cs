@@ -47,7 +47,7 @@ public class BlockConfig : MonoBehaviour
 
 
     // パネルが回転パネルかのチェック関数
-    private bool CheckPanelRotate(bool isFront)
+    public bool CheckPanelRotate(bool isFront)
     {
         return transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetCanRotate();
     }

@@ -33,8 +33,21 @@ public class BlockControl : MonoBehaviour
             {
                 for (int i = 0; i < transform.GetChild(n).childCount; ++i)
                 {
-                    if (transform.GetChild(n).GetChild(i).gameObject != _GameManager.GetComponent<GameManagerScript>().GetPlayer())
-                        transform.GetChild(n).GetChild(i).GetComponent<GimmicControl>().Rotate(angle);
+                    if (transform.GetChild(n).GetChild(i).gameObject == _GameManager.GetComponent<GameManagerScript>().GetPlayer())
+                        continue;
+
+                    List<GameObject> enemys = _GameManager.GetComponent<GameManagerScript>().GetEnemys();
+                    bool isThrow = false;
+                    foreach (GameObject enemy in enemys)
+                        if (transform.GetChild(n).GetChild(i).gameObject == enemy)
+                        {
+                            isThrow = true;
+                            break;
+                        }
+                    if (isThrow)
+                        continue;
+                    
+                    transform.GetChild(n).GetChild(i).GetComponent<GimmicControl>().Rotate(angle);
                 }
             }
             GameManagerScript gameManagerScript = _GameManager.GetComponent<GameManagerScript>();
@@ -42,8 +55,8 @@ public class BlockControl : MonoBehaviour
             // プレイヤー、エネミーの向きを変える関数を呼び出す
             // ここに書いてあるスクリプト、関数で用意してもらえるとコメントアウトだけで済むので助かる
             gameManagerScript.GetPlayer().GetComponent<PlayerControl>().RotateMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition(), angle);
-            //foreach (GameObject enemy in gameManagerScript.GetEnemys())
-            //    enemy.GetComponent<EnemyControl>().RotateMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition(), angle);
+            foreach (GameObject enemy in gameManagerScript.GetEnemys())
+                enemy.GetComponent<EnemyControl>().RotateMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition(), angle);
         }
     }
 
@@ -70,8 +83,21 @@ public class BlockControl : MonoBehaviour
             {
                 for (int i = 0; i < transform.GetChild(n).childCount; ++i)
                 {
-                    if (transform.GetChild(n).GetChild(i).gameObject != _GameManager.GetComponent<GameManagerScript>().GetPlayer())
-                        transform.GetChild(n).GetChild(i).GetComponent<GimmicControl>().TurnOver(rotAxis);
+                    if (transform.GetChild(n).GetChild(i).gameObject == _GameManager.GetComponent<GameManagerScript>().GetPlayer())
+                        continue;
+
+                    List<GameObject> enemys = _GameManager.GetComponent<GameManagerScript>().GetEnemys();
+                    bool isThrow = false;
+                    foreach (GameObject enemy in enemys)
+                        if (transform.GetChild(n).GetChild(i).gameObject == enemy)
+                        {
+                            isThrow = true;
+                            break;
+                        }
+                    if (isThrow)
+                        continue;
+                    
+                    transform.GetChild(n).GetChild(i).GetComponent<GimmicControl>().TurnOver(rotAxis);
                 }
             }
 
@@ -83,9 +109,9 @@ public class BlockControl : MonoBehaviour
 
             // プレイヤー、エネミーの表裏を変える関数を呼び出す
             // ここに書いてあるスクリプト、関数で用意してもらえるとコメントアウトだけで済むので助かる
-            gameManagerScript.GetPlayer().GetComponent<PlayerControl>().TurnOverMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition());
-            //foreach (GameObject enemy in gameManagerScript.GetEnemys())
-            //    enemy.GetComponent<EnemyControl>().TurnOverMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition());
+            gameManagerScript.GetPlayer().GetComponent<PlayerControl>().TurnOverMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition(/*rotAxis*/));
+            foreach (GameObject enemy in gameManagerScript.GetEnemys())
+                enemy.GetComponent<EnemyControl>().TurnOverMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition(/*rotAxis*/));
         }
     }
 
@@ -133,8 +159,8 @@ public class BlockControl : MonoBehaviour
         // プレイヤー、エネミーのパネル入れ替え関数を呼び出す
         // ここに書いてあるスクリプト、関数で用意してもらえるとコメントアウトだけで済むので助かる
         gameManagerScript.GetPlayer().GetComponent<PlayerControl>().SwapMySelf(targetBlockLocalPosition);
-        //foreach (GameObject enemy in gameManagerScript.GetEnemys())
-        //    enemy.GetComponent<EnemyControl>().SwapMySelf(targetBlockLocalPosition);
+        foreach (GameObject enemy in gameManagerScript.GetEnemys())
+            enemy.GetComponent<EnemyControl>().SwapMySelf(targetBlockLocalPosition);
 
     }
 
