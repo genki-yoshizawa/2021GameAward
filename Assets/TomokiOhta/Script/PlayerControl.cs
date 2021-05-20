@@ -10,6 +10,7 @@ public class PlayerControl : MonoBehaviour
 
     [Header("プレイヤーの向きを入れてください。")]
     [SerializeField]private Vector2Int _Direction;
+    private Vector2Int _StartDirection;
 
     [Header("吹き出し")]
     [SerializeField] private GameObject _FukidasiObj;
@@ -19,6 +20,7 @@ public class PlayerControl : MonoBehaviour
 
     //プレイヤーの配列座標
     private Vector2Int _LocalPosition;
+    private Vector2Int _StartPostion;
 
     //他のオブジェクトに触れるときの仲介役
     private GameManagerScript _GameManagerScript;
@@ -35,7 +37,7 @@ public class PlayerControl : MonoBehaviour
     //どの行動が可能でど7の文字を格納するかを管理する
     private List<int> _CanActionList = new List<int>();
 
-    //
+    //ふきだしのUIを管理する
     private FukidasiAnimationUI _FukidasiScript;
 
     private int _CommandSelect = 0;
@@ -44,11 +46,15 @@ public class PlayerControl : MonoBehaviour
     {
         //初手FindWithTag
         _GameManagerScript = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerScript>();
-        //_FukidasiAnimationUI = GameObject.Find("fukidasi_0").GetComponent<FukidasiAnimationUI>();
 
         _IsExist = true;
 
+
         _FukidasiScript = _FukidasiObj.GetComponent<FukidasiAnimationUI>();
+
+        _StartPostion = _LocalPosition;
+        _StartDirection = _Direction;
+        _IsExist = true;
     }
 
     void Update()
@@ -74,6 +80,13 @@ public class PlayerControl : MonoBehaviour
 
         //}
 
+    }
+
+    public void PlayerInit()
+    {
+        _IsExist = true;
+        _LocalPosition = _StartPostion;
+        _Direction = _StartDirection;
     }
 
     private void Move(Vector2Int direction)
@@ -188,6 +201,7 @@ public class PlayerControl : MonoBehaviour
             transform.Rotate(0.0f, 90.0f, 0.0f);
             SetFrontBlock();
 
+            _FukidasiScript.ResetPanel();
             _FukidasiScript.ResetCount();
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow))
@@ -196,6 +210,7 @@ public class PlayerControl : MonoBehaviour
             transform.Rotate(0.0f, -90.0f, 0.0f);
             SetFrontBlock();
 
+            _FukidasiScript.ResetPanel();
             _FukidasiScript.ResetCount();
         }
 

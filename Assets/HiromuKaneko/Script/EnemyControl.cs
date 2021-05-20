@@ -822,6 +822,7 @@ public class EnemyControl : MonoBehaviour
     public void Level4()
     {
 
+<<<<<<< HEAD
         //// プレイヤーのいるブロックを取得して
         //// プレイヤーから一番遠いブロックへ逃げる
         _Player = _GameManager.gameObject.GetComponent<GameManagerScript>().GetPlayer();
@@ -1091,24 +1092,295 @@ public class EnemyControl : MonoBehaviour
                     }
                 }
             }
+=======
+        ////// プレイヤーのいるブロックを取得して
+        ////// プレイヤーから一番遠いブロックへ逃げる
+        //_Player = _GameManager.gameObject.GetComponent<GameManagerScript>().GetPlayer();
+        //Vector3 playerpos = _Player.transform.position;
+
+        //GameObject moveobj = new GameObject();
+        //GameObject breakobj = new GameObject();
+
+        //float distance = 0.0f;
+        //float distance2 = 10000.0f;
+        //float tmp = 0.0f;
+        //float y = 90;
+        //float random;
+
+        //// 周辺がすべて壁 or 壁＋パネルがない場合は必ずかじるを選択
+        //if ((_WallCount == 4) ||
+        //   (_WallCount == 3 && _NullBlockCount == 1) ||
+        //   (_WallCount == 2 && _NullBlockCount == 2) ||
+        //   (_WallCount == 1 && _NullBlockCount == 3))
+        //{
+        //    // どこの壁をかじるか
+        //    Debug.Log("とおった？");
 
 
-            float movetmp = Vector3.Distance(playerpos, moveobj.transform.position);
-            float breaktmp = Vector3.Distance(playerpos, breakobj.transform.position);
+        //    _WallCount = 0;
+        //    _NullBlockCount = 0;
+        //    _EnemyState = EnemyState.BREAK;
+        //}
 
-            if (movetmp < breaktmp)
-            {
-                _NextBlock = breakobj;
-                _EnemyState = EnemyState.BREAK;
+        //if (_WallCount == 3)
+        //{
+        //    _WallCount = 0;
+        //    _NullBlockCount = 0;
+        //    _EnemyState = EnemyState.BREAK;
+        //}
+        //// いけるパネルが一枚のみだけどネコに近づいてしまうときにかじる選択をする（一番離れられる場所の壁を）
+        //// 一番遠くへいけるパネルへの道に壁があったらかじる？　プレイヤーとの距離によっては離れるべき？
 
-            }
-            else
-            {
-                _NextBlock = moveobj;
-                _EnemyState = EnemyState.MOVE;
-            }
-            _TurnCount = 0;
-        }
+>>>>>>> 63b5873ec038eefc3b30ce183f7bccef8c33f320
+
+        //random = Random.value;
+
+        //if (random < 0.5)
+        //{
+        //    _TurnCount++;
+        //}
+
+        //if (_TurnCount == 0)
+        //{
+        //    _TurnCount++;
+
+        //}
+        //else
+        //{
+        //    if (_IsFront)
+        //    {
+        //        if (_Up != null)
+        //        {
+        //            _EnemyDirection = new Vector2Int(0, 1);
+        //            tmp = Vector3.Distance(playerpos, _Up.transform.position);
+        //            if (tmp == distance)
+        //            {
+        //                random = Random.value;
+        //                if (random < 0.5f)
+        //                {
+        //                    if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+        //                    {
+
+        //                        moveobj = _Up;
+        //                        this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+        //                        distance = tmp;
+        //                    }
+        //                    else
+        //                    {
+        //                        breakobj = _Up;
+        //                        this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+        //                        distance = tmp;
+        //                    }
+        //                }
+        //            }
+        //            else if (tmp > distance)
+        //            {
+        //                if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+        //                {
+        //                    // 壁がなければいける
+        //                    obj = _Up;
+        //                    this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+        //                    distance = tmp;
+        //                }
+        //                else
+        //                {
+        //                    // 壁があったらかじる
+        //                    breakobj = _Up;
+        //                    this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+        //                    distance = tmp;
+        //                }
+        //            }
+        //        }
+
+        //        if (_Down != null)
+        //        {
+        //            _EnemyDirection = new Vector2Int(0, -1);
+        //            tmp = Vector3.Distance(playerpos, _Down.transform.position);
+
+
+        //            if (tmp == distance)
+        //            {
+        //                random = Random.value;
+        //                if (random < 0.5f)
+        //                {
+        //                    if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+        //                    {
+        //                        moveobj = _Down;
+        //                        this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
+        //                        distance = tmp;
+        //                    }
+        //                    else
+        //                    {
+        //                        breakobj = _Down;
+        //                        this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
+        //                        distance = tmp;
+        //                    }
+        //                }
+        //            }
+        //            else if (tmp > distance)
+        //            {
+        //                if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+        //                {
+        //                    obj = _Down;
+        //                    this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
+        //                    distance = tmp;
+        //                }
+        //                else
+        //                {
+        //                    breakobj = _Down;
+        //                    this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
+        //                    distance = tmp;
+        //                }
+        //            }
+
+        //        }
+
+        //        if (_Left != null)
+        //        {
+        //            _EnemyDirection = new Vector2Int(-1, 0);
+        //            tmp = Vector3.Distance(playerpos, _Left.transform.position);
+
+        //            if (tmp == distance)
+        //            {
+        //                random = Random.value;
+        //                if (random < 0.5f)
+        //                {
+        //                    if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+        //                    {
+
+        //                        moveobj = _Left;
+        //                        this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
+        //                        distance = tmp;
+        //                    }
+        //                    else
+        //                    {
+        //                        breakobj = _Left;
+        //                        this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
+        //                        distance = tmp;
+        //                    }
+        //                }
+        //            }
+        //            else if (tmp > distance)
+        //            {
+        //                if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+        //                {
+        //                    moveobj = _Left;
+        //                    this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
+        //                    distance = tmp;
+        //                }
+        //                else
+        //                {
+        //                    breakobj = _Left;
+        //                    this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
+        //                    distance = tmp;
+        //                }
+        //            }
+        //        }
+
+        //        if (_Right != null)
+        //        {
+        //            _EnemyDirection = new Vector2Int(1, 0);
+        //            tmp = Vector3.Distance(playerpos, _Right.transform.position);
+
+        //            if (tmp == distance)
+        //            {
+        //                random = Random.value;
+        //                if (random < 0.5f)
+        //                {
+        //                    if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+        //                    {
+
+        //                        moveobj = _Right;
+        //                        this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
+        //                        distance = tmp;
+        //                    }
+        //                    else
+        //                    {
+        //                        breakobj = _Right;
+        //                        this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
+        //                        distance = tmp;
+        //                    }
+        //                }
+        //            }
+        //            else if (tmp > distance)
+        //            {
+        //                if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+        //                {
+
+        //                    obj = _Right;
+        //                    this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
+        //                    distance = tmp;
+        //                }
+        //                else
+        //                {
+        //                    breakobj = _Right;
+        //                    this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
+        //                    distance = tmp;
+        //                }
+        //            }
+        //        }
+
+        //    }
+        //    else
+        //    {
+        //        if (_Up != null)
+        //        {
+        //            tmp = Vector3.Distance(playerpos, _Up.transform.position);
+        //            if (tmp < distance2)
+        //            {
+        //                obj = _Up;
+        //                distance2 = tmp;
+        //            }
+        //        }
+
+        //        if (_Down != null)
+        //        {
+        //            tmp = Vector3.Distance(playerpos, _Down.transform.position);
+        //            if (tmp < distance2)
+        //            {
+        //                obj = _Down;
+        //                distance2 = tmp;
+        //            }
+        //        }
+
+        //        if (_Left != null)
+        //        {
+        //            tmp = Vector3.Distance(playerpos, _Left.transform.position);
+        //            if (tmp < distance2)
+        //            {
+        //                obj = _Left;
+        //                distance2 = tmp;
+        //            }
+        //        }
+
+        //        if (_Right != null)
+        //        {
+        //            tmp = Vector3.Distance(playerpos, _Right.transform.position);
+        //            if (tmp < distance2)
+        //            {
+        //                obj = _Right;
+        //                distance2 = tmp;
+        //            }
+        //        }
+        //    }
+
+
+        //    float movetmp = Vector3.Distance(playerpos, moveobj.transform.position);
+        //    float breaktmp = Vector3.Distance(playerpos, breakobj.transform.position);
+
+        //    if (movetmp < breaktmp)
+        //    {
+        //        _NextBlock = breakobj;
+        //        _EnemyState = EnemyState.BREAK;
+
+        //    }
+        //    else
+        //    {
+        //        _NextBlock = moveobj;
+        //        _EnemyState = EnemyState.MOVE;
+        //    }
+        //    _TurnCount = 0;
+        //}
 
     }
 

@@ -524,7 +524,7 @@ Animator:
   m_GameObject: {fileID: 334879443}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 55343c2a466f6794da79ef45481d4617, type: 2}
+  m_Controller: {fileID: 9100000, guid: 2ff28e4a610394748ae5ee01995433e6, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1389,6 +1389,7 @@ MonoBehaviour:
   - {fileID: 1360487737}
   - {fileID: 639910410}
   _Icon: {fileID: 334879443}
+  _Camera: {fileID: 1658337496}
 --- !u!95 &740374223
 Animator:
   serializedVersion: 3
@@ -1840,7 +1841,7 @@ GameObject:
   - component: {fileID: 1338347102}
   - component: {fileID: 1338347101}
   m_Layer: 0
-  m_Name: panel_act02 1_0
+  m_Name: panel_act02 1_0 (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
