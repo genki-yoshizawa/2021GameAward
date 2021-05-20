@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class Stage : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField]
+    string _SceneName;
 
     [SerializeField]
     private float _Range;
@@ -12,6 +15,8 @@ public class Stage : MonoBehaviour
     [SerializeField]
     private float _Speed;
 
+    [SerializeField]
+    private int _ClearPercentage;
 
     private float _StartPos;
 
@@ -34,5 +39,15 @@ public class Stage : MonoBehaviour
 
 
         transform.Rotate(0.01f, 0.01f, 0.0f);
+    }
+
+    public string GetSceneName()
+    {
+        return _SceneName;
+    }
+
+    public int GetClearParsentage()
+    {
+        return _ClearPercentage;
     }
 }

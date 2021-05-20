@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class StageManager : MonoBehaviour
+public class StageManager : SingletonMonoBehaviour<StageManager>
 {
 
     private int _ChidCount;
@@ -29,7 +30,6 @@ public class StageManager : MonoBehaviour
     void Start()
     {
         _ChidCount = this.transform.childCount;
-        //_ChoiceStagePos = this.transform.position;
         _ChoiceStage = transform.GetChild(0).gameObject;
         _EndPos = new Vector3[_ChidCount];
         _StartPos = new Vector3[_ChidCount];
@@ -155,6 +155,13 @@ public class StageManager : MonoBehaviour
 
     public void GameStart()
     {
+        string sceneName = _ChoiceStage.GetComponent<Stage>().GetSceneName();
 
+        SceneManager.LoadScene(sceneName);
+    }
+
+    public GameObject GetChoiceStageObject()
+    {
+        return _ChoiceStage;
     }
 }
