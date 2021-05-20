@@ -86,7 +86,7 @@ public class EnemyControl : MonoBehaviour
         if (_EnemyState == EnemyState.IDLE)
             Idle();
 
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.K))
         {
             _WallCount = 0;
         }
@@ -112,8 +112,12 @@ public class EnemyControl : MonoBehaviour
             _Up = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock((pos + _EnemyDirection));
             if (_Up != null)
             {
-                if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                if (!_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                {
+                    Debug.Log("up");
                     _WallCount++;
+
+                }
             }
             else
             {
@@ -125,7 +129,7 @@ public class EnemyControl : MonoBehaviour
             _Down = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock((pos + _EnemyDirection));
             if (_Down != null)
             {
-                if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                if (!_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                     _WallCount++;
             }
             else
@@ -138,7 +142,7 @@ public class EnemyControl : MonoBehaviour
             _Left = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock((pos + _EnemyDirection));
             if (_Left != null)
             {
-                if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                if (!_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                     _WallCount++;
             }
             else
@@ -151,7 +155,7 @@ public class EnemyControl : MonoBehaviour
             _Right = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock((pos + _EnemyDirection));
             if (_Right != null)
             {
-                if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                if (!_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                     _WallCount++;
             }
             else
@@ -229,6 +233,7 @@ public class EnemyControl : MonoBehaviour
             //}
         }
 
+    // 移動もかじるもしない待機モーションのみでターン終了
     void Stay()
     {
         // なにもしない処理？
@@ -236,8 +241,7 @@ public class EnemyControl : MonoBehaviour
         _Count--;
         _EnemyState = EnemyState.IDLE;
     }
-
-
+    
     // 移動関数
     void Move()
     {
@@ -294,12 +298,16 @@ public class EnemyControl : MonoBehaviour
 
         // 壁をかじる処理を作る
         _EnemyDirection = new Vector2Int(0, 1);
-        if(_Up.gameObject.GetComponent<BlockControl>().BreakWall(_IsFront, _EnemyLocalPosition, _EnemyDirection, _BreakLevel));
-                Debug.Log("かべをこわす");
+        _Up.gameObject.GetComponent<BlockControl>().BreakWall(_IsFront, _EnemyLocalPosition, _EnemyDirection, _BreakLevel);
+        //                Debug.Log("かべをこわす");
+        _EnemyDirection = new Vector2Int(0, -1);
+        _Down.gameObject.GetComponent<BlockControl>().BreakWall(_IsFront, _EnemyLocalPosition, _EnemyDirection, _BreakLevel);
 
-        //_Down.gameObject.GetComponent<BlockControl>().BreakWall(_IsFront, _EnemyLocalPosition, _EnemyDirection, _BreakLevel);
-        //_Left.gameObject.GetComponent<BlockControl>().BreakWall(_IsFront, _EnemyLocalPosition, _EnemyDirection, _BreakLevel);
-        //_Right.gameObject.GetComponent<BlockControl>().BreakWall(_IsFront, _EnemyLocalPosition, _EnemyDirection, _BreakLevel);
+        _EnemyDirection = new Vector2Int(-1, 0);
+        _Left.gameObject.GetComponent<BlockControl>().BreakWall(_IsFront, _EnemyLocalPosition, _EnemyDirection, _BreakLevel);
+
+        _EnemyDirection = new Vector2Int(1, 0);
+        _Right.gameObject.GetComponent<BlockControl>().BreakWall(_IsFront, _EnemyLocalPosition, _EnemyDirection, _BreakLevel);
 
         if (_BreakTurn == BreakTurn.RANDOM)
         {
@@ -307,6 +315,7 @@ public class EnemyControl : MonoBehaviour
         }
 
         _Count--;
+
         _EnemyState = EnemyState.IDLE;
 
     }
@@ -392,8 +401,6 @@ public class EnemyControl : MonoBehaviour
     {
 
     }
-
-    // 壁をかじるテスト用に仮作成
 
     // 何も行動しない　待機モーションのみ
     public void Level1()
@@ -606,6 +613,7 @@ public class EnemyControl : MonoBehaviour
         Vector3 playerpos = _Player.transform.position;
 
         GameObject obj = new GameObject();
+        obj = null;
         float distance = 0.0f;
         float distance2 = 10000.0f;
         float tmp = 0.0f;
@@ -614,7 +622,243 @@ public class EnemyControl : MonoBehaviour
 
         random = Random.value;
 
-        if (random < 10.0)
+        if (random < 0.3)
+        {
+            _TurnCount++;
+        }
+
+        if (_TurnCount == 0)
+        {
+            _TurnCount++;
+
+        }
+        else
+        {
+            if (_IsFront)
+            {
+                if (_Up != null)
+                {
+                    _EnemyDirection = new Vector2Int(0, 1);
+                    tmp = Vector3.Distance(playerpos, _Up.transform.position);
+                    if (tmp == distance)
+                    {
+                        random = Random.value;
+                        if (random < 0.5f)
+                        {
+                            if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                            {
+
+                                obj = _Up;
+                                this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                                distance = tmp;
+                            }
+                        }
+                    }
+                    else if (tmp > distance)
+                    {
+                        if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                        {
+
+                            obj = _Up;
+                            this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                            distance = tmp;
+                        }
+                    }
+                }
+
+                if (_Down != null)
+                {
+                    _EnemyDirection = new Vector2Int(0, -1);
+                    tmp = Vector3.Distance(playerpos, _Down.transform.position);
+
+
+                    if (tmp == distance)
+                    {
+                        random = Random.value;
+                        if (random < 0.5f)
+                        {
+                            if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                            {
+                                obj = _Down;
+                                this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
+                                distance = tmp;
+                            }
+                        }
+                    }
+                    else if (tmp > distance)
+                    {
+                        if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                        {
+                            obj = _Down;
+                            this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
+                            distance = tmp;
+                        }
+                    }
+
+                }
+
+                if (_Left != null)
+                {
+                    _EnemyDirection = new Vector2Int(-1, 0);
+                    tmp = Vector3.Distance(playerpos, _Left.transform.position);
+
+                    if (tmp == distance)
+                    {
+                        random = Random.value;
+                        if (random < 0.5f)
+                        {
+                            if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                            {
+
+                                obj = _Left;
+                                this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
+                                distance = tmp;
+                            }
+                        }
+                    }
+                    else if (tmp > distance)
+                    {
+                        if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                        {
+                            obj = _Left;
+                            this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
+                            distance = tmp;
+                        }
+                    }
+                }
+
+                if (_Right != null)
+                {
+                    _EnemyDirection = new Vector2Int(1, 0);
+                    tmp = Vector3.Distance(playerpos, _Right.transform.position);
+
+                    if (tmp == distance)
+                    {
+                        random = Random.value;
+                        if (random < 0.5f)
+                        {
+                            if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                            {
+
+                                obj = _Right;
+                                this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
+                                distance = tmp;
+                            }
+                        }
+                    }
+                    else if (tmp > distance)
+                    {
+                        if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                        {
+
+                            obj = _Right;
+                            this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
+                            distance = tmp;
+                        }
+                    }
+                }
+
+            }
+            else
+            {
+                if (_Up != null)
+                {
+                    tmp = Vector3.Distance(playerpos, _Up.transform.position);
+                    if (tmp < distance2)
+                    {
+                        obj = _Up;
+                        distance2 = tmp;
+                    }
+                }
+
+                if (_Down != null)
+                {
+                    tmp = Vector3.Distance(playerpos, _Down.transform.position);
+                    if (tmp < distance2)
+                    {
+                        obj = _Down;
+                        distance2 = tmp;
+                    }
+                }
+
+                if (_Left != null)
+                {
+                    tmp = Vector3.Distance(playerpos, _Left.transform.position);
+                    if (tmp < distance2)
+                    {
+                        obj = _Left;
+                        distance2 = tmp;
+                    }
+                }
+
+                if (_Right != null)
+                {
+                    tmp = Vector3.Distance(playerpos, _Right.transform.position);
+                    if (tmp < distance2)
+                    {
+                        obj = _Right;
+                        distance2 = tmp;
+                    }
+                }
+            }
+
+            _TurnCount = 0;
+            if (obj != null)
+            {
+                _NextBlock = obj;
+
+                Debug.Log(_NextBlock);
+                _EnemyState = EnemyState.MOVE;
+            }
+            else
+            {
+                _EnemyState = EnemyState.STAY;
+            }
+        }
+
+    }
+
+    // ２ターンに１度行動する　たまに１ターンに１度行動（現状50%位）　レベル１の壁をかじる
+    public void Level4()
+    {
+        // 周辺がすべて壁 or 壁＋パネルがない場合は必ずかじるを選択
+        if((_WallCount == 4) ||
+           (_WallCount == 3 && _NullBlockCount == 1) ||
+           (_WallCount == 2 && _NullBlockCount == 2) ||
+           (_WallCount == 1 && _NullBlockCount == 3))
+        {
+            // どこの壁をかじるか
+            Debug.Log("とおった？");
+            _WallCount = 0;
+            _NullBlockCount = 0;
+            _EnemyState = EnemyState.BREAK;
+        }
+
+        if(_WallCount == 3)
+        {
+            _WallCount = 0;
+            _NullBlockCount = 0;
+            _EnemyState = EnemyState.BREAK;
+        }
+        // いけるパネルが一枚のみだけどネコに近づいてしまうときにかじる選択をする（一番離れられる場所の壁を）
+        // 一番遠くへいけるパネルへの道に壁があったらかじる？　プレイヤーとの距離によっては離れるべき？
+
+        //// プレイヤーのいるブロックを取得して
+        //// プレイヤーから一番遠いブロックへ逃げる
+        _Player = _GameManager.gameObject.GetComponent<GameManagerScript>().GetPlayer();
+        Vector3 playerpos = _Player.transform.position;
+
+        GameObject tmpobj = new GameObject();
+
+        float distance = 0.0f;
+        float distance2 = 10000.0f;
+        float tmp = 0.0f;
+        float y = 90;
+        float random;
+
+        random = Random.value;
+
+        if (random < 0.5)
         {
             _TurnCount++;
         }
@@ -798,25 +1042,22 @@ public class EnemyControl : MonoBehaviour
             _NextBlock = obj;
             _EnemyState = EnemyState.MOVE;
         }
+
     }
 
-    // ２ターンに１度行動する　たまに１ターンに１度行動（現状50%位）　レベル１の壁をかじる
-    public void Level4()
-    {
-
-        _EnemyState = EnemyState.BREAK;
-    }
-
+    // 毎ターン行動する。レベル1の硬さのオブジェクトをかじる
     public void Level5()
     {
 
     }
 
+    // 毎ターン行動する。レベル２の硬さのオブジェクトをかじる
     public void Level6()
     {
 
     }
 
+    // 毎ターン行動する。レベル３の硬さのオブジェクトをかじる
     public void Level7()
     {
 

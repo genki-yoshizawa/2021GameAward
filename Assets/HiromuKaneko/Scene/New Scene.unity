@@ -1654,7 +1654,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2317516878489153377, guid: f7d1cdf630fb3904e93c52d74e028a2f, type: 3}
       propertyPath: _WallRebornTurn
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2317516878489153378, guid: f7d1cdf630fb3904e93c52d74e028a2f, type: 3}
       propertyPath: m_RootOrder
@@ -1707,6 +1707,10 @@ PrefabInstance:
     - target: {fileID: 2317516878489153405, guid: f7d1cdf630fb3904e93c52d74e028a2f, type: 3}
       propertyPath: m_Name
       value: Wall (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2317516878489153405, guid: f7d1cdf630fb3904e93c52d74e028a2f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f7d1cdf630fb3904e93c52d74e028a2f, type: 3}
@@ -2226,7 +2230,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8473983117655951653, guid: b9de26ea8d6db4d4783fe094ec08fb62, type: 3}
       propertyPath: _BreakLevel
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8473983117655951653, guid: b9de26ea8d6db4d4783fe094ec08fb62, type: 3}
       propertyPath: _EnemyLevel
