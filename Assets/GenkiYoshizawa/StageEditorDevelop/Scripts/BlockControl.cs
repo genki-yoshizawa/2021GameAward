@@ -61,7 +61,7 @@ public class BlockControl : MonoBehaviour
     }
 
     // ブロックのひっくり返し関数
-    public void TurnOver(bool isFront, bool isScan = true)
+    public void TurnOver(bool isFront, Vector2Int direction, bool isScan = true)
     {
         // Blockから呼び出された場合は他のBlockを調べない
         if (isScan && transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetPanelIndex() != 0)
@@ -70,13 +70,17 @@ public class BlockControl : MonoBehaviour
 
             foreach (GameObject target in targetBlock)
             {
-                target.GetComponent<BlockControl>().TurnOver(isFront, false);
+                target.GetComponent<BlockControl>().TurnOver(isFront, direction, false);
             }
         }
         else
         {
             // 右軸に180度回転（プレイヤーの向きによって変えたほうがいいかも）
-            Vector3 rotAxis = Vector3.right;
+            Vector3 rotAxis = Vector3.zero;
+            if (direction.x != 0)
+                rotAxis = Vector3.forward;
+            else if (direction.y != 0)
+                rotAxis = Vector3.right;
             this.transform.Rotate(rotAxis, 180);
 
             for (int n = 0; n < transform.childCount; ++n)// パネル枚数
@@ -109,9 +113,9 @@ public class BlockControl : MonoBehaviour
 
             // プレイヤー、エネミーの表裏を変える関数を呼び出す
             // ここに書いてあるスクリプト、関数で用意してもらえるとコメントアウトだけで済むので助かる
-            gameManagerScript.GetPlayer().GetComponent<PlayerControl>().TurnOverMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition(/*rotAxis*/));
+            gameManagerScript.GetPlayer().GetComponent<PlayerControl>().TurnOverMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition(), rotAxis);
             foreach (GameObject enemy in gameManagerScript.GetEnemys())
-                enemy.GetComponent<EnemyControl>().TurnOverMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition(/*rotAxis*/));
+                enemy.GetComponent<EnemyControl>().TurnOverMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition()/*, rotAxis*/);
         }
     }
 
@@ -124,36 +128,57 @@ public class BlockControl : MonoBehaviour
         if (transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetPanelIndex() != 0)
             targetBlock = ScanTargetBlock(isFront);
 
-        List<Vector2Int> targetBlockLocalPosition = new List<Vector2Int>();
-
         if (targetBlock == null)
             return;
-        
+
+        // ターゲットブロックをSwapIndexで昇順ソートする
+        // ラムダ式でソートしてる。なんでこの書き方なのかよく分かってない
+        targetBlock.Sort((a, b) => a.transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetSwapIndex() - b.transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetSwapIndex());
+
+        List<Vector2Int> targetBlockLocalPosition = new List<Vector2Int>();
+
         foreach (GameObject target in targetBlock)
         {
             targetBlockLocalPosition.Add(target.GetComponent<BlockConfig>().GetBlockLocalPosition());
         }
 
-        foreach (GameObject target in targetBlock)
-        {
-            if (gameObject == target)
-            {
-                targetBlock.Remove(target);
-                break;
-            }
-        }
-        
+        // 自分を取り除く
+        //foreach (GameObject target in targetBlock)
+        //{
+        //    if (gameObject == target)
+        //    {
+        //        targetBlock.Remove(target);
+        //        break;
+        //    }
+        //}
+
+        // 現段階では3つ以上のスワップはバグる(手直し中)
         // 配列要素入れ替え処理
         // ゲームマネージャー内の配列入れ替え
-        gameManagerScript.SwapBlockArray(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition(), targetBlock[0].GetComponent<BlockConfig>().GetBlockLocalPosition());
+        //gameManagerScript.SwapBlockArray(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition(), targetBlock[0].GetComponent<BlockConfig>().GetBlockLocalPosition());
+        gameManagerScript.SwapBlockArray(targetBlock);
+
         // それぞれのブロックのローカルポジションを入れ替え
-        Vector2Int localTemp = gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition();
-        gameObject.GetComponent<BlockConfig>().SetBlockLocalPosition(targetBlock[0].GetComponent<BlockConfig>().GetBlockLocalPosition());
+        //Vector2Int localTemp = gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition();
+        //gameObject.GetComponent<BlockConfig>().SetBlockLocalPosition(targetBlock[0].GetComponent<BlockConfig>().GetBlockLocalPosition());
+        //targetBlock[0].GetComponent<BlockConfig>().SetBlockLocalPosition(localTemp);
+        Vector2Int localTemp = targetBlock[targetBlock.Count - 1].GetComponent<BlockConfig>().GetBlockLocalPosition();
+        for (int n = targetBlock.Count - 1; n > 0; --n) 
+        {
+            targetBlock[n].GetComponent<BlockConfig>().SetBlockLocalPosition(targetBlock[n - 1].GetComponent<BlockConfig>().GetBlockLocalPosition());
+        }
         targetBlock[0].GetComponent<BlockConfig>().SetBlockLocalPosition(localTemp);
 
+
         // ブロックのグローバル座標を入れ替える
-        Vector3 globalTemp = gameObject.transform.position;
-        gameObject.transform.position = targetBlock[0].transform.position;
+        //Vector3 globalTemp = gameObject.transform.position;
+        //gameObject.transform.position = targetBlock[0].transform.position;
+        //targetBlock[0].transform.position = globalTemp;
+        Vector3 globalTemp = targetBlock[targetBlock.Count - 1].transform.position;
+        for (int n = targetBlock.Count - 1; n > 0; --n)
+        {
+            targetBlock[n].transform.position = targetBlock[n - 1].transform.position;
+        }
         targetBlock[0].transform.position = globalTemp;
 
         // プレイヤー、エネミーのパネル入れ替え関数を呼び出す
@@ -168,7 +193,7 @@ public class BlockControl : MonoBehaviour
     public bool BreakWall(bool isFront, Vector2Int objectPosition, Vector2 direction, int lv = 0)
     {
         GameObject objectBlock = null;
-        Vector2Int blockLocalPosition = _GameManager.transform.GetComponent<BlockConfig>().GetBlockLocalPosition();
+        Vector2Int blockLocalPosition = transform.GetComponent<BlockConfig>().GetBlockLocalPosition();
         if (objectPosition != blockLocalPosition)
         {// 調べるブロックにオブジェクトがいなければ
             // オブジェクトのいるブロックの取得
@@ -186,7 +211,7 @@ public class BlockControl : MonoBehaviour
         switch (breakResult)
         {
             case 0:// 自身の乗ってるパネルの壁がなかった場合
-                breakResult = transform.GetChild(isFront ? 0 : 1).GetComponent<PanelControl>().BreakWall(objectPosition, blockLocalPosition, direction);
+                breakResult = transform.GetChild(isFront ? 0 : 1).GetComponent<PanelControl>().BreakWall(objectPosition, blockLocalPosition, direction, lv);
                 break;
 
             case 1:// 自身の乗ってるパネルの壁を壊せなかった場合
@@ -222,7 +247,6 @@ public class BlockControl : MonoBehaviour
             {
                 if (blockZLine == null) continue;
                 // 同じインデックスであれば対象ブロック
-                // 現段階では3つ以上のスワップはバグる
                 if (blockZLine.transform.GetChild(isFront ? 0 : 1).transform.GetComponent<PanelConfig>().GetPanelIndex() == gameObject.transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetPanelIndex())
                 {
                     targetBlock.Add(blockZLine);
@@ -236,4 +260,5 @@ public class BlockControl : MonoBehaviour
 
         return targetBlock;
     }
+    
 }
