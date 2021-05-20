@@ -117,7 +117,7 @@ public class EnemyControl : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.K))
         {
-            _WallCount = 0;
+            SetDestroy();
         }
 
         //if (_EnemyAnimation.GetBool("Panic"))
@@ -186,6 +186,14 @@ public class EnemyControl : MonoBehaviour
 
         }
 
+        var clipInfo = _EnemyAnimation.GetCurrentAnimatorClipInfo(0)[0];   // 引数はLayer番号、配列の0番目
+        Debug.Log("AnimationClip名 : " + clipInfo.clip.name);
+
+        if(clipInfo.clip.name == "Dead")
+        {
+            Destroy(this.gameObject);
+        }
+        //
 
 
     }
@@ -1838,7 +1846,12 @@ public class EnemyControl : MonoBehaviour
             }
         }
     }
-    public void EnemyDestroy() { Destroy(this.gameObject); }                                 // エネミーを削除する処理
+    public void SetDestroy()
+    {
+        transform.parent = null;
+       _EnemyAnimation.SetBool("Captured", true);      
+    }           
+    // エネミーを削除する処理
     public void SetIsFront(bool isfront) { _IsFront = isfront; }
     public void SetStartEnemyTurn(bool enemyturn) { _StartEnemyTurn = enemyturn; }           // エネミーターンに変わったときにターンマネージャーでtrueにしてほしい
     public void SetLocalPosition(Vector2Int position) { _EnemyLocalPosition = position; }    // 自分のいるブロックの座標を更新する
