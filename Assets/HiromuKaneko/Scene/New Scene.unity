@@ -1230,11 +1230,11 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 1358740215}
+    m_TransformParent: {fileID: 824516764}
     m_Modifications:
     - target: {fileID: 704700372243951068, guid: fee4bd989cd7b894b90667ebde76443e, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 704700372243951068, guid: fee4bd989cd7b894b90667ebde76443e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2865,11 +2865,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3760247806866263022, guid: 7f1bfe86b3445a3408044f599cf338e3, type: 3}
   m_PrefabInstance: {fileID: 1386392995}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1358740215 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3015775788171534685, guid: 93ea03306aab4f642af8648647ea3dff, type: 3}
-  m_PrefabInstance: {fileID: 867867793}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1369358355
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4165,6 +4160,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 42911932}
     m_Modifications:
+    - target: {fileID: 8075308426167416852, guid: 988c8588977d61141831a78ddf1867c3, type: 3}
+      propertyPath: _EnemyLevel
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8618758596643089070, guid: 988c8588977d61141831a78ddf1867c3, type: 3}
       propertyPath: m_RootOrder
       value: 0
