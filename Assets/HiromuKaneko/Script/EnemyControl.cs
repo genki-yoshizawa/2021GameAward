@@ -296,6 +296,7 @@ public class EnemyControl : MonoBehaviour
     void Break()
     {
 
+
         // 壁をかじる処理を作る
         _EnemyDirection = new Vector2Int(0, 1);
         _Up.gameObject.GetComponent<BlockControl>().BreakWall(_IsFront, _EnemyLocalPosition, _EnemyDirection, _BreakLevel);
@@ -821,14 +822,31 @@ public class EnemyControl : MonoBehaviour
     // ２ターンに１度行動する　たまに１ターンに１度行動（現状50%位）　レベル１の壁をかじる
     public void Level4()
     {
+
+        //// プレイヤーのいるブロックを取得して
+        //// プレイヤーから一番遠いブロックへ逃げる
+        _Player = _GameManager.gameObject.GetComponent<GameManagerScript>().GetPlayer();
+        Vector3 playerpos = _Player.transform.position;
+
+        GameObject moveobj = new GameObject();
+        GameObject breakobj = new GameObject();
+
+        float distance = 0.0f;
+        float distance2 = 10000.0f;
+        float tmp = 0.0f;
+        float y = 90;
+        float random;
+
         // 周辺がすべて壁 or 壁＋パネルがない場合は必ずかじるを選択
-        if((_WallCount == 4) ||
+        if ((_WallCount == 4) ||
            (_WallCount == 3 && _NullBlockCount == 1) ||
            (_WallCount == 2 && _NullBlockCount == 2) ||
            (_WallCount == 1 && _NullBlockCount == 3))
         {
             // どこの壁をかじるか
             Debug.Log("とおった？");
+
+
             _WallCount = 0;
             _NullBlockCount = 0;
             _EnemyState = EnemyState.BREAK;
@@ -843,18 +861,6 @@ public class EnemyControl : MonoBehaviour
         // いけるパネルが一枚のみだけどネコに近づいてしまうときにかじる選択をする（一番離れられる場所の壁を）
         // 一番遠くへいけるパネルへの道に壁があったらかじる？　プレイヤーとの距離によっては離れるべき？
 
-        //// プレイヤーのいるブロックを取得して
-        //// プレイヤーから一番遠いブロックへ逃げる
-        _Player = _GameManager.gameObject.GetComponent<GameManagerScript>().GetPlayer();
-        Vector3 playerpos = _Player.transform.position;
-
-        GameObject tmpobj = new GameObject();
-
-        float distance = 0.0f;
-        float distance2 = 10000.0f;
-        float tmp = 0.0f;
-        float y = 90;
-        float random;
 
         random = Random.value;
 
@@ -884,7 +890,13 @@ public class EnemyControl : MonoBehaviour
                             if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                             {
 
-                                obj = _Up;
+                                moveobj = _Up;
+                                this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                                distance = tmp;
+                            }
+                            else
+                            {
+                                breakobj = _Up;
                                 this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
                                 distance = tmp;
                             }
@@ -894,8 +906,15 @@ public class EnemyControl : MonoBehaviour
                     {
                         if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                         {
-
+                            // 壁がなければいける
                             obj = _Up;
+                            this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                            distance = tmp;
+                        }
+                        else
+                        {
+                            // 壁があったらかじる
+                            breakobj = _Up;
                             this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
                             distance = tmp;
                         }
@@ -915,7 +934,13 @@ public class EnemyControl : MonoBehaviour
                         {
                             if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                             {
-                                obj = _Down;
+                                moveobj = _Down;
+                                this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
+                                distance = tmp;
+                            }
+                            else
+                            {
+                                breakobj = _Down;
                                 this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
                                 distance = tmp;
                             }
@@ -926,6 +951,12 @@ public class EnemyControl : MonoBehaviour
                         if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                         {
                             obj = _Down;
+                            this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
+                            distance = tmp;
+                        }
+                        else
+                        {
+                            breakobj = _Down;
                             this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
                             distance = tmp;
                         }
@@ -946,7 +977,13 @@ public class EnemyControl : MonoBehaviour
                             if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                             {
 
-                                obj = _Left;
+                                moveobj = _Left;
+                                this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
+                                distance = tmp;
+                            }
+                            else
+                            {
+                                breakobj = _Left;
                                 this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
                                 distance = tmp;
                             }
@@ -956,7 +993,13 @@ public class EnemyControl : MonoBehaviour
                     {
                         if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                         {
-                            obj = _Left;
+                            moveobj = _Left;
+                            this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
+                            distance = tmp;
+                        }
+                        else
+                        {
+                            breakobj = _Left;
                             this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
                             distance = tmp;
                         }
@@ -976,7 +1019,13 @@ public class EnemyControl : MonoBehaviour
                             if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                             {
 
-                                obj = _Right;
+                                moveobj = _Right;
+                                this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
+                                distance = tmp;
+                            }
+                            else
+                            {
+                                breakobj = _Right;
                                 this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
                                 distance = tmp;
                             }
@@ -988,6 +1037,12 @@ public class EnemyControl : MonoBehaviour
                         {
 
                             obj = _Right;
+                            this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
+                            distance = tmp;
+                        }
+                        else
+                        {
+                            breakobj = _Right;
                             this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
                             distance = tmp;
                         }
@@ -1038,9 +1093,22 @@ public class EnemyControl : MonoBehaviour
                 }
             }
 
+
+            float movetmp = Vector3.Distance(playerpos, moveobj.transform.position);
+            float breaktmp = Vector3.Distance(playerpos, breakobj.transform.position);
+
+            if (movetmp < breaktmp)
+            {
+                _NextBlock = breakobj;
+                _EnemyState = EnemyState.BREAK;
+
+            }
+            else
+            {
+                _NextBlock = moveobj;
+                _EnemyState = EnemyState.MOVE;
+            }
             _TurnCount = 0;
-            _NextBlock = obj;
-            _EnemyState = EnemyState.MOVE;
         }
 
     }
