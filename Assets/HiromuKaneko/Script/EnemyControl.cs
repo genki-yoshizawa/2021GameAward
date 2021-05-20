@@ -417,7 +417,7 @@ public class EnemyControl : MonoBehaviour
         _Player = _GameManager.gameObject.GetComponent<GameManagerScript>().GetPlayer();
         Vector3 playerpos = _Player.transform.position;
 
-        GameObject obj = new GameObject();
+        GameObject obj = null;
         float distance = 0.0f;
         float distance2 = 10000.0f;
         float tmp = 0.0f;
@@ -427,7 +427,7 @@ public class EnemyControl : MonoBehaviour
         if (_TurnCount == 0)
         {
             _TurnCount++;
-
+            _EnemyState = EnemyState.STAY;
         }
         else
         {
@@ -613,8 +613,7 @@ public class EnemyControl : MonoBehaviour
         _Player = _GameManager.gameObject.GetComponent<GameManagerScript>().GetPlayer();
         Vector3 playerpos = _Player.transform.position;
 
-        GameObject obj = new GameObject();
-        obj = null;
+        GameObject obj = null;
         float distance = 0.0f;
         float distance2 = 10000.0f;
         float tmp = 0.0f;
@@ -631,7 +630,7 @@ public class EnemyControl : MonoBehaviour
         if (_TurnCount == 0)
         {
             _TurnCount++;
-
+            _EnemyState = EnemyState.STAY;
         }
         else
         {
@@ -828,8 +827,8 @@ public class EnemyControl : MonoBehaviour
         _Player = _GameManager.gameObject.GetComponent<GameManagerScript>().GetPlayer();
         Vector3 playerpos = _Player.transform.position;
 
-        GameObject moveobj = new GameObject();
-        GameObject breakobj = new GameObject();
+        GameObject moveobj = null;
+        GameObject breakobj = null;
 
         float distance = 0.0f;
         float distance2 = 10000.0f;
@@ -852,7 +851,7 @@ public class EnemyControl : MonoBehaviour
             _EnemyState = EnemyState.BREAK;
         }
 
-        if(_WallCount == 3)
+        if (_WallCount == 3)
         {
             _WallCount = 0;
             _NullBlockCount = 0;
@@ -872,7 +871,7 @@ public class EnemyControl : MonoBehaviour
         if (_TurnCount == 0)
         {
             _TurnCount++;
-
+            _EnemyState = EnemyState.STAY;
         }
         else
         {
@@ -907,7 +906,7 @@ public class EnemyControl : MonoBehaviour
                         if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                         {
                             // •Ç‚ª‚È‚¯‚ê‚Î‚¢‚¯‚é
-                            obj = _Up;
+                            moveobj = _Up;
                             this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
                             distance = tmp;
                         }
@@ -950,7 +949,7 @@ public class EnemyControl : MonoBehaviour
                     {
                         if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                         {
-                            obj = _Down;
+                            moveobj = _Down;
                             this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
                             distance = tmp;
                         }
@@ -1036,7 +1035,7 @@ public class EnemyControl : MonoBehaviour
                         if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                         {
 
-                            obj = _Right;
+                            moveobj = _Right;
                             this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
                             distance = tmp;
                         }
@@ -1057,7 +1056,7 @@ public class EnemyControl : MonoBehaviour
                     tmp = Vector3.Distance(playerpos, _Up.transform.position);
                     if (tmp < distance2)
                     {
-                        obj = _Up;
+                        moveobj = _Up;
                         distance2 = tmp;
                     }
                 }
@@ -1067,7 +1066,7 @@ public class EnemyControl : MonoBehaviour
                     tmp = Vector3.Distance(playerpos, _Down.transform.position);
                     if (tmp < distance2)
                     {
-                        obj = _Down;
+                        moveobj = _Down;
                         distance2 = tmp;
                     }
                 }
@@ -1077,7 +1076,7 @@ public class EnemyControl : MonoBehaviour
                     tmp = Vector3.Distance(playerpos, _Left.transform.position);
                     if (tmp < distance2)
                     {
-                        obj = _Left;
+                        moveobj = _Left;
                         distance2 = tmp;
                     }
                 }
@@ -1087,7 +1086,7 @@ public class EnemyControl : MonoBehaviour
                     tmp = Vector3.Distance(playerpos, _Right.transform.position);
                     if (tmp < distance2)
                     {
-                        obj = _Right;
+                        moveobj = _Right;
                         distance2 = tmp;
                     }
                 }
