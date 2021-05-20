@@ -41,9 +41,7 @@ public class FukidasiAnimationUI : MonoBehaviour
         {
             panelAnim.SetInteger("_ActType", -1);
         }
-        Debug.Log("アイコン読み込み");
         _IconAnim = _Icon.GetComponent<Animator>();
-        Debug.Log("アイコン読み込み完了");
     }
 
     public void Update()
