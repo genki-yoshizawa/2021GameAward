@@ -10,6 +10,7 @@ public class PlayerControl : MonoBehaviour
 
     [Header("プレイヤーの向きを入れてください。")]
     [SerializeField]private Vector2Int _Direction;
+    private Vector2Int _StartDirection;
 
     [Header("吹き出し")]
     [SerializeField] private GameObject _FukidasiObj;
@@ -19,6 +20,7 @@ public class PlayerControl : MonoBehaviour
 
     //プレイヤーの配列座標
     private Vector2Int _LocalPosition;
+    private Vector2Int _StartPostion;
 
     //他のオブジェクトに触れるときの仲介役
     private GameManagerScript _GameManagerScript;
@@ -44,9 +46,12 @@ public class PlayerControl : MonoBehaviour
     {
         //初手FindWithTag
         _GameManagerScript = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerScript>();
-        _IsExist = true;
 
         _FukidasiScript = _FukidasiObj.GetComponent<FukidasiAnimationUI>();
+
+        _StartPostion = _LocalPosition;
+        _StartDirection = _Direction;
+        _IsExist = true;
     }
 
     void Update()
@@ -72,6 +77,13 @@ public class PlayerControl : MonoBehaviour
 
         //}
 
+    }
+
+    public void PlayerInit()
+    {
+        _IsExist = true;
+        _LocalPosition = _StartPostion;
+        _Direction = _StartDirection;
     }
 
     private void Move(Vector2Int direction)
