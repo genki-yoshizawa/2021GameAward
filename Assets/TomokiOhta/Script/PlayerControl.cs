@@ -15,8 +15,26 @@ public class PlayerControl : MonoBehaviour
     [Header("吹き出し")]
     [SerializeField] private GameObject _FukidasiObj;
 
-    [Header("コマンド")]
-    [SerializeField] private GameObject _ActObj;
+    [Header("選択アイコン")]
+    [SerializeField] private GameObject _IconObj;
+
+    [Header("歩く時間")]
+    [SerializeField] private float _WalkTime = 1.0f;
+
+    [Header("行動終了後の待機時間")]
+    [SerializeField] private float _ActionTime = 0.01f;
+
+    //アニメーションスタートからの経過時間
+    private float _PassedTime;
+
+    //歩き始めの座標
+    private Vector3 _WalkStartPosition;
+
+    //目的地の座標
+    private Vector3 _WalkTargetPosition;
+
+    //プレイヤーのアニメーター
+    private Animator _Animator;
 
     //プレイヤーの配列座標
     private Vector2Int _LocalPosition;
@@ -42,20 +60,55 @@ public class PlayerControl : MonoBehaviour
 
     private int _CommandSelect = 0;
 
-    void Start()
+    public void Start()
     {
         //初手FindWithTag
         _GameManagerScript = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerScript>();
+        _Animator = GetComponent<Animator>();
+
+        _IsExist = true;
+
 
         _FukidasiScript = _FukidasiObj.GetComponent<FukidasiAnimationUI>();
 
         _StartPostion = _LocalPosition;
         _StartDirection = _Direction;
         _IsExist = true;
+
+        _WalkStartPosition = new Vector3(0.0f, 0.0f, 0.0f);
+        _WalkTargetPosition = new Vector3(0.0f, 0.0f, 0.0f);
+        _PassedTime = 0.0f;
     }
 
-    void Update()
+    public void Update()
     {
+        // 歩くアニメーション
+        if (_Animator.GetBool("Walk"))
+        {
+            float time = Time.deltaTime;
+            if ((_PassedTime += time) > _WalkTime)
+            {
+                _PassedTime = _WalkTime;
+                _Animator.SetBool("Walk", false);
+            }
+
+            transform.position = _WalkStartPosition + (_WalkTargetPosition - _WalkStartPosition) * (_PassedTime / _WalkTime);
+
+            if (!_Animator.GetBool("Walk"))
+                _PassedTime = 0.0f;
+        }
+
+        //アクションアニメーション
+        if(_Animator.GetBool("Action"))
+        {
+            float time = Time.deltaTime;
+            if ((_PassedTime += time) > _ActionTime)
+            {
+                _Animator.SetBool("Action", false);
+                _PassedTime = 0.0f;
+            }
+        }
+
         //箱コンこれで動くと思う
         //if (Input.GetKeyDown("joystick button 1"))  //B
         //{
@@ -84,6 +137,14 @@ public class PlayerControl : MonoBehaviour
         _IsExist = true;
         _LocalPosition = _StartPostion;
         _Direction = _StartDirection;
+        _WalkStartPosition  = new Vector3(0.0f, 0.0f, 0.0f);
+        _WalkTargetPosition = new Vector3(0.0f, 0.0f, 0.0f);
+        _PassedTime = 0.0f;
+
+        if (_Animator.GetBool("Tired"))
+            SetTired(false);
+        if (_Animator.GetBool("GameOver"))
+            SetDead(false);
     }
 
     private void Move(Vector2Int direction)
@@ -91,11 +152,18 @@ public class PlayerControl : MonoBehaviour
         //前のブロック取得
         var block = _GameManagerScript.GetBlock(_LocalPosition + direction);
 
+        //ゆっくり歩くために現在地と目的地を取得
+        _WalkStartPosition = transform.position;
+        _WalkTargetPosition = block.transform.position;
+
+        //Walkのアニメーション開始
+        _Animator.SetBool("Walk", true);
+
         //親を切り替える
         transform.parent = block.transform.GetChild(0).transform;
 
         //移動
-        transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
+        //transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
         _LocalPosition += _Direction;
     }
 
@@ -157,6 +225,7 @@ public class PlayerControl : MonoBehaviour
     private void PlayerRotate(GameObject block)
     {
         var blockScript = block.GetComponent<BlockControl>();
+        _Animator.SetBool("Action", true);
         blockScript.Rotate(_IsFront, 90);
         SetFrontBlock();
     }
@@ -164,6 +233,7 @@ public class PlayerControl : MonoBehaviour
     private void PlayerSwap(GameObject block)
     {
         var blockScript = block.GetComponent<BlockControl>();
+        _Animator.SetBool("Action", true);
         blockScript.Swap(_IsFront);
         SetFrontBlock();
     }
@@ -172,6 +242,7 @@ public class PlayerControl : MonoBehaviour
     {
         var blockScript = block.GetComponent<BlockControl>();
         blockScript.TurnOver(_IsFront, _Direction);
+        _Animator.SetBool("Action", true);
         SetFrontBlock();
     }
 
@@ -214,13 +285,19 @@ public class PlayerControl : MonoBehaviour
         //上下矢印でコマンド選択
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            if(_CommandSelect > 0)
-            _CommandSelect--;
+            if (_CommandSelect > 0)
+            {
+                _CommandSelect--;
+                _IconObj.transform.Translate(0.0f, 0.3f, 0.0f);
+            }
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            if(_CommandSelect < _CanActionList.Count)
-            _CommandSelect++;
+            if (_CommandSelect < _CanActionList.Count)
+            {
+                _CommandSelect++;
+                _IconObj.transform.Translate(0.0f, -0.3f, 0.0f);
+            }
         }
 
         //Enterキーで行動 ターンを進める
@@ -302,19 +379,15 @@ public class PlayerControl : MonoBehaviour
                 {
                     case 0:
                         PlayerRotate(_FrontBlock);
-                        Debug.Log("Rotate");
                         break;
                     case 1:
                         PlayerMove();
-                        Debug.Log("Move");
                         break;
                     case 2:
                         PlayerTurnOver(_FrontBlock);
-                        Debug.Log("TurnOver");
                         break;
                     case 3:
                         PlayerSwap(_FrontBlock);
-                        Debug.Log("Swap");
                         break;
                 }
                 break;
@@ -322,6 +395,31 @@ public class PlayerControl : MonoBehaviour
 
             count++;
         }
+    }
+
+    public void SetTired(bool flag)
+    {
+        _Animator.SetBool("Tired", flag);
+    }
+
+    public void SetDead(bool flag)
+    {
+        _Animator.SetBool("GameOver", flag);
+    }
+
+    GameObject CheckEnemy(Vector2Int position)
+    {
+        var enemys = _GameManagerScript.GetEnemys();
+
+        EnemyControl enemyScript;
+        foreach (var enemy in enemys)
+        {
+            enemyScript = enemy.GetComponent<EnemyControl>();
+            if (position == enemyScript.GetLocalPosition())
+                return enemy;
+        }
+
+        return null;
     }
 
 }

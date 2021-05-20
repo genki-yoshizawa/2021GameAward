@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: kirikabu_tex
-    second: {fileID: 2800000, guid: a299712ebe576444da9bb41345e83f9c, type: 3}
+    second: {fileID: 2800000, guid: 7e087a7f221cd7d408f68c1adeccff60, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0

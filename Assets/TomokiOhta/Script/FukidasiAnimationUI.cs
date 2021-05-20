@@ -41,19 +41,17 @@ public class FukidasiAnimationUI : MonoBehaviour
         {
             panelAnim.SetInteger("_ActType", -1);
         }
-        Debug.Log("アイコン読み込み");
         _IconAnim = _Icon.GetComponent<Animator>();
-        Debug.Log("アイコン読み込み完了");
     }
 
     public void Update()
     {
         //ビルボード処理
-        Vector3 p = _Camera.transform.position;
+        //Vector3 p = _Camera.transform.position;
         //p.x = transform.position.x;
         //p.y = transform.position.y;
         //p.z = transform.position.z;
-        this.transform.LookAt(p);
+        //this.transform.LookAt(p);
     }
 
     public void SetCount(int num)

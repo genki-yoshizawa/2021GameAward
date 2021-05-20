@@ -9,6 +9,12 @@ public class TurnManager : MonoBehaviour
     [Header("ターンが進んでいるかの確認用")]
     [SerializeField] private int _TurnCount = 0;
 
+    [Header("終了ターンをいれてください")]
+    [SerializeField] private int _TurnLimit = 10;
+
+    [Header("疲れるまでのターン数をいれてください")]
+    [SerializeField] private int _TurnTiredLimit = 5;
+
     private bool _PlayerTurn = true;
     private bool _EnemyTurn  = false;
     private bool _BlockTurn  = false;
@@ -47,6 +53,13 @@ public class TurnManager : MonoBehaviour
     {
         if (_PlayerTurn)
         {
+            if(!_PlayerScript.GetIsExist())
+
+
+            //ターン数が少なくなると疲れる
+            if (_TurnLimit < _TurnTiredLimit)
+                _PlayerScript.SetTired(true);
+
             if (_PlayerScript.PlayerTurn())
             {
                 _PlayerTurn = false;
@@ -72,10 +85,15 @@ public class TurnManager : MonoBehaviour
             _BlockTurn = false;
             _PlayerTurn = true;
             _TurnCount++;
+            _TurnLimit--;
         }
     }
 
     public int GetTurnCount() { return _TurnCount; }
 
     public void SetTurnCount(int turn) { _TurnCount = turn; }
+
+    public int GetTurnLimit() { return _TurnLimit; }
+
+    public void SetTurnLimit(int limit) { _TurnLimit = limit; }
 }

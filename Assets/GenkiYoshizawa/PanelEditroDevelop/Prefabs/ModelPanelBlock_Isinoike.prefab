@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &704700372243951075
+--- !u!1 &2206742969967508588
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,48 +8,47 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 704700372243951068}
-  - component: {fileID: 704700372243951071}
-  - component: {fileID: 704700372243951070}
-  - component: {fileID: 704700372243951073}
-  - component: {fileID: 704700372243951072}
-  - component: {fileID: 7689281800580006502}
+  - component: {fileID: 1572949955334678230}
+  - component: {fileID: 2484832729619736947}
+  - component: {fileID: 405061707794177465}
+  - component: {fileID: 9169631595689276080}
+  - component: {fileID: 3945664131009646778}
   m_Layer: 0
-  m_Name: Cheese
+  m_Name: ModelPanelBlock_Isinoike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &704700372243951068
+--- !u!4 &1572949955334678230
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 704700372243951075}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.231, z: 0}
-  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
+  m_GameObject: {fileID: 2206742969967508588}
+  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &704700372243951071
+--- !u!33 &2484832729619736947
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 704700372243951075}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &704700372243951070
+  m_GameObject: {fileID: 2206742969967508588}
+  m_Mesh: {fileID: 6773115520716754387, guid: fb17b3961898478489e14627ae0632dc, type: 3}
+--- !u!23 &405061707794177465
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 704700372243951075}
+  m_GameObject: {fileID: 2206742969967508588}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -62,7 +61,9 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: -4726719574831886768, guid: fb17b3961898478489e14627ae0632dc, type: 3}
+  - {fileID: 1300632511004089281, guid: fb17b3961898478489e14627ae0632dc, type: 3}
+  - {fileID: 7654534302899522754, guid: fb17b3961898478489e14627ae0632dc, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -84,43 +85,42 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &704700372243951073
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 704700372243951075}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &704700372243951072
+--- !u!114 &9169631595689276080
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 704700372243951075}
+  m_GameObject: {fileID: 2206742969967508588}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ef2a1d993d36ea41b43aae6febcb477, type: 3}
+  m_Script: {fileID: 11500000, guid: fae0c403617e9fc418f485b0f2986624, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _CheeseRange: 1
-  _DebugColor: {r: 1, g: 0, b: 0, a: 0.5}
---- !u!114 &7689281800580006502
+  _canRotate: 0
+  _canTurnOver: 0
+  _canSwap: 0
+  _SwapIndex: 0
+  _PanelIndex: 0
+--- !u!114 &3945664131009646778
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 704700372243951075}
+  m_GameObject: {fileID: 2206742969967508588}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7a78ee793a07424c8b279f6419a9524, type: 3}
+  m_Script: {fileID: 11500000, guid: 781f7c11d77b8e54081312fd382bcf8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _EatenAnimTime: 1
+  _isMarker: 0
+  _CycleTime: 1
+  _isSinPulse: 0
+  _MarkerMaxScale: 0.2
+  _MarkerOffset: 0.2
+  _MarkerPrefab: {fileID: 1872822032243401266, guid: ce06579cf86a63d47bd757b67649b4d8, type: 3}
+  _DefaultMaterial:
+  - {fileID: 2100000, guid: 20cbf4b1f56ab404882ded3b3184d73e, type: 2}
+  - {fileID: 2100000, guid: 3307c1843c343c240a7e686a8d57baa1, type: 2}
+  - {fileID: 2100000, guid: 3b59a1dca410f8d49b387e13f512ff35, type: 2}
