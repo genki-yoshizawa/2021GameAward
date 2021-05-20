@@ -49,11 +49,13 @@ public class FukidasiAnimationUI : MonoBehaviour
     public void Update()
     {
         //ビルボード処理
-        Vector3 p = _Camera.transform.position;
+       // Vector3 p = _Camera.transform.position;
         //p.x = transform.position.x;
         //p.y = transform.position.y;
         //p.z = transform.position.z;
-        this.transform.LookAt(p);
+      //  this.transform.LookAt(p);
+
+
     }
 
     public void SetCount(int num)
