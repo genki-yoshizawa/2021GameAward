@@ -98,6 +98,7 @@ MonoBehaviour:
   _canRotate: 0
   _canTurnOver: 0
   _canSwap: 0
+  _SwapIndex: 0
   _PanelIndex: 0
 --- !u!114 &2041184501183777837
 MonoBehaviour:
@@ -111,3 +112,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 781f7c11d77b8e54081312fd382bcf8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isMarker: 0
+  _CycleTime: 1
+  _isSinPulse: 1
+  _MarkerMaxScale: 0.2
+  _MarkerOffset: 0.2
+  _MarkerPrefab: {fileID: 1872822032243401266, guid: ce06579cf86a63d47bd757b67649b4d8, type: 3}
+  _DefaultMaterial: {fileID: 2100000, guid: 20cbf4b1f56ab404882ded3b3184d73e, type: 2}

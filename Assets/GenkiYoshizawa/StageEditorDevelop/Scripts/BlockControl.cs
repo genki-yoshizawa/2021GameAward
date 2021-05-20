@@ -7,16 +7,106 @@ public class BlockControl : MonoBehaviour
 {
     private GameObject _GameManager = null;
 
+    // 回転アニメーション用変数
+    [Header("回転アニメーションにかける秒数")]
+    [SerializeField] private float _RotateAnimTime = 1.0f;
+    private bool _isRotateAnim = false;
+    private float _RotateAngle = 0.0f;
+
+    // ひっくり返しアニメーション用変数
+    [Header("ひっくり返しアニメーションにかける秒数")]
+    [SerializeField] private float _TurnOverAnimTime = 1.0f;
+    private bool _isTurnOverAnim = false;
+    private Vector3 _TurnOverAxis = Vector3.zero;
+
+    // 入れ替えアニメーション用変数
+    [Header("入れ替えアニメーションにかける秒数")]
+    [SerializeField] private float _SwapAnimTime = 1.0f;
+    [Header("入れ替えアニメーション時にブロックをどれだけ浮かすか")]
+    [SerializeField] private float _SwapPanelFloat = 0.3f;
+    private bool _isSwapAnim = false;
+    private Vector3 _SwapGlobalPosition = Vector3.zero;
+    private Vector3 _StartGlobalPosition = Vector3.zero;
+
+    private float _PassedTime = 0.0f;
+
     // Start is called before the first frame update
     void Start()
     {
         _GameManager = GameObject.FindGameObjectWithTag("Manager");
+        _isRotateAnim = false;
+        _RotateAngle = 0.0f;
+
+        _isTurnOverAnim = false;
+        _TurnOverAxis = Vector3.zero;
+
+        _isSwapAnim = false;
+        _SwapGlobalPosition = Vector3.zero;
+        _SwapPanelFloat += transform.position.y;
+        _StartGlobalPosition = transform.position;
+
+        _PassedTime = 0.0f;
+    }
+
+    private void Update()
+    {
+        if (_isRotateAnim)
+        {
+            float time = Time.deltaTime;
+            if (_PassedTime + time > _RotateAnimTime)
+            {
+                time = _RotateAnimTime - _PassedTime;
+                _PassedTime = 0.0f;
+                _isRotateAnim = false;
+            }
+            else
+                _PassedTime += time;
+
+            float angle = _RotateAngle * (time / _RotateAnimTime);
+            this.transform.Rotate(Vector3.up, angle);
+        }
+
+        if (_isTurnOverAnim)
+        {
+            float time = Time.deltaTime;
+            if (_PassedTime + time > _TurnOverAnimTime)
+            {
+                time = _TurnOverAnimTime - _PassedTime;
+                _PassedTime = 0.0f;
+                _isTurnOverAnim = false;
+            }
+            else
+                _PassedTime += time;
+
+            float angle = 180.0f * (time / _TurnOverAnimTime);
+            this.transform.Rotate(_TurnOverAxis, angle);
+        }
+
+        if (_isSwapAnim)
+        {
+            // ここなんか回りくどい書き方してる気がする
+            transform.position = new Vector3(transform.position.x, _SwapPanelFloat, transform.position.z);
+
+            float time = Time.deltaTime;
+            if (_PassedTime + time > _SwapAnimTime)
+            {
+                transform.position = new Vector3(transform.position.x, _StartGlobalPosition.y, transform.position.z); 
+                time = _SwapAnimTime - _PassedTime;
+                _PassedTime = 0.0f;
+                _isSwapAnim = false;
+            }
+            else
+                _PassedTime += time;
+
+            Vector3 move = (_SwapGlobalPosition - _StartGlobalPosition) * (time / _TurnOverAnimTime);
+            transform.position += move;
+        }
     }
 
     // ブロックの回転関数
     public void Rotate(bool isFront, float angle, bool isScan = true)
     {
-        // Blockから呼び出された場合は他のBlockを調べない
+        // 最初に呼び出された時は回転させるべきブロックを一挙に調べる
         if (isScan && transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetPanelIndex() != 0)
         {
             List<GameObject> targetBlock = ScanTargetBlock(isFront);
@@ -28,14 +118,18 @@ public class BlockControl : MonoBehaviour
         }
         else
         {
-            this.transform.Rotate(Vector3.up, angle);
+            _isRotateAnim = true;
+            _RotateAngle = angle;
+            //this.transform.Rotate(Vector3.up, angle);
             for (int n = 0; n < transform.childCount; ++n)// パネル枚数
             {
                 for (int i = 0; i < transform.GetChild(n).childCount; ++i)
                 {
+                    // プレイヤーならスルー
                     if (transform.GetChild(n).GetChild(i).gameObject == _GameManager.GetComponent<GameManagerScript>().GetPlayer())
                         continue;
 
+                    // エネミーならスルー
                     List<GameObject> enemys = _GameManager.GetComponent<GameManagerScript>().GetEnemys();
                     bool isThrow = false;
                     foreach (GameObject enemy in enemys)
@@ -47,6 +141,7 @@ public class BlockControl : MonoBehaviour
                     if (isThrow)
                         continue;
                     
+                    // 子オブジェクトのギミックの回転関数呼び出し
                     transform.GetChild(n).GetChild(i).GetComponent<GimmicControl>().Rotate(angle);
                 }
             }
@@ -61,31 +156,39 @@ public class BlockControl : MonoBehaviour
     }
 
     // ブロックのひっくり返し関数
-    public void TurnOver(bool isFront, bool isScan = true)
+    public void TurnOver(bool isFront, Vector2Int direction, bool isScan = true)
     {
-        // Blockから呼び出された場合は他のBlockを調べない
+        // 最初に呼び出された時は回転させるべきブロックを一挙に調べる
         if (isScan && transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetPanelIndex() != 0)
         {
             List<GameObject> targetBlock = ScanTargetBlock(isFront);
 
             foreach (GameObject target in targetBlock)
             {
-                target.GetComponent<BlockControl>().TurnOver(isFront, false);
+                target.GetComponent<BlockControl>().TurnOver(isFront, direction, false);
             }
         }
         else
         {
-            // 右軸に180度回転（プレイヤーの向きによって変えたほうがいいかも）
-            Vector3 rotAxis = Vector3.right;
-            this.transform.Rotate(rotAxis, 180);
+            // プレイヤーの向きによって回転軸を変える
+            Vector3 rotAxis = Vector3.zero;
+            if (direction.x != 0)
+                rotAxis = Vector3.forward;
+            else if (direction.y != 0)
+                rotAxis = Vector3.right;
+            _TurnOverAxis = rotAxis;
+            _isTurnOverAnim = true;
+            //this.transform.Rotate(rotAxis, 180);
 
             for (int n = 0; n < transform.childCount; ++n)// パネル枚数
             {
                 for (int i = 0; i < transform.GetChild(n).childCount; ++i)
                 {
+                    // プレイヤーならスルー
                     if (transform.GetChild(n).GetChild(i).gameObject == _GameManager.GetComponent<GameManagerScript>().GetPlayer())
                         continue;
 
+                    // エネミーならスルー
                     List<GameObject> enemys = _GameManager.GetComponent<GameManagerScript>().GetEnemys();
                     bool isThrow = false;
                     foreach (GameObject enemy in enemys)
@@ -96,7 +199,8 @@ public class BlockControl : MonoBehaviour
                         }
                     if (isThrow)
                         continue;
-                    
+
+                    // 子オブジェクトのギミックの回転関数呼び出し
                     transform.GetChild(n).GetChild(i).GetComponent<GimmicControl>().TurnOver(rotAxis);
                 }
             }
@@ -109,9 +213,9 @@ public class BlockControl : MonoBehaviour
 
             // プレイヤー、エネミーの表裏を変える関数を呼び出す
             // ここに書いてあるスクリプト、関数で用意してもらえるとコメントアウトだけで済むので助かる
-            gameManagerScript.GetPlayer().GetComponent<PlayerControl>().TurnOverMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition(/*rotAxis*/));
+            gameManagerScript.GetPlayer().GetComponent<PlayerControl>().TurnOverMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition(), rotAxis);
             foreach (GameObject enemy in gameManagerScript.GetEnemys())
-                enemy.GetComponent<EnemyControl>().TurnOverMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition(/*rotAxis*/));
+                enemy.GetComponent<EnemyControl>().TurnOverMySelf(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition()/*, rotAxis*/);
         }
     }
 
@@ -124,37 +228,67 @@ public class BlockControl : MonoBehaviour
         if (transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetPanelIndex() != 0)
             targetBlock = ScanTargetBlock(isFront);
 
-        List<Vector2Int> targetBlockLocalPosition = new List<Vector2Int>();
-
         if (targetBlock == null)
             return;
-        
+
+        // ターゲットブロックをSwapIndexで昇順ソートする
+        // ラムダ式でソートしてる。なんでこの書き方なのかよく分かってない
+        targetBlock.Sort((a, b) => a.transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetSwapIndex() - b.transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetSwapIndex());
+
+        List<Vector2Int> targetBlockLocalPosition = new List<Vector2Int>();
+
         foreach (GameObject target in targetBlock)
         {
             targetBlockLocalPosition.Add(target.GetComponent<BlockConfig>().GetBlockLocalPosition());
         }
 
-        foreach (GameObject target in targetBlock)
-        {
-            if (gameObject == target)
-            {
-                targetBlock.Remove(target);
-                break;
-            }
-        }
-        
+        // 自分を取り除く
+        //foreach (GameObject target in targetBlock)
+        //{
+        //    if (gameObject == target)
+        //    {
+        //        targetBlock.Remove(target);
+        //        break;
+        //    }
+        //}
+
+        // 現段階では3つ以上のスワップはバグる(手直し中)
         // 配列要素入れ替え処理
         // ゲームマネージャー内の配列入れ替え
-        gameManagerScript.SwapBlockArray(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition(), targetBlock[0].GetComponent<BlockConfig>().GetBlockLocalPosition());
+        //gameManagerScript.SwapBlockArray(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition(), targetBlock[0].GetComponent<BlockConfig>().GetBlockLocalPosition());
+        gameManagerScript.SwapBlockArray(targetBlock);
+
         // それぞれのブロックのローカルポジションを入れ替え
-        Vector2Int localTemp = gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition();
-        gameObject.GetComponent<BlockConfig>().SetBlockLocalPosition(targetBlock[0].GetComponent<BlockConfig>().GetBlockLocalPosition());
+        //Vector2Int localTemp = gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition();
+        //gameObject.GetComponent<BlockConfig>().SetBlockLocalPosition(targetBlock[0].GetComponent<BlockConfig>().GetBlockLocalPosition());
+        //targetBlock[0].GetComponent<BlockConfig>().SetBlockLocalPosition(localTemp);
+        Vector2Int localTemp = targetBlock[targetBlock.Count - 1].GetComponent<BlockConfig>().GetBlockLocalPosition();
+        for (int n = targetBlock.Count - 1; n > 0; --n) 
+        {
+            targetBlock[n].GetComponent<BlockConfig>().SetBlockLocalPosition(targetBlock[n - 1].GetComponent<BlockConfig>().GetBlockLocalPosition());
+        }
         targetBlock[0].GetComponent<BlockConfig>().SetBlockLocalPosition(localTemp);
 
+
         // ブロックのグローバル座標を入れ替える
-        Vector3 globalTemp = gameObject.transform.position;
-        gameObject.transform.position = targetBlock[0].transform.position;
-        targetBlock[0].transform.position = globalTemp;
+        //Vector3 globalTemp = gameObject.transform.position;
+        //gameObject.transform.position = targetBlock[0].transform.position;
+        //targetBlock[0].transform.position = globalTemp;
+        //Vector3 globalTemp = targetBlock[targetBlock.Count - 1].transform.position;
+        //for (int n = targetBlock.Count - 1; n > 0; --n)
+        //{
+        //    targetBlock[n].transform.position = targetBlock[n - 1].transform.position;
+        //}
+        //targetBlock[0].transform.position = globalTemp;
+        for (int n = targetBlock.Count - 1; n > 0; --n)
+        {
+            targetBlock[n].GetComponent<BlockControl>().SetisSwapAnim();
+            targetBlock[n].GetComponent<BlockControl>().SetSwapGlobalPosition(targetBlock[n - 1].transform.position);
+            targetBlock[n].GetComponent<BlockControl>().SetStartGlobalPosition();
+        }
+        targetBlock[0].GetComponent<BlockControl>().SetisSwapAnim();
+        targetBlock[0].GetComponent<BlockControl>().SetSwapGlobalPosition(targetBlock[targetBlock.Count - 1].transform.position);
+        targetBlock[0].GetComponent<BlockControl>().SetStartGlobalPosition();
 
         // プレイヤー、エネミーのパネル入れ替え関数を呼び出す
         // ここに書いてあるスクリプト、関数で用意してもらえるとコメントアウトだけで済むので助かる
@@ -168,7 +302,7 @@ public class BlockControl : MonoBehaviour
     public bool BreakWall(bool isFront, Vector2Int objectPosition, Vector2 direction, int lv = 0)
     {
         GameObject objectBlock = null;
-        Vector2Int blockLocalPosition = _GameManager.transform.GetComponent<BlockConfig>().GetBlockLocalPosition();
+        Vector2Int blockLocalPosition = transform.GetComponent<BlockConfig>().GetBlockLocalPosition();
         if (objectPosition != blockLocalPosition)
         {// 調べるブロックにオブジェクトがいなければ
             // オブジェクトのいるブロックの取得
@@ -186,7 +320,7 @@ public class BlockControl : MonoBehaviour
         switch (breakResult)
         {
             case 0:// 自身の乗ってるパネルの壁がなかった場合
-                breakResult = transform.GetChild(isFront ? 0 : 1).GetComponent<PanelControl>().BreakWall(objectPosition, blockLocalPosition, direction);
+                breakResult = transform.GetChild(isFront ? 0 : 1).GetComponent<PanelControl>().BreakWall(objectPosition, blockLocalPosition, direction, lv);
                 break;
 
             case 1:// 自身の乗ってるパネルの壁を壊せなかった場合
@@ -222,7 +356,6 @@ public class BlockControl : MonoBehaviour
             {
                 if (blockZLine == null) continue;
                 // 同じインデックスであれば対象ブロック
-                // 現段階では3つ以上のスワップはバグる
                 if (blockZLine.transform.GetChild(isFront ? 0 : 1).transform.GetComponent<PanelConfig>().GetPanelIndex() == gameObject.transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetPanelIndex())
                 {
                     targetBlock.Add(blockZLine);
@@ -236,4 +369,9 @@ public class BlockControl : MonoBehaviour
 
         return targetBlock;
     }
+    
+
+    public void SetisSwapAnim() { _isSwapAnim = true; }
+    public void SetSwapGlobalPosition(Vector3 pos) { _SwapGlobalPosition = pos; }
+    public void SetStartGlobalPosition() { _StartGlobalPosition = transform.position; }
 }

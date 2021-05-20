@@ -71,13 +71,15 @@ public class WallConfig : MonoBehaviour
         _isBreak = true;
         _BreakCount = 0;
         // ˆêŽž“I‚È‘[’u
-        transform.localScale = new Vector3(0f, 0f, 0f);
+        //transform.localScale = new Vector3(0f, 0f, 0f);
+        transform.GetComponent<WallControl>().SetisBreakAnim();
     }
 
     private void RebornWall()
     {
         _isBreak = false;
-        transform.localScale = _Scale;
+        //transform.localScale = _Scale;
+        transform.GetComponent<WallControl>().SetisRebornAnim();
     }
 
     public void AddBreakCount()

@@ -71,6 +71,11 @@ public class TurnManager : MonoBehaviour
 
             _BlockTurn = false;
             _PlayerTurn = true;
+            _TurnCount++;
         }
     }
+
+    public int GetTurnCount() { return _TurnCount; }
+
+    public void SetTurnCount(int turn) { _TurnCount = turn; }
 }
