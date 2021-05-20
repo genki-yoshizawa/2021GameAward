@@ -119,4 +119,13 @@ public class GameManagerScript : MonoBehaviour
         return _Block[pos.x][pos.y];
     }     //pos‚É‚ ‚éBlock‚ÌŽæ“¾
     
+    public void KillEnemy(GameObject enemy)
+    {
+        foreach (GameObject e in _Enemy)
+        {
+            if (e == enemy)
+                Destroy(e);
+        }
+        _Enemy.Remove(enemy);
+    }
 }

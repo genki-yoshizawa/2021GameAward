@@ -12,6 +12,17 @@ public class EnemyCountScript : MonoBehaviour
 
     private List<GameObject> _Enemys = null;
 
+    private int _CurEnemyCount;
+
+    [Header("エネミー減少アニメーションにかける秒数")]
+    [SerializeField] private float _EnemyCountAnimTime = 1.0f;
+    [Header("エネミー減少アニメーションの際の最大倍率")]
+    [SerializeField] private float _EnemyCountMaxScale = 1.0f;
+    private bool _isEnemyCountAnim = false;
+
+    private Vector3 _StartLocalScale;
+
+    private float _PassedTime = 0.0f;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,11 +31,39 @@ public class EnemyCountScript : MonoBehaviour
         _Enemys = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerScript>().GetEnemys();
 
         _MyImage.sprite = _NumberSprite[_Enemys.Count];
+        _CurEnemyCount = _Enemys.Count;
+
+        _StartLocalScale = gameObject.GetComponent<RectTransform>().localScale;
+        _PassedTime = 0.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        _MyImage.sprite = _NumberSprite[_Enemys.Count];
+        if(_Enemys.Count != _CurEnemyCount)
+        {
+            gameObject.GetComponent<RectTransform>().localScale = new Vector3(_EnemyCountMaxScale, _EnemyCountMaxScale, _EnemyCountMaxScale);
+            _isEnemyCountAnim = true;
+        }
+
+        if (_isEnemyCountAnim)
+        {
+            float time = Time.deltaTime;
+            if ((_PassedTime += time) > _EnemyCountAnimTime) 
+            {
+                gameObject.GetComponent<RectTransform>().localScale = _StartLocalScale;
+                _PassedTime = 0.0f;
+                _isEnemyCountAnim = false;
+            }
+
+
+            _MyImage.sprite = _NumberSprite[_Enemys.Count + 10];
+        }
+        else
+        {
+            _MyImage.sprite = _NumberSprite[_Enemys.Count];
+        }
+
+        _CurEnemyCount = _Enemys.Count;
     }
 }

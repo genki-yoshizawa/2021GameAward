@@ -11,6 +11,7 @@ public class CheeseControl : GimmicControl
     [SerializeField] private float _EatenAnimTime = 1.0f;
     private bool _isEatenAnim = false;
     private Vector3 _StartLocalScale = new Vector3(1.0f, 1.0f, 1.0f);
+    private Vector3 _StartGlobalPosition = new Vector3(0.0f, 0.0f, 0.0f);
 
     private float _PassedTime = 0.0f;
 
@@ -22,7 +23,7 @@ public class CheeseControl : GimmicControl
 
         _isEatenAnim = false;
         _StartLocalScale = transform.localScale;
-
+        _StartGlobalPosition = transform.position;
     }
 
     // Update is called once per frame
@@ -31,16 +32,16 @@ public class CheeseControl : GimmicControl
         if (_isEatenAnim)
         {
             float time = Time.deltaTime;
-            if (_PassedTime + time > _EatenAnimTime)
+            if ((_PassedTime += time) > _EatenAnimTime)
             {
-                time = _EatenAnimTime - _PassedTime;
-                _PassedTime = 0.0f;
+                _PassedTime = _EatenAnimTime;
                 _isEatenAnim = false;
                 Destroy(gameObject);
             }
 
-            Vector3 scale = _StartLocalScale * (time / _EatenAnimTime);
-            transform.localScale = transform.localScale - scale;
+            transform.position = _StartGlobalPosition + (new Vector3(_StartGlobalPosition.x, 0.0f, _StartGlobalPosition.z) - _StartGlobalPosition) * (_PassedTime / _EatenAnimTime);
+
+            transform.localScale = _StartLocalScale + (Vector3.zero - _StartLocalScale) * (_PassedTime / _EatenAnimTime);
         }
 
     }
