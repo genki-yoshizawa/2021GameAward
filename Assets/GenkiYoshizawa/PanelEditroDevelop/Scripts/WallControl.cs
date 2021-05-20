@@ -34,38 +34,41 @@ public class WallControl : GimmicControl
         if (_isBreakAnim)
         {
             float time = Time.deltaTime;
-            if (_PassedTime + time > _BreakAnimTime)
+            if ( (_PassedTime += time) > _BreakAnimTime)
             {
-                time = _BreakAnimTime - _PassedTime;
-                _PassedTime = 0.0f;
+                _PassedTime = _BreakAnimTime;
                 _isBreakAnim = false;
             }
 
             // y座標を下げながらyサイズを0に向かわせる
-            float move = (_StartGlobalPosition.y - 0.0f) * (time / _BreakAnimTime);
-            transform.position = new Vector3(transform.position.x, transform.position.y - move, transform.position.z);
+            transform.position = _StartGlobalPosition + (new Vector3(_StartGlobalPosition.x ,0.0f,_StartGlobalPosition.z) - _StartGlobalPosition) * (_PassedTime / _BreakAnimTime);
 
-            float scale = (_StartLocalScale.y - 0.0f) * (time / _BreakAnimTime);
-            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y - scale, transform.localScale.z);
+            transform.localScale = _StartLocalScale + (new Vector3(_StartLocalScale.x, 0.0f, _StartLocalScale.z) - _StartLocalScale) * (_PassedTime / _BreakAnimTime);
+
+            if (!_isBreakAnim)
+                _PassedTime = 0.0f;
         }
 
         if (_isRebornAnim)
         {
             float time = Time.deltaTime;
-            if (_PassedTime + time > _RebornAnimTime)
+            if ((_PassedTime += time) > _RebornAnimTime)
             {
-                time = _RebornAnimTime - _PassedTime;
-                _PassedTime = 0.0f;
+                _PassedTime = _RebornAnimTime;
                 _isRebornAnim = false;
             }
 
             // y座標を上げながらyサイズを元のサイズにに向かわせる
-            float move = (0.0f - _StartGlobalPosition.y) * (time / _BreakAnimTime);
-            transform.position = new Vector3(transform.position.x, transform.position.y - move, transform.position.z);
+            //float move = (0.0f - _StartGlobalPosition.y) * (time / _BreakAnimTime);
+            //transform.position = new Vector3(transform.position.x, transform.position.y - move, transform.position.z);
+            Vector3 beforePos = new Vector3(_StartGlobalPosition.x, 0.0f, _StartGlobalPosition.z);
+            transform.position = beforePos + (_StartGlobalPosition - beforePos) * (_PassedTime / _RebornAnimTime);
 
-            float scale = (0.0f - _StartLocalScale.y) * (time / _BreakAnimTime);
-            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y - scale, transform.localScale.z);
+            Vector3 beforeScale = new Vector3(_StartLocalScale.x, 0.0f, _StartLocalScale.z);
+            transform.localScale = beforeScale + (_StartLocalScale - beforeScale) * (_PassedTime / _RebornAnimTime);
 
+            if (!_isRebornAnim)
+                _PassedTime = 0.0f;
         }
     }
 
