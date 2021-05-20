@@ -47,6 +47,9 @@ public class PlayerControl : MonoBehaviour
         //èâéËFindWithTag
         _GameManagerScript = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerScript>();
 
+        _IsExist = true;
+
+
         _FukidasiScript = _FukidasiObj.GetComponent<FukidasiAnimationUI>();
 
         _StartPostion = _LocalPosition;

@@ -59,15 +59,15 @@ public class CheeseControl : GimmicControl
 
     public override void TurnEndUpdate()
     {
-        //foreach (GameObject enemy in _Enemys)
-        //{
-        //    EnemyControl enemyScript = enemy.GetComponent<EnemyControl>();
+        foreach (GameObject enemy in _Enemys)
+        {
+            EnemyControl enemyScript = enemy.GetComponent<EnemyControl>();
 
-        //    if (HitCheese(enemyScript.GetLocalPosition(), GetCheeseSearchRange()))
-        //    {
-        //        enemyScript.SetCheese(gameObject);
-        //    }
-        //}
+            if (HitEnemy(enemyScript.GetLocalPosition(), enemyScript.GetCheeseSearchRange()))
+            {
+                enemyScript.SetCheese(gameObject);
+            }
+        }
     }
 
     public void Eaten()
