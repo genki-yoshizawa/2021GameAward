@@ -14,9 +14,9 @@ public class FukidasiAnimationUI : MonoBehaviour
     private List<Animator> _PanelAnimList = new List<Animator>();
 
 
-    [Header("選択アイコン入れる")]
-    [SerializeField] private GameObject _Icon;
-    private Animator _IconAnim;
+    //[Header("選択アイコン入れる")]
+    //[SerializeField] private GameObject _Icon;
+    //private Animator _IconAnim;
 
     //どの個数のふきだしを生成するか
     private int _FukidasiCount = 0;
@@ -39,7 +39,9 @@ public class FukidasiAnimationUI : MonoBehaviour
         {
             panelAnim.SetInteger("_ActType", -1);
         }
-        _IconAnim = _Icon.GetComponent<Animator>();
+        Debug.Log("アイコン読み込み");
+        //_IconAnim = _Icon.GetComponent<Animator>();
+        Debug.Log("アイコン読み込み完了");
     }
 
     public void Update()
@@ -55,7 +57,7 @@ public class FukidasiAnimationUI : MonoBehaviour
     public void SetCount(int num)
     {
         _FukidasiCount = num;
-        _FukidasiAnimator.SetInteger("_ActionCount", num);
+        //_FukidasiAnimator.SetInteger("_ActionCount", num);
     }
 
     public void ResetCount()
@@ -74,7 +76,7 @@ public class FukidasiAnimationUI : MonoBehaviour
         {
 
         }
-        _IconAnim.SetInteger("_Select", 1);
+        //_IconAnim.SetInteger("_Select", 1);
     }
 
     public void ResetPanel()
@@ -83,7 +85,7 @@ public class FukidasiAnimationUI : MonoBehaviour
         {
             panelAnim.SetInteger("_ActType", -1);
         }
-        _IconAnim.SetInteger("_Select", 0);
+        //_IconAnim.SetInteger("_Select", 0);
     }
 }
 
