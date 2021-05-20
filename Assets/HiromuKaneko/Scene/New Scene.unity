@@ -1280,6 +1280,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cheese (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 704700372243951075, guid: fee4bd989cd7b894b90667ebde76443e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fee4bd989cd7b894b90667ebde76443e, type: 3}
 --- !u!1001 &638449454
@@ -1933,6 +1937,8 @@ MonoBehaviour:
   - {fileID: 9063293069752963073, guid: cc3a624e77ffb20459b432c25d6fa79c, type: 3}
   - {fileID: -476436919263850630, guid: cc3a624e77ffb20459b432c25d6fa79c, type: 3}
   - {fileID: 7264112055361014304, guid: cc3a624e77ffb20459b432c25d6fa79c, type: 3}
+  _EnemyCountAnimTime: 1
+  _EnemyCountMaxScale: 1
 --- !u!114 &1092937666
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4162,7 +4168,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8075308426167416852, guid: 988c8588977d61141831a78ddf1867c3, type: 3}
       propertyPath: _EnemyLevel
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8618758596643089070, guid: 988c8588977d61141831a78ddf1867c3, type: 3}
       propertyPath: m_RootOrder
