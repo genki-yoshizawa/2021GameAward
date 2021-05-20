@@ -10,8 +10,6 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField] private GameObject _Player;
     [Header("ステージ上のEnemyオブジェクトの数を入れた後それぞれのElementにセットしてください(Hierarchy上のEnemyオブジェクト)")]
     [SerializeField] private List<GameObject> _Enemy;
-    [Header("ステージ上のGameEndCheckerオブジェクトをセットしてください(Hierarchy上のTurnManagerオブジェクト)")]
-    [SerializeField] private GameObject _GameEndChecker;
     // ブロックの配列
     private GameObject[][] _Block;
 

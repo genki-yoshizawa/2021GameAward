@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading;
 
 public class PlayerControl : MonoBehaviour
 {
@@ -22,9 +23,6 @@ public class PlayerControl : MonoBehaviour
     //他のオブジェクトに触れるときの仲介役
     private GameManagerScript _GameManagerScript;
 
-    //プレイヤーのアニメーション
-    private FukidasiAnimationUI _FukidasiAnimationUI;
-
     //表裏
     private bool _IsFront;
 
@@ -37,12 +35,22 @@ public class PlayerControl : MonoBehaviour
     //どの行動が可能でど7の文字を格納するかを管理する
     private List<int> _CanActionList = new List<int>();
 
+    //
+    private FukidasiAnimationUI _FukidasiScript;
+
+    private int _CommandSelect = 0;
+
     void Start()
     {
         //初手FindWithTag
         _GameManagerScript = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerScript>();
-        _FukidasiAnimationUI = GameObject.Find("fukidasi_0").GetComponent<FukidasiAnimationUI>();
+<<<<<<< HEAD
+        //_FukidasiAnimationUI = GameObject.Find("fukidasi_0").GetComponent<FukidasiAnimationUI>();
+=======
+>>>>>>> 782f95e958e8120805bb300657cd53862ba20222
         _IsExist = true;
+
+        _FukidasiScript = _FukidasiObj.GetComponent<FukidasiAnimationUI>();
     }
 
     void Update()
@@ -161,39 +169,56 @@ public class PlayerControl : MonoBehaviour
 
     public bool PlayerTurn()
     {
+        bool turnEnd = false;
+
+        //Startで取得するのでターン開始時に手動で取得
         if (_FrontBlock == null)
             SetFrontBlock();
 
-        bool turnEnd = false;
+        //吹き出しのアニメーション終了を確認したら生成する
+        if (_FukidasiScript.GetCount() == 0)
+        {
+            _FukidasiScript.SetCount(_CanActionList.Count);
+            _FukidasiScript.SetPanel(_CanActionList);
+        }
 
         //プレイヤー左右回転
+        //きょろきょろしすぎるとコマンドが消えたまま出てこなくなるので注意
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             RotateMySelf(_LocalPosition, _IsFront ? 90.0f : -90.0f);
             transform.Rotate(0.0f, 90.0f, 0.0f);
             SetFrontBlock();
+
+            _FukidasiScript.ResetCount();
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             RotateMySelf(_LocalPosition, _IsFront ? -90.0f : 90.0f);
             transform.Rotate(0.0f, -90.0f, 0.0f);
             SetFrontBlock();
+
+            _FukidasiScript.ResetCount();
         }
 
         //上下矢印でコマンド選択
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            _FukidasiAnimationUI.SetCount(_CanActionList.Count);
+            if(_CommandSelect > 0)
+            _CommandSelect--;
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            _FukidasiAnimationUI.SetCount(0);
+            if(_CommandSelect < _CanActionList.Count)
+            _CommandSelect++;
         }
 
         //Enterキーで行動 ターンを進める
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            PlayerMove();
+            CommandAction(_CommandSelect);
+            _CommandSelect = 0;
+            _FukidasiScript.ResetCount();
             turnEnd = true;
         }
         if (Input.GetKeyDown(KeyCode.Keypad1))
@@ -210,9 +235,13 @@ public class PlayerControl : MonoBehaviour
 
     public Vector2Int GetLocalPosition() { return _LocalPosition; }
     public bool GetIsFront() { return _IsFront; }
+    public bool GetIsExist() { return _IsExist; }
+
 
     public void SetLocalPosition(Vector2Int position) { _LocalPosition = position; }
     public void SetIsFront(bool isFront){ _IsFront = isFront; }
+    public void SetIsExist(bool isExist) { _IsExist = isExist; }
+
 
     //前のブロックの情報取得
     private void SetFrontBlock()
@@ -250,6 +279,39 @@ public class PlayerControl : MonoBehaviour
         //入替可能なら3を入れる
         if (blockScript.CheckPanelSwap(_IsFront))
             _CanActionList.Add(3);
+    }
+
+    private void CommandAction(int num)
+    {
+        int count = 0;
+        foreach (var act in _CanActionList)
+        {
+            if (num == count)
+            {
+                switch (act)
+                {
+                    case 0:
+                        PlayerRotate(_FrontBlock);
+                        Debug.Log("Rotate");
+                        break;
+                    case 1:
+                        PlayerMove();
+                        Debug.Log("Move");
+                        break;
+                    case 2:
+                        PlayerTurnOver(_FrontBlock);
+                        Debug.Log("TurnOver");
+                        break;
+                    case 3:
+                        PlayerSwap(_FrontBlock);
+                        Debug.Log("Swap");
+                        break;
+                }
+                break;
+            }
+
+            count++;
+        }
     }
 
 }
