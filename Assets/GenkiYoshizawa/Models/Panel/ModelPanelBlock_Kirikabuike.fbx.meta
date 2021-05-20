@@ -3,7 +3,12 @@ guid: 4a97128b6286e1644971adacaa651d21
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: kirikabu_tex
+    second: {fileID: 2800000, guid: a299712ebe576444da9bb41345e83f9c, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
