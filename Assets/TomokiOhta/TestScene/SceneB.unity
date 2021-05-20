@@ -1388,6 +1388,8 @@ MonoBehaviour:
   - {fileID: 1338347100}
   - {fileID: 1360487737}
   - {fileID: 639910410}
+  _Icon: {fileID: 334879443}
+  _Camera: {fileID: 1658337496}
 --- !u!95 &740374223
 Animator:
   serializedVersion: 3
@@ -1839,7 +1841,7 @@ GameObject:
   - component: {fileID: 1338347102}
   - component: {fileID: 1338347101}
   m_Layer: 0
-  m_Name: panel_act02 1_0
+  m_Name: panel_act02 1_0 (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

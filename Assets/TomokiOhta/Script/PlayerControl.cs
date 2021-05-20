@@ -37,7 +37,7 @@ public class PlayerControl : MonoBehaviour
     //‚Ç‚Ìs“®‚ª‰Â”\‚Å‚Ç7‚Ì•¶š‚ğŠi”[‚·‚é‚©‚ğŠÇ—‚·‚é
     private List<int> _CanActionList = new List<int>();
 
-    //
+    //‚Ó‚«‚¾‚µ‚ÌUI‚ğŠÇ—‚·‚é
     private FukidasiAnimationUI _FukidasiScript;
 
     private int _CommandSelect = 0;
@@ -198,6 +198,7 @@ public class PlayerControl : MonoBehaviour
             transform.Rotate(0.0f, 90.0f, 0.0f);
             SetFrontBlock();
 
+            _FukidasiScript.ResetPanel();
             _FukidasiScript.ResetCount();
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow))
@@ -206,6 +207,7 @@ public class PlayerControl : MonoBehaviour
             transform.Rotate(0.0f, -90.0f, 0.0f);
             SetFrontBlock();
 
+            _FukidasiScript.ResetPanel();
             _FukidasiScript.ResetCount();
         }
 
