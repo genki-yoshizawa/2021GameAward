@@ -66,6 +66,11 @@ public class PauseManager : MonoBehaviour
 
     public void Pose()
     {
+        //if(_FadeType == FadeType.DO)
+        //    //Pause(true);
+        //else
+        //    //Pause(false);
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             switch(_FadeType)
@@ -93,9 +98,6 @@ public class PauseManager : MonoBehaviour
 
     void FadeIn()
     {
-
-
-
         if (_FadeType != FadeType.IN) return;
 
         _FadeCount += Time.deltaTime;
@@ -131,6 +133,7 @@ public class PauseManager : MonoBehaviour
         _FadeType = FadeType.NONE;
         return;
     }
+
 
     void PoseInAnimation()
     {

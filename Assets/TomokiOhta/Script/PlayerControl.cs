@@ -24,6 +24,8 @@ public class PlayerControl : MonoBehaviour
     [Header("行動終了後の待機時間")]
     [SerializeField] private float _ActionTime = 0.01f;
 
+    [Header("クリア画面"), SerializeField] private GameObject _ClearScreen; 
+
     //アニメーションスタートからの経過時間
     private float _PassedTime;
 
@@ -58,6 +60,7 @@ public class PlayerControl : MonoBehaviour
     //ふきだしのUIを管理する
     private FukidasiAnimationUI _FukidasiScript;
 
+    //コマンド選択時に上から何番目にいるか
     private int _CommandSelect = 0;
 
     public void Start()
@@ -109,7 +112,7 @@ public class PlayerControl : MonoBehaviour
             }
         }
 
-        //捕まえた後waitに戻る
+        //捕まえるアニメーション
         if (_Animator.GetBool("Capture"))
         {
             float time = Time.deltaTime;
@@ -319,6 +322,12 @@ public class PlayerControl : MonoBehaviour
             {
                 _Animator.SetBool("Capture", true);
                 _GameManagerScript.KillEnemy(enemy);
+                var remainEnemy = _GameManagerScript.GetEnemys();
+                if (remainEnemy.Count <= 0)
+                {
+                    var clearScreenScript = _ClearScreen.GetComponent<ClearScreen>();
+                    clearScreenScript.DisplayClearScreen();
+                }
                 turnEnd = true;
             }
         }
@@ -327,6 +336,8 @@ public class PlayerControl : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Return))
         {
             CommandAction(_CommandSelect);
+            for(int i = 0; i < _CommandSelect; i++)
+                _IconObj.transform.Translate(0.0f, 0.3f, 0.0f);
             _CommandSelect = 0;
             _FukidasiScript.ResetCount();
             turnEnd = true;
