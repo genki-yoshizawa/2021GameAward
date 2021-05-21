@@ -220,6 +220,7 @@ GameObject:
   - component: {fileID: 66509399}
   - component: {fileID: 66509398}
   - component: {fileID: 66509400}
+  - component: {fileID: 66509401}
   m_Layer: 5
   m_Name: Fukidasi
   m_TagString: Untagged
@@ -238,10 +239,10 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_Children:
-  - {fileID: 693371376}
-  - {fileID: 1099022273}
-  - {fileID: 1629409108}
   - {fileID: 1854767040}
+  - {fileID: 1629409108}
+  - {fileID: 1099022273}
+  - {fileID: 693371376}
   - {fileID: 2110589160}
   - {fileID: 374197684}
   m_Father: {fileID: 221100994}
@@ -309,6 +310,27 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &66509401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 66509396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20e132b4a15662c4cb0127507462e2c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ActSprite:
+  - {fileID: -2130005583034063330, guid: 89638ff947c7ab04a98afb53948136ac, type: 3}
+  - {fileID: -3266590123848627995, guid: 89638ff947c7ab04a98afb53948136ac, type: 3}
+  - {fileID: 2603161423602805999, guid: 89638ff947c7ab04a98afb53948136ac, type: 3}
+  - {fileID: -7478313239484501179, guid: 89638ff947c7ab04a98afb53948136ac, type: 3}
+  - {fileID: -6776914444954656585, guid: 89638ff947c7ab04a98afb53948136ac, type: 3}
+  - {fileID: -5758134134724806001, guid: 89638ff947c7ab04a98afb53948136ac, type: 3}
+  - {fileID: -6290697964671020295, guid: 89638ff947c7ab04a98afb53948136ac, type: 3}
+  - {fileID: 3024303660538627983, guid: 89638ff947c7ab04a98afb53948136ac, type: 3}
 --- !u!4 &148868815 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2041184501183777836, guid: 197a8fef8514b7a42abe8f9ce9a1f74f, type: 3}
@@ -1684,7 +1706,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &693371376
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1697,7 +1719,7 @@ RectTransform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 66509397}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1773,13 +1795,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20e132b4a15662c4cb0127507462e2c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _PanelList:
-  - {fileID: 1701416348}
-  - {fileID: 1338347100}
-  - {fileID: 1360487737}
-  - {fileID: 639910410}
-  _Icon: {fileID: 334879443}
-  _Camera: {fileID: 1658337496}
+  _ActSprite: []
 --- !u!95 &740374223
 Animator:
   serializedVersion: 3
@@ -2011,10 +2027,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioClip: {fileID: 0}
   _Direction: {x: 0, y: 1}
-  _FukidasiObj: {fileID: 740374221}
+  _FukidasiObj: {fileID: 66509396}
   _WalkTime: 1
   _ActionTime: 0.01
-  _ClearScreen: {fileID: 2114921885}
+  _ClearScreen: {fileID: 0}
 --- !u!95 &993669139
 Animator:
   serializedVersion: 3
@@ -2133,7 +2149,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1099022273
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2146,7 +2162,7 @@ RectTransform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 66509397}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2744,7 +2760,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1629409108
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2757,7 +2773,7 @@ RectTransform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 66509397}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3290,7 +3306,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1854767040
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3303,7 +3319,7 @@ RectTransform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 66509397}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
