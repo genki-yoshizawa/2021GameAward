@@ -90,6 +90,8 @@ public class EnemyControl : MonoBehaviour
     private Vector3 _TargetPoint;
     private float _PassedTime;
     private bool _CheeseBite;
+    private bool _IsExist;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -99,6 +101,7 @@ public class EnemyControl : MonoBehaviour
         _EnemyAnimation = gameObject.GetComponent<Animator>();
         _IsFront = true;
         _CheeseBite = false;
+        _IsExist = false;　
         _WallCount = 0;
         _TurnCount = 0;
         _Count = 0;
@@ -187,8 +190,8 @@ public class EnemyControl : MonoBehaviour
         }
 
         var clipInfo = _EnemyAnimation.GetCurrentAnimatorClipInfo(0)[0];   // 引数はLayer番号、配列の0番目
-        Debug.Log("AnimationClip名 : " + clipInfo.clip.name);
 
+        // 現在のアニメーションがDeadだったらオブジェクトを削除する
         if(clipInfo.clip.name == "Dead")
         {
             Destroy(this.gameObject);
@@ -367,15 +370,26 @@ public class EnemyControl : MonoBehaviour
             // ネズミのローカルポジションを
             _EnemyLocalPosition = _NextBlock.GetComponent<BlockConfig>().GetBlockLocalPosition();
 
-            Vector2Int cheeselocalposition = _Cheese.gameObject.GetComponent<CheeseConfig>().GetCheeseLocalPosition();
-
-            if (cheeselocalposition == _EnemyLocalPosition)
+            if(_Cheese != null)
             {
-                _CheeseBite = true;
-                 _EnemyAnimation.SetBool("Bite", true);
-           }
+                Vector2Int cheeselocalposition = _Cheese.gameObject.GetComponent<CheeseConfig>().GetCheeseLocalPosition();
+
+                if (cheeselocalposition == _EnemyLocalPosition)
+                {
+                    _CheeseBite = true;
+                    _EnemyAnimation.SetBool("Bite", true);
+                }
+                else
+                {
+                    _EnemyAnimation.SetBool("Walk", true);
+                }
+            }
             else
+            {
                 _EnemyAnimation.SetBool("Walk", true);
+
+            }
+
 
 
 
@@ -435,71 +449,76 @@ public class EnemyControl : MonoBehaviour
 
     public void EnemyTurn()
     {
-        if (_StartEnemyTurn)
+        // 生きていれば動ける
+        if(_IsExist == false)
         {
-            _Count = _ActCount;
-            _StartEnemyTurn = false;
-        }
+            if (_StartEnemyTurn)
+            {
+                _Count = _ActCount;
+                _StartEnemyTurn = false;
+            }
 
-        Wait();
-        // エネミーステートを変更する関数を呼ぶ
-
-
-        // 右Shiftで裏に行く（戻れない）
-        if (Input.GetKeyDown(KeyCode.RightShift))
-        {
-            _IsFront = false;
-            this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
-
-            GameObject ob;
-            GameObject parent = transform.root.gameObject;
-            ob = parent.transform.GetChild(1).gameObject;
-            transform.parent = ob.transform;
-
-        }
-
-        // ここでレベル別に処理を書く？
-        // ChangeState();
-        switch (_EnemyLevel)
-        {
-            case EnemyLevel.LEVEL1:
-                Level1();
-                break;
-            case EnemyLevel.LEVEL2:
-                Level2();
-                break;
-            case EnemyLevel.LEVEL3:
-                Level3();
-                break;
-            case EnemyLevel.LEVEL4:
-                Level4();
-                break;
-            case EnemyLevel.LEVEL5:
-                Level5();
-                break;
-            case EnemyLevel.LEVEL6:
-                Level6();
-                break;
-            case EnemyLevel.LEVEL7:
-                Level7();
-                break;
-        }
+            Wait();
+            // エネミーステートを変更する関数を呼ぶ
 
 
-        switch (_EnemyState)
-        {
-            case EnemyState.IDLE:
-                Idle();
-                break;
-            case EnemyState.STAY:
-                Stay();
-                break;
-            case EnemyState.MOVE:
-                Move();
-                break;
-            case EnemyState.BREAK:
-                Break();
-                break;
+            // 右Shiftで裏に行く（戻れない）
+            if (Input.GetKeyDown(KeyCode.RightShift))
+            {
+                _IsFront = false;
+                this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
+
+                GameObject ob;
+                GameObject parent = transform.root.gameObject;
+                ob = parent.transform.GetChild(1).gameObject;
+                transform.parent = ob.transform;
+
+            }
+
+            // ここでレベル別に処理を書く？
+            // ChangeState();
+            switch (_EnemyLevel)
+            {
+                case EnemyLevel.LEVEL1:
+                    Level1();
+                    break;
+                case EnemyLevel.LEVEL2:
+                    Level2();
+                    break;
+                case EnemyLevel.LEVEL3:
+                    Level3();
+                    break;
+                case EnemyLevel.LEVEL4:
+                    Level4();
+                    break;
+                case EnemyLevel.LEVEL5:
+                    Level5();
+                    break;
+                case EnemyLevel.LEVEL6:
+                    Level6();
+                    break;
+                case EnemyLevel.LEVEL7:
+                    Level7();
+                    break;
+            }
+
+
+            switch (_EnemyState)
+            {
+                case EnemyState.IDLE:
+                    Idle();
+                    break;
+                case EnemyState.STAY:
+                    Stay();
+                    break;
+                case EnemyState.MOVE:
+                    Move();
+                    break;
+                case EnemyState.BREAK:
+                    Break();
+                    break;
+
+            }
 
         }
 
@@ -880,13 +899,15 @@ public class EnemyControl : MonoBehaviour
         }
         else
         {
-            if (_IsFront)
+            // チーズを保持しているときの処理
+            if (_Cheese != null)
             {
                 if (_Up != null)
                 {
                     _EnemyDirection = new Vector2Int(0, 1);
-                    tmp = Vector3.Distance(playerpos, _Up.transform.position);
-                    if (tmp == distance)
+                    tmp = Vector3.Distance(_Cheese.transform.position, _Up.transform.position);
+
+                    if (tmp == distance2)
                     {
                         random = Random.value;
                         if (random < 0.5f)
@@ -896,18 +917,18 @@ public class EnemyControl : MonoBehaviour
 
                                 obj = _Up;
                                 this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
-                                distance = tmp;
+                                distance2 = tmp;
                             }
                         }
                     }
-                    else if (tmp > distance)
+                    else if (tmp < distance2)
                     {
                         if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                         {
 
                             obj = _Up;
                             this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
-                            distance = tmp;
+                            distance2 = tmp;
                         }
                     }
                 }
@@ -915,29 +936,29 @@ public class EnemyControl : MonoBehaviour
                 if (_Down != null)
                 {
                     _EnemyDirection = new Vector2Int(0, -1);
-                    tmp = Vector3.Distance(playerpos, _Down.transform.position);
+                    tmp = Vector3.Distance(_Cheese.transform.position, _Down.transform.position);
 
-
-                    if (tmp == distance)
+                    if (tmp == distance2)
                     {
                         random = Random.value;
                         if (random < 0.5f)
                         {
                             if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                             {
+
                                 obj = _Down;
-                                this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
-                                distance = tmp;
+                                this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                                distance2 = tmp;
                             }
                         }
                     }
-                    else if (tmp > distance)
+                    else if (tmp < distance2)
                     {
                         if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                         {
                             obj = _Down;
                             this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
-                            distance = tmp;
+                            distance2 = tmp;
                         }
                     }
 
@@ -946,9 +967,9 @@ public class EnemyControl : MonoBehaviour
                 if (_Left != null)
                 {
                     _EnemyDirection = new Vector2Int(-1, 0);
-                    tmp = Vector3.Distance(playerpos, _Left.transform.position);
+                    tmp = Vector3.Distance(_Cheese.transform.position, _Left.transform.position);
 
-                    if (tmp == distance)
+                    if (tmp == distance2)
                     {
                         random = Random.value;
                         if (random < 0.5f)
@@ -957,18 +978,18 @@ public class EnemyControl : MonoBehaviour
                             {
 
                                 obj = _Left;
-                                this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
-                                distance = tmp;
+                                this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                                distance2 = tmp;
                             }
                         }
                     }
-                    else if (tmp > distance)
+                    else if (tmp < distance2)
                     {
                         if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                         {
                             obj = _Left;
                             this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
-                            distance = tmp;
+                            distance2 = tmp;
                         }
                     }
                 }
@@ -976,9 +997,9 @@ public class EnemyControl : MonoBehaviour
                 if (_Right != null)
                 {
                     _EnemyDirection = new Vector2Int(1, 0);
-                    tmp = Vector3.Distance(playerpos, _Right.transform.position);
+                    tmp = Vector3.Distance(_Cheese.transform.position, _Right.transform.position);
 
-                    if (tmp == distance)
+                    if (tmp == distance2)
                     {
                         random = Random.value;
                         if (random < 0.5f)
@@ -987,91 +1008,220 @@ public class EnemyControl : MonoBehaviour
                             {
 
                                 obj = _Right;
-                                this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
-                                distance = tmp;
+                                this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                                distance2 = tmp;
                             }
                         }
                     }
-                    else if (tmp > distance)
+                    else if (tmp < distance2)
                     {
                         if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                         {
 
                             obj = _Right;
                             this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
-                            distance = tmp;
+                            distance2 = tmp;
                         }
                     }
                 }
 
-            }
-            else
-            {
-                if (_Up != null)
-                {
-                    tmp = Vector3.Distance(playerpos, _Up.transform.position);
-                    if (tmp < distance2)
-                    {
-                        obj = _Up;
-                        distance2 = tmp;
-                    }
-                }
-
-                if (_Down != null)
-                {
-                    tmp = Vector3.Distance(playerpos, _Down.transform.position);
-                    if (tmp < distance2)
-                    {
-                        obj = _Down;
-                        distance2 = tmp;
-                    }
-                }
-
-                if (_Left != null)
-                {
-                    tmp = Vector3.Distance(playerpos, _Left.transform.position);
-                    if (tmp < distance2)
-                    {
-                        obj = _Left;
-                        distance2 = tmp;
-                    }
-                }
-
-                if (_Right != null)
-                {
-                    tmp = Vector3.Distance(playerpos, _Right.transform.position);
-                    if (tmp < distance2)
-                    {
-                        obj = _Right;
-                        distance2 = tmp;
-                    }
-                }
-            }
-
-            _TurnCount = 0;
-            if (obj != null)
-            {
-                tmp = Vector3.Distance(playerpos, obj.transform.position);
-                tmp2 = Vector3.Distance(playerpos, this.transform.position);
-
-                if (tmp < tmp2)
-                {
-                    _EnemyState = EnemyState.STAY;
-                }
                 else
                 {
-                    _NextBlock = obj;
-                    Debug.Log(_NextBlock);
-                    _EnemyState = EnemyState.MOVE;
+                    if (_IsFront)
+                    {
+                        if (_Up != null)
+                        {
+                            _EnemyDirection = new Vector2Int(0, 1);
+                            tmp = Vector3.Distance(playerpos, _Up.transform.position);
+                            if (tmp == distance)
+                            {
+                                random = Random.value;
+                                if (random < 0.5f)
+                                {
+                                    if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                                    {
+
+                                        obj = _Up;
+                                        this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                                        distance = tmp;
+                                    }
+                                }
+                            }
+                            else if (tmp > distance)
+                            {
+                                if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                                {
+
+                                    obj = _Up;
+                                    this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                                    distance = tmp;
+                                }
+                            }
+                        }
+
+                        if (_Down != null)
+                        {
+                            _EnemyDirection = new Vector2Int(0, -1);
+                            tmp = Vector3.Distance(playerpos, _Down.transform.position);
+
+
+                            if (tmp == distance)
+                            {
+                                random = Random.value;
+                                if (random < 0.5f)
+                                {
+                                    if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                                    {
+                                        obj = _Down;
+                                        this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
+                                        distance = tmp;
+                                    }
+                                }
+                            }
+                            else if (tmp > distance)
+                            {
+                                if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                                {
+                                    obj = _Down;
+                                    this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
+                                    distance = tmp;
+                                }
+                            }
+
+                        }
+
+                        if (_Left != null)
+                        {
+                            _EnemyDirection = new Vector2Int(-1, 0);
+                            tmp = Vector3.Distance(playerpos, _Left.transform.position);
+
+                            if (tmp == distance)
+                            {
+                                random = Random.value;
+                                if (random < 0.5f)
+                                {
+                                    if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                                    {
+
+                                        obj = _Left;
+                                        this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
+                                        distance = tmp;
+                                    }
+                                }
+                            }
+                            else if (tmp > distance)
+                            {
+                                if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                                {
+                                    obj = _Left;
+                                    this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
+                                    distance = tmp;
+                                }
+                            }
+                        }
+
+                        if (_Right != null)
+                        {
+                            _EnemyDirection = new Vector2Int(1, 0);
+                            tmp = Vector3.Distance(playerpos, _Right.transform.position);
+
+                            if (tmp == distance)
+                            {
+                                random = Random.value;
+                                if (random < 0.5f)
+                                {
+                                    if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                                    {
+
+                                        obj = _Right;
+                                        this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
+                                        distance = tmp;
+                                    }
+                                }
+                            }
+                            else if (tmp > distance)
+                            {
+                                if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                                {
+
+                                    obj = _Right;
+                                    this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
+                                    distance = tmp;
+                                }
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        if (_Up != null)
+                        {
+                            tmp = Vector3.Distance(playerpos, _Up.transform.position);
+                            if (tmp < distance2)
+                            {
+                                obj = _Up;
+                                distance2 = tmp;
+                            }
+                        }
+
+                        if (_Down != null)
+                        {
+                            tmp = Vector3.Distance(playerpos, _Down.transform.position);
+                            if (tmp < distance2)
+                            {
+                                obj = _Down;
+                                distance2 = tmp;
+                            }
+                        }
+
+                        if (_Left != null)
+                        {
+                            tmp = Vector3.Distance(playerpos, _Left.transform.position);
+                            if (tmp < distance2)
+                            {
+                                obj = _Left;
+                                distance2 = tmp;
+                            }
+                        }
+
+                        if (_Right != null)
+                        {
+                            tmp = Vector3.Distance(playerpos, _Right.transform.position);
+                            if (tmp < distance2)
+                            {
+                                obj = _Right;
+                                distance2 = tmp;
+                            }
+                        }
+                    }
+
+                    _TurnCount = 0;
+                    if (obj != null)
+                    {
+                        tmp = Vector3.Distance(playerpos, obj.transform.position);
+                        tmp2 = Vector3.Distance(playerpos, this.transform.position);
+
+                        if (tmp < tmp2)
+                        {
+                            _EnemyState = EnemyState.STAY;
+                        }
+                        else
+                        {
+                            _NextBlock = obj;
+                            Debug.Log(_NextBlock);
+                            _EnemyState = EnemyState.MOVE;
+                        }
+
+                    }
+                    else
+                    {
+                        _EnemyState = EnemyState.STAY;
+                    }
                 }
 
-            }
-            else
-            {
-                _EnemyState = EnemyState.STAY;
+
             }
         }
-
     }
 
     // ２ターンに１度行動する　たまに１ターンに１度行動（現状50%位）　レベル１の壁をかじる
@@ -1109,6 +1259,7 @@ public class EnemyControl : MonoBehaviour
         }
         else
         {
+
             if (_IsFront)
             {
                 if (_Up != null)
@@ -1848,6 +1999,7 @@ public class EnemyControl : MonoBehaviour
     }
     public void SetDestroy()
     {
+        _IsExist = true;
         transform.parent = null;
        _EnemyAnimation.SetBool("Captured", true);      
     }           
