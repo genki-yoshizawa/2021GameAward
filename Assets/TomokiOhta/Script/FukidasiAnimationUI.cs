@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FukidasiAnimationUI : MonoBehaviour
 {
@@ -9,19 +10,10 @@ public class FukidasiAnimationUI : MonoBehaviour
 
     private Animator _FukidasiAnimator;
 
-    [Header("コマンド入れる")]
-    [SerializeField] private List<GameObject> _PanelList;
-    private List<Animator> _PanelAnimList = new List<Animator>();
-
-
-    [Header("選択アイコン入れる")]
-    [SerializeField] private GameObject _Icon;
-    private Animator _IconAnim;
-
-    [SerializeField] private Camera _Camera;
+    [Header("Act格納用"), SerializeField] private Sprite[] _ActSprite;
 
     //どの個数のふきだしを生成するか
-    private int _FukidasiCount = 0;
+    private int _FukidasiCount = -1;
 
     public void Start()
     {
@@ -31,17 +23,6 @@ public class FukidasiAnimationUI : MonoBehaviour
 
         _FukidasiAnimator = GetComponent<Animator>();
 
-        //パネルの初期化
-        foreach (var panel in _PanelList)
-        {
-            _PanelAnimList.Add(panel.GetComponent<Animator>());
-        }
-        //とりあえず見えなくしておく
-        foreach (var panelAnim in _PanelAnimList)
-        {
-            panelAnim.SetInteger("_ActType", -1);
-        }
-        _IconAnim = _Icon.GetComponent<Animator>();
     }
 
     public void Update()
@@ -54,42 +35,37 @@ public class FukidasiAnimationUI : MonoBehaviour
         //this.transform.LookAt(p);
     }
 
-    public void SetCount(int num)
+    public void SetAnimPattern(int num)
     {
         _FukidasiCount = num;
         _FukidasiAnimator.SetInteger("_ActionCount", num);
     }
 
-    public void ResetCount()
+    public void ResetAnimPattern()
     {
         _FukidasiCount = -1;
         _FukidasiAnimator.SetInteger("_ActionCount", _FukidasiCount);
     }
 
-    public int GetCount() { return _FukidasiCount; }
+    public int GetAnimPattern() { return _FukidasiCount; }
 
-    public void SetPanel(List<int> panelList)
+    public void SetActPattern(List<int> panelList)
     {
         //listの要素をそのまま_PanelAnimListのSetIntしてあげる
 
-        for (int i = 0; i < _PanelAnimList.Count; i++)
-        {
-            if (i != panelList[i])
-                return;
+        Image actImage;
 
-            _PanelAnimList[i].SetInteger("_ActType", i);
+        for (int i = 0; i < panelList.Count; i++)
+        {
+            actImage = transform.GetChild(i).GetComponent<Image>();
+            if(i == panelList.Count - 1)
+                actImage.sprite = _ActSprite[panelList[i] * 2];
+            else
+                actImage.sprite = _ActSprite[panelList[i] * 2 + 1];
         }
 
-        _IconAnim.SetInteger("_Select", 1);
     }
 
-    public void ResetPanel()
-    {
-        foreach (var panelAnim in _PanelAnimList)
-        {
-            panelAnim.SetInteger("_ActType", -1);
-        }
-        _IconAnim.SetInteger("_Select", 0);
-    }
+
 }
 
