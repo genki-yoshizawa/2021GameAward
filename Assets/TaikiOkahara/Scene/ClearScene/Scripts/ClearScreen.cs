@@ -36,7 +36,7 @@ public class ClearScreen : MonoBehaviour
     void Start()
     {
 
-        DisplayClearScreen();
+        //DisplayClearScreen();
     }
 
     void Update()
@@ -46,8 +46,6 @@ public class ClearScreen : MonoBehaviour
         ClearScreenAnim();
         CommentAnim();
 
-        if(Input.GetKeyDown(KeyCode.Return))
-            SceneManager.LoadScene("MenuScene");
 
     }
 
