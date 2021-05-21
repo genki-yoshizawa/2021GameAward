@@ -35,6 +35,9 @@ public class PauseManager : MonoBehaviour
     [SerializeField]
     private Animator _UIAnimator;
 
+    [SerializeField]
+    Button _StartSetButton;//ポーズ画面に入ったとき選択中のボタン
+
 
     private enum FadeType
     {
@@ -49,6 +52,9 @@ public class PauseManager : MonoBehaviour
     void Start()
     {
         _FadeType = FadeType.NONE;
+
+        _StartSetButton = GameObject.Find("Canvas/PauseOut").GetComponent<Button>();
+        _StartSetButton.Select();
     }
 
     void Update()
