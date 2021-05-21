@@ -10,10 +10,13 @@ public class ClearScreen : MonoBehaviour
     Gauss _Gauss;
 
     [SerializeField]
-    Animator _StarAnimator;
+    private Animator _StarAnimator;
 
     [SerializeField]
     private Animator _ClearScreenAnimator;
+
+    [SerializeField]
+    private Animator _CommentAnimator;
 
     bool _PauseFlag = false;
     float _Intencity = 0;
@@ -25,9 +28,10 @@ public class ClearScreen : MonoBehaviour
     float _StarStartTime = 1.0f;
 
     float _ClearTextStartCount = 0;
-    float _ClearTextStartTime = 4.0f;
+    float _ClearTextStartTime = 3.0f;
 
-   
+    float _CommentStartCount = 0;
+    float _CommentStartTime = 4.0f;
 
     void Start()
     {
@@ -40,6 +44,7 @@ public class ClearScreen : MonoBehaviour
         GaussFilter();
         StarAnim();
         ClearScreenAnim();
+        CommentAnim();
 
         if(Input.GetKeyDown(KeyCode.Return))
             SceneManager.LoadScene("MenuScene");
@@ -51,14 +56,12 @@ public class ClearScreen : MonoBehaviour
         if (!_PauseFlag) return;
 
 
-        if (_StarStartCount< _StarStartTime)
-        {
+        if (_StarStartCount< _StarStartTime){
             _StarStartCount += Time.deltaTime;
             return;
         }
 
         _StarAnimator.SetTrigger("OneStar");
-
 
         return;
     }
@@ -74,18 +77,14 @@ public class ClearScreen : MonoBehaviour
             return;
         }
          
-        
-        
         _Intencity += Time.deltaTime;
 
         _Gauss.Resolution = (int)((_Intencity/_GaussTime) * 20);
-
     }
 
     void ClearScreenAnim()
     {
         if (!_PauseFlag) return;
-
 
         if (_ClearTextStartCount < _ClearTextStartTime)
         {
@@ -95,10 +94,23 @@ public class ClearScreen : MonoBehaviour
 
         _ClearScreenAnimator.SetBool("Clear", true);
 
-
         return;
     }
 
+    void CommentAnim()
+    {
+        if (!_PauseFlag) return;
+
+        if (_CommentStartCount < _CommentStartTime)
+        {
+            _CommentStartCount += Time.deltaTime;
+            return;
+        }
+
+        _CommentAnimator.SetBool("Display", true);
+
+        return;
+    }
 
 
     public void DisplayClearScreen()
