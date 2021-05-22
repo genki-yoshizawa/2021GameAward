@@ -189,10 +189,11 @@ public class EnemyControl : MonoBehaviour
 
         }
 
-        var clipInfo = _EnemyAnimation.GetCurrentAnimatorClipInfo(0);   // 引数はLayer番号、配列の0番目
+        var clipInfo = _EnemyAnimation.GetCurrentAnimatorClipInfo(0)[0];   // 引数はLayer番号、配列の0番目
+        Debug.Log(clipInfo.clip.name);
 
         // 現在のアニメーションがDeadだったらオブジェクトを削除する
-        if(clipInfo[0].clip.name == "Dead")
+        if(clipInfo.clip.name == "Dead")
         {
             Destroy(this.gameObject);
         }
