@@ -7,6 +7,9 @@ public class TitleLogoSmoke : MonoBehaviour
     [SerializeField]
     private GameObject _SmokeLeft, _SmokeRight;
 
+    [SerializeField]
+    private GameObject  _StartButton;
+
     bool _IsStart = false;
 
     [SerializeField]
@@ -30,6 +33,9 @@ public class TitleLogoSmoke : MonoBehaviour
 
         _SmokeLeft.GetComponent<ParticleSystem>().Stop();
         _SmokeRight.GetComponent<ParticleSystem>().Stop();
+        _StartButton.GetComponent<Animator>().SetBool("start", false);
+
+
     }
 
     void Update()
@@ -53,11 +59,14 @@ public class TitleLogoSmoke : MonoBehaviour
             size = new Vector3(s, s, s);
 
 
-            pos = _RightStartPos + new Vector3((_TimeCount / _Time) * _Distance, (_TimeCount / _Time) * _Hight, 0);
+            pos = Vector3.Slerp(_RightStartPos, _RightStartPos + new Vector3(_Distance,_Hight,0), (_TimeCount / _Time));
+
+
+
             _SmokeRight.transform.position = pos;
             _SmokeRight.transform.localScale = size;
 
-            pos = _LeftStartPos + new Vector3((_TimeCount / _Time) * -_Distance, (_TimeCount / _Time) * _Hight, 0);
+            pos = Vector3.Slerp(_LeftStartPos, _LeftStartPos + new Vector3(-_Distance,_Hight,0), (_TimeCount / _Time));
             _SmokeLeft.transform.position = pos;
             _SmokeLeft.transform.localScale = size;
             return;
@@ -74,9 +83,8 @@ public class TitleLogoSmoke : MonoBehaviour
         {
             _SmokeLeft.GetComponent<ParticleSystem>().Play();
             _SmokeRight.GetComponent<ParticleSystem>().Play();
-            Debug.Log("Hit!!");
             _IsStart = true;
-            //Destroy(this.gameObject); //衝突したゲームオブジェクトを削除
+            _StartButton.GetComponent<Animator>().SetBool("start",true);
         }
 
     }

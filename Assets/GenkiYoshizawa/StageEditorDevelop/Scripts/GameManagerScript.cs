@@ -10,6 +10,9 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField] private GameObject _Player;
     [Header("ステージ上のEnemyオブジェクトの数を入れた後それぞれのElementにセットしてください(Hierarchy上のEnemyオブジェクト)")]
     [SerializeField] private List<GameObject> _Enemy;
+    [Header("ステージ上のUIFolderオブジェクトをセットしてください(Hierarchy上のUIFolderオブジェクト)")]
+    [SerializeField] private GameObject _UIFolder;
+
     // ブロックの配列
     private GameObject[][] _Block;
 
@@ -119,4 +122,15 @@ public class GameManagerScript : MonoBehaviour
         return _Block[pos.x][pos.y];
     }     //posにあるBlockの取得
     
+    public void KillEnemy(GameObject enemy)
+    {
+        enemy.GetComponent<EnemyControl>().SetDestroy();
+        _Enemy.Remove(enemy);
+    }
+
+    public void SetPause()
+    { }
+
+    public void SetUnPause()
+    { }
 }

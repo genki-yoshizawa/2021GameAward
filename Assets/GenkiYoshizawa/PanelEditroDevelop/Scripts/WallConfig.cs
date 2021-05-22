@@ -22,8 +22,7 @@ public class WallConfig : MonoBehaviour
     // àÍéûìIÇ»ë[íuópÇÃïœêî
     private Vector3 _Scale;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         if (_XAxis != 0 && _ZAxis != 0 || _XAxis == 0 && _ZAxis == 0)
         {
@@ -31,10 +30,14 @@ public class WallConfig : MonoBehaviour
             //UnityEditor.EditorApplication.isPlaying = false;
         }
 
+        transform.localPosition = new Vector3(_XAxis * _LocalOffset, transform.localPosition.y, _ZAxis * _LocalOffset);
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
         _isBreak = false;
         _BreakCount = 0;
-
-        transform.localPosition = new Vector3(_XAxis * _LocalOffset, transform.localPosition.y, _ZAxis * _LocalOffset);
 
         Vector3 direction = new Vector3(1f, 0f, 0f);
 
