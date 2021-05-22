@@ -297,13 +297,13 @@ public class PlayerControl : MonoBehaviour
         //上下矢印でコマンド選択
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            if (_CommandSelect < _CanActionList.Count)
+            if (_CommandSelect < _CanActionList.Count - 1)
             {
                 _CommandSelect++;
 
                 //アイコンのtransform取得
-                var icon = _FukidasiObj.transform.GetChild(5).GetComponent<RectTransform>();
-                icon.anchoredPosition = new Vector3(icon.localPosition.x, icon.localPosition.y + 10.0f, icon.localPosition.z);
+                var icon = _FukidasiObj.transform.GetChild(4).GetComponent<RectTransform>();
+                icon.anchoredPosition = new Vector3(icon.localPosition.x, icon.localPosition.y + 20.0f, icon.localPosition.z);
             }
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
@@ -314,8 +314,8 @@ public class PlayerControl : MonoBehaviour
                 _CommandSelect--;
 
                 //アイコンのtransform取得
-                var icon = _FukidasiObj.transform.GetChild(5).GetComponent<RectTransform>();
-                icon.anchoredPosition = new Vector3(icon.localPosition.x, icon.localPosition.y - 10.0f, icon.localPosition.z);
+                var icon = _FukidasiObj.transform.GetChild(4).GetComponent<RectTransform>();
+                icon.anchoredPosition = new Vector3(icon.localPosition.x, icon.localPosition.y - 20.0f, icon.localPosition.z);
             }
         }
 
