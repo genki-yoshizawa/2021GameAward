@@ -11,7 +11,7 @@ public class GameManagerScript : MonoBehaviour
     [Header("ステージ上のEnemyオブジェクトの数を入れた後それぞれのElementにセットしてください(Hierarchy上のEnemyオブジェクト)")]
     [SerializeField] private List<GameObject> _Enemy;
     [Header("ステージ上のUIFolderオブジェクトをセットしてください(Hierarchy上のUIFolderオブジェクト)")]
-    [SerializeField] private GameObject _UIFolder;
+    [SerializeField] private GameObject _GameUI;
 
     // ブロックの配列
     private GameObject[][] _Block;
