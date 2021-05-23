@@ -69,7 +69,7 @@ public class BlockConfig : MonoBehaviour
         {
             foreach (GameObject blockZLine in blockXLine)
             {
-                if (blockZLine == gameObject)
+                if (blockZLine == gameObject || blockZLine == null)
                     continue;
 
                 if (blockZLine.transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetPanelIndex() == transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetPanelIndex())
