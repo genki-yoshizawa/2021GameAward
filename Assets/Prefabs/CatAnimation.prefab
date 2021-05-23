@@ -1170,10 +1170,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioClip: {fileID: 0}
   _Direction: {x: 0, y: 1}
-  _FukidasiObj: {fileID: 0}
-  _IconObj: {fileID: 0}
+  _FukidasiObj: {fileID: 8912895626404942289, guid: c4b51f6447ab1d34cbac28952a2d790e, type: 3}
   _WalkTime: 1
   _ActionTime: 0.01
+  _ClearScreen: {fileID: 0}
 --- !u!1 &1928443941589281878
 GameObject:
   m_ObjectHideFlags: 0

@@ -51,14 +51,18 @@ public class PlayerControl : MonoBehaviour
     //前のブロック情報
     private GameObject _FrontBlock;
 
-    //どの行動が可能でど7の文字を格納するかを管理する
+    //どの行動が可能でどの文字を格納するかを管理する
     private List<int> _CanActionList = new List<int>();
 
     //ふきだしのUIを管理する
     private FukidasiAnimationUI _FukidasiScript;
+    private Vector3 _CorsorStartPosition;
 
     //コマンド選択時に上から何番目にいるか
     private int _CommandSelect = 3;
+
+    //
+    private readonly int _AnimMax = 4;
 
     public void Start()
     {
@@ -80,6 +84,8 @@ public class PlayerControl : MonoBehaviour
         _WalkTargetPosition = new Vector3(0.0f, 0.0f, 0.0f);
         _PassedTime = 0.0f;
 
+        _CorsorStartPosition = _FukidasiObj.transform.GetChild(4).localPosition;
+        //_CorsorStartPosition = new Vector3(_CorsorStartPosition.x, _CorsorStartPosition.y - 80.0f, _CorsorStartPosition.z);
     }
 
     public void Update()
@@ -270,9 +276,14 @@ public class PlayerControl : MonoBehaviour
         //吹き出しのアニメーション終了を確認したら生成する
         if (_FukidasiScript.GetAnimPattern() == -1)
         {
-            Debug.Log("よびだし");
             _FukidasiScript.SetAnimPattern(_CanActionList.Count);
             _FukidasiScript.SetActPattern(_CanActionList);
+
+
+            _CommandSelect = _CanActionList.Count - 1;
+            var icon = _FukidasiObj.transform.GetChild(4).GetComponent<RectTransform>();
+            icon.anchoredPosition = 
+                new Vector3(icon.localPosition.x, _CorsorStartPosition.y + (20.0f * _CommandSelect), _CorsorStartPosition.z);
         }
 
         //プレイヤー左右回転
@@ -304,18 +315,23 @@ public class PlayerControl : MonoBehaviour
                 //アイコンのtransform取得
                 var icon = _FukidasiObj.transform.GetChild(4).GetComponent<RectTransform>();
                 icon.anchoredPosition = new Vector3(icon.localPosition.x, icon.localPosition.y + 20.0f, icon.localPosition.z);
+
+                //文字のsprite変更
+                _FukidasiScript.SetActPattern(_CanActionList, _CommandSelect + 1);
             }
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             if (_CommandSelect > 0)
             {
-                Debug.Log("じつはうごいうえる");
                 _CommandSelect--;
 
                 //アイコンのtransform取得
                 var icon = _FukidasiObj.transform.GetChild(4).GetComponent<RectTransform>();
                 icon.anchoredPosition = new Vector3(icon.localPosition.x, icon.localPosition.y - 20.0f, icon.localPosition.z);
+
+                //文字のsprite変更
+                _FukidasiScript.SetActPattern(_CanActionList, _CommandSelect + 1);
             }
         }
 

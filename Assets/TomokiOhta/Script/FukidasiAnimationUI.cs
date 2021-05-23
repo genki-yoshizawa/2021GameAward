@@ -49,16 +49,17 @@ public class FukidasiAnimationUI : MonoBehaviour
 
     public int GetAnimPattern() { return _FukidasiCount; }
 
-    public void SetActPattern(List<int> panelList)
+    public void SetActPattern(List<int> panelList, int select = -1)
     {
-        //list‚Ì—v‘f‚ð‚»‚Ì‚Ü‚Ü_PanelAnimList‚ÌSetInt‚µ‚Ä‚ ‚°‚é
-
         Image actImage;
+
+        if (select == -1)
+            select = panelList.Count;
 
         for (int i = 0; i < panelList.Count; i++)
         {
             actImage = transform.GetChild(i).GetComponent<Image>();
-            if(i == panelList.Count - 1)
+            if(i == select - 1)
                 actImage.sprite = _ActSprite[panelList[i] * 2];
             else
                 actImage.sprite = _ActSprite[panelList[i] * 2 + 1];
