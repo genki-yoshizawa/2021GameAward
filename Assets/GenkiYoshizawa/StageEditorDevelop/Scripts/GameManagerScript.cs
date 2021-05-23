@@ -100,12 +100,12 @@ public class GameManagerScript : MonoBehaviour
     // ソート済みのGameObjectリスト配列を受け取り、SwapIndex順に入れ替える
     public void SwapBlockArray(List<GameObject> swapList)
     {// 多分これでいいはず・・・
-        GameObject temp = _Block[swapList[swapList.Count - 1].GetComponent<BlockConfig>().GetBlockLocalPosition().x][swapList[swapList.Count - 1].GetComponent<BlockConfig>().GetBlockLocalPosition().y];
-        for (int n = swapList.Count - 1; n > 0; --n)
+        GameObject temp = _Block[swapList[0].GetComponent<BlockConfig>().GetBlockLocalPosition().x][swapList[0].GetComponent<BlockConfig>().GetBlockLocalPosition().y];
+        for (int n = 0; n < swapList.Count - 1; ++n)
         {
-            _Block[swapList[n].GetComponent<BlockConfig>().GetBlockLocalPosition().x][swapList[n].GetComponent<BlockConfig>().GetBlockLocalPosition().y] = _Block[swapList[n - 1].GetComponent<BlockConfig>().GetBlockLocalPosition().x][swapList[n - 1].GetComponent<BlockConfig>().GetBlockLocalPosition().y];
+            _Block[swapList[n].GetComponent<BlockConfig>().GetBlockLocalPosition().x][swapList[n].GetComponent<BlockConfig>().GetBlockLocalPosition().y] = _Block[swapList[n + 1].GetComponent<BlockConfig>().GetBlockLocalPosition().x][swapList[n + 1].GetComponent<BlockConfig>().GetBlockLocalPosition().y];
         }
-        _Block[swapList[0].GetComponent<BlockConfig>().GetBlockLocalPosition().x][swapList[0].GetComponent<BlockConfig>().GetBlockLocalPosition().y] = temp;
+        _Block[swapList[swapList.Count - 1].GetComponent<BlockConfig>().GetBlockLocalPosition().x][swapList[swapList.Count - 1].GetComponent<BlockConfig>().GetBlockLocalPosition().y] = temp;
     }
 
     public GameObject GetTurnManager() { return _TurnManager; }
