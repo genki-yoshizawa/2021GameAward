@@ -113,16 +113,6 @@ public class PlayerControl : MonoBehaviour
                 _PassedTime = 0.0f;
         }
 
-        //アクションアニメーション
-        if(_Animator.GetBool("Action"))
-        {
-            float time = Time.deltaTime;
-            if ((_PassedTime += time) > _ActionTime)
-            {
-                _Animator.SetBool("Action", false);
-                _PassedTime = 0.0f;
-            }
-        }
 
         //向き変更
         if (_Animator.GetBool("Walk") && NowWalkAnim == true)
@@ -157,8 +147,6 @@ public class PlayerControl : MonoBehaviour
 
         if (_Animator.GetBool("Tired"))
             SetTired(false);
-        if (_Animator.GetBool("GameOver"))
-            SetDead(false);
     }
 
     private void Move(Vector2Int direction)
@@ -238,7 +226,7 @@ public class PlayerControl : MonoBehaviour
     private void PlayerRotate(GameObject block)
     {
         var blockScript = block.GetComponent<BlockControl>();
-        _Animator.SetBool("Action", true);
+        _Animator.SetTrigger("Action");
         blockScript.Rotate(_IsFront, 90);
         SetFrontBlock();
     }
@@ -246,7 +234,7 @@ public class PlayerControl : MonoBehaviour
     private void PlayerSwap(GameObject block)
     {
         var blockScript = block.GetComponent<BlockControl>();
-        _Animator.SetBool("Action", true);
+        _Animator.SetTrigger("Action");
         blockScript.Swap(_IsFront);
         SetFrontBlock();
     }
@@ -472,9 +460,9 @@ public class PlayerControl : MonoBehaviour
         _Animator.SetBool("Tired", flag);
     }
 
-    public void SetDead(bool flag)
+    public void SetDead()
     {
-        _Animator.SetBool("GameOver", flag);
+        _Animator.SetTrigger("GameOver");
     }
 
     private GameObject CheckEnemy(Vector2Int position)
