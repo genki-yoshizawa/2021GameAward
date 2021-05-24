@@ -124,17 +124,6 @@ public class PlayerControl : MonoBehaviour
             }
         }
 
-        //捕まえるアニメーション
-        if (_Animator.GetBool("Capture"))
-        {
-            float time = Time.deltaTime;
-            if ((_PassedTime += time) > _ActionTime)
-            {
-                _Animator.SetBool("Capture", false);
-                _PassedTime = 0.0f;
-            }
-        }
-
         //向き変更
         if (_Animator.GetBool("Walk") && NowWalkAnim == true)
         {
@@ -369,7 +358,7 @@ public class PlayerControl : MonoBehaviour
             var enemy = CheckEnemy(_LocalPosition + _Direction);
             if (enemy != null)
             {
-                _Animator.SetBool("Capture", true);
+                _Animator.SetTrigger("Capture");
                 _GameManagerScript.KillEnemy(enemy);
                 var remainEnemy = _GameManagerScript.GetEnemys();
 
