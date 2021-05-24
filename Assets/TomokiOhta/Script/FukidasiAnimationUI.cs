@@ -15,6 +15,9 @@ public class FukidasiAnimationUI : MonoBehaviour
     //‚Ç‚ÌŒÂ”‚Ì‚Ó‚«‚¾‚µ‚ğ¶¬‚·‚é‚©
     private int _FukidasiCount = -1;
 
+    //RectTransform
+    private RectTransform _RectTransform;
+
     public void Start()
     {
         //‰èFindWithTag
@@ -22,6 +25,8 @@ public class FukidasiAnimationUI : MonoBehaviour
         _Player = GameManagerScript.GetPlayer();
 
         _FukidasiAnimator = GetComponent<Animator>();
+        _RectTransform = GetComponent<RectTransform>();
+
 
     }
 
@@ -33,6 +38,9 @@ public class FukidasiAnimationUI : MonoBehaviour
         //p.y = transform.position.y;
         //p.z = transform.position.z;
         //this.transform.LookAt(p);
+
+        _RectTransform.position = new Vector3
+            (_Player.transform.position.x + 1.0f, _Player.transform.position.y + 1.0f, _Player.transform.position.z);
     }
 
     public void SetAnimPattern(int num)
