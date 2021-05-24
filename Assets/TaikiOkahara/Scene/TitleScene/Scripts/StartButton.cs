@@ -5,7 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class StartButton : MonoBehaviour
 {
-   public void OnStartButtonClick()
+    void Update()
+    {
+        if (Input.GetKeyDown("joystick button 0"))
+            OnStartButtonClick();
+
+    }
+    public void OnStartButtonClick()
     {
         SceneManager.LoadScene("MenuScene");
     }
