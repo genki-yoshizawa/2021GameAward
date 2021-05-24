@@ -164,9 +164,8 @@ public class ClearScreen : MonoBehaviour
 
     }
 
-    public void DisplayClearScreen()
+    public void DisplayClearScreen(int score)
     {
-        int score = 0;
         _TurnScoreNumber.GetComponent<TurnScore>().SetScore(score);
 
         _PauseFlag = true;
