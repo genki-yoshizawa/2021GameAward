@@ -123,6 +123,7 @@ public class PlayerControl : MonoBehaviour
         //捕まえるアニメーション
         if (_Animator.GetBool("Capture"))
         {
+            Debug.Log("捕まえたい");
             float time = Time.deltaTime;
             if ((_PassedTime += time) > _ActionTime)
             {
@@ -387,7 +388,6 @@ public class PlayerControl : MonoBehaviour
                 //敵がいなくなったことを確認したらゲームを終わらせに行く
                 if (remainEnemy.Count <= 0)
                 {
-                    Debug.Log("敵全員倒しました");
                     var clearScreenScript = _ClearScreen.GetComponent<ClearScreen>();
                     clearScreenScript.DisplayClearScreen();
                 }

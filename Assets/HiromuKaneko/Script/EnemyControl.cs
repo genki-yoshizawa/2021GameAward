@@ -101,7 +101,7 @@ public class EnemyControl : MonoBehaviour
         _EnemyAnimation = gameObject.GetComponent<Animator>();
         _IsFront = true;
         _CheeseBite = false;
-        _IsExist = false;　
+        _IsExist = false;
         _WallCount = 0;
         _TurnCount = 0;
         _Count = 0;
@@ -160,7 +160,7 @@ public class EnemyControl : MonoBehaviour
         if (_EnemyAnimation.GetBool("Bite"))
         {
             // チーズをかじるときのアニメーション　かじりながら移動
-            if(_CheeseBite)
+            if (_CheeseBite)
             {
                 _Cheese.gameObject.GetComponent<CheeseControl>().Eaten();
                 float time = Time.deltaTime;
@@ -193,7 +193,7 @@ public class EnemyControl : MonoBehaviour
         Debug.Log(clipInfo.clip.name);
 
         // 現在のアニメーションがDeadだったらオブジェクトを削除する
-        if(clipInfo.clip.name == "Dead")
+        if (clipInfo.clip.name == "Dead")
         {
             Destroy(this.gameObject);
         }
@@ -371,7 +371,8 @@ public class EnemyControl : MonoBehaviour
             // ネズミのローカルポジションを
             _EnemyLocalPosition = _NextBlock.GetComponent<BlockConfig>().GetBlockLocalPosition();
 
-            if(_Cheese != null)
+
+            if (_Cheese != null)
             {
                 Vector2Int cheeselocalposition = _Cheese.gameObject.GetComponent<CheeseConfig>().GetCheeseLocalPosition();
 
@@ -451,7 +452,7 @@ public class EnemyControl : MonoBehaviour
     public void EnemyTurn()
     {
         // 生きていれば動ける
-        if(_IsExist == false)
+        if (_IsExist == false)
         {
             if (_StartEnemyTurn)
             {
@@ -1026,29 +1027,19 @@ public class EnemyControl : MonoBehaviour
                     }
                 }
 
-                else
+            }
+            else
+            {
+                if (_IsFront)
                 {
-                    if (_IsFront)
+                    if (_Up != null)
                     {
-                        if (_Up != null)
+                        _EnemyDirection = new Vector2Int(0, 1);
+                        tmp = Vector3.Distance(playerpos, _Up.transform.position);
+                        if (tmp == distance)
                         {
-                            _EnemyDirection = new Vector2Int(0, 1);
-                            tmp = Vector3.Distance(playerpos, _Up.transform.position);
-                            if (tmp == distance)
-                            {
-                                random = Random.value;
-                                if (random < 0.5f)
-                                {
-                                    if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                    {
-
-                                        obj = _Up;
-                                        this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
-                                        distance = tmp;
-                                    }
-                                }
-                            }
-                            else if (tmp > distance)
+                            random = Random.value;
+                            if (random < 0.5f)
                             {
                                 if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                                 {
@@ -1059,27 +1050,28 @@ public class EnemyControl : MonoBehaviour
                                 }
                             }
                         }
-
-                        if (_Down != null)
+                        else if (tmp > distance)
                         {
-                            _EnemyDirection = new Vector2Int(0, -1);
-                            tmp = Vector3.Distance(playerpos, _Down.transform.position);
-
-
-                            if (tmp == distance)
+                            if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                             {
-                                random = Random.value;
-                                if (random < 0.5f)
-                                {
-                                    if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                    {
-                                        obj = _Down;
-                                        this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
-                                        distance = tmp;
-                                    }
-                                }
+
+                                obj = _Up;
+                                this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                                distance = tmp;
                             }
-                            else if (tmp > distance)
+                        }
+                    }
+
+                    if (_Down != null)
+                    {
+                        _EnemyDirection = new Vector2Int(0, -1);
+                        tmp = Vector3.Distance(playerpos, _Down.transform.position);
+
+
+                        if (tmp == distance)
+                        {
+                            random = Random.value;
+                            if (random < 0.5f)
                             {
                                 if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                                 {
@@ -1088,59 +1080,58 @@ public class EnemyControl : MonoBehaviour
                                     distance = tmp;
                                 }
                             }
-
+                        }
+                        else if (tmp > distance)
+                        {
+                            if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                            {
+                                obj = _Down;
+                                this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
+                                distance = tmp;
+                            }
                         }
 
-                        if (_Left != null)
+                    }
+
+                    if (_Left != null)
+                    {
+                        _EnemyDirection = new Vector2Int(-1, 0);
+                        tmp = Vector3.Distance(playerpos, _Left.transform.position);
+
+                        if (tmp == distance)
                         {
-                            _EnemyDirection = new Vector2Int(-1, 0);
-                            tmp = Vector3.Distance(playerpos, _Left.transform.position);
-
-                            if (tmp == distance)
-                            {
-                                random = Random.value;
-                                if (random < 0.5f)
-                                {
-                                    if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                    {
-
-                                        obj = _Left;
-                                        this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
-                                        distance = tmp;
-                                    }
-                                }
-                            }
-                            else if (tmp > distance)
+                            random = Random.value;
+                            if (random < 0.5f)
                             {
                                 if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                                 {
+
                                     obj = _Left;
                                     this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
                                     distance = tmp;
                                 }
                             }
                         }
-
-                        if (_Right != null)
+                        else if (tmp > distance)
                         {
-                            _EnemyDirection = new Vector2Int(1, 0);
-                            tmp = Vector3.Distance(playerpos, _Right.transform.position);
-
-                            if (tmp == distance)
+                            if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                             {
-                                random = Random.value;
-                                if (random < 0.5f)
-                                {
-                                    if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                    {
-
-                                        obj = _Right;
-                                        this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
-                                        distance = tmp;
-                                    }
-                                }
+                                obj = _Left;
+                                this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
+                                distance = tmp;
                             }
-                            else if (tmp > distance)
+                        }
+                    }
+
+                    if (_Right != null)
+                    {
+                        _EnemyDirection = new Vector2Int(1, 0);
+                        tmp = Vector3.Distance(playerpos, _Right.transform.position);
+
+                        if (tmp == distance)
+                        {
+                            random = Random.value;
+                            if (random < 0.5f)
                             {
                                 if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                                 {
@@ -1151,79 +1142,89 @@ public class EnemyControl : MonoBehaviour
                                 }
                             }
                         }
-
-                    }
-                    else
-                    {
-                        if (_Up != null)
+                        else if (tmp > distance)
                         {
-                            tmp = Vector3.Distance(playerpos, _Up.transform.position);
-                            if (tmp < distance2)
+                            if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                             {
-                                obj = _Up;
-                                distance2 = tmp;
-                            }
-                        }
 
-                        if (_Down != null)
-                        {
-                            tmp = Vector3.Distance(playerpos, _Down.transform.position);
-                            if (tmp < distance2)
-                            {
-                                obj = _Down;
-                                distance2 = tmp;
-                            }
-                        }
-
-                        if (_Left != null)
-                        {
-                            tmp = Vector3.Distance(playerpos, _Left.transform.position);
-                            if (tmp < distance2)
-                            {
-                                obj = _Left;
-                                distance2 = tmp;
-                            }
-                        }
-
-                        if (_Right != null)
-                        {
-                            tmp = Vector3.Distance(playerpos, _Right.transform.position);
-                            if (tmp < distance2)
-                            {
                                 obj = _Right;
-                                distance2 = tmp;
+                                this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
+                                distance = tmp;
                             }
                         }
                     }
 
-                    _TurnCount = 0;
-                    if (obj != null)
+                }
+                else
+                {
+                    if (_Up != null)
                     {
-                        tmp = Vector3.Distance(playerpos, obj.transform.position);
-                        tmp2 = Vector3.Distance(playerpos, this.transform.position);
-
-                        if (tmp < tmp2)
+                        tmp = Vector3.Distance(playerpos, _Up.transform.position);
+                        if (tmp < distance2)
                         {
-                            _EnemyState = EnemyState.STAY;
+                            obj = _Up;
+                            distance2 = tmp;
                         }
-                        else
-                        {
-                            _NextBlock = obj;
-                            Debug.Log(_NextBlock);
-                            _EnemyState = EnemyState.MOVE;
-                        }
-
                     }
-                    else
+
+                    if (_Down != null)
                     {
-                        _EnemyState = EnemyState.STAY;
+                        tmp = Vector3.Distance(playerpos, _Down.transform.position);
+                        if (tmp < distance2)
+                        {
+                            obj = _Down;
+                            distance2 = tmp;
+                        }
+                    }
+
+                    if (_Left != null)
+                    {
+                        tmp = Vector3.Distance(playerpos, _Left.transform.position);
+                        if (tmp < distance2)
+                        {
+                            obj = _Left;
+                            distance2 = tmp;
+                        }
+                    }
+
+                    if (_Right != null)
+                    {
+                        tmp = Vector3.Distance(playerpos, _Right.transform.position);
+                        if (tmp < distance2)
+                        {
+                            obj = _Right;
+                            distance2 = tmp;
+                        }
                     }
                 }
 
+                _TurnCount = 0;
+                if (obj != null)
+                {
+                    tmp = Vector3.Distance(playerpos, obj.transform.position);
+                    tmp2 = Vector3.Distance(playerpos, this.transform.position);
 
+                    if (tmp < tmp2)
+                    {
+                        _EnemyState = EnemyState.STAY;
+                    }
+                    else
+                    {
+                        _NextBlock = obj;
+                        Debug.Log(_NextBlock);
+                        _EnemyState = EnemyState.MOVE;
+                    }
+
+                }
+                else
+                {
+                    _EnemyState = EnemyState.STAY;
+                }
             }
         }
+
     }
+
 
     // ２ターンに１度行動する　たまに１ターンに１度行動（現状50%位）　レベル１の壁をかじる
     public void Level4()
@@ -1239,6 +1240,7 @@ public class EnemyControl : MonoBehaviour
         float distance = 0.0f;
         float distance2 = 10000.0f;
         float breakdistance = 0.0f;
+        float breakdistance2 = 10000.0f;
         float tmp = 0.0f;
         float tmp2 = 0.0f;
         float y = 90;
@@ -1261,13 +1263,636 @@ public class EnemyControl : MonoBehaviour
         else
         {
 
+            // チーズみつけてる
+            if (_Cheese != null)
+            {
+                // 表
+                if (_IsFront)
+                {
+                    if (_Up != null)
+                    {
+                        _EnemyDirection = new Vector2Int(0, 1);
+                        tmp = Vector3.Distance(_Cheese.transform.position, _Up.transform.position);
+                        if (tmp == distance2)
+                        {
+                            random = Random.value;
+                            if (random < 0.5f)
+                            {
+                                if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                                {
+                                    tmpdirection = _EnemyDirection;
+                                    moveobj = _Up;
+                                    distance2 = tmp;
+                                }
+                                else
+                                {
+                                    if (tmp < breakdistance2)
+                                    {
+                                        tmpdirection = _EnemyDirection;
+                                        breakobj = _Up;
+                                        breakdistance2 = tmp;
+                                    }
+
+                                }
+                            }
+                        }
+                        else if (tmp < distance2)
+                        {
+                            if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                            {
+                                tmpdirection = _EnemyDirection;
+                                moveobj = _Up;
+                                distance2 = tmp;
+                            }
+                            else
+                            {
+                                if (tmp < breakdistance2)
+                                {
+                                    tmpdirection = _EnemyDirection;
+                                    breakobj = _Up;
+                                    breakdistance2 = tmp;
+                                }
+                            }
+                        }
+                    }
+
+                    if (_Down != null)
+                    {
+                        _EnemyDirection = new Vector2Int(0, -1);
+                        tmp = Vector3.Distance(_Cheese.transform.position, _Down.transform.position);
+                        if (tmp == distance2)
+                        {
+                            random = Random.value;
+                            if (random < 0.5f)
+                            {
+                                if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                                {
+                                    tmpdirection = _EnemyDirection;
+                                    moveobj = _Down;
+                                    distance2 = tmp;
+                                }
+                                else
+                                {
+                                    if (tmp < breakdistance2)
+                                    {
+                                        tmpdirection = _EnemyDirection;
+                                        breakobj = _Down;
+                                        breakdistance2 = tmp;
+                                    }
+
+                                }
+                            }
+                        }
+                        else if (tmp < distance2)
+                        {
+                            if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                            {
+                                tmpdirection = _EnemyDirection;
+                                moveobj = _Down;
+                                distance2 = tmp;
+                            }
+                            else
+                            {
+                                if (tmp < breakdistance2)
+                                {
+                                    tmpdirection = _EnemyDirection;
+                                    breakobj = _Down;
+                                    breakdistance2 = tmp;
+                                }
+                            }
+                        }
+                    }
+
+                    if (_Left != null)
+                    {
+                        _EnemyDirection = new Vector2Int(-1, 0);
+                        tmp = Vector3.Distance(_Cheese.transform.position, _Left.transform.position);
+                        if (tmp == distance2)
+                        {
+                            random = Random.value;
+                            if (random < 0.5f)
+                            {
+                                if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                                {
+                                    tmpdirection = _EnemyDirection;
+                                    moveobj = _Left;
+                                    distance2 = tmp;
+                                }
+                                else
+                                {
+                                    if (tmp < breakdistance2)
+                                    {
+                                        tmpdirection = _EnemyDirection;
+                                        breakobj = _Left;
+                                        breakdistance2 = tmp;
+                                    }
+
+                                }
+                            }
+                        }
+                        else if (tmp < distance2)
+                        {
+                            if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                            {
+                                tmpdirection = _EnemyDirection;
+                                moveobj = _Left;
+                                distance2 = tmp;
+                            }
+                            else
+                            {
+                                if (tmp < breakdistance2)
+                                {
+                                    tmpdirection = _EnemyDirection;
+                                    breakobj = _Left;
+                                    breakdistance2 = tmp;
+                                }
+                            }
+                        }
+                    }
+
+                    if (_Right != null)
+                    {
+                        _EnemyDirection = new Vector2Int(1, 0);
+                        tmp = Vector3.Distance(_Cheese.transform.position, _Right.transform.position);
+                        if (tmp == distance2)
+                        {
+                            random = Random.value;
+                            if (random < 0.5f)
+                            {
+                                if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                                {
+                                    tmpdirection = _EnemyDirection;
+                                    moveobj = _Right;
+                                    distance2 = tmp;
+                                }
+                                else
+                                {
+                                    if (tmp < breakdistance2)
+                                    {
+                                        tmpdirection = _EnemyDirection;
+                                        breakobj = _Right;
+                                        breakdistance2 = tmp;
+                                    }
+
+                                }
+                            }
+                        }
+                        else if (tmp < distance2)
+                        {
+                            if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                            {
+                                tmpdirection = _EnemyDirection;
+                                moveobj = _Right;
+                                distance2 = tmp;
+                            }
+                            else
+                            {
+                                if (tmp < breakdistance2)
+                                {
+                                    tmpdirection = _EnemyDirection;
+                                    breakobj = _Right;
+                                    breakdistance2 = tmp;
+                                }
+                            }
+                        }
+                    }
+                }
+                // 裏
+                else
+                {
+
+                }
+
+                // チーズとネズミのいる位置を比較
+                tmp2 = Vector3.Distance(_Cheese.transform.position, this.transform.position);
+                if (moveobj != null)
+                {
+                    // チーズとムーブ先のパネルの位置を比較
+                    tmp = Vector3.Distance(_Cheese.transform.position, moveobj.transform.position);
+                    if (breakobj != null)
+                    {
+                        // チーズと壊す壁の位置を比較
+                        float tmp3 = Vector3.Distance(_Cheese.transform.position, breakobj.transform.position);
+
+                        if (tmp < tmp2)
+                        {
+                            _NextBlock = moveobj;
+                            _EnemyState = EnemyState.MOVE;
+                        }
+                        else
+                        {
+                            if (tmp3 < tmp)
+                            {
+                                _EnemyDirection = tmpdirection;
+                                _NextBlock = breakobj;
+                                _EnemyState = EnemyState.BREAK;
+                            }
+                            else
+                            {
+                                _EnemyState = EnemyState.STAY;
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        if (tmp < tmp2)
+                        {
+                            _NextBlock = moveobj;
+                            _EnemyState = EnemyState.MOVE;
+                        }
+                        else
+                        {
+                            _EnemyState = EnemyState.STAY;
+                        }
+                    }
+                }
+                else
+                {
+                    if (breakobj != null)
+                    {
+                        float tmp3 = Vector3.Distance(_Cheese.transform.position, breakobj.transform.position);
+
+                        if (tmp3 < tmp2)
+                        {
+                            _EnemyDirection = tmpdirection;
+                            _NextBlock = breakobj;
+                            _EnemyState = EnemyState.BREAK;
+                        }
+
+                    }
+                    else
+                    {
+                        _EnemyState = EnemyState.STAY;
+                    }
+                }
+
+
+            }
+            // チーズ見つけてない
+            else
+            {
+                // 表
+                if (_IsFront)
+                {
+                    if (_Up != null)
+                    {
+                        _EnemyDirection = new Vector2Int(0, 1);
+                        tmp = Vector3.Distance(playerpos, _Up.transform.position);
+                        if (tmp == distance)
+                        {
+                            random = Random.value;
+                            if (random < 0.5f)
+                            {
+                                if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                                {
+
+                                    moveobj = _Up;
+                                    this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                                    distance = tmp;
+                                }
+                                else
+                                {
+                                    if (tmp > breakdistance)
+                                    {
+                                        tmpdirection = _EnemyDirection;
+                                        breakobj = _Up;
+                                        this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                                        breakdistance = tmp;
+                                    }
+
+                                }
+                            }
+                        }
+                        else if (tmp > distance)
+                        {
+                            if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                            {
+
+                                moveobj = _Up;
+                                this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                                distance = tmp;
+                            }
+                            else
+                            {
+                                if (tmp > breakdistance)
+                                {
+                                    tmpdirection = _EnemyDirection;
+                                    breakobj = _Up;
+                                    this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                                    breakdistance = tmp;
+                                }
+                            }
+                        }
+                    }
+
+                    if (_Down != null)
+                    {
+                        _EnemyDirection = new Vector2Int(0, -1);
+                        tmp = Vector3.Distance(playerpos, _Down.transform.position);
+
+
+                        if (tmp == distance)
+                        {
+                            random = Random.value;
+                            if (random < 0.5f)
+                            {
+                                if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                                {
+                                    moveobj = _Down;
+                                    this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
+                                    distance = tmp;
+                                }
+                                else
+                                {
+                                    if (tmp > breakdistance)
+                                    {
+                                        tmpdirection = _EnemyDirection;
+                                        breakobj = _Down;
+                                        this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
+                                        breakdistance = tmp;
+                                    }
+
+                                }
+                            }
+                        }
+                        else if (tmp > distance)
+                        {
+                            if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                            {
+                                moveobj = _Down;
+                                this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
+                                distance = tmp;
+                            }
+                            else
+                            {
+                                if (tmp > breakdistance)
+                                {
+                                    tmpdirection = _EnemyDirection;
+                                    breakobj = _Down;
+                                    this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
+                                    breakdistance = tmp;
+                                }
+
+                            }
+                        }
+
+                    }
+
+                    if (_Left != null)
+                    {
+                        _EnemyDirection = new Vector2Int(-1, 0);
+                        tmp = Vector3.Distance(playerpos, _Left.transform.position);
+
+                        if (tmp == distance)
+                        {
+                            random = Random.value;
+                            if (random < 0.5f)
+                            {
+                                if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                                {
+
+                                    moveobj = _Left;
+                                    this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
+                                    distance = tmp;
+                                }
+                                else
+                                {
+                                    if (tmp > breakdistance)
+                                    {
+                                        tmpdirection = _EnemyDirection;
+                                        breakobj = _Left;
+                                        this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
+                                        breakdistance = tmp;
+                                    }
+
+
+                                }
+                            }
+                        }
+                        else if (tmp > distance)
+                        {
+                            if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                            {
+                                moveobj = _Left;
+                                this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
+                                distance = tmp;
+                            }
+                            else
+                            {
+                                if (tmp > breakdistance)
+                                {
+                                    tmpdirection = _EnemyDirection;
+                                    breakobj = _Left;
+                                    this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
+                                    breakdistance = tmp;
+                                }
+
+                            }
+                        }
+                    }
+
+                    if (_Right != null)
+                    {
+                        _EnemyDirection = new Vector2Int(1, 0);
+                        tmp = Vector3.Distance(playerpos, _Right.transform.position);
+
+                        if (tmp == distance)
+                        {
+                            random = Random.value;
+                            if (random < 0.5f)
+                            {
+                                if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                                {
+
+                                    moveobj = _Right;
+                                    this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
+                                    distance = tmp;
+                                }
+                                else
+                                {
+                                    if (tmp > breakdistance)
+                                    {
+                                        tmpdirection = _EnemyDirection;
+                                        breakobj = _Right;
+                                        this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
+                                        breakdistance = tmp;
+                                    }
+
+                                }
+                            }
+                        }
+                        else if (tmp > distance)
+                        {
+                            if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                            {
+
+                                moveobj = _Right;
+                                this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
+                                distance = tmp;
+                            }
+                            else
+                            {
+                                if (tmp > breakdistance)
+                                {
+                                    tmpdirection = _EnemyDirection;
+                                    breakobj = _Right;
+                                    this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
+                                    breakdistance = tmp;
+                                }
+
+                            }
+                        }
+                    }
+
+                }
+                // 裏
+                else
+                {
+                    if (_Up != null)
+                    {
+                        tmp = Vector3.Distance(playerpos, _Up.transform.position);
+                        if (tmp < distance2)
+                        {
+                            moveobj = _Up;
+                            distance2 = tmp;
+                        }
+                    }
+
+                    if (_Down != null)
+                    {
+                        tmp = Vector3.Distance(playerpos, _Down.transform.position);
+                        if (tmp < distance2)
+                        {
+                            moveobj = _Down;
+                            distance2 = tmp;
+                        }
+                    }
+
+                    if (_Left != null)
+                    {
+                        tmp = Vector3.Distance(playerpos, _Left.transform.position);
+                        if (tmp < distance2)
+                        {
+                            moveobj = _Left;
+                            distance2 = tmp;
+                        }
+                    }
+
+                    if (_Right != null)
+                    {
+                        tmp = Vector3.Distance(playerpos, _Right.transform.position);
+                        if (tmp < distance2)
+                        {
+                            moveobj = _Right;
+                            distance2 = tmp;
+                        }
+                    }
+                }
+
+
+                tmp2 = Vector3.Distance(playerpos, this.transform.position);
+                if (moveobj != null)
+                {
+                    tmp = Vector3.Distance(playerpos, moveobj.transform.position);
+                    if (breakobj != null)
+                    {
+                        float tmp3 = Vector3.Distance(playerpos, breakobj.transform.position);
+
+                        if (tmp2 < tmp)
+                        {
+                            _NextBlock = moveobj;
+                            _EnemyState = EnemyState.MOVE;
+                        }
+                        else
+                        {
+                            if (tmp < tmp3)
+                            {
+                                _EnemyDirection = tmpdirection;
+                                _NextBlock = breakobj;
+                                _EnemyState = EnemyState.BREAK;
+                            }
+                            else
+                            {
+                                _EnemyState = EnemyState.STAY;
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        if (tmp2 < tmp)
+                        {
+                            _NextBlock = moveobj;
+                            _EnemyState = EnemyState.MOVE;
+                        }
+                        else
+                        {
+                            _EnemyState = EnemyState.STAY;
+                        }
+                    }
+                }
+                else
+                {
+                    if (breakobj != null)
+                    {
+                        float tmp3 = Vector3.Distance(playerpos, breakobj.transform.position);
+
+                        if (tmp2 < tmp3)
+                        {
+                            _EnemyDirection = tmpdirection;
+                            _NextBlock = breakobj;
+                            _EnemyState = EnemyState.BREAK;
+                        }
+
+                    }
+                    else
+                    {
+                        _EnemyState = EnemyState.STAY;
+                    }
+                }
+
+
+            }
+            _TurnCount = 0;
+
+        }
+    }
+
+    // 毎ターン行動する。レベル1の硬さのオブジェクトをかじる
+    public void Level5()
+    {
+
+        // プレイヤーのいるブロックを取得して
+        // プレイヤーから一番遠いブロックへ逃げる
+        _Player = _GameManager.gameObject.GetComponent<GameManagerScript>().GetPlayer();
+        Vector3 playerpos = _Player.transform.position;
+
+        GameObject moveobj = null;
+        GameObject breakobj = null;
+
+        float distance = 0.0f;
+        float distance2 = 10000.0f;
+        float breakdistance = 0.0f;
+        float breakdistance2 = 10000.0f;
+        float tmp = 0.0f;
+        float tmp2 = 0.0f;
+        float y = 90;
+        float random;
+        Vector2Int tmpdirection = new Vector2Int();
+
+        random = Random.value;
+
+        // チーズを見つけたときチーズに向かって最短距離で向かう（壁を壊しながら）
+        if (_Cheese != null)
+        {
             if (_IsFront)
             {
                 if (_Up != null)
                 {
                     _EnemyDirection = new Vector2Int(0, 1);
-                    tmp = Vector3.Distance(playerpos, _Up.transform.position);
-                    if (tmp == distance)
+                    tmp = Vector3.Distance(_Cheese.transform.position, _Up.transform.position);
+                    if (tmp == distance2)
                     {
                         random = Random.value;
                         if (random < 0.5f)
@@ -1281,7 +1906,7 @@ public class EnemyControl : MonoBehaviour
                             }
                             else
                             {
-                                if (tmp > breakdistance)
+                                if (tmp > breakdistance2)
                                 {
                                     tmpdirection = _EnemyDirection;
                                     breakobj = _Up;
@@ -1313,17 +1938,94 @@ public class EnemyControl : MonoBehaviour
                         }
                     }
                 }
-
-                if (_Down != null)
+            }
+            // チーズを見つけていないとき
+            else
+            {
+                if (_IsFront)
                 {
-                    _EnemyDirection = new Vector2Int(0, -1);
-                    tmp = Vector3.Distance(playerpos, _Down.transform.position);
-
-
-                    if (tmp == distance)
+                    if (_Up != null)
                     {
-                        random = Random.value;
-                        if (random < 0.5f)
+                        _EnemyDirection = new Vector2Int(0, 1);
+                        tmp = Vector3.Distance(playerpos, _Up.transform.position);
+                        if (tmp == distance)
+                        {
+                            random = Random.value;
+                            if (random < 0.5f)
+                            {
+                                if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                                {
+
+                                    moveobj = _Up;
+                                    this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                                    distance = tmp;
+                                }
+                                else
+                                {
+                                    if (tmp > breakdistance)
+                                    {
+                                        tmpdirection = _EnemyDirection;
+                                        breakobj = _Up;
+                                        this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                                        breakdistance = tmp;
+                                    }
+
+                                }
+                            }
+                        }
+                        else if (tmp > distance)
+                        {
+                            if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                            {
+
+                                moveobj = _Up;
+                                this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                                distance = tmp;
+                            }
+                            else
+                            {
+                                if (tmp > breakdistance)
+                                {
+                                    tmpdirection = _EnemyDirection;
+                                    breakobj = _Up;
+                                    this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                                    breakdistance = tmp;
+                                }
+                            }
+                        }
+                    }
+
+                    if (_Down != null)
+                    {
+                        _EnemyDirection = new Vector2Int(0, -1);
+                        tmp = Vector3.Distance(playerpos, _Down.transform.position);
+
+
+                        if (tmp == distance)
+                        {
+                            random = Random.value;
+                            if (random < 0.5f)
+                            {
+                                if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                                {
+                                    moveobj = _Down;
+                                    this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
+                                    distance = tmp;
+                                }
+                                else
+                                {
+                                    if (tmp > breakdistance)
+                                    {
+                                        tmpdirection = _EnemyDirection;
+                                        breakobj = _Down;
+                                        this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
+                                        breakdistance = tmp;
+                                    }
+
+                                }
+                            }
+                        }
+                        else if (tmp > distance)
                         {
                             if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                             {
@@ -1343,43 +2045,44 @@ public class EnemyControl : MonoBehaviour
 
                             }
                         }
+
                     }
-                    else if (tmp > distance)
+
+                    if (_Left != null)
                     {
-                        if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                        _EnemyDirection = new Vector2Int(-1, 0);
+                        tmp = Vector3.Distance(playerpos, _Left.transform.position);
+
+                        if (tmp == distance)
                         {
-                            moveobj = _Down;
-                            this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
-                            distance = tmp;
-                        }
-                        else
-                        {
-                            if (tmp > breakdistance)
+                            random = Random.value;
+                            if (random < 0.5f)
                             {
-                                tmpdirection = _EnemyDirection;
-                                breakobj = _Down;
-                                this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
-                                breakdistance = tmp;
+                                if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                                {
+
+                                    moveobj = _Left;
+                                    this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
+                                    distance = tmp;
+                                }
+                                else
+                                {
+                                    if (tmp > breakdistance)
+                                    {
+                                        tmpdirection = _EnemyDirection;
+                                        breakobj = _Left;
+                                        this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
+                                        breakdistance = tmp;
+                                    }
+
+
+                                }
                             }
-
                         }
-                    }
-
-                }
-
-                if (_Left != null)
-                {
-                    _EnemyDirection = new Vector2Int(-1, 0);
-                    tmp = Vector3.Distance(playerpos, _Left.transform.position);
-
-                    if (tmp == distance)
-                    {
-                        random = Random.value;
-                        if (random < 0.5f)
+                        else if (tmp > distance)
                         {
                             if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                             {
-
                                 moveobj = _Left;
                                 this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
                                 distance = tmp;
@@ -1394,41 +2097,41 @@ public class EnemyControl : MonoBehaviour
                                     breakdistance = tmp;
                                 }
 
-
                             }
                         }
                     }
-                    else if (tmp > distance)
+
+                    if (_Right != null)
                     {
-                        if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                        _EnemyDirection = new Vector2Int(1, 0);
+                        tmp = Vector3.Distance(playerpos, _Right.transform.position);
+
+                        if (tmp == distance)
                         {
-                            moveobj = _Left;
-                            this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
-                            distance = tmp;
-                        }
-                        else
-                        {
-                            if (tmp > breakdistance)
+                            random = Random.value;
+                            if (random < 0.5f)
                             {
-                                tmpdirection = _EnemyDirection;
-                                breakobj = _Left;
-                                this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
-                                breakdistance = tmp;
+                                if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                                {
+
+                                    moveobj = _Right;
+                                    this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
+                                    distance = tmp;
+                                }
+                                else
+                                {
+                                    if (tmp > breakdistance)
+                                    {
+                                        tmpdirection = _EnemyDirection;
+                                        breakobj = _Right;
+                                        this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
+                                        breakdistance = tmp;
+                                    }
+
+                                }
                             }
-
                         }
-                    }
-                }
-
-                if (_Right != null)
-                {
-                    _EnemyDirection = new Vector2Int(1, 0);
-                    tmp = Vector3.Distance(playerpos, _Right.transform.position);
-
-                    if (tmp == distance)
-                    {
-                        random = Random.value;
-                        if (random < 0.5f)
+                        else if (tmp > distance)
                         {
                             if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
                             {
@@ -1450,440 +2153,107 @@ public class EnemyControl : MonoBehaviour
                             }
                         }
                     }
-                    else if (tmp > distance)
-                    {
-                        if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                        {
 
+                }
+                else
+                {
+                    if (_Up != null)
+                    {
+                        tmp = Vector3.Distance(playerpos, _Up.transform.position);
+                        if (tmp < distance2)
+                        {
+                            moveobj = _Up;
+                            distance2 = tmp;
+                        }
+                    }
+
+                    if (_Down != null)
+                    {
+                        tmp = Vector3.Distance(playerpos, _Down.transform.position);
+                        if (tmp < distance2)
+                        {
+                            moveobj = _Down;
+                            distance2 = tmp;
+                        }
+                    }
+
+                    if (_Left != null)
+                    {
+                        tmp = Vector3.Distance(playerpos, _Left.transform.position);
+                        if (tmp < distance2)
+                        {
+                            moveobj = _Left;
+                            distance2 = tmp;
+                        }
+                    }
+
+                    if (_Right != null)
+                    {
+                        tmp = Vector3.Distance(playerpos, _Right.transform.position);
+                        if (tmp < distance2)
+                        {
                             moveobj = _Right;
-                            this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
-                            distance = tmp;
+                            distance2 = tmp;
+                        }
+                    }
+                }
+
+                _TurnCount = 0;
+
+                tmp2 = Vector3.Distance(playerpos, this.transform.position);
+                if (moveobj != null)
+                {
+                    tmp = Vector3.Distance(playerpos, moveobj.transform.position);
+                    if (breakobj != null)
+                    {
+                        float tmp3 = Vector3.Distance(playerpos, breakobj.transform.position);
+
+                        if (tmp2 < tmp)
+                        {
+                            _NextBlock = moveobj;
+                            _EnemyState = EnemyState.MOVE;
                         }
                         else
                         {
-                            if (tmp > breakdistance)
+                            if (tmp < tmp3)
                             {
-                                tmpdirection = _EnemyDirection;
-                                breakobj = _Right;
-                                this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
-                                breakdistance = tmp;
+                                _EnemyDirection = tmpdirection;
+                                _NextBlock = breakobj;
+                                _EnemyState = EnemyState.BREAK;
                             }
-
+                            else
+                            {
+                                _EnemyState = EnemyState.STAY;
+                            }
                         }
-                    }
-                }
 
-            }
-            else
-            {
-                if (_Up != null)
-                {
-                    tmp = Vector3.Distance(playerpos, _Up.transform.position);
-                    if (tmp < distance2)
-                    {
-                        moveobj = _Up;
-                        distance2 = tmp;
-                    }
-                }
-
-                if (_Down != null)
-                {
-                    tmp = Vector3.Distance(playerpos, _Down.transform.position);
-                    if (tmp < distance2)
-                    {
-                        moveobj = _Down;
-                        distance2 = tmp;
-                    }
-                }
-
-                if (_Left != null)
-                {
-                    tmp = Vector3.Distance(playerpos, _Left.transform.position);
-                    if (tmp < distance2)
-                    {
-                        moveobj = _Left;
-                        distance2 = tmp;
-                    }
-                }
-
-                if (_Right != null)
-                {
-                    tmp = Vector3.Distance(playerpos, _Right.transform.position);
-                    if (tmp < distance2)
-                    {
-                        moveobj = _Right;
-                        distance2 = tmp;
-                    }
-                }
-            }
-
-            _TurnCount = 0;
-
-            tmp2 = Vector3.Distance(playerpos, this.transform.position);
-            if (moveobj != null)
-            {
-                tmp = Vector3.Distance(playerpos, moveobj.transform.position);
-                if (breakobj != null)
-                {
-                    float tmp3 = Vector3.Distance(playerpos, breakobj.transform.position);
-
-                    if (tmp2 < tmp)
-                    {
-                        _NextBlock = moveobj;
-                        _EnemyState = EnemyState.MOVE;
                     }
                     else
                     {
-                        if (tmp < tmp3)
+                        if (tmp2 < tmp)
                         {
-                            _EnemyDirection = tmpdirection;
-                            _NextBlock = breakobj;
-                            _EnemyState = EnemyState.BREAK;
+                            _NextBlock = moveobj;
+                            _EnemyState = EnemyState.MOVE;
                         }
                         else
                         {
                             _EnemyState = EnemyState.STAY;
                         }
                     }
-
                 }
                 else
                 {
-                    if (tmp2 < tmp)
+                    if (breakobj != null)
                     {
-                        _NextBlock = moveobj;
-                        _EnemyState = EnemyState.MOVE;
-                    }
-                    else
-                    {
-                        _EnemyState = EnemyState.STAY;
-                    }
-                }
-            }
-            else
-            {
-                if (breakobj != null)
-                {
-                    float tmp3 = Vector3.Distance(playerpos, breakobj.transform.position);
+                        float tmp3 = Vector3.Distance(playerpos, breakobj.transform.position);
 
-                    if (tmp2 < tmp3)
-                    {
-                        _EnemyDirection = tmpdirection;
-                        _NextBlock = breakobj;
-                        _EnemyState = EnemyState.BREAK;
-                    }
-
-                }
-                else
-                {
-                    _EnemyState = EnemyState.STAY;
-                }
-            }
-
-        }
-    }
-
-    // 毎ターン行動する。レベル1の硬さのオブジェクトをかじる
-    public void Level5()
-    {
-
-        // プレイヤーのいるブロックを取得して
-        // プレイヤーから一番遠いブロックへ逃げる
-        _Player = _GameManager.gameObject.GetComponent<GameManagerScript>().GetPlayer();
-        Vector3 playerpos = _Player.transform.position;
-
-        GameObject moveobj = null;
-        GameObject breakobj = null;
-
-        float distance = 0.0f;
-        float distance2 = 10000.0f;
-        float breakdistance = 0.0f;
-        float tmp = 0.0f;
-        float tmp2 = 0.0f;
-        float y = 90;
-        float random;
-        Vector2Int tmpdirection = new Vector2Int();
-
-        random = Random.value;
-
-        if (_IsFront)
-        {
-            if (_Up != null)
-            {
-                _EnemyDirection = new Vector2Int(0, 1);
-                tmp = Vector3.Distance(playerpos, _Up.transform.position);
-                if (tmp == distance)
-                {
-                    random = Random.value;
-                    if (random < 0.5f)
-                    {
-                        if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                        if (tmp2 < tmp3)
                         {
-
-                            moveobj = _Up;
-                            this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
-                            distance = tmp;
-                        }
-                        else
-                        {
-                            if (tmp > breakdistance)
-                            {
-                                tmpdirection = _EnemyDirection;
-                                breakobj = _Up;
-                                this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
-                                breakdistance = tmp;
-                            }
-
-                        }
-                    }
-                }
-                else if (tmp > distance)
-                {
-                    if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                    {
-
-                        moveobj = _Up;
-                        this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
-                        distance = tmp;
-                    }
-                    else
-                    {
-                        if (tmp > breakdistance)
-                        {
-                            tmpdirection = _EnemyDirection;
-                            breakobj = _Up;
-                            this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
-                            breakdistance = tmp;
-                        }
-                    }
-                }
-            }
-
-            if (_Down != null)
-            {
-                _EnemyDirection = new Vector2Int(0, -1);
-                tmp = Vector3.Distance(playerpos, _Down.transform.position);
-
-
-                if (tmp == distance)
-                {
-                    random = Random.value;
-                    if (random < 0.5f)
-                    {
-                        if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                        {
-                            moveobj = _Down;
-                            this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
-                            distance = tmp;
-                        }
-                        else
-                        {
-                            if (tmp > breakdistance)
-                            {
-                                tmpdirection = _EnemyDirection;
-                                breakobj = _Down;
-                                this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
-                                breakdistance = tmp;
-                            }
-
-                        }
-                    }
-                }
-                else if (tmp > distance)
-                {
-                    if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                    {
-                        moveobj = _Down;
-                        this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
-                        distance = tmp;
-                    }
-                    else
-                    {
-                        if (tmp > breakdistance)
-                        {
-                            tmpdirection = _EnemyDirection;
-                            breakobj = _Down;
-                            this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
-                            breakdistance = tmp;
+                            _EnemyDirection = tmpdirection;
+                            _NextBlock = breakobj;
+                            _EnemyState = EnemyState.BREAK;
                         }
 
-                    }
-                }
-
-            }
-
-            if (_Left != null)
-            {
-                _EnemyDirection = new Vector2Int(-1, 0);
-                tmp = Vector3.Distance(playerpos, _Left.transform.position);
-
-                if (tmp == distance)
-                {
-                    random = Random.value;
-                    if (random < 0.5f)
-                    {
-                        if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                        {
-
-                            moveobj = _Left;
-                            this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
-                            distance = tmp;
-                        }
-                        else
-                        {
-                            if (tmp > breakdistance)
-                            {
-                                tmpdirection = _EnemyDirection;
-                                breakobj = _Left;
-                                this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
-                                breakdistance = tmp;
-                            }
-
-
-                        }
-                    }
-                }
-                else if (tmp > distance)
-                {
-                    if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                    {
-                        moveobj = _Left;
-                        this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
-                        distance = tmp;
-                    }
-                    else
-                    {
-                        if (tmp > breakdistance)
-                        {
-                            tmpdirection = _EnemyDirection;
-                            breakobj = _Left;
-                            this.transform.rotation = Quaternion.Euler(0.0f, -y, 0.0f);
-                            breakdistance = tmp;
-                        }
-
-                    }
-                }
-            }
-
-            if (_Right != null)
-            {
-                _EnemyDirection = new Vector2Int(1, 0);
-                tmp = Vector3.Distance(playerpos, _Right.transform.position);
-
-                if (tmp == distance)
-                {
-                    random = Random.value;
-                    if (random < 0.5f)
-                    {
-                        if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                        {
-
-                            moveobj = _Right;
-                            this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
-                            distance = tmp;
-                        }
-                        else
-                        {
-                            if (tmp > breakdistance)
-                            {
-                                tmpdirection = _EnemyDirection;
-                                breakobj = _Right;
-                                this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
-                                breakdistance = tmp;
-                            }
-
-                        }
-                    }
-                }
-                else if (tmp > distance)
-                {
-                    if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                    {
-
-                        moveobj = _Right;
-                        this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
-                        distance = tmp;
-                    }
-                    else
-                    {
-                        if (tmp > breakdistance)
-                        {
-                            tmpdirection = _EnemyDirection;
-                            breakobj = _Right;
-                            this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
-                            breakdistance = tmp;
-                        }
-
-                    }
-                }
-            }
-
-        }
-        else
-        {
-            if (_Up != null)
-            {
-                tmp = Vector3.Distance(playerpos, _Up.transform.position);
-                if (tmp < distance2)
-                {
-                    moveobj = _Up;
-                    distance2 = tmp;
-                }
-            }
-
-            if (_Down != null)
-            {
-                tmp = Vector3.Distance(playerpos, _Down.transform.position);
-                if (tmp < distance2)
-                {
-                    moveobj = _Down;
-                    distance2 = tmp;
-                }
-            }
-
-            if (_Left != null)
-            {
-                tmp = Vector3.Distance(playerpos, _Left.transform.position);
-                if (tmp < distance2)
-                {
-                    moveobj = _Left;
-                    distance2 = tmp;
-                }
-            }
-
-            if (_Right != null)
-            {
-                tmp = Vector3.Distance(playerpos, _Right.transform.position);
-                if (tmp < distance2)
-                {
-                    moveobj = _Right;
-                    distance2 = tmp;
-                }
-            }
-        }
-
-        _TurnCount = 0;
-
-        tmp2 = Vector3.Distance(playerpos, this.transform.position);
-        if (moveobj != null)
-        {
-            tmp = Vector3.Distance(playerpos, moveobj.transform.position);
-            if (breakobj != null)
-            {
-                float tmp3 = Vector3.Distance(playerpos, breakobj.transform.position);
-
-                if (tmp2 < tmp)
-                {
-                    _NextBlock = moveobj;
-                    _EnemyState = EnemyState.MOVE;
-                }
-                else
-                {
-                    if (tmp < tmp3)
-                    {
-                        _EnemyDirection = tmpdirection;
-                        _NextBlock = breakobj;
-                        _EnemyState = EnemyState.BREAK;
                     }
                     else
                     {
@@ -1892,127 +2262,97 @@ public class EnemyControl : MonoBehaviour
                 }
 
             }
-            else
-            {
-                if (tmp2 < tmp)
-                {
-                    _NextBlock = moveobj;
-                    _EnemyState = EnemyState.MOVE;
-                }
-                else
-                {
-                    _EnemyState = EnemyState.STAY;
-                }
-            }
-        }
-        else
-        {
-            if (breakobj != null)
-            {
-                float tmp3 = Vector3.Distance(playerpos, breakobj.transform.position);
-
-                if (tmp2 < tmp3)
-                {
-                    _EnemyDirection = tmpdirection;
-                    _NextBlock = breakobj;
-                    _EnemyState = EnemyState.BREAK;
-                }
-
-            }
-            else
-            {
-                _EnemyState = EnemyState.STAY;
-            }
         }
     }
 
-    // 毎ターン行動する。レベル２の硬さのオブジェクトをかじる
-    public void Level6()
-    {
-
-    }
-
-    // 毎ターン行動する。レベル３の硬さのオブジェクトをかじる
-    public void Level7()
-    {
-
-    }
 
 
-    // ブロック側で呼び出す　自分を回転させる関数
-    public void RotateMySelf(Vector2Int position, float angle)
-    {
-        //Rotate時に呼び出される関数、自分の方向を変えるときにも自分で呼ぶ
-        if (position != _EnemyLocalPosition)
-            return;
-
-        Vector3 direction = new Vector3(_EnemyDirection.x, 0f, _EnemyDirection.y);
-        direction = Quaternion.Euler(0f, angle, 0f) * direction;
-
-        Vector2 tmp = new Vector2(direction.x, direction.z);
-        //四捨五入して代入することでVector2Intにも無理やり代入させる
-        _EnemyDirection = new Vector2Int(Mathf.RoundToInt(tmp.x), Mathf.RoundToInt(tmp.y));
-    }
-
-    // ブロック側で呼び出す　自分をひっくり返す関数（表裏入れ替え）
-    public void TurnOverMySelf(Vector2Int position)
-    {
-        //TurnOver時に呼び出される関数、ひっくり返すのはSetIsFrontで良いのでは？
-        if (position != _EnemyLocalPosition)
-            return;
-
-        //ひっくり返す
-        if (_IsFront)
-            _IsFront = false;
-        else
-            _IsFront = true;
-    }
-
-    // ブロック側で呼び出す　自分の位置を入れ替える関数
-    public void SwapMySelf(List<Vector2Int> position)
-    {
-        // ブロックのローカル
-        //Swap時に呼び出される関数、親オブジェクトであるブロックの移動についていくだけ
-        foreach (Vector2Int pos in position)
+        // 毎ターン行動する。レベル２の硬さのオブジェクトをかじる
+        public void Level6()
         {
-            if (pos == _EnemyLocalPosition)
-            {
-                var blockConfig = transform.parent.parent.GetComponent<BlockConfig>();
-                _EnemyLocalPosition = blockConfig.GetBlockLocalPosition();
+
+        }
+
+        // 毎ターン行動する。レベル３の硬さのオブジェクトをかじる
+        public void Level7()
+        {
+
+        }
+
+
+        // ブロック側で呼び出す　自分を回転させる関数
+        public void RotateMySelf(Vector2Int position, float angle)
+        {
+            //Rotate時に呼び出される関数、自分の方向を変えるときにも自分で呼ぶ
+            if (position != _EnemyLocalPosition)
                 return;
-            }
-        }
-    }
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = _DebugColor;
-        Vector3 size = new Vector3(1.0f, 0.01f, 1.0f);
 
-        for (int x = 0; x < 2 * _CheeseSearchRange + 1; ++x)
+            Vector3 direction = new Vector3(_EnemyDirection.x, 0f, _EnemyDirection.y);
+            direction = Quaternion.Euler(0f, angle, 0f) * direction;
+
+            Vector2 tmp = new Vector2(direction.x, direction.z);
+            //四捨五入して代入することでVector2Intにも無理やり代入させる
+            _EnemyDirection = new Vector2Int(Mathf.RoundToInt(tmp.x), Mathf.RoundToInt(tmp.y));
+        }
+
+        // ブロック側で呼び出す　自分をひっくり返す関数（表裏入れ替え）
+        public void TurnOverMySelf(Vector2Int position)
         {
-            for (int z = 0; z < 2 * _CheeseSearchRange + 1; ++z)
+            //TurnOver時に呼び出される関数、ひっくり返すのはSetIsFrontで良いのでは？
+            if (position != _EnemyLocalPosition)
+                return;
+
+            //ひっくり返す
+            if (_IsFront)
+                _IsFront = false;
+            else
+                _IsFront = true;
+        }
+
+        // ブロック側で呼び出す　自分の位置を入れ替える関数
+        public void SwapMySelf(List<Vector2Int> position)
+        {
+            // ブロックのローカル
+            //Swap時に呼び出される関数、親オブジェクトであるブロックの移動についていくだけ
+            foreach (Vector2Int pos in position)
             {
-                Vector2 pos = new Vector2(x - _CheeseSearchRange, z - _CheeseSearchRange);
-                Vector3 position = new Vector3(pos.x, 0.0f, pos.y);
-                Gizmos.DrawCube(transform.position + position, size);
+                if (pos == _EnemyLocalPosition)
+                {
+                    var blockConfig = transform.parent.parent.GetComponent<BlockConfig>();
+                    _EnemyLocalPosition = blockConfig.GetBlockLocalPosition();
+                    return;
+                }
             }
         }
-    }
-    public void SetDestroy()
-    {
-        _IsExist = true;
-        transform.parent = null;
-       _EnemyAnimation.SetBool("Captured", true);      
-    }           
-    // エネミーを削除する処理
-    public void SetIsFront(bool isfront) { _IsFront = isfront; }
-    public void SetStartEnemyTurn(bool enemyturn) { _StartEnemyTurn = enemyturn; }           // エネミーターンに変わったときにターンマネージャーでtrueにしてほしい
-    public void SetLocalPosition(Vector2Int position) { _EnemyLocalPosition = position; }    // 自分のいるブロックの座標を更新する
-    public Vector2Int GetLocalPosition() { return _EnemyLocalPosition; }
-    public void SetCheese(GameObject cheese) { _Cheese = cheese; }
-    public int GetCheeseSearchRange() { return _CheeseSearchRange; }
-}
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = _DebugColor;
+            Vector3 size = new Vector3(1.0f, 0.01f, 1.0f);
 
+            for (int x = 0; x < 2 * _CheeseSearchRange + 1; ++x)
+            {
+                for (int z = 0; z < 2 * _CheeseSearchRange + 1; ++z)
+                {
+                    Vector2 pos = new Vector2(x - _CheeseSearchRange, z - _CheeseSearchRange);
+                    Vector3 position = new Vector3(pos.x, 0.0f, pos.y);
+                    Gizmos.DrawCube(transform.position + position, size);
+                }
+            }
+        }
+        public void SetDestroy()
+        {
+            _IsExist = true;
+            transform.parent = null;
+            _EnemyAnimation.SetBool("Captured", true);
+        }
+        // エネミーを削除する処理
+        public void SetIsFront(bool isfront) { _IsFront = isfront; }
+        public void SetStartEnemyTurn(bool enemyturn) { _StartEnemyTurn = enemyturn; }           // エネミーターンに変わったときにターンマネージャーでtrueにしてほしい
+        public void SetLocalPosition(Vector2Int position) { _EnemyLocalPosition = position; }    // 自分のいるブロックの座標を更新する
+        public Vector2Int GetLocalPosition() { return _EnemyLocalPosition; }
+        public void SetCheese(GameObject cheese) { _Cheese = cheese; }
+        public int GetCheeseSearchRange() { return _CheeseSearchRange; }
+    }
 //class Level1 :  EnemyControl
 //{
 //    public override void ChangeState()
