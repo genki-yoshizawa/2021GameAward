@@ -298,7 +298,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3222256064951453970, guid: a367f7769d845e24bb18fcaa1cec54e7, type: 3}
       propertyPath: _SceneName
-      value: 
+      value: SampleStage
       objectReference: {fileID: 0}
     - target: {fileID: 3222256064951453970, guid: a367f7769d845e24bb18fcaa1cec54e7, type: 3}
       propertyPath: _ClearPercentage

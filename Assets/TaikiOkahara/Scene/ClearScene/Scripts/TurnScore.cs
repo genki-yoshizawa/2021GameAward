@@ -10,6 +10,7 @@ public class TurnScore : MonoBehaviour
     [SerializeField]
     private Image _ScoreImage1, _ScoreImage2;//ˆêŒ…–ÚA“ñŒ…–Ú
 
+
     public void SetScore(int score)
     {
         _ScoreImage1.enabled = true;

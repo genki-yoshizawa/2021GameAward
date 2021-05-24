@@ -39,6 +39,9 @@ public class PauseManager : MonoBehaviour
     Button _StartSetButton;//ポーズ画面に入ったとき選択中のボタン
 
 
+
+    
+
     private enum FadeType
     {
         NONE,
@@ -67,8 +70,8 @@ public class PauseManager : MonoBehaviour
 
         FadeIn();
         FadeOut();
-          
 
+        GameObject obj;
         if (Input.GetKeyDown(KeyCode.Escape) ||(Input.GetKeyDown("joystick button 2")))
         {
             switch(_FadeType)
@@ -76,11 +79,17 @@ public class PauseManager : MonoBehaviour
                 case FadeType.NONE:
                     _FadeType = FadeType.IN;
                     PoseInAnimation();
+
+                    obj = GameObject.FindGameObjectWithTag("GameManager");
+                    obj.GetComponent<GameManagerScript>().SetPause();
                     break;
 
                 case FadeType.DO:
                     _FadeType = FadeType.OUT;
                     PoseOutAnimation();
+
+                    obj = GameObject.FindGameObjectWithTag("GameManager");
+                    obj.GetComponent<GameManagerScript>().SetUnPause();
                     break;
 
                 default:
