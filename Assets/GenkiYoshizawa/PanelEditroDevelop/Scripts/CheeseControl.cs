@@ -54,7 +54,7 @@ public class CheeseControl : GimmicControl
         bool front = transform.parent == transform.parent.parent.GetChild(0);
 
         // エネミーとチーズのお互いの半径の和が絶対距離より小さければヒット
-        if ((Mathf.Abs(enemyDirection.x) > serchRange || Mathf.Abs(enemyDirection.y) > serchRange) && isFront == front)
+        if ((Mathf.Abs(enemyDirection.x) > serchRange || Mathf.Abs(enemyDirection.y) > serchRange) || isFront != front)
             return false;
 
         return true;
