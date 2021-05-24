@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 
@@ -10,17 +11,16 @@ public class Stage : MonoBehaviour
     string _SceneName;
 
     [SerializeField]
-    private float _Range;
-
-    [SerializeField]
-    private float _Speed;
-
-    [SerializeField]
     private int _ClearPercentage;
 
-    private float _StartPos;
+    [SerializeField]
+    private Image _StageName;
 
+    private float _Range = 0.1f;
+    private float _StartPos;
     private float _StartY;
+    private float _Speed = 1.0f;
+
 
     void Start()
     {

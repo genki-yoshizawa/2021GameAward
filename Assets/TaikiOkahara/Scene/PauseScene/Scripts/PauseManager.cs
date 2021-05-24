@@ -52,32 +52,24 @@ public class PauseManager : MonoBehaviour
     void Start()
     {
         _FadeType = FadeType.NONE;
-
-        _StartSetButton = GameObject.Find("Canvas/PauseOut").GetComponent<Button>();
-        _StartSetButton.Select();
+        // 画面サイズに変更する
+        var targetSize = new Vector2(Screen.width, Screen.height);
+        _Image.GetComponent<RectTransform>().sizeDelta = targetSize;
     }
 
     void Update()
     {
-        // 画面サイズに変更する
-        var targetSize = new Vector2(Screen.width, Screen.height);
-        _Image.GetComponent<RectTransform>().sizeDelta = targetSize;
-
-
- 
-
         Pose();
-
     }
 
     public void Pose()
     {
-        //if(_FadeType == FadeType.DO)
-        //    //Pause(true);
-        //else
-        //    //Pause(false);
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        FadeIn();
+        FadeOut();
+          
+
+        if (Input.GetKeyDown(KeyCode.Escape) ||(Input.GetKeyDown("joystick button 2")))
         {
             switch(_FadeType)
             {
@@ -96,10 +88,6 @@ public class PauseManager : MonoBehaviour
             }
 
         }
-          
-
-        FadeIn();
-        FadeOut();
     }
 
     void FadeIn()
@@ -111,11 +99,15 @@ public class PauseManager : MonoBehaviour
         if(_FadeCount <= _FadeInTime)
         {
             _Image.GetComponent<Image>().color = new Color(0, 0, 0, _Power * (_FadeCount / _FadeInTime));
+
             return;
         }
 
         _FadeCount = 0;
         _FadeType = FadeType.DO;
+       
+        _StartSetButton.Select();
+
         return;
     }
 
@@ -147,7 +139,6 @@ public class PauseManager : MonoBehaviour
         _DetailUIAnimator.SetBool("Pose", true);
         _StageNumberUIAnimator.SetBool("Pose", true);
         _UIAnimator.SetBool("Pose", true);
-
     }
 
     void PoseOutAnimation()
@@ -170,7 +161,8 @@ public class PauseManager : MonoBehaviour
 
     public void OnClickRestart()
     {
-       
+        string restartStageName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(restartStageName);
     }
 
     public void OnClickMenu()
