@@ -66,7 +66,7 @@ public class CheeseControl : GimmicControl
         {
             EnemyControl enemyScript = enemy.GetComponent<EnemyControl>();
 
-            if (HitEnemy(enemyScript.GetLocalPosition(), enemyScript.GetCheeseSearchRange()), enemyScript.GetIsFront())
+            if (HitEnemy(enemyScript.GetLocalPosition(), enemyScript.GetCheeseSearchRange(), enemyScript.GetIsFront()))
             {
                 enemyScript.SetCheese(gameObject);
             }
