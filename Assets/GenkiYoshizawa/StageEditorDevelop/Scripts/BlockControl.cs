@@ -63,7 +63,7 @@ public class BlockControl : MonoBehaviour
                 _PassedTime += time;
 
             float angle = _RotateAngle * (time / _RotateAnimTime);
-            this.transform.Rotate(Vector3.up, angle);
+            this.transform.Rotate(Vector3.up * angle, Space.World);
         }
 
         if (_isTurnOverAnim)
@@ -79,7 +79,7 @@ public class BlockControl : MonoBehaviour
                 _PassedTime += time;
 
             float angle = 180.0f * (time / _TurnOverAnimTime);
-            this.transform.Rotate(_TurnOverAxis, angle);
+            this.transform.Rotate(_TurnOverAxis * angle, Space.World);
         }
 
         if (_isSwapAnim)

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
@@ -10,6 +11,9 @@ public class ClearScreen : MonoBehaviour
     Gauss _Gauss;
 
     [SerializeField]
+    GameObject _Pause = null;
+
+    [SerializeField]
     private Animator _StarAnimator;
 
     [SerializeField]
@@ -17,6 +21,12 @@ public class ClearScreen : MonoBehaviour
 
     [SerializeField]
     private Animator _CommentAnimator;
+
+    [SerializeField]
+    private GameObject _TurnNumber;
+
+    [SerializeField]
+    private Animator _StarParticle;
 
     bool _PauseFlag = false;
     float _Intencity = 0;
@@ -33,20 +43,28 @@ public class ClearScreen : MonoBehaviour
     float _CommentStartCount = 0;
     float _CommentStartTime = 4.0f;
 
+    float _TurnNumberStartCount = 0;
+    float _TurnNumberStartTime = 1.0f;
+
+    [SerializeField]
+    float _ChangeMenuSceneCount = 0;
+    float _ChangeMenuSceneTime = 5.0f;
+
     void Start()
     {
-
-        //DisplayClearScreen();
+        DisplayClearScreen();
     }
 
     void Update()
     {
+       
+
         GaussFilter();
         StarAnim();
         ClearScreenAnim();
         CommentAnim();
-
-
+        TurnNumber();
+        ChangeMenuScene();
     }
 
     void StarAnim()
@@ -59,6 +77,7 @@ public class ClearScreen : MonoBehaviour
             return;
         }
 
+        //スコアに応じてアニメーションを分岐
         _StarAnimator.SetTrigger("OneStar");
 
         return;
@@ -91,7 +110,8 @@ public class ClearScreen : MonoBehaviour
         }
 
         _ClearScreenAnimator.SetBool("Clear", true);
-
+        _StarParticle.SetBool("StarParticle", true);
+        
         return;
     }
 
@@ -106,13 +126,45 @@ public class ClearScreen : MonoBehaviour
         }
 
         _CommentAnimator.SetBool("Display", true);
+        return;
+    }
+
+    void TurnNumber()
+    {
+        if (!_PauseFlag) return;
+
+        if (_TurnNumberStartCount < _TurnNumberStartTime)
+        {
+            _TurnNumberStartCount += Time.deltaTime;
+            return;
+        }
+
+        _TurnNumber.GetComponent<ClearTransition>().BeginTransition();
+
 
         return;
     }
 
+    void ChangeMenuScene()
+    {
+        if (!_PauseFlag) return;
+
+        if(_ChangeMenuSceneCount < _ChangeMenuSceneTime)
+        {
+            _ChangeMenuSceneCount += Time.deltaTime;
+            return;
+        }
+
+
+        if(Input.GetKeyDown("joystick button 0"))
+            SceneManager.LoadScene("MenuScene");
+
+    }
 
     public void DisplayClearScreen()
     {
         _PauseFlag = true;
+        if(_Pause != null)
+            _Pause.SetActive(false);
     }
 }
