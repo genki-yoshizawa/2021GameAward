@@ -65,19 +65,6 @@ public class CameraWork : MonoBehaviour
             _TurnOverTransform.Add(_TurnOverPoint[i].transform.transform);
         }
         
-
-        // 表裏フラグ初期化(初期値は表)
-        _IsFront = true;
-        //_IsFront = false;     // 裏面テスト用
-        _IsTopView = false;
-
-
-
-        /// テスト用
-
-        this.TurnOverCameraWork();
-        /// テスト用
-
     }
 
     // Update is called once per frame
