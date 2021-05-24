@@ -75,11 +75,13 @@ public class PauseManager : MonoBehaviour
             {
                 case FadeType.NONE:
                     _FadeType = FadeType.IN;
+
                     PoseInAnimation();
                     break;
 
                 case FadeType.DO:
                     _FadeType = FadeType.OUT;
+                    
                     PoseOutAnimation();
                     break;
 
