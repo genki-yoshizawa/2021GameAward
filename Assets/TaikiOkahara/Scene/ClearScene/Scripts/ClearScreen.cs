@@ -26,6 +26,9 @@ public class ClearScreen : MonoBehaviour
     private GameObject _TurnNumber;
 
     [SerializeField]
+    private GameObject _TurnScoreNumber;
+
+    [SerializeField]
     private Animator _StarParticle;
 
     bool _PauseFlag = false;
@@ -52,7 +55,7 @@ public class ClearScreen : MonoBehaviour
 
     void Start()
     {
-        DisplayClearScreen();
+        //DisplayClearScreen();
     }
 
     void Update()
@@ -163,6 +166,9 @@ public class ClearScreen : MonoBehaviour
 
     public void DisplayClearScreen()
     {
+        int score = 0;
+        _TurnScoreNumber.GetComponent<TurnScore>().SetScore(score);
+
         _PauseFlag = true;
         if(_Pause != null)
             _Pause.SetActive(false);
