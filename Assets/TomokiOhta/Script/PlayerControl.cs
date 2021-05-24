@@ -67,6 +67,9 @@ public class PlayerControl : MonoBehaviour
     //行動コマンドの種類数
     private readonly int _AnimMax = 4;
 
+    //ターンマネージャー
+    private TurnManager _TurnManager;
+
     public void Start()
     {
         //初手FindWithTag
@@ -88,7 +91,8 @@ public class PlayerControl : MonoBehaviour
         _PassedTime = 0.0f;
 
         _CorsorStartPosition = _FukidasiObj.transform.GetChild(4).localPosition;
-        //_CorsorStartPosition = new Vector3(_CorsorStartPosition.x, _CorsorStartPosition.y - 80.0f, _CorsorStartPosition.z);
+
+        _TurnManager = GameObject.FindGameObjectWithTag("TurnManager").GetComponent<TurnManager>();
     }
 
     public void Update()
@@ -113,7 +117,7 @@ public class PlayerControl : MonoBehaviour
         if(_Animator.GetBool("Action"))
         {
             float time = Time.deltaTime;
-            if ((_PassedTime += time) > _ActionTime)
+            if ((_PassedTime += time) > 1.0f)
             {
                 _Animator.SetBool("Action", false);
                 _PassedTime = 0.0f;
@@ -124,7 +128,7 @@ public class PlayerControl : MonoBehaviour
         if (_Animator.GetBool("Capture"))
         {
             float time = Time.deltaTime;
-            if ((_PassedTime += time) > _ActionTime)
+            if ((_PassedTime += time) > 1.0f)
             {
                 _Animator.SetBool("Capture", false);
                 _PassedTime = 0.0f;
@@ -137,7 +141,7 @@ public class PlayerControl : MonoBehaviour
             float time = Time.deltaTime;
             if ((_PassedTime += time) > _WalkTime)
             {
-                _PassedTime = _WalkTime;
+                //_PassedTime = _WalkTime;
 
                 _Animator.SetBool("Walk", false);
             }
@@ -387,9 +391,8 @@ public class PlayerControl : MonoBehaviour
                 //敵がいなくなったことを確認したらゲームを終わらせに行く
                 if (remainEnemy.Count <= 0)
                 {
-                    Debug.Log("敵全員倒しました");
                     var clearScreenScript = _ClearScreen.GetComponent<ClearScreen>();
-                    clearScreenScript.DisplayClearScreen();
+                    clearScreenScript.DisplayClearScreen(_TurnManager.GetTurnCount());
                 }
                 turnEnd = true;
             }
