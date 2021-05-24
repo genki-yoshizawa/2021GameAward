@@ -21,7 +21,10 @@ public class PlayerControl : MonoBehaviour
     [Header("行動終了後の待機時間")]
     [SerializeField] private float _ActionTime = 0.01f;
 
-    [Header("クリア画面"), SerializeField] private GameObject _ClearScreen; 
+    [Header("クリア画面"), SerializeField] private GameObject _ClearScreen;
+
+    [Header("向き変更時に歩行アニメーションを再生するか"), SerializeField] private bool IsWalkAnim;
+    private bool NowWalkAnim = false;
 
     //アニメーションスタートからの経過時間
     private float _PassedTime;
@@ -61,7 +64,7 @@ public class PlayerControl : MonoBehaviour
     //コマンド選択時に上から何番目にいるか
     private int _CommandSelect = 3;
 
-    //
+    //行動コマンドの種類数
     private readonly int _AnimMax = 4;
 
     public void Start()
@@ -91,7 +94,7 @@ public class PlayerControl : MonoBehaviour
     public void Update()
     {
         // 歩くアニメーション
-        if (_Animator.GetBool("Walk"))
+        if (_Animator.GetBool("Walk") && NowWalkAnim == false)
         {
             float time = Time.deltaTime;
             if ((_PassedTime += time) > _WalkTime)
@@ -127,6 +130,27 @@ public class PlayerControl : MonoBehaviour
                 _PassedTime = 0.0f;
             }
         }
+
+        //向き変更
+        if (_Animator.GetBool("Walk") && NowWalkAnim == true)
+        {
+            float time = Time.deltaTime;
+            if ((_PassedTime += time) > _WalkTime)
+            {
+                _PassedTime = _WalkTime;
+
+                _Animator.SetBool("Walk", false);
+            }
+
+            transform.Rotate(0.0f, 90.0f * 0.01f, 0.0f);
+
+            if (!_Animator.GetBool("Walk"))
+            {
+                _PassedTime = 0.0f;
+                NowWalkAnim = false;
+            }
+        }
+
 
         //箱コンこれで動くと思う
         //if (Input.GetKeyDown("joystick button 1"))  //B
@@ -182,7 +206,6 @@ public class PlayerControl : MonoBehaviour
         transform.parent = block.transform.GetChild(0).transform;
 
         //移動
-        //transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
         _LocalPosition += _Direction;
     }
 
@@ -290,16 +313,33 @@ public class PlayerControl : MonoBehaviour
         //きょろきょろしすぎるとコマンドが消えたまま出てこなくなるので注意
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
+            //向き変更時に歩行アニメーション再生
+            if (IsWalkAnim)
+            {
+                _Animator.SetBool("Walk", true);
+                NowWalkAnim = true;
+            }
+            else
+                transform.Rotate(0.0f, 90.0f, 0.0f);
+
             RotateMySelf(_LocalPosition, _IsFront ? 90.0f : -90.0f);
-            transform.Rotate(0.0f, 90.0f, 0.0f);
+            
             SetFrontBlock();
 
             _FukidasiScript.ResetAnimPattern();
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
+            //向き変更時に歩行アニメーション再生
+            if (IsWalkAnim)
+            {
+                _Animator.SetBool("Walk", true);
+                NowWalkAnim = true;
+            }
+            else
+                transform.Rotate(0.0f, -90.0f, 0.0f);
+
             RotateMySelf(_LocalPosition, _IsFront ? -90.0f : 90.0f);
-            transform.Rotate(0.0f, -90.0f, 0.0f);
             SetFrontBlock();
 
             _FukidasiScript.ResetAnimPattern();
@@ -463,7 +503,7 @@ public class PlayerControl : MonoBehaviour
         _Animator.SetBool("GameOver", flag);
     }
 
-    GameObject CheckEnemy(Vector2Int position)
+    private GameObject CheckEnemy(Vector2Int position)
     {
         var enemys = _GameManagerScript.GetEnemys();
 
@@ -477,6 +517,8 @@ public class PlayerControl : MonoBehaviour
 
         return null;
     }
+
+    public Vector3 GetTargetPosition() { return _WalkTargetPosition; }
 
 }
 

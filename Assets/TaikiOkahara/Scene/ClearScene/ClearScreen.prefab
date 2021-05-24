@@ -979,7 +979,9 @@ MonoBehaviour:
   _ClearScreenAnimator: {fileID: 1759198751765872088}
   _CommentAnimator: {fileID: 1759198751337076926}
   _TurnNumber: {fileID: 1759198751190701063}
+  _TurnScoreNumber: {fileID: 1759198752558619509}
   _StarParticle: {fileID: 1759198752125864069}
+  _ChangeMenuSceneCount: 0
 --- !u!95 &1759198751765872088
 Animator:
   serializedVersion: 3
