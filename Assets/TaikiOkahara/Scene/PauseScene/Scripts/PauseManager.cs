@@ -35,6 +35,9 @@ public class PauseManager : MonoBehaviour
     [SerializeField]
     private Animator _UIAnimator;
 
+    [SerializeField]
+    Button _StartSetButton;//ポーズ画面に入ったとき選択中のボタン
+
 
     private enum FadeType
     {
@@ -49,24 +52,24 @@ public class PauseManager : MonoBehaviour
     void Start()
     {
         _FadeType = FadeType.NONE;
+        // 画面サイズに変更する
+        var targetSize = new Vector2(Screen.width, Screen.height);
+        _Image.GetComponent<RectTransform>().sizeDelta = targetSize;
     }
 
     void Update()
     {
-        // 画面サイズに変更する
-        var targetSize = new Vector2(Screen.width, Screen.height);
-        _Image.GetComponent<RectTransform>().sizeDelta = targetSize;
-
-
- 
-
         Pose();
-
     }
 
     public void Pose()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+
+        FadeIn();
+        FadeOut();
+          
+
+        if (Input.GetKeyDown(KeyCode.Escape) ||(Input.GetKeyDown("joystick button 2")))
         {
             switch(_FadeType)
             {
@@ -85,17 +88,10 @@ public class PauseManager : MonoBehaviour
             }
 
         }
-          
-
-        FadeIn();
-        FadeOut();
     }
 
     void FadeIn()
     {
-
-
-
         if (_FadeType != FadeType.IN) return;
 
         _FadeCount += Time.deltaTime;
@@ -103,11 +99,15 @@ public class PauseManager : MonoBehaviour
         if(_FadeCount <= _FadeInTime)
         {
             _Image.GetComponent<Image>().color = new Color(0, 0, 0, _Power * (_FadeCount / _FadeInTime));
+
             return;
         }
 
         _FadeCount = 0;
         _FadeType = FadeType.DO;
+       
+        _StartSetButton.Select();
+
         return;
     }
 
@@ -132,13 +132,13 @@ public class PauseManager : MonoBehaviour
         return;
     }
 
+
     void PoseInAnimation()
     {
         _StageModelAnimator.SetBool("Pose", true);
         _DetailUIAnimator.SetBool("Pose", true);
         _StageNumberUIAnimator.SetBool("Pose", true);
         _UIAnimator.SetBool("Pose", true);
-
     }
 
     void PoseOutAnimation()
@@ -161,7 +161,8 @@ public class PauseManager : MonoBehaviour
 
     public void OnClickRestart()
     {
-       
+        string restartStageName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(restartStageName);
     }
 
     public void OnClickMenu()

@@ -17,6 +17,13 @@ public class DetailUI : MonoBehaviour
 
     void Update()
     {
+
+        float dph = Input.GetAxis("D Pad Horizontal");
+
+        if (dph != 0)
+            AnimationReset();
+
+
         _StageClearPercentage = StageManager.Instance.GetChoiceStageObject().GetComponent<Stage>().GetClearParsentage();
 
         _ClearTurn.GetComponent<Text>().text = _StageClearPercentage.ToString();

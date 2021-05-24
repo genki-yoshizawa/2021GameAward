@@ -53,8 +53,8 @@ public class TurnManager : MonoBehaviour
     {
         if (_PlayerTurn)
         {
-            if(!_PlayerScript.GetIsExist())
-
+            if (!_PlayerScript.GetIsExist())
+                return;
 
             //ƒ^[ƒ“”‚ª­‚È‚­‚È‚é‚Æ”æ‚ê‚é
             if (_TurnLimit < _TurnTiredLimit)

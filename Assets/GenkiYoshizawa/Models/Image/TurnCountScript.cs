@@ -35,7 +35,8 @@ public class TurnCountScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _MyImageObject.Add(gameObject);
+        _MyImageObject = new List<GameObject>();
+        _MyImageObject.Add(this.gameObject);
 
         _TurnManagerScript = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerScript>().GetTurnManager().GetComponent<TurnManager>();
         // TurnManagerに最大ターン数設定できるようにしてください
@@ -68,7 +69,7 @@ public class TurnCountScript : MonoBehaviour
         }
         // テクスチャ設定
         for (int i = 0; i < number.Count; ++i)
-            _MyImageObject[i].GetComponent<Image>().sprite = _NumberSprite[number[i]];
+            //_MyImageObject[i].GetComponent<Image>().sprite = _NumberSprite[number[i]];
 
         _PreDigit = number.Count;
         _StartLocalScale = _MyImageObject[0].GetComponent<RectTransform>().localScale;
