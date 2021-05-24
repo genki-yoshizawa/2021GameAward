@@ -168,6 +168,8 @@ public class ClearScreen : MonoBehaviour
     {
         _TurnScoreNumber.GetComponent<TurnScore>().SetScore(score);
 
+        GameObject obj = GameObject.FindGameObjectWithTag("Manager");
+        obj.GetComponent<GameManagerScript>().SetPause();
         _PauseFlag = true;
         if(_Pause != null)
             _Pause.SetActive(false);
