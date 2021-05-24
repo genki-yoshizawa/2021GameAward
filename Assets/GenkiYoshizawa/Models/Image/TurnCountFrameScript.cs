@@ -13,6 +13,7 @@ public class TurnCountFrameScript : MonoBehaviour
 
     private TurnManager _TurnManagerScript = null;
 
+    private int _TurnLimit = 0;
     private int _CurTurnCount = 0;
 
     private float _PassedTime = 0.0f;
@@ -23,13 +24,14 @@ public class TurnCountFrameScript : MonoBehaviour
         _TurnManagerScript = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerScript>().GetTurnManager().GetComponent<TurnManager>();
 
         List<int> number = new List<int>();
-        int turnLimit = _TurnManagerScript.GetTurnLimit();
+        int turnLimit = _TurnLimit = _TurnManagerScript.GetTurnLimit();
         int digit = turnLimit;
-        while (turnLimit > 0)
+        while (digit > 0)
         {
             turnLimit = digit % 10;
             digit = digit / 10;
             number.Add(turnLimit);
+            
         }
         transform.GetChild(0).GetComponent<Image>().sprite = _NumberSprite[number[0]];
         transform.GetChild(1).GetComponent<Image>().sprite = _NumberSprite[number[1]];
@@ -39,6 +41,26 @@ public class TurnCountFrameScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        int preTurnCount = _TurnManagerScript.GetTurnCount();
+
+        // ƒ^[ƒ“‚É•Ï‰»‚ª‚È‚¯‚ê‚Î‚È‚É‚à‚µ‚È‚¢
+        if (_CurTurnCount == preTurnCount)
+            return;
+
+        // •\¦‚·‚é”š
+        List<int> number = new List<int>();
+        int displayNumber = _TurnLimit - preTurnCount;
+        int digit = displayNumber;
+        while (digit > 0)
+        {
+            displayNumber = digit % 10;
+            digit = digit / 10;
+            number.Add(displayNumber);
+
+        }
+        transform.GetChild(0).GetComponent<Image>().sprite = _NumberSprite[number[0]];
+        transform.GetChild(1).GetComponent<Image>().sprite = _NumberSprite[number[1]];
+
+        _CurTurnCount = preTurnCount;
     }
 }
