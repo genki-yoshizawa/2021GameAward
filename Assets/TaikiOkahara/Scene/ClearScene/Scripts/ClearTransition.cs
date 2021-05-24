@@ -37,7 +37,6 @@ public class ClearTransition : MonoBehaviour
             return;
         }
 
-        _ScoreText.GetComponent<TurnScore>().SetScore(5);
         _ScoreText.GetComponent<Animator>().SetBool("Display", true);
         _TransitionIn.SetFloat("_Alpha", 1.5f);
         _Transition = false;

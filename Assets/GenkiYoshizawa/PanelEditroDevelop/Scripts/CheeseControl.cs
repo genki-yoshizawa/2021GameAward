@@ -46,13 +46,15 @@ public class CheeseControl : GimmicControl
 
     }
 
-    private bool HitEnemy(Vector2Int enemyPos, int enemyRange)
+    private bool HitEnemy(Vector2Int enemyPos, int enemyRange, bool isFront)
     {
         Vector2Int enemyDirection = enemyPos - transform.GetComponent<CheeseConfig>().GetCheeseLocalPosition();
         int serchRange = transform.GetComponent<CheeseConfig>().GetRange() + enemyRange;
 
+        bool front = transform.parent == transform.parent.parent.GetChild(0);
+
         // エネミーとチーズのお互いの半径の和が絶対距離より小さければヒット
-        if (Mathf.Abs(enemyDirection.x) > serchRange || Mathf.Abs(enemyDirection.y) > serchRange)
+        if ((Mathf.Abs(enemyDirection.x) > serchRange || Mathf.Abs(enemyDirection.y) > serchRange) || isFront != front)
             return false;
 
         return true;
@@ -64,7 +66,7 @@ public class CheeseControl : GimmicControl
         {
             EnemyControl enemyScript = enemy.GetComponent<EnemyControl>();
 
-            if (HitEnemy(enemyScript.GetLocalPosition(), enemyScript.GetCheeseSearchRange()))
+            if (HitEnemy(enemyScript.GetLocalPosition(), enemyScript.GetCheeseSearchRange(), enemyScript.GetIsFront()))
             {
                 enemyScript.SetCheese(gameObject);
             }

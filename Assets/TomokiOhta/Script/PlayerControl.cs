@@ -67,6 +67,9 @@ public class PlayerControl : MonoBehaviour
     //行動コマンドの種類数
     private readonly int _AnimMax = 4;
 
+    //ターンマネージャー
+    private TurnManager _TurnManager;
+
     public void Start()
     {
         //初手FindWithTag
@@ -88,7 +91,8 @@ public class PlayerControl : MonoBehaviour
         _PassedTime = 0.0f;
 
         _CorsorStartPosition = _FukidasiObj.transform.GetChild(4).localPosition;
-        //_CorsorStartPosition = new Vector3(_CorsorStartPosition.x, _CorsorStartPosition.y - 80.0f, _CorsorStartPosition.z);
+
+        _TurnManager = GameObject.FindGameObjectWithTag("TurnManager").GetComponent<TurnManager>();
     }
 
     public void Update()
@@ -109,27 +113,6 @@ public class PlayerControl : MonoBehaviour
                 _PassedTime = 0.0f;
         }
 
-        //アクションアニメーション
-        if(_Animator.GetBool("Action"))
-        {
-            float time = Time.deltaTime;
-            if ((_PassedTime += time) > _ActionTime)
-            {
-                _Animator.SetBool("Action", false);
-                _PassedTime = 0.0f;
-            }
-        }
-
-        //捕まえるアニメーション
-        if (_Animator.GetBool("Capture"))
-        {
-            float time = Time.deltaTime;
-            if ((_PassedTime += time) > _ActionTime)
-            {
-                _Animator.SetBool("Capture", false);
-                _PassedTime = 0.0f;
-            }
-        }
 
         //向き変更
         if (_Animator.GetBool("Walk") && NowWalkAnim == true)
@@ -137,7 +120,7 @@ public class PlayerControl : MonoBehaviour
             float time = Time.deltaTime;
             if ((_PassedTime += time) > _WalkTime)
             {
-                _PassedTime = _WalkTime;
+                //_PassedTime = _WalkTime;
 
                 _Animator.SetBool("Walk", false);
             }
@@ -150,28 +133,6 @@ public class PlayerControl : MonoBehaviour
                 NowWalkAnim = false;
             }
         }
-
-
-        //箱コンこれで動くと思う
-        //if (Input.GetKeyDown("joystick button 1"))  //B
-        //{
-
-        //}
-
-        //if (Input.GetKeyDown("joystick button 0"))  //A
-        //{
-
-        //}
-
-        //if (Input.GetKeyDown("joystick button 2"))  //X
-        //{
-
-        //}
-
-        //if (Input.GetKeyDown("joystick button 3"))  //Y
-        //{
-
-        //}
 
     }
 
@@ -186,8 +147,6 @@ public class PlayerControl : MonoBehaviour
 
         if (_Animator.GetBool("Tired"))
             SetTired(false);
-        if (_Animator.GetBool("GameOver"))
-            SetDead(false);
     }
 
     private void Move(Vector2Int direction)
@@ -267,7 +226,7 @@ public class PlayerControl : MonoBehaviour
     private void PlayerRotate(GameObject block)
     {
         var blockScript = block.GetComponent<BlockControl>();
-        _Animator.SetBool("Action", true);
+        _Animator.SetTrigger("Action");
         blockScript.Rotate(_IsFront, 90);
         SetFrontBlock();
     }
@@ -275,7 +234,7 @@ public class PlayerControl : MonoBehaviour
     private void PlayerSwap(GameObject block)
     {
         var blockScript = block.GetComponent<BlockControl>();
-        _Animator.SetBool("Action", true);
+        _Animator.SetTrigger("Action");
         blockScript.Swap(_IsFront);
         SetFrontBlock();
     }
@@ -300,9 +259,15 @@ public class PlayerControl : MonoBehaviour
         if (_FukidasiScript.GetAnimPattern() == -1)
         {
             _FukidasiScript.SetAnimPattern(_CanActionList.Count);
-            _FukidasiScript.SetActPattern(_CanActionList);
+            if (CheckEnemy(_LocalPosition + _Direction) != null)
+            {
+                //前に敵がいたのでそれ用の画像を出す
+                _FukidasiScript.SetActPattern(_CanActionList, true);
+            }
+            else
+                _FukidasiScript.SetActPattern(_CanActionList);
 
-
+            //カーソルを一番上に設定
             _CommandSelect = _CanActionList.Count - 1;
             var icon = _FukidasiObj.transform.GetChild(4).GetComponent<RectTransform>();
             icon.anchoredPosition = 
@@ -357,7 +322,7 @@ public class PlayerControl : MonoBehaviour
                 icon.anchoredPosition = new Vector3(icon.localPosition.x, icon.localPosition.y + 20.0f, icon.localPosition.z);
 
                 //文字のsprite変更
-                _FukidasiScript.SetActPattern(_CanActionList, _CommandSelect + 1);
+                _FukidasiScript.SetActPattern(_CanActionList, false, _CommandSelect + 1);
             }
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
@@ -371,36 +336,33 @@ public class PlayerControl : MonoBehaviour
                 icon.anchoredPosition = new Vector3(icon.localPosition.x, icon.localPosition.y - 20.0f, icon.localPosition.z);
 
                 //文字のsprite変更
-                _FukidasiScript.SetActPattern(_CanActionList, _CommandSelect + 1);
-            }
-        }
-
-        //デバッグ用 敵がいたら捕まえる
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            var enemy = CheckEnemy(_LocalPosition + _Direction);
-            if (enemy != null)
-            {
-                _Animator.SetBool("Capture", true);
-                _GameManagerScript.KillEnemy(enemy);
-                var remainEnemy = _GameManagerScript.GetEnemys();
-                //敵がいなくなったことを確認したらゲームを終わらせに行く
-                if (remainEnemy.Count <= 0)
-                {
-                    Debug.Log("敵全員倒しました");
-                    var clearScreenScript = _ClearScreen.GetComponent<ClearScreen>();
-                    clearScreenScript.DisplayClearScreen();
-                }
-                turnEnd = true;
+                _FukidasiScript.SetActPattern(_CanActionList, false, _CommandSelect + 1);
             }
         }
 
         //Enterキーで行動 ターンを進める
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            CommandAction(_CommandSelect);
+            var enemy = CheckEnemy(_LocalPosition + _Direction);
+            if (enemy != null)
+            {
+                _Animator.SetTrigger("Capture");
+                _GameManagerScript.KillEnemy(enemy);
+                var remainEnemy = _GameManagerScript.GetEnemys();
 
-            _CommandSelect = 3;
+                //敵がいなくなったことを確認したらゲームを終わらせに行く
+                if (remainEnemy.Count <= 0)
+                {
+                    var clearScreenScript = _ClearScreen.GetComponent<ClearScreen>();
+                    clearScreenScript.DisplayClearScreen(_TurnManager.GetTurnCount());
+                }
+            }
+            else
+            {
+                CommandAction(_CommandSelect);
+            }
+
+            //_CommandSelect = 3;   存在意義が分からないけど一応残しておく
             _FukidasiScript.ResetAnimPattern();
             turnEnd = true;
         }
@@ -498,13 +460,24 @@ public class PlayerControl : MonoBehaviour
         _Animator.SetBool("Tired", flag);
     }
 
-    public void SetDead(bool flag)
+    public void SetDead()
     {
-        _Animator.SetBool("GameOver", flag);
+        _Animator.SetTrigger("GameOver");
     }
 
     private GameObject CheckEnemy(Vector2Int position)
     {
+        //前に壁が存在しているかを調べる
+        if(_FrontBlock == null)
+            return null;
+
+        var frontBlockScript = _FrontBlock.GetComponent<BlockConfig>();
+
+        bool noWall = frontBlockScript.CheckPanelMove(_IsFront, _LocalPosition, _Direction);
+        if (!noWall)
+            return null;
+
+        //正面にenemyがいるかを調べる
         var enemys = _GameManagerScript.GetEnemys();
 
         EnemyControl enemyScript;
