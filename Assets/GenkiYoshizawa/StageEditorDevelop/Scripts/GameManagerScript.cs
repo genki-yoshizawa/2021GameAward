@@ -129,8 +129,12 @@ public class GameManagerScript : MonoBehaviour
     }
 
     public void SetPause()
-    { }
+    {
+        _GameUI.SetActive(false);
+    }
 
     public void SetUnPause()
-    { }
+    {
+        _GameUI.SetActive(true);
+    }
 }
