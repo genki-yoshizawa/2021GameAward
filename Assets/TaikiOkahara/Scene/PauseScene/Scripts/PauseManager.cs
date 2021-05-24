@@ -80,7 +80,7 @@ public class PauseManager : MonoBehaviour
                     _FadeType = FadeType.IN;
                     PoseInAnimation();
 
-                    obj = GameObject.FindGameObjectWithTag("GameManager");
+                    obj = GameObject.FindGameObjectWithTag("Manager");
                     obj.GetComponent<GameManagerScript>().SetPause();
                     break;
 
@@ -88,7 +88,7 @@ public class PauseManager : MonoBehaviour
                     _FadeType = FadeType.OUT;
                     PoseOutAnimation();
 
-                    obj = GameObject.FindGameObjectWithTag("GameManager");
+                    obj = GameObject.FindGameObjectWithTag("Manager");
                     obj.GetComponent<GameManagerScript>().SetUnPause();
                     break;
 
