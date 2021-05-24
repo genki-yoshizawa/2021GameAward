@@ -49,6 +49,15 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
 
     void Update()
     {
+        float dph = Input.GetAxis("D Pad Horizontal");
+
+        if (dph > 0)
+            InputRightButton();
+        else if (dph < 0)
+            InputLeftButton();
+        else if (Input.GetKeyDown("joystick button 0") && !_Move)
+            GameStart();
+
 
         foreach(Transform child in transform)
         {

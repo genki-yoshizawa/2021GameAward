@@ -5,7 +5,7 @@ Shader "Custom/AlphaGradation"
 		_MainTex("Sprite Texture", 2D) = "white" {}
 		//_FadeTex("Fade Texture", 2D) = "white" {}
 		//_Color("Tint", Color) = (1,1,1,1)
-		_Alpha("Alpha",Range(0,1)) = 0
+		_Alpha("Alpha",Range(0,1.5)) = 0.0
 	}
 
 		SubShader
@@ -72,7 +72,18 @@ Shader "Custom/AlphaGradation"
 				fixed4 color = tex2D(_MainTex, IN.texcoord);
 				//half fadeAlpha = tex2D(_FadeTex, IN.texcoord).a;
 				//half alpha = (fadeAlpha > 0.5) ? color.a : 0;
-				half alpha = (_Alpha > IN.texcoord.x)? color.a : ( 1 - IN.texcoord.x/(_Alpha)) * color.a;
+				//half alpha = (_Alpha > IN.texcoord.x)? color.a : ( 1 - IN.texcoord.x/(_Alpha)) * color.a;
+
+				half alpha = 0;// = (> ) ? color.a : (1 - IN.texcoord.x / (_Alpha)) * color.a;
+				if (_Alpha < IN.texcoord.x)
+				{
+					alpha = 0;
+				}
+				else
+				{
+					alpha = (_Alpha - IN.texcoord.x <= 0.5) ? ((_Alpha - IN.texcoord))/0.5 * color.a : color.a;
+				}
+
 				return fixed4(color.r, color.g, color.b,alpha);
 				//return color;
 
