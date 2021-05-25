@@ -16,25 +16,39 @@ public class Stage : MonoBehaviour
     [SerializeField]
     private Image _StageName;
 
-    private float _Range = 0.1f;
+    [SerializeField]
+    private int _StageNumber = 0;
+
+    [SerializeField]
+    public int _MaxTurn = 0;
+    [SerializeField]
+    public int _3Star = 0;
+    [SerializeField]
+    public int _2Star = 0;
+    [SerializeField]
+    public int _1Star = 0;
+
+
+    private float _Range = 0.025f;
     private float _StartPos;
-    private float _StartY;
     private float _Speed = 1.0f;
 
 
+    private float _Time = 0;
+
     void Start()
     {
-        _StartPos = Random.Range(-_Range, _Range);
-        _StartY = this.transform.position.y;
+        _StartPos = Random.Range(0, 2 * Mathf.PI);
+        _Time = _StartPos;
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        float sin = Mathf.Sin((Time.time + _StartPos)* _Speed) * _Range;
+        _Time += Time.deltaTime;
+        float sin = Mathf.Sin(_Time * _Speed) * _Range;
         Vector3 pos = transform.position;
-        pos.y = sin + _StartY;
+        pos.y = sin;// + _StartY;
         transform.position = pos;
 
 
@@ -49,5 +63,15 @@ public class Stage : MonoBehaviour
     public int GetClearParsentage()
     {
         return _ClearPercentage;
+    }
+
+    public int GetMatTurn()
+    {
+        return _MaxTurn;
+    }
+
+    public int GetStageNumber()
+    {
+        return _StageNumber;
     }
 }

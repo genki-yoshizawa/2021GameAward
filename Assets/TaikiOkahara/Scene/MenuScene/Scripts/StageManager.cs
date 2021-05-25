@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEditor;
 
 public class StageManager : SingletonMonoBehaviour<StageManager>
 {
+    
 
     private int _ChidCount;
 
@@ -26,6 +28,17 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
 
     private Vector3[] _StartPos;
     private Vector3[] _EndPos;
+
+
+
+
+    public static int _ChoiceStageNumber = 0;
+    public static int _MaxTurn = 0;
+    public static int _3Star = 0;
+    public static int _2Star = 0;
+    public static int _1Star = 0;
+    public static string _StageName;
+    public static string _StageModelName;
 
     void Start()
     {
@@ -71,18 +84,19 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         {
             if (_ChoiceStage.transform == child.transform)
             {
-                child.GetComponent<Renderer>().material.color = new Color(0.6f, 0.6f, 0.6f, 1);
+
+                child.GetChild(0).GetComponent<Renderer>().material.color = new Color(0.6f, 0.6f, 0.6f, 1);
             }
             else
             {
-                child.GetComponent<Renderer>().material.color = new Color(0.3f, 0.3f, 0.3f, 1);
+                child.GetChild(0).GetComponent<Renderer>().material.color = new Color(0.3f, 0.3f, 0.3f, 1);
             }
         }
 
 
         StageMove();
 
-        
+       
     }
 
 
@@ -112,7 +126,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
             _Move = false;
         }
 
-        _MoveTime += _MoveSpeed;
+        _MoveTime += _MoveSpeed * Time.deltaTime;
     }
 
     
@@ -164,13 +178,23 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
 
     public void GameStart()
     {
-        string sceneName = _ChoiceStage.GetComponent<Stage>().GetSceneName();
+        _StageName = _ChoiceStage.GetComponent<Stage>().GetSceneName();
 
-        SceneManager.LoadScene(sceneName);
+        _ChoiceStageNumber = _ChoiceStage.GetComponent<Stage>().GetStageNumber();
+        _1Star = _ChoiceStage.GetComponent<Stage>()._1Star;
+        _2Star = _ChoiceStage.GetComponent<Stage>()._2Star;
+        _3Star = _ChoiceStage.GetComponent<Stage>()._3Star;
+
+
+        GameObject obj = _ChoiceStage.transform.GetChild(0).gameObject;
+        _StageModelName = obj.name;
+
+        SceneManager.LoadScene("FadeScene");
     }
 
     public GameObject GetChoiceStageObject()
     {
         return _ChoiceStage;
     }
+
 }

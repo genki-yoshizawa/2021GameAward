@@ -38,7 +38,7 @@ public class TitleLogoSmoke : MonoBehaviour
 
     }
 
-    void Update()
+    void FixedUpdate()
     {
         Effect();
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+using UnityEditor;
 
 public class PauseManager : MonoBehaviour
 {
@@ -38,7 +38,8 @@ public class PauseManager : MonoBehaviour
     [SerializeField]
     Button _StartSetButton;//ポーズ画面に入ったとき選択中のボタン
 
-
+    [SerializeField]
+    private GameObject _StageModel;
 
     
 
@@ -58,10 +59,32 @@ public class PauseManager : MonoBehaviour
         // 画面サイズに変更する
         var targetSize = new Vector2(Screen.width, Screen.height);
         _Image.GetComponent<RectTransform>().sizeDelta = targetSize;
+
+
+        //_StageModel.transform.parent = StageManager._StageModel.transform;
+        //_StageModel.transform.parent = ob.transform;
+
+        //Object obj = PrefabUtility.GetCorrespondingObjectFromSource(StageManager.Instance.GetChoiceStageObject().transform.GetChild(0));
+        //GameObject ob = (GameObject)obj;
+
+        string name = "WorldModel/" + StageManager._StageModelName;
+        GameObject obj = (GameObject)Resources.Load(name);
+
+        _StageModel.transform.GetChild(0).GetComponent<Renderer>().sharedMaterial = obj.transform.GetComponent<Renderer>().sharedMaterial;
+
+        //obj.name = "StageModel";
+        //obj.layer = 7;
+        //Instantiate(obj, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity,_StageModel.transform.GetChild(0).transform);
+        //Debug.Log(obj.transform.position);
+        
     }
 
     void Update()
     {
+        //GameObject model = GameObject.Find("StageModel");
+        //if(model != null)
+        //    model.transform.position = new Vector3(0, 0, 0);
+
         Pose();
     }
 
