@@ -31,7 +31,7 @@ public class TurnCountFrameScript : MonoBehaviour
         int digit = turnLimit;
         if (digit == 0)
         {
-            number.Add(displayNumber);
+            number.Add(turnLimit);
         }
         while (digit > 0)
         {
