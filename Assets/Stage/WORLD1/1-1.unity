@@ -346,6 +346,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4320651164276382667, guid: 480eef6a109238445a179b0023185a61, type: 3}
+      propertyPath: _canSwap
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320651164276382667, guid: 480eef6a109238445a179b0023185a61, type: 3}
+      propertyPath: _canRotate
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320651164276382667, guid: 480eef6a109238445a179b0023185a61, type: 3}
+      propertyPath: _PanelIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320651164276382667, guid: 480eef6a109238445a179b0023185a61, type: 3}
+      propertyPath: _canTurnOver
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6612586452748659346, guid: 480eef6a109238445a179b0023185a61, type: 3}
       propertyPath: m_Name
       value: NomalPanel_Green
@@ -472,6 +488,10 @@ PrefabInstance:
       propertyPath: _Player
       value: 
       objectReference: {fileID: 377583765}
+    - target: {fileID: 5322210636608615477, guid: 80af85b9bf7a4a345b11283cdfe8735e, type: 3}
+      propertyPath: _CameraWork
+      value: 
+      objectReference: {fileID: 1161957489}
     - target: {fileID: 5322210636608615477, guid: 80af85b9bf7a4a345b11283cdfe8735e, type: 3}
       propertyPath: _TurnManager
       value: 
@@ -884,6 +904,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4320651164276382667, guid: 480eef6a109238445a179b0023185a61, type: 3}
+      propertyPath: _PanelIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320651164276382667, guid: 480eef6a109238445a179b0023185a61, type: 3}
+      propertyPath: _canTurnOver
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6612586452748659346, guid: 480eef6a109238445a179b0023185a61, type: 3}
       propertyPath: m_Name
       value: NomalPanel_Green (1)
@@ -934,6 +962,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 480eef6a109238445a179b0023185a61, type: 3}
+--- !u!1 &1161957489 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7100963243512670062, guid: ddbd29d1198ad7e46b160e9af79b07da, type: 3}
+  m_PrefabInstance: {fileID: 1760862458}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1294797329 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8912895628452179480, guid: c4b51f6447ab1d34cbac28952a2d790e, type: 3}
@@ -1275,7 +1308,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4933105662467854061, guid: ddbd29d1198ad7e46b160e9af79b07da, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.606013
+      value: 9.606305
       objectReference: {fileID: 0}
     - target: {fileID: 4933105662467854061, guid: ddbd29d1198ad7e46b160e9af79b07da, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1283,7 +1316,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4933105662467854061, guid: ddbd29d1198ad7e46b160e9af79b07da, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.8200035
+      value: 1.8200765
       objectReference: {fileID: 0}
     - target: {fileID: 4933105662467854061, guid: ddbd29d1198ad7e46b160e9af79b07da, type: 3}
       propertyPath: m_LocalRotation.w
