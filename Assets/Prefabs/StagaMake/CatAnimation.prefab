@@ -1127,7 +1127,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1927794913386874087}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.075, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_Children:
   - {fileID: 4215207069187025445}
@@ -1174,6 +1174,8 @@ MonoBehaviour:
   _WalkTime: 1
   _ActionTime: 0.01
   _ClearScreen: {fileID: 0}
+  _GameOverScreen: {fileID: 0}
+  IsWalkAnim: 0
 --- !u!1 &1928443941589281878
 GameObject:
   m_ObjectHideFlags: 0
