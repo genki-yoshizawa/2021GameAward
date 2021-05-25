@@ -31,10 +31,9 @@ public class TurnCountFrameScript : MonoBehaviour
             turnLimit = digit % 10;
             digit = digit / 10;
             number.Add(turnLimit);
-            
         }
         transform.GetChild(0).GetComponent<Image>().sprite = _NumberSprite[number[0]];
-        if (number.Count > 2)
+        if (number.Count > 1)
             transform.GetChild(1).GetComponent<Image>().sprite = _NumberSprite[number[1]];
         else
             transform.GetChild(1).GetComponent<Image>().sprite = _NumberSprite[0];
@@ -62,7 +61,7 @@ public class TurnCountFrameScript : MonoBehaviour
 
         }
         transform.GetChild(0).GetComponent<Image>().sprite = _NumberSprite[number[0]];
-        if(number.Count > 2)
+        if(number.Count > 1)
             transform.GetChild(1).GetComponent<Image>().sprite = _NumberSprite[number[1]];
         else
             transform.GetChild(1).GetComponent<Image>().sprite = _NumberSprite[0];

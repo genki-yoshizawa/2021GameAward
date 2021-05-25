@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Threading;
 
 public class PlayerControl : MonoBehaviour
 {
@@ -113,27 +112,6 @@ public class PlayerControl : MonoBehaviour
                 _PassedTime = 0.0f;
         }
 
-        //アクションアニメーション
-        if(_Animator.GetBool("Action"))
-        {
-            float time = Time.deltaTime;
-            if ((_PassedTime += time) > _ActionTime)
-            {
-                _Animator.SetBool("Action", false);
-                _PassedTime = 0.0f;
-            }
-        }
-
-        //捕まえるアニメーション
-        if (_Animator.GetBool("Capture"))
-        {
-            float time = Time.deltaTime;
-            if ((_PassedTime += time) > _ActionTime)
-            {
-                _Animator.SetBool("Capture", false);
-                _PassedTime = 0.0f;
-            }
-        }
 
         //向き変更
         if (_Animator.GetBool("Walk") && NowWalkAnim == true)
@@ -155,6 +133,24 @@ public class PlayerControl : MonoBehaviour
             }
         }
 
+        //現在のアニメーション情報を取得
+        var clipInfo = _Animator.GetCurrentAnimatorClipInfo(0)[0];
+
+        //クリア確認
+        if (clipInfo.clip.name == "Clear")
+        {
+            var clearScreenScript = _ClearScreen.GetComponent<ClearScreen>();
+            clearScreenScript.DisplayClearScreen(_TurnManager.GetTurnCount());
+        }
+
+        //ゲームオーバー確認
+        if (clipInfo.clip.name == "GameOvered")
+        {
+            //ここでgameoverを呼び出す
+            //var gameOverScript = _ClearScreen.GetComponent<GameOverScreen>();
+            //gameOverScript.DisplayGameOverScreen();
+        }
+
     }
 
     public void PlayerInit()
@@ -168,8 +164,6 @@ public class PlayerControl : MonoBehaviour
 
         if (_Animator.GetBool("Tired"))
             SetTired(false);
-        if (_Animator.GetBool("GameOver"))
-            SetDead(false);
     }
 
     private void Move(Vector2Int direction)
@@ -249,7 +243,7 @@ public class PlayerControl : MonoBehaviour
     private void PlayerRotate(GameObject block)
     {
         var blockScript = block.GetComponent<BlockControl>();
-        _Animator.SetBool("Action", true);
+        _Animator.SetTrigger("Action");
         blockScript.Rotate(_IsFront, 90);
         SetFrontBlock();
     }
@@ -257,7 +251,7 @@ public class PlayerControl : MonoBehaviour
     private void PlayerSwap(GameObject block)
     {
         var blockScript = block.GetComponent<BlockControl>();
-        _Animator.SetBool("Action", true);
+        _Animator.SetTrigger("Action");
         blockScript.Swap(_IsFront);
         SetFrontBlock();
     }
@@ -369,16 +363,13 @@ public class PlayerControl : MonoBehaviour
             var enemy = CheckEnemy(_LocalPosition + _Direction);
             if (enemy != null)
             {
-                _Animator.SetBool("Capture", true);
+                _Animator.SetTrigger("Capture");
                 _GameManagerScript.KillEnemy(enemy);
                 var remainEnemy = _GameManagerScript.GetEnemys();
 
                 //敵がいなくなったことを確認したらゲームを終わらせに行く
                 if (remainEnemy.Count <= 0)
-                {
-                    var clearScreenScript = _ClearScreen.GetComponent<ClearScreen>();
-                    clearScreenScript.DisplayClearScreen(_TurnManager.GetTurnCount());
-                }
+                    _Animator.SetBool("Clear", true);
             }
             else
             {
@@ -388,14 +379,6 @@ public class PlayerControl : MonoBehaviour
             //_CommandSelect = 3;   存在意義が分からないけど一応残しておく
             _FukidasiScript.ResetAnimPattern();
             turnEnd = true;
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad1))
-        {
-            PlayerTurnOver(_FrontBlock);
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad2))
-        {
-            PlayerRotate(_FrontBlock);
         }
 
         return turnEnd;
@@ -408,7 +391,12 @@ public class PlayerControl : MonoBehaviour
 
     public void SetLocalPosition(Vector2Int position) { _LocalPosition = position; }
     public void SetIsFront(bool isFront){ _IsFront = isFront; }
-    public void SetIsExist(bool isExist) { _IsExist = isExist; }
+    public void SetIsExist(bool isExist)
+    {
+        if (isExist)
+            SetDead();
+        _IsExist = isExist;
+    }
 
 
     //前のブロックの情報取得
@@ -483,9 +471,9 @@ public class PlayerControl : MonoBehaviour
         _Animator.SetBool("Tired", flag);
     }
 
-    public void SetDead(bool flag)
+    public void SetDead()
     {
-        _Animator.SetBool("GameOver", flag);
+        _Animator.SetTrigger("GameOver");
     }
 
     private GameObject CheckEnemy(Vector2Int position)
@@ -507,7 +495,8 @@ public class PlayerControl : MonoBehaviour
         foreach (var enemy in enemys)
         {
             enemyScript = enemy.GetComponent<EnemyControl>();
-            if (position == enemyScript.GetLocalPosition())
+            if (position == enemyScript.GetLocalPosition() && _IsFront && enemyScript.GetIsFront())
+                )
                 return enemy;
         }
 

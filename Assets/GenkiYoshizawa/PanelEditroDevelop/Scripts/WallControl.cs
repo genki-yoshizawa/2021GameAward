@@ -33,6 +33,7 @@ public class WallControl : GimmicControl
     {
         if (_isBreakAnim)
         {
+            _StartGlobalPosition = new Vector3(transform.position.x, _StartGlobalPosition.y, transform.position.z);
             float time = Time.deltaTime;
             if ( (_PassedTime += time) > _BreakAnimTime)
             {
@@ -51,6 +52,7 @@ public class WallControl : GimmicControl
 
         if (_isRebornAnim)
         {
+            _StartGlobalPosition = new Vector3(transform.position.x, _StartGlobalPosition.y, transform.position.z);
             float time = Time.deltaTime;
             if ((_PassedTime += time) > _RebornAnimTime)
             {
@@ -201,6 +203,12 @@ public class WallControl : GimmicControl
         return 0;
     }
 
-    public void SetisBreakAnim() { _isBreakAnim = true; }
-    public void SetisRebornAnim() { _isRebornAnim = true; }
+    public void SetisBreakAnim()
+    {
+        _isBreakAnim = true;
+    }
+    public void SetisRebornAnim()
+    {
+        _isRebornAnim = true;
+    }
 }
