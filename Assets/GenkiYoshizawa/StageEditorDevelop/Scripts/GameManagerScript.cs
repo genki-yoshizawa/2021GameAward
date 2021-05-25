@@ -133,14 +133,16 @@ public class GameManagerScript : MonoBehaviour
 
     public void SetPause()
     {
+        _TurnManager.GetComponent<TurnManager>().enabled = false;
         _GameUI.SetActive(false);
     }
 
     public void SetUnPause()
     {
+        _TurnManager.GetComponent<TurnManager>().enabled = true;
         _GameUI.SetActive(true);
     }
-
+    
     public void SetClear()
     {
         _TurnManager.GetComponent<TurnManager>().enabled = false;
