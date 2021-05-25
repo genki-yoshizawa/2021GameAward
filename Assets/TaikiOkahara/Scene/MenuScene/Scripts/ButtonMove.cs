@@ -26,7 +26,7 @@ public class ButtonMove : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
 
         float sin = Mathf.Sin((Time.time) * _Speed * _Direction) * _Length;

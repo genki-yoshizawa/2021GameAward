@@ -18,7 +18,7 @@ public class IrisOutEffect : MonoBehaviour
 	{
 	}
 
-	void Update()
+	void FixedUpdate()
 	{
 		//Targetオブジェクト座標を画面座標に変換
 		Vector3 target = _Target.gameObject.transform.position;

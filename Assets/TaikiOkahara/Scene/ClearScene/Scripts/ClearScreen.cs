@@ -58,7 +58,7 @@ public class ClearScreen : MonoBehaviour
         //DisplayClearScreen();
     }
 
-    void Update()
+    void FixedUpdate()
     {
        
 

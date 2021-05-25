@@ -25,7 +25,7 @@ public class ClearTransition : MonoBehaviour
         _TransitionIn.SetFloat("_Alpha", 0);
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (!_Transition)
             return;

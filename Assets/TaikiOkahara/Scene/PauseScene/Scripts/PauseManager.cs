@@ -58,9 +58,11 @@ public class PauseManager : MonoBehaviour
         // 画面サイズに変更する
         var targetSize = new Vector2(Screen.width, Screen.height);
         _Image.GetComponent<RectTransform>().sizeDelta = targetSize;
+
+
     }
 
-    void Update()
+    void FixedUpdate()
     {
         Pose();
     }
