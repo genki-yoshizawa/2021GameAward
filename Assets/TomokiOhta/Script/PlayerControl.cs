@@ -221,16 +221,17 @@ public class PlayerControl : MonoBehaviour
 
     public void TurnOverMySelf(Vector2Int position, Vector3 axis)
     {
+
+        //TurnOver時に呼び出される関数
+        if (position != _LocalPosition)
+            return;
+
         //カメラ位置の更新
         var camera = _GameManagerScript.GetCamera().GetComponent<CameraWork>();
         if (camera != null)
             camera.PlayerTurnCameraWork();
         else
             Debug.Log("かめらないよ！！！！");
-
-        //TurnOver時に呼び出される関数
-        if (position != _LocalPosition)
-            return;
 
         //ひっくり返す
         _IsFront = !_IsFront;
