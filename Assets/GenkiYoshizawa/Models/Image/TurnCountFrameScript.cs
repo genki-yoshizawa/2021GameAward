@@ -7,6 +7,9 @@ public class TurnCountFrameScript : MonoBehaviour
 {
     [Header("Assetから適用する数字テクスチャを入れてください")]
     [SerializeField] private Sprite[] _NumberSprite;
+    [Header("エネミー減少テクスチャを表示する秒数")]
+    [SerializeField] private float _TurnCountAnimTime = 1.0f;
+
     private List<GameObject> _MyImageObject;
 
     private bool _isTurnCountAnim = false;
@@ -47,24 +50,54 @@ public class TurnCountFrameScript : MonoBehaviour
 
         // ターンに変化がなければなにもしない
         if (_CurTurnCount == preTurnCount)
-            return;
-
-        // 表示する数字
-        List<int> number = new List<int>();
-        int displayNumber = _TurnLimit - preTurnCount;
-        int digit = displayNumber;
-        while (digit > 0)
         {
-            displayNumber = digit % 10;
-            digit = digit / 10;
-            number.Add(displayNumber);
+            // 表示する数字
+            List<int> number = new List<int>();
+            int displayNumber = _TurnLimit - preTurnCount;
+            int digit = displayNumber;
+            while (digit > 0)
+            {
+                displayNumber = digit % 10;
+                digit = digit / 10;
+                number.Add(displayNumber);
 
+            }
+            transform.GetChild(0).GetComponent<Image>().sprite = _NumberSprite[number[0] + 10];
+            if (number.Count > 1)
+                transform.GetChild(1).GetComponent<Image>().sprite = _NumberSprite[number[1] + 10];
+            else
+                transform.GetChild(1).GetComponent<Image>().sprite = _NumberSprite[0 + 10];
+
+            _isTurnCountAnim = true;
         }
-        transform.GetChild(0).GetComponent<Image>().sprite = _NumberSprite[number[0]];
-        if(number.Count > 1)
-            transform.GetChild(1).GetComponent<Image>().sprite = _NumberSprite[number[1]];
-        else
-            transform.GetChild(1).GetComponent<Image>().sprite = _NumberSprite[0];
+
+        if (_isTurnCountAnim)
+        {
+            float time = Time.deltaTime;
+            if ((_PassedTime += time) > _TurnCountAnimTime)
+            {
+                //gameObject.GetComponent<RectTransform>().localScale = _StartLocalScale;
+                // 表示する数字
+                List<int> number = new List<int>();
+                int displayNumber = _TurnLimit - preTurnCount;
+                int digit = displayNumber;
+                while (digit > 0)
+                {
+                    displayNumber = digit % 10;
+                    digit = digit / 10;
+                    number.Add(displayNumber);
+
+                }
+                transform.GetChild(0).GetComponent<Image>().sprite = _NumberSprite[number[0]];
+                if (number.Count > 1)
+                    transform.GetChild(1).GetComponent<Image>().sprite = _NumberSprite[number[1]];
+                else
+                    transform.GetChild(1).GetComponent<Image>().sprite = _NumberSprite[0];
+
+                _PassedTime = 0.0f;
+                _isTurnCountAnim = false;
+            }
+        }
 
         _CurTurnCount = preTurnCount;
     }
