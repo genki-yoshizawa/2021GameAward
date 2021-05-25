@@ -87,6 +87,7 @@ public class CameraWork : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F))
         {
             //PlayerMoveCameraWork();     // プレイヤーが呼ばないと検証不可。たぶん大丈夫。
+
         }
         // ↑を押したら「ゲームスタート」
         if (Input.GetKeyDown(KeyCode.G))
@@ -106,7 +107,7 @@ public class CameraWork : MonoBehaviour
 
     //------------------------------------------------------------------------------------------------------------
     // 「俯瞰視点⇔プレイヤー」のカメラワーク
-    void TopViewToPlayerViewCameraWork()
+    public void TopViewToPlayerViewCameraWork()
     {
 
         if(_IsTopView)
@@ -171,10 +172,10 @@ public class CameraWork : MonoBehaviour
         }
         
     }
-    
+
 
     // 「プレイヤー移動選択時のカメラワーク(引数：int 移動先のブロック配列の要素数)
-    void PlayerMoveCameraWork(Vector2Int BlockNum)
+    public void PlayerMoveCameraWork(Vector2Int BlockNum)
     {
         // プレイヤーの現在トランスフォームを更新
         _PlayerObject = _GameManagerScript.GetPlayer();
@@ -209,7 +210,7 @@ public class CameraWork : MonoBehaviour
 
 
     // 「裏表切り替え」のカメラワーク
-    void TurnOverCameraWork()
+    public void TurnOverCameraWork()
     {
         if(!_IsTopView)     // 俯瞰視点じゃない場合俯瞰視点になるカメラワーク
         {
@@ -328,7 +329,7 @@ public class CameraWork : MonoBehaviour
 
 
     // 「ゲームスタート時」のカメラワーク
-    void GameStartCameraWork()
+    public void GameStartCameraWork()
     {
         // 暫定的に「俯瞰視点→プレイヤー」のカメラワークを設定
 
@@ -366,19 +367,19 @@ public class CameraWork : MonoBehaviour
 
 
     // IsFrontを取得(カメラが表を映しているか否か)
-    bool GetCameraWorkIsFront()
+    public bool GetCameraWorkIsFront()
     {
         return _IsFront;
     }
 
     // IsFrontを設定(パネル操作時に裏面に行った時に使う)
-    void SetCameraWorkIsFront(bool FrontOrBack)
+    public void SetCameraWorkIsFront(bool FrontOrBack)
     {
         _IsFront = FrontOrBack;
     }
-    
+
     // カメラ俯瞰視点判定フラグ
-    bool GetIsTopView()
+    public bool GetIsTopView()
     {
         return _IsTopView;
     }
