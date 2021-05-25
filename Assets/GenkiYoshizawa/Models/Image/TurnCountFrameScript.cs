@@ -29,6 +29,10 @@ public class TurnCountFrameScript : MonoBehaviour
         List<int> number = new List<int>();
         int turnLimit = _TurnLimit = _TurnManagerScript.GetTurnLimit();
         int digit = turnLimit;
+        if (digit == 0)
+        {
+            number.Add(displayNumber);
+        }
         while (digit > 0)
         {
             turnLimit = digit % 10;
@@ -55,6 +59,10 @@ public class TurnCountFrameScript : MonoBehaviour
             List<int> number = new List<int>();
             int displayNumber = _TurnLimit - preTurnCount;
             int digit = displayNumber;
+            if (digit == 0)
+            {
+                number.Add(displayNumber);
+            }
             while (digit > 0)
             {
                 displayNumber = digit % 10;
@@ -81,6 +89,10 @@ public class TurnCountFrameScript : MonoBehaviour
                 List<int> number = new List<int>();
                 int displayNumber = _TurnLimit - preTurnCount;
                 int digit = displayNumber;
+                if(digit == 0)
+                {
+                    number.Add(displayNumber);
+                }
                 while (digit > 0)
                 {
                     displayNumber = digit % 10;
