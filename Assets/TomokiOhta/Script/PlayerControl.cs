@@ -21,9 +21,10 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] private float _ActionTime = 0.01f;
 
     [Header("クリア画面"), SerializeField] private GameObject _ClearScreen;
+    [Header("ゲームオーバー画面"), SerializeField] private GameObject _GameOverScreen;
 
     [Header("向き変更時に歩行アニメーションを再生するか"), SerializeField] private bool IsWalkAnim;
-    private bool NowWalkAnim = false;
+    private bool _NowWalkAnim = false;
 
     //アニメーションスタートからの経過時間
     private float _PassedTime;
@@ -97,7 +98,7 @@ public class PlayerControl : MonoBehaviour
     public void Update()
     {
         // 歩くアニメーション
-        if (_Animator.GetBool("Walk") && NowWalkAnim == false)
+        if (_Animator.GetBool("Walk") && _NowWalkAnim == false)
         {
             float time = Time.deltaTime;
             if ((_PassedTime += time) > _WalkTime)
@@ -114,22 +115,20 @@ public class PlayerControl : MonoBehaviour
 
 
         //向き変更
-        if (_Animator.GetBool("Walk") && NowWalkAnim == true)
+        if (_Animator.GetBool("Walk") && _NowWalkAnim == true)
         {
             float time = Time.deltaTime;
             if ((_PassedTime += time) > _WalkTime)
             {
-                //_PassedTime = _WalkTime;
-
                 _Animator.SetBool("Walk", false);
             }
 
-            transform.Rotate(0.0f, 90.0f * 0.01f, 0.0f);
+            transform.Rotate(0.0f, 90.0f * (time / _WalkTime), 0.0f);
 
             if (!_Animator.GetBool("Walk"))
             {
                 _PassedTime = 0.0f;
-                NowWalkAnim = false;
+                _NowWalkAnim = false;
             }
         }
 
@@ -146,7 +145,7 @@ public class PlayerControl : MonoBehaviour
         //ゲームオーバー確認
         if (clipInfo.clip.name == "GameOvered")
         {
-            var gameOverScript = _ClearScreen.GetComponent<GameOverScreen>();
+            var gameOverScript = _GameOverScreen.GetComponent<GameOverScreen>();
             gameOverScript.DisplayGameOverScreen();
         }
 
@@ -204,6 +203,9 @@ public class PlayerControl : MonoBehaviour
 
     public void SwapMySelf(List<Vector2Int> position)
     {
+        //カメラ位置の更新
+        _GameManagerScript.GetCamera().GetComponent<CameraWork>().PlayerSwapCameraWork();
+
         //Swap時に呼び出される関数、親オブジェクトであるブロックの移動についていくだけ
         foreach (Vector2Int pos in position)
         {
@@ -219,18 +221,20 @@ public class PlayerControl : MonoBehaviour
 
     public void TurnOverMySelf(Vector2Int position, Vector3 axis)
     {
+        //カメラ位置の更新
+        var camera = _GameManagerScript.GetCamera().GetComponent<CameraWork>();
+        if (camera != null)
+            camera.PlayerTurnCameraWork();
+        else
+            Debug.Log("かめらないよ！！！！");
+
         //TurnOver時に呼び出される関数
         if (position != _LocalPosition)
             return;
 
         //ひっくり返す
-        if (_IsFront)
-            _IsFront = false;
-        else
-            _IsFront = true;
+        _IsFront = !_IsFront;
 
-        //向きを反転
-        //_Direction *= -1;
         //モデルを反転
         RotateMySelf(_LocalPosition, 180.0f, axis.x, axis.y, axis.z);
     }
@@ -300,7 +304,7 @@ public class PlayerControl : MonoBehaviour
             if (IsWalkAnim)
             {
                 _Animator.SetBool("Walk", true);
-                NowWalkAnim = true;
+                _NowWalkAnim = true;
             }
             else
                 transform.Rotate(0.0f, 90.0f, 0.0f);
@@ -317,7 +321,7 @@ public class PlayerControl : MonoBehaviour
             if (IsWalkAnim)
             {
                 _Animator.SetBool("Walk", true);
-                NowWalkAnim = true;
+                _NowWalkAnim = true;
             }
             else
                 transform.Rotate(0.0f, -90.0f, 0.0f);
