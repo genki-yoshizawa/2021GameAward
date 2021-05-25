@@ -39,8 +39,22 @@ public class FukidasiAnimationUI : MonoBehaviour
         //p.z = transform.position.z;
         //this.transform.LookAt(p);
 
-        _RectTransform.position = new Vector3
-            (_Player.transform.position.x + 1.0f, _Player.transform.position.y + 1.0f, _Player.transform.position.z);
+        var playerScript = _Player.GetComponent<PlayerControl>();
+
+        if (playerScript.GetIsFront())
+        {
+            if (_RectTransform.localScale.x <= 0.0f)
+                _RectTransform.localScale = new Vector3(-_RectTransform.localScale.x, -_RectTransform.localScale.y, _RectTransform.localScale.z);
+            _RectTransform.position = new Vector3
+                (_Player.transform.position.x + 1.0f, _Player.transform.position.y + 1.0f, _Player.transform.position.z);
+        }
+        else
+        {
+            if(_RectTransform.localScale.x >= 0.0f)
+                _RectTransform.localScale = new Vector3(-_RectTransform.localScale.x, -_RectTransform.localScale.y, _RectTransform.localScale.z);
+            _RectTransform.position = new Vector3
+                (_Player.transform.position.x - 1.0f, _Player.transform.position.y - 1.0f, _Player.transform.position.z);
+        }
     }
 
     public void SetAnimPattern(int num)
