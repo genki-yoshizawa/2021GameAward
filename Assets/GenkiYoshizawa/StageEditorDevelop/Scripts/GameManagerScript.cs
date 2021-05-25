@@ -12,6 +12,8 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField] private List<GameObject> _Enemy;
     [Header("ステージ上のUIFolderオブジェクトをセットしてください(Hierarchy上のUIFolderオブジェクト)")]
     [SerializeField] private GameObject _GameUI;
+    [Header("ステージ上のCameraWorkオブジェクトをセットしてください(Hierarchy上のUIFolderオブジェクト)")]
+    [SerializeField] private GameObject _CameraWork;
 
     // ブロックの配列
     private GameObject[][] _Block;
@@ -121,7 +123,8 @@ public class GameManagerScript : MonoBehaviour
 
         return _Block[pos.x][pos.y];
     }     //posにあるBlockの取得
-    
+    public GameObject GetCamera() { return _CameraWork.transform.GetChild(0).gameObject; }
+
     public void KillEnemy(GameObject enemy)
     {
         enemy.GetComponent<EnemyControl>().SetDestroy();
@@ -137,4 +140,5 @@ public class GameManagerScript : MonoBehaviour
     {
         _GameUI.SetActive(true);
     }
+
 }

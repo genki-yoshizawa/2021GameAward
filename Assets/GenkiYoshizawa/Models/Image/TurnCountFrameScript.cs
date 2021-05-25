@@ -49,7 +49,7 @@ public class TurnCountFrameScript : MonoBehaviour
         int preTurnCount = _TurnManagerScript.GetTurnCount();
 
         // ƒ^[ƒ“‚É•Ï‰»‚ª‚È‚¯‚ê‚Î‚È‚É‚à‚µ‚È‚¢
-        if (_CurTurnCount == preTurnCount)
+        if (_CurTurnCount != preTurnCount)
         {
             // •\¦‚·‚é”š
             List<int> number = new List<int>();
