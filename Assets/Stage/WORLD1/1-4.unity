@@ -712,7 +712,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4933105662467854061, guid: ddbd29d1198ad7e46b160e9af79b07da, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.092273
+      value: 9.092284
       objectReference: {fileID: 0}
     - target: {fileID: 4933105662467854061, guid: ddbd29d1198ad7e46b160e9af79b07da, type: 3}
       propertyPath: m_LocalPosition.y
@@ -720,7 +720,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4933105662467854061, guid: ddbd29d1198ad7e46b160e9af79b07da, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.8611364
+      value: 2.8611422
       objectReference: {fileID: 0}
     - target: {fileID: 4933105662467854061, guid: ddbd29d1198ad7e46b160e9af79b07da, type: 3}
       propertyPath: m_LocalRotation.w
@@ -973,6 +973,14 @@ PrefabInstance:
       propertyPath: _ClearScreen
       value: 
       objectReference: {fileID: 286939688}
+    - target: {fileID: 1585705306440433839, guid: 6158f0bf8f46c844c81e9cf816963c00, type: 3}
+      propertyPath: _Direction.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1585705306440433839, guid: 6158f0bf8f46c844c81e9cf816963c00, type: 3}
+      propertyPath: _Direction.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1585705306440433839, guid: 6158f0bf8f46c844c81e9cf816963c00, type: 3}
       propertyPath: _FukidasiObj
       value: 

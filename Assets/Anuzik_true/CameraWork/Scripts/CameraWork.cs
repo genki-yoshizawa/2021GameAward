@@ -190,7 +190,7 @@ public class CameraWork : MonoBehaviour
         {   // カメラが表の時の処理
 
             // 次の移動先ブロック座標にカメラワーク
-            iTween.MoveTo(this.gameObject, iTween.Hash("x", NextMoveToBlock_transform.position.x + _PlayerViewPosOffset.x, "y", _PlayerCurTransform.position.y + _PlayerViewPosOffset.y, "z", NextMoveToBlock_transform.position.z + _PlayerViewPosOffset.z, "time", _TopViewToPlayerView_RotateTime));
+            iTween.MoveTo(this.gameObject, iTween.Hash("x", NextMoveToBlock_transform.position.x + _PlayerViewPosOffset.x, "y", _PlayerCurTransform.position.y + _PlayerViewPosOffset.y, "z", NextMoveToBlock_transform.position.z + _PlayerViewPosOffset.z, "time", _TopViewToPlayerView_MoveTime));
             iTween.RotateTo(this.gameObject, iTween.Hash("x", _PlayerViewRotOffset.x, "y", _PlayerViewRotOffset.y, "z", _PlayerViewRotOffset.z, "time", _TopViewToPlayerView_RotateTime));
             
         }
@@ -199,7 +199,7 @@ public class CameraWork : MonoBehaviour
 
             // 次の移動先ブロック座標にカメラワーク
             Vector3 rPVposOffset = new Vector3(_PlayerViewPosOffset.x, -(_PlayerViewPosOffset.y), _PlayerViewPosOffset.z);     // 裏面用オフセット
-            iTween.MoveTo(this.gameObject, iTween.Hash("x", NextMoveToBlock_transform.position.x + rPVposOffset.x, "y", _PlayerCurTransform.position.y + rPVposOffset.y, "z", NextMoveToBlock_transform.position.z + rPVposOffset.z, "time", _TopViewToPlayerView_RotateTime));
+            iTween.MoveTo(this.gameObject, iTween.Hash("x", NextMoveToBlock_transform.position.x + rPVposOffset.x, "y", _PlayerCurTransform.position.y + rPVposOffset.y, "z", NextMoveToBlock_transform.position.z + rPVposOffset.z, "time", _TopViewToPlayerView_MoveTime));
             iTween.RotateTo(this.gameObject, iTween.Hash("x", _PlayerViewRotOffset.x, "y", _PlayerViewRotOffset.y, "z", _PlayerViewRotOffset.z, "time", _TopViewToPlayerView_RotateTime));
             
         }
