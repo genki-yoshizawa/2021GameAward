@@ -173,5 +173,7 @@ public class ClearScreen : MonoBehaviour
         _PauseFlag = true;
         if(_Pause != null)
             _Pause.SetActive(false);
+
+        transform.parent.GetChild(0).gameObject.SetActive(true);
     }
 }
