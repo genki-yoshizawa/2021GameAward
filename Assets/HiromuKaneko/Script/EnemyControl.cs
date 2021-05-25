@@ -87,6 +87,7 @@ public class EnemyControl : MonoBehaviour
     private Vector3 _TargetPoint;
     private float _PassedTime;
     private bool _CheeseBite;
+    private bool _PlayerBite;
     private bool _IsExist;
 
     // Start is called before the first frame update
@@ -180,7 +181,7 @@ public class EnemyControl : MonoBehaviour
 
         }
 
-        var clipInfo = _EnemyAnimation.GetCurrentAnimatorClipInfo(0)[0];   // 引数はLayer番号、配列の0番目
+    var clipInfo = _EnemyAnimation.GetCurrentAnimatorClipInfo(0)[0];   // 引数はLayer番号、配列の0番目
 
         // 現在のアニメーションがDeadだったらオブジェクトを削除する
         if (clipInfo.clip.name == "Dead")
@@ -349,6 +350,20 @@ public class EnemyControl : MonoBehaviour
             }
             else
             {
+                _Player = _GameManager.gameObject.GetComponent<GameManagerScript>().GetPlayer();
+
+                if (!_Player.gameObject.GetComponent<PlayerControl>().GetIsFront())
+                {
+                    if (_Player.gameObject.GetComponent<PlayerControl>().GetLocalPosition() == _EnemyLocalPosition)
+                    {
+                        _EnemyAnimation.SetTrigger("Attack");
+                        _Player.gameObject.GetComponent<PlayerControl>().SetIsExist(true);
+
+                    }
+                    else
+                    _EnemyAnimation.SetBool("Walk", true);
+                }
+
                 _EnemyAnimation.SetBool("Walk", true);
 
             }
@@ -2754,7 +2769,7 @@ public class EnemyControl : MonoBehaviour
         {
 
         }
-        _Player.gameObject.GetComponent<PlayerControl>().SetIsExist(false);
+        _Player.gameObject.GetComponent<PlayerControl>().SetIsExist(true);
     }
 
     // エネミーを行く方向・かじる方向へ回転させる
