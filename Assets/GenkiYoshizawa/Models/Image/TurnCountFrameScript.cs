@@ -100,7 +100,6 @@ public class TurnCountFrameScript : MonoBehaviour
                     number.Add(displayNumber);
 
                 }
-                Debug.Log(number[0]);
                 transform.GetChild(0).GetComponent<Image>().sprite = _NumberSprite[number[0]];
                 if (number.Count > 1)
                     transform.GetChild(1).GetComponent<Image>().sprite = _NumberSprite[number[1]];

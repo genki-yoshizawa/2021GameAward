@@ -85,7 +85,9 @@ public class BlockControl : MonoBehaviour
         if (_isSwapAnim)
         {
             // ‚±‚±‚È‚ñ‚©‰ñ‚è‚­‚Ç‚¢‘‚«•û‚µ‚Ä‚é‹C‚ª‚·‚é
-            transform.position = new Vector3(transform.position.x, _SwapPanelFloat, transform.position.z);
+            float swapFloat = _GameManager.GetComponent<GameManagerScript>().GetPlayer().transform.GetComponent<PlayerControl>().GetIsFront() ? _SwapPanelFloat : -_SwapPanelFloat;
+
+            transform.position = new Vector3(transform.position.x, swapFloat, transform.position.z);
 
             float time = Time.deltaTime;
             if (_PassedTime + time > _SwapAnimTime)
