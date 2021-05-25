@@ -20,7 +20,7 @@ public class ClearScreen : MonoBehaviour
     private Animator _ClearScreenAnimator;
 
     [SerializeField]
-    private Animator _CommentAnimator;
+    private GameObject _Comment;
 
     [SerializeField]
     private GameObject _TurnNumber;
@@ -30,6 +30,10 @@ public class ClearScreen : MonoBehaviour
 
     [SerializeField]
     private Animator _StarParticle;
+
+    [SerializeField]
+    private Sprite[] _Comments;
+
 
     bool _PauseFlag = false;
     float _Intencity = 0;
@@ -52,6 +56,9 @@ public class ClearScreen : MonoBehaviour
     [SerializeField]
     float _ChangeMenuSceneCount = 0;
     float _ChangeMenuSceneTime = 5.0f;
+
+
+    private int _Score;
 
     void Start()
     {
@@ -81,7 +88,13 @@ public class ClearScreen : MonoBehaviour
         }
 
         //スコアに応じてアニメーションを分岐
-        _StarAnimator.SetTrigger("OneStar");
+        if(_Score < StageManager._3Star)
+            _StarAnimator.SetTrigger("ThreeStar");
+        else if(_Score < StageManager._2Star)
+            _StarAnimator.SetTrigger("TwoStar");
+        else
+            _StarAnimator.SetTrigger("OneStar");
+
 
         return;
     }
@@ -128,7 +141,7 @@ public class ClearScreen : MonoBehaviour
             return;
         }
 
-        _CommentAnimator.SetBool("Display", true);
+        _Comment.GetComponent<Animator>().SetBool("Display", true);
         return;
     }
 
@@ -166,14 +179,23 @@ public class ClearScreen : MonoBehaviour
 
     public void DisplayClearScreen(int score)
     {
-        _TurnScoreNumber.GetComponent<TurnScore>().SetScore(score);
-
         GameObject obj = GameObject.FindGameObjectWithTag("Manager");
         obj.GetComponent<GameManagerScript>().SetPause();
+
+        _Score = score;
+        _TurnScoreNumber.GetComponent<TurnScore>().SetScore(score);
+
+        //スコアに応じてアニメーションを分岐
+        if (_Score < StageManager._3Star)
+            _Comment.GetComponent<Image>().sprite = _Comments[0];
+        else if (_Score < StageManager._2Star)
+            _Comment.GetComponent<Image>().sprite = _Comments[1];
+        else
+            _Comment.GetComponent<Image>().sprite = _Comments[2];
+
+
         _PauseFlag = true;
         if(_Pause != null)
             _Pause.SetActive(false);
-
-        transform.parent.GetChild(0).gameObject.SetActive(true);
     }
 }
