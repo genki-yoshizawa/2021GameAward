@@ -744,6 +744,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: FrontPanel
       objectReference: {fileID: 0}
+    - target: {fileID: 9169631595689276080, guid: b8f7e580f13293d4ea95feb6bff42293, type: 3}
+      propertyPath: _PanelIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9169631595689276080, guid: b8f7e580f13293d4ea95feb6bff42293, type: 3}
+      propertyPath: _canTurnOver
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b8f7e580f13293d4ea95feb6bff42293, type: 3}
 --- !u!1001 &242438706
@@ -1232,7 +1240,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4110765971112751289, guid: 1f7743e9578a9e14ab6d3d88970efad7, type: 3}
       propertyPath: _TurnLimit
-      value: 40
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 8285886139608196045, guid: 1f7743e9578a9e14ab6d3d88970efad7, type: 3}
       propertyPath: m_Name
@@ -2941,6 +2949,14 @@ PrefabInstance:
     - target: {fileID: 2206742969967508588, guid: b8f7e580f13293d4ea95feb6bff42293, type: 3}
       propertyPath: m_Name
       value: FrontPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 9169631595689276080, guid: b8f7e580f13293d4ea95feb6bff42293, type: 3}
+      propertyPath: _PanelIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9169631595689276080, guid: b8f7e580f13293d4ea95feb6bff42293, type: 3}
+      propertyPath: _canTurnOver
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b8f7e580f13293d4ea95feb6bff42293, type: 3}
