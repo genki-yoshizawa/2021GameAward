@@ -495,7 +495,8 @@ public class PlayerControl : MonoBehaviour
         foreach (var enemy in enemys)
         {
             enemyScript = enemy.GetComponent<EnemyControl>();
-            if (position == enemyScript.GetLocalPosition())
+            if (position == enemyScript.GetLocalPosition() && _IsFront && enemyScript.GetIsFront())
+                )
                 return enemy;
         }
 
