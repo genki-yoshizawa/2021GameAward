@@ -58,6 +58,10 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
 
             transform.GetChild(i).position = pos;
         }
+
+        _DetailUI.gameObject.GetComponent<DetailUI>().DetailUIAnimation();
+        _DetailUI.gameObject.GetComponent<DetailUINumber>().SetScore(_ChoiceStage.GetComponent<Stage>().GetClearParsentage());
+
     }
 
     void Update()
@@ -122,6 +126,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         if (_MoveTime >= 1.0f)
         {
             _DetailUI.gameObject.GetComponent<DetailUI>().DetailUIAnimation();
+            _DetailUI.gameObject.GetComponent<DetailUINumber>().SetScore(_ChoiceStage.GetComponent<Stage>().GetClearParsentage());
             _MoveTime = 0.0f;
             _Move = false;
         }
