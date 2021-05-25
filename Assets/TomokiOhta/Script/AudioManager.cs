@@ -29,6 +29,7 @@ public class AudioManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         _AudioManager = GetComponent<AudioManager>();
+
     }
 
     public void Start()
@@ -44,7 +45,6 @@ public class AudioManager : MonoBehaviour
 
     public void Update()
     {
-
     }
 
     public void PlayBGM(AudioClip audioClip)
@@ -57,4 +57,8 @@ public class AudioManager : MonoBehaviour
         _Source[1].PlayOneShot(audioClip, _SeVolume);
     }
 
+    public void SetBGMVol()
+    {
+
+    }
 }
