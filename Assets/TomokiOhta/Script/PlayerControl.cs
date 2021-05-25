@@ -146,9 +146,8 @@ public class PlayerControl : MonoBehaviour
         //ゲームオーバー確認
         if (clipInfo.clip.name == "GameOvered")
         {
-            //ここでgameoverを呼び出す
-            //var gameOverScript = _ClearScreen.GetComponent<GameOverScreen>();
-            //gameOverScript.DisplayGameOverScreen();
+            var gameOverScript = _ClearScreen.GetComponent<GameOverScreen>();
+            gameOverScript.DisplayGameOverScreen();
         }
 
     }

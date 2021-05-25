@@ -13,6 +13,7 @@ public class TurnManager : MonoBehaviour
     [SerializeField] private int _TurnTiredLimit = 5;
 
     //最大ターン数
+    [SerializeField]
     private int _TurnLimit;
 
     private bool _PlayerTurn = true;
@@ -32,6 +33,7 @@ public class TurnManager : MonoBehaviour
         GameObject[][] blocks = _GameManagerScript.GetBlocks();
         List<GameObject> enemys = _GameManagerScript.GetEnemys();
 
+        //ターン数取得できないなんで
         _TurnLimit = StageManager._MaxTurn;
 
         //ブロックのスクリプト取得
