@@ -170,6 +170,7 @@ public class PlayerControl : MonoBehaviour
     {
         //前のブロック取得
         var block = _GameManagerScript.GetBlock(_LocalPosition + direction);
+        _GameManagerScript.GetCamera().transform.GetComponent<CameraWork>().PlayerMoveCameraWork(_LocalPosition + direction);
 
         //ゆっくり歩くために現在地と目的地を取得
         _WalkStartPosition = transform.position;
@@ -183,6 +184,7 @@ public class PlayerControl : MonoBehaviour
 
         //移動
         _LocalPosition += _Direction;
+
     }
 
     public void RotateMySelf(Vector2Int position, float angle, float axisX = 0.0f, float axisY =1.0f, float axisZ = 0.0f)

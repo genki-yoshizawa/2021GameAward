@@ -39,7 +39,7 @@ public class GameOverScreen : MonoBehaviour
 
     void Start()
     {
-        DisplayGameOverScreen();
+        //DisplayGameOverScreen();
     }
 
     void Update()

@@ -214,7 +214,9 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         {
             int idx = _ChoiceStage.transform.GetSiblingIndex();
             idx++;
+            _ChoiceStage = this.transform.GetChild(idx).gameObject;
 
+            GameStart();
         }
     }
 

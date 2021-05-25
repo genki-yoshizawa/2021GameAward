@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 6697255894657581279}
   - component: {fileID: 6697255894657581273}
   - component: {fileID: 6697255894657581272}
+  - component: {fileID: 4441832640358362244}
   m_Layer: 0
-  m_Name: KariImage
+  m_Name: BackGroundImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -75,6 +76,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4441832640358362244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6697255894657581278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1ef9a617ac7e984083fb7b832f2b9cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _FrontWorldImage: {fileID: 21300000, guid: c882343940fedc041a45e8c26c9c7462, type: 3}
+  _BackWorldImage: {fileID: 21300000, guid: 73298f3f0c99d724b99713d8e5e49697, type: 3}
 --- !u!1 &6697255896083332675
 GameObject:
   m_ObjectHideFlags: 0
