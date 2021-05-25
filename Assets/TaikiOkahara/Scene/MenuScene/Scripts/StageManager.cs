@@ -39,10 +39,12 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
     public static int _1Star = 0;
     public static string _StageName;
     public static string _StageModelName;
+    public static bool _NextStage = false;
+
 
     void Start()
     {
-        _ChidCount = this.transform.childCount;
+        _ChidCount = this.transform.childCount - 1;
         _ChoiceStage = transform.GetChild(0).gameObject;
         _EndPos = new Vector3[_ChidCount];
         _StartPos = new Vector3[_ChidCount];
@@ -58,45 +60,92 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
 
             transform.GetChild(i).position = pos;
         }
+
+        _DetailUI.gameObject.GetComponent<DetailUI>().DetailUIAnimation();
+        _DetailUI.gameObject.GetComponent<DetailUINumber>().SetScore(_ChoiceStage.GetComponent<Stage>().GetClearParsentage());
+
     }
 
     void Update()
     {
+        //ChageNextStage();
+
+
+
+        string curStageName = SceneManager.GetActiveScene().name;
+        if(curStageName == "MenuScene")
+        {
+            for (int i = 0; i < _ChidCount; i++)
+            {
+
+                if (transform.GetChild(i).gameObject.transform.GetChild(0).GetComponent<Renderer>() != null)
+                    transform.GetChild(i).gameObject.transform.GetChild(0).GetComponent<Renderer>().enabled = true;
+
+                if (transform.GetChild(i).gameObject.GetComponent<Stage>() != null)
+                    transform.GetChild(i).gameObject.GetComponent<Stage>().enabled = true;
+
+
+               
+            }
+
+            transform.GetChild(_ChidCount).gameObject.SetActive(true);
+
+        }
+        else
+        {
+            for (int i = 0; i < _ChidCount; i++)
+            {
+                if (transform.GetChild(i).gameObject.transform.GetChild(0).GetComponent<Renderer>() != null)
+                    transform.GetChild(i).gameObject.transform.GetChild(0).GetComponent<Renderer>().enabled = false;
+
+                if (transform.GetChild(i).gameObject.GetComponent<Stage>() != null)
+                    transform.GetChild(i).gameObject.GetComponent<Stage>().enabled = false;
+
+                
+            }
+
+
+            transform.GetChild(_ChidCount).gameObject.SetActive(false);
+
+            return;
+        }
+
+
         float dph = Input.GetAxis("D Pad Horizontal");
 
         if (dph > 0)
             InputRightButton();
         else if (dph < 0)
             InputLeftButton();
-        else if (Input.GetKeyDown("joystick button 0") && !_Move)
+        else if (Input.GetKeyDown("joystick button 1") && !_Move)
             GameStart();
 
 
-        foreach(Transform child in transform)
+        for (int i = 0; i < _ChidCount; i++)
         {
-            if(_ChoiceStage.transform.position.z > child.transform.position.z)
+            if(_ChoiceStage.transform.position.z > transform.GetChild(i).transform.position.z)
             {
-                _ChoiceStage = child.gameObject;
+                _ChoiceStage = transform.GetChild(i).gameObject;
             }
         }
 
-        foreach (Transform child in transform)
+        for(int i = 0; i < _ChidCount; i++)
         {
-            if (_ChoiceStage.transform == child.transform)
+            if (_ChoiceStage.transform == transform.GetChild(i))
             {
 
-                child.GetChild(0).GetComponent<Renderer>().material.color = new Color(0.6f, 0.6f, 0.6f, 1);
+                transform.GetChild(i).GetChild(0).GetComponent<Renderer>().material.color = new Color(0.6f, 0.6f, 0.6f, 1);
             }
             else
             {
-                child.GetChild(0).GetComponent<Renderer>().material.color = new Color(0.3f, 0.3f, 0.3f, 1);
+                transform.GetChild(i).GetChild(0).GetComponent<Renderer>().material.color = new Color(0.3f, 0.3f, 0.3f, 1);
             }
         }
 
 
         StageMove();
 
-       
+
     }
 
 
@@ -122,6 +171,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         if (_MoveTime >= 1.0f)
         {
             _DetailUI.gameObject.GetComponent<DetailUI>().DetailUIAnimation();
+            _DetailUI.gameObject.GetComponent<DetailUINumber>().SetScore(_ChoiceStage.GetComponent<Stage>().GetClearParsentage());
             _MoveTime = 0.0f;
             _Move = false;
         }
@@ -130,7 +180,29 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
     }
 
     
+    void ChageNextStage()
+    {
+        //if (!_NextStage) return;
 
+        int stageNum = _ChoiceStageNumber;
+
+        if (Digit(stageNum) == 3)
+        {
+            Debug.Log("全ステージクリア！次の星へ！！");
+        }
+        else
+        {
+            int idx = _ChoiceStage.transform.GetSiblingIndex();
+            idx++;
+            Debug.Log(idx);
+            _ChoiceStage = this.transform.GetChild(idx).gameObject;
+
+            GameStart();
+        }
+
+        //_NextStage = false;
+        return;
+    }
 
     public void InputLeftButton()
     {
@@ -143,7 +215,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
             _StartPos[i] = transform.GetChild(i).position;
         }
 
-        for (int i = 0; i < _ChidCount-1; i++)
+        for (int i = 0; i < _ChidCount - 1; i++)
         {
             _EndPos[i] = transform.GetChild(i+1).position;
         }
@@ -165,7 +237,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
             _StartPos[i] = transform.GetChild(i).position;
         }
 
-        for (int i = _ChidCount - 1; i > 0; i--)
+        for (int i = _ChidCount-1; i > 0; i--)
         {
             _EndPos[i] = transform.GetChild(i-1).position;
         }
@@ -189,7 +261,20 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         GameObject obj = _ChoiceStage.transform.GetChild(0).gameObject;
         _StageModelName = obj.name;
 
+
         SceneManager.LoadScene("FadeScene");
+        foreach (Transform child in transform)
+        {
+            if (child.gameObject.transform.GetChild(0).GetComponent<Renderer>() != null)
+                child.gameObject.transform.GetChild(0).GetComponent<Renderer>().enabled = false;
+
+            if (child.gameObject.GetComponent<Stage>() != null)
+                child.gameObject.GetComponent<Stage>().enabled = false;
+
+            GameObject canv = GameObject.Find("MenuCanvas");
+            canv.gameObject.SetActive(false);
+        }
+        //_NextStage = false;
     }
 
     public GameObject GetChoiceStageObject()
@@ -197,4 +282,17 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         return _ChoiceStage;
     }
 
+    public void NextStage()
+    {
+      
+
+        ChageNextStage();
+      
+    }
+
+    int Digit(int num)
+    {
+        // Mathf.Log10(0)はNegativeInfinityを返すため、別途処理する。
+        return (num == 0) ? 1 : ((int)Mathf.Log10(num) + 1);
+    }
 }

@@ -65,6 +65,11 @@ public class Stage : MonoBehaviour
         return _ClearPercentage;
     }
 
+    public void SetClearParsentage(int clean)
+    {
+        _ClearPercentage = clean;
+    }
+
     public int GetMatTurn()
     {
         return _MaxTurn;

@@ -310,6 +310,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ModelPanelBlock_Kirikabuike
       objectReference: {fileID: 0}
+    - target: {fileID: 199526904437539865, guid: 46ef5ad5c95e9f245b082275226fb777, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 688782483836264099, guid: 46ef5ad5c95e9f245b082275226fb777, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -366,6 +370,10 @@ PrefabInstance:
     - target: {fileID: 6215266256043887818, guid: 1498eabe4b8408e41b12e8e09302ea2f, type: 3}
       propertyPath: m_Name
       value: ModelPanelBlock_Tuchi
+      objectReference: {fileID: 0}
+    - target: {fileID: 6215266256043887818, guid: 1498eabe4b8408e41b12e8e09302ea2f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6704416282038998640, guid: 1498eabe4b8408e41b12e8e09302ea2f, type: 3}
       propertyPath: m_RootOrder
@@ -462,6 +470,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 89308181174462579, guid: e7d35478dcc9ae34d8dc9e4186e9d948, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 484119558314419687, guid: e7d35478dcc9ae34d8dc9e4186e9d948, type: 3}
+      propertyPath: _XAxis
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 484119558314419687, guid: e7d35478dcc9ae34d8dc9e4186e9d948, type: 3}
+      propertyPath: _ZAxis
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 753959303106327241, guid: e7d35478dcc9ae34d8dc9e4186e9d948, type: 3}
@@ -705,6 +721,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ModelPanelBlock_Isinoike
       objectReference: {fileID: 0}
+    - target: {fileID: 2206742969967508588, guid: b8f7e580f13293d4ea95feb6bff42293, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b8f7e580f13293d4ea95feb6bff42293, type: 3}
 --- !u!1001 &5440888900077050877
@@ -717,6 +737,10 @@ PrefabInstance:
     - target: {fileID: 5134246998000660794, guid: 52420e2cdecbd4048ba6412d747e3277, type: 3}
       propertyPath: m_Name
       value: ModelFence_03
+      objectReference: {fileID: 0}
+    - target: {fileID: 5440888900721595495, guid: 52420e2cdecbd4048ba6412d747e3277, type: 3}
+      propertyPath: _ZAxis
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 5479564483489803136, guid: 52420e2cdecbd4048ba6412d747e3277, type: 3}
       propertyPath: m_RootOrder
@@ -935,6 +959,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8701725712840153748, guid: c9678235ce8cb9b4194fdd253e86b710, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9171585124660367424, guid: c9678235ce8cb9b4194fdd253e86b710, type: 3}
+      propertyPath: _XAxis
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9171585124660367424, guid: c9678235ce8cb9b4194fdd253e86b710, type: 3}
+      propertyPath: _ZAxis
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

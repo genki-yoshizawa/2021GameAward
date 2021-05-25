@@ -5,9 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class StartButton : MonoBehaviour
 {
-    void FixedUpdate()
+    void Update()
     {
-        if (Input.GetKeyDown("joystick button 0"))
+        if (Input.GetKeyDown("joystick button 1"))
             OnStartButtonClick();
 
     }

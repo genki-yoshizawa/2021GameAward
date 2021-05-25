@@ -30,7 +30,7 @@ public class PauseManager : MonoBehaviour
     private Animator _DetailUIAnimator;
 
     [SerializeField]
-    private Animator _StageNumberUIAnimator;
+    private GameObject _StageNumberUI;
 
     [SerializeField]
     private Animator _UIAnimator;
@@ -41,7 +41,12 @@ public class PauseManager : MonoBehaviour
     [SerializeField]
     private GameObject _StageModel;
 
-    
+    [SerializeField]
+    private GameObject _PauseOut;
+    [SerializeField]
+    private GameObject _Restart;
+    [SerializeField]
+    private GameObject _Menu;
 
     private enum FadeType
     {
@@ -61,30 +66,15 @@ public class PauseManager : MonoBehaviour
         _Image.GetComponent<RectTransform>().sizeDelta = targetSize;
 
 
-        //_StageModel.transform.parent = StageManager._StageModel.transform;
-        //_StageModel.transform.parent = ob.transform;
-
-        //Object obj = PrefabUtility.GetCorrespondingObjectFromSource(StageManager.Instance.GetChoiceStageObject().transform.GetChild(0));
-        //GameObject ob = (GameObject)obj;
-
         string name = "WorldModel/" + StageManager._StageModelName;
         GameObject obj = (GameObject)Resources.Load(name);
 
         _StageModel.transform.GetChild(0).GetComponent<Renderer>().sharedMaterial = obj.transform.GetComponent<Renderer>().sharedMaterial;
-
-        //obj.name = "StageModel";
-        //obj.layer = 7;
-        //Instantiate(obj, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity,_StageModel.transform.GetChild(0).transform);
-        //Debug.Log(obj.transform.position);
-        
+        _StageNumberUI.GetComponent<PauseStageNumber>().SetScore(StageManager._ChoiceStageNumber);
     }
 
     void Update()
     {
-        //GameObject model = GameObject.Find("StageModel");
-        //if(model != null)
-        //    model.transform.position = new Vector3(0, 0, 0);
-
         Pose();
     }
 
@@ -94,15 +84,21 @@ public class PauseManager : MonoBehaviour
         FadeIn();
         FadeOut();
 
-        GameObject obj;
-        if (Input.GetKeyDown(KeyCode.Escape) ||(Input.GetKeyDown("joystick button 2")))
+
+        if ((_Restart.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Selected") && Input.GetKeyDown("joystick button 1")))
+            OnClickRestart();
+        else if (_Menu.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Selected") && Input.GetKeyDown("joystick button 1"))
+            OnClickMenu();
+
+        if (Input.GetKeyDown(KeyCode.Escape) ||(Input.GetKeyDown("joystick button 2"))
+            || (_PauseOut.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Selected") && Input.GetKeyDown("joystick button 1")))
         {
             switch(_FadeType)
             {
                 case FadeType.NONE:
                     _FadeType = FadeType.IN;
                     PoseInAnimation();
-
+                    GameObject obj;
                     obj = GameObject.FindGameObjectWithTag("Manager");
                     obj.GetComponent<GameManagerScript>().SetPause();
                     break;
@@ -110,9 +106,6 @@ public class PauseManager : MonoBehaviour
                 case FadeType.DO:
                     _FadeType = FadeType.OUT;
                     PoseOutAnimation();
-
-                    obj = GameObject.FindGameObjectWithTag("Manager");
-                    obj.GetComponent<GameManagerScript>().SetUnPause();
                     break;
 
                 default:
@@ -161,6 +154,10 @@ public class PauseManager : MonoBehaviour
         _Image.GetComponent<Image>().color = new Color(0, 0, 0,0);
         _FadeCount = 0;
         _FadeType = FadeType.NONE;
+        GameObject obj;
+        obj = GameObject.FindGameObjectWithTag("Manager");
+        obj.GetComponent<GameManagerScript>().SetUnPause();
+
         return;
     }
 
@@ -169,7 +166,7 @@ public class PauseManager : MonoBehaviour
     {
         _StageModelAnimator.SetBool("Pose", true);
         _DetailUIAnimator.SetBool("Pose", true);
-        _StageNumberUIAnimator.SetBool("Pose", true);
+        _StageNumberUI.GetComponent<Animator>().SetBool("Pose", true);
         _UIAnimator.SetBool("Pose", true);
     }
 
@@ -177,7 +174,7 @@ public class PauseManager : MonoBehaviour
     {
         _StageModelAnimator.SetBool("Pose", false);
         _DetailUIAnimator.SetBool("Pose", false);
-        _StageNumberUIAnimator.SetBool("Pose", false);
+        _StageNumberUI.GetComponent<Animator>().SetBool("Pose", false);
         _UIAnimator.SetBool("Pose", false);
 
     }

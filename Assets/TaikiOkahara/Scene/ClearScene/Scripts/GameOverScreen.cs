@@ -39,7 +39,7 @@ public class GameOverScreen : MonoBehaviour
 
     void Start()
     {
-        DisplayGameOverScreen();
+        //DisplayGameOverScreen();
     }
 
     void Update()
@@ -98,8 +98,12 @@ public class GameOverScreen : MonoBehaviour
         }
 
 
-        if (Input.GetKeyDown("joystick button 0"))
-            SceneManager.LoadScene("MenuScene");
+        if (Input.GetKeyDown("joystick button 0") || Input.GetKeyDown(KeyCode.Return))
+        {
+            string restartStageName = SceneManager.GetActiveScene().name;
+            SceneManager.LoadScene(restartStageName);
+        }
+
 
     }
 
@@ -108,7 +112,7 @@ public class GameOverScreen : MonoBehaviour
        
 
         GameObject obj = GameObject.FindGameObjectWithTag("Manager");
-        //obj.GetComponent<GameManagerScript>().SetPause();
+        obj.GetComponent<GameManagerScript>().SetPause();
         _PauseFlag = true;
         if (_Pause != null)
             _Pause.SetActive(false);

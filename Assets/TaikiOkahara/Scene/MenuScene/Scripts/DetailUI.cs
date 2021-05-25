@@ -10,8 +10,10 @@ public class DetailUI : MonoBehaviour
     private Animator _Animator;
 
     [SerializeField]
-    private GameObject _ClearTurn;
+    private GameObject _Comment;
 
+    [SerializeField]
+    private Sprite[] _CommentSprites;
 
     private int _StageClearPercentage;
 
@@ -26,7 +28,32 @@ public class DetailUI : MonoBehaviour
 
         _StageClearPercentage = StageManager.Instance.GetChoiceStageObject().GetComponent<Stage>().GetClearParsentage();
 
-        _ClearTurn.GetComponent<Text>().text = _StageClearPercentage.ToString();
+        switch(_StageClearPercentage)
+        {
+            case 0:
+            case 10:
+            case 20:
+            case 30:
+                _Comment.GetComponent<Image>().sprite = _CommentSprites[0];
+                break;
+
+            case 40:
+            case 50:
+            case 60:
+                _Comment.GetComponent<Image>().sprite = _CommentSprites[1];
+                break;
+
+            case 70:
+            case 80:
+            case 90:
+                _Comment.GetComponent<Image>().sprite = _CommentSprites[2];
+                break;
+            case 100:
+                _Comment.GetComponent<Image>().sprite = _CommentSprites[3];
+                break;
+            default:
+                break;
+        }
     }
 
     public void DetailUIAnimation()
