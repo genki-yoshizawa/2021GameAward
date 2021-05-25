@@ -222,7 +222,7 @@ public class CameraWork : MonoBehaviour
     }
 
 
-    // 「プレイヤー移動選択時のカメラワーク(引数：int 移動先のブロック配列の要素数)-----------------------------------------------------------------------
+    // 「プレイヤー移動選択時」のカメラワーク(引数：int 移動先のブロック配列の要素数)-----------------------------------------------------------------------
     public void PlayerMoveCameraWork(Vector2Int BlockNum)
     {
         // プレイヤーの現在トランスフォームを更新
@@ -246,7 +246,7 @@ public class CameraWork : MonoBehaviour
         {   // カメラが裏の時の処理
 
             // 次の移動先ブロック座標にカメラワーク
-            rPVposOffset = new Vector3(_PlayerViewPosOffset.x, -(_PlayerViewPosOffset.y), _PlayerViewPosOffset.z);     // 裏面用オフセット
+            rPVposOffset = new Vector3(_PlayerViewPosOffset.x, (_PlayerViewPosOffset.y), _PlayerViewPosOffset.z);     // 裏面用オフセット
             iTween.MoveTo(this.gameObject, iTween.Hash("x", NextMoveToBlock_transform.position.x + rPVposOffset.x, "y", _PlayerCurTransform.position.y + rPVposOffset.y, "z", NextMoveToBlock_transform.position.z + rPVposOffset.z, "time", _TopViewToPlayerView_MoveTime));
             iTween.RotateTo(this.gameObject, iTween.Hash("x", _PlayerViewRotOffset.x, "y", _PlayerViewRotOffset.y, "z", _PlayerViewRotOffset.z, "time", _TopViewToPlayerView_RotateTime));
             
@@ -292,15 +292,16 @@ public class CameraWork : MonoBehaviour
     public void PlayerTurnCameraWork()
     {
         
-        if(_IsFront)
+        // 「反転中」フラグを立てる
+        _PlayerIsTurn = true;
+        
+        if (_IsFront)
         {
             //this.gameObject.transform.position = _PlayerObject.transform.position + _PlayerViewPosOffset;
             // カメラのrotationを合わせる
             //this.gameObject.transform.rotation = Quaternion.Euler(_PlayerViewRotOffset.x, _PlayerViewRotOffset.y, _PlayerViewRotOffset.z);
+            
 
-
-            // 「反転中」フラグを立てる
-            _PlayerIsTurn = true;
 
             // 表→裏のひっくり返し
             //iTween.RotateTo(this.gameObject
@@ -322,9 +323,6 @@ public class CameraWork : MonoBehaviour
             //this.gameObject.transform.rotation = Quaternion.Euler(_rPlayerViewRotOffset.x, _rPlayerViewRotOffset.y, _rPlayerViewRotOffset.z);
 
 
-
-            // 「反転中」フラグを立てる
-            _PlayerIsTurn = true;
 
             // 裏→表のひっくり返し
             //iTween.RotateTo(this.gameObject
@@ -349,11 +347,13 @@ public class CameraWork : MonoBehaviour
             rPVposOffset = new Vector3(_PlayerViewPosOffset.x, -(_PlayerViewPosOffset.y), _PlayerViewPosOffset.z);
             iTween.MoveTo(this.gameObject, iTween.Hash("x", _PlayerObject.transform.position.x + rPVposOffset.x, "y", _PlayerObject.transform.position.y + rPVposOffset.y, "z", _PlayerObject.transform.position.z + rPVposOffset.z, "time", 0.3f
                 , "easeType", iTween.EaseType.linear));
+            
         }
         else
         {
             iTween.MoveTo(this.gameObject, iTween.Hash("x", _PlayerObject.transform.position.x + _PlayerViewPosOffset.x, "y", _PlayerObject.transform.position.y + _PlayerViewPosOffset.y, "z", _PlayerObject.transform.position.z + _PlayerViewPosOffset.z, "time", 0.3f
                 , "easeType", iTween.EaseType.linear));
+            
         }
         
         _PlayerIsTurn = false;　　　　　// 「反転中」フラグを折る
