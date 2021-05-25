@@ -98,7 +98,7 @@ public class GameOverScreen : MonoBehaviour
         }
 
 
-        if (Input.GetKeyDown("joystick button 0") || Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown("joystick button 1") || Input.GetKeyDown(KeyCode.Return))
         {
             string restartStageName = SceneManager.GetActiveScene().name;
             SceneManager.LoadScene(restartStageName);

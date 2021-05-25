@@ -34,8 +34,8 @@ public class TurnManager : MonoBehaviour
         List<GameObject> enemys = _GameManagerScript.GetEnemys();
 
         //ターン数取得できないなんで
-        //_TurnLimit = StageManager._MaxTurn;
-        _TurnLimit = 30;
+        _TurnLimit = StageManager._MaxTurn;
+        //_TurnLimit = 30;
 
         //ブロックのスクリプト取得
         foreach(var blocklist in blocks)

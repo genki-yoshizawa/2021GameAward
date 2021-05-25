@@ -7,7 +7,7 @@ public class StartButton : MonoBehaviour
 {
     void Update()
     {
-        if (Input.GetKeyDown("joystick button 1"))
+        if (Input.GetKeyDown("joystick button 1") || Input.GetKeyDown(KeyCode.Return))
             OnStartButtonClick();
 
     }
