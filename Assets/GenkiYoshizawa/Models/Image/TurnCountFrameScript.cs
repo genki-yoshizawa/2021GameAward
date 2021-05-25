@@ -29,7 +29,7 @@ public class TurnCountFrameScript : MonoBehaviour
         List<int> number = new List<int>();
         int turnLimit = _TurnLimit = _TurnManagerScript.GetTurnLimit();
         int digit = turnLimit;
-        if (digit == 0)
+        if (digit <= 0)
         {
             number.Add(turnLimit);
         }
@@ -59,7 +59,7 @@ public class TurnCountFrameScript : MonoBehaviour
             List<int> number = new List<int>();
             int displayNumber = _TurnLimit - preTurnCount;
             int digit = displayNumber;
-            if (digit == 0)
+            if (digit <= 0)
             {
                 number.Add(displayNumber);
             }
@@ -89,7 +89,7 @@ public class TurnCountFrameScript : MonoBehaviour
                 List<int> number = new List<int>();
                 int displayNumber = _TurnLimit - preTurnCount;
                 int digit = displayNumber;
-                if(digit == 0)
+                if(digit <= 0)
                 {
                     number.Add(displayNumber);
                 }
@@ -100,6 +100,7 @@ public class TurnCountFrameScript : MonoBehaviour
                     number.Add(displayNumber);
 
                 }
+                Debug.Log(number[0]);
                 transform.GetChild(0).GetComponent<Image>().sprite = _NumberSprite[number[0]];
                 if (number.Count > 1)
                     transform.GetChild(1).GetComponent<Image>().sprite = _NumberSprite[number[1]];
