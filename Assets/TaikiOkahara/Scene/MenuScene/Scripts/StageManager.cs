@@ -117,7 +117,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
             InputRightButton();
         else if (dph < 0)
             InputLeftButton();
-        else if (Input.GetKeyDown("joystick button 1") && !_Move)
+        else if ((Input.GetKeyDown("joystick button 1") || (Input.GetKeyDown(KeyCode.Return))) && !_Move)
             GameStart();
 
 
