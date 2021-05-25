@@ -976,10 +976,14 @@ MonoBehaviour:
   _Pause: {fileID: 0}
   _StarAnimator: {fileID: 1759198751570843543}
   _ClearScreenAnimator: {fileID: 1759198751765872088}
-  _CommentAnimator: {fileID: 1759198751337076926}
+  _Comment: {fileID: 1759198751337076920}
   _TurnNumber: {fileID: 1759198751190701063}
   _TurnScoreNumber: {fileID: 1759198752558619509}
   _StarParticle: {fileID: 1759198752125864069}
+  _Comments:
+  - {fileID: -1662065156415404479, guid: b266e01c320bb244193282df238d6805, type: 3}
+  - {fileID: -1987024573452110525, guid: b266e01c320bb244193282df238d6805, type: 3}
+  - {fileID: 2536172832228308136, guid: b266e01c320bb244193282df238d6805, type: 3}
   _ChangeMenuSceneCount: 0
 --- !u!95 &1759198751765872088
 Animator:
