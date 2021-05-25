@@ -5145,6 +5145,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1585705306440433839, guid: 6158f0bf8f46c844c81e9cf816963c00, type: 3}
+      propertyPath: _ActionTime
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1585705306440433839, guid: 6158f0bf8f46c844c81e9cf816963c00, type: 3}
       propertyPath: _ClearScreen
       value: 
       objectReference: {fileID: 1059863355}

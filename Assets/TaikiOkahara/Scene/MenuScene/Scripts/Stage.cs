@@ -43,7 +43,7 @@ public class Stage : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         _Time += Time.deltaTime;
         float sin = Mathf.Sin(_Time * _Speed) * _Range;

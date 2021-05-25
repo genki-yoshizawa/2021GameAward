@@ -38,7 +38,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
     public static int _2Star = 0;
     public static int _1Star = 0;
     public static string _StageName;
-    public static GameObject _StageModel;
+    public static string _StageModelName;
 
     void Start()
     {
@@ -60,7 +60,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         }
     }
 
-    void FixedUpdate()
+    void Update()
     {
         float dph = Input.GetAxis("D Pad Horizontal");
 
@@ -185,8 +185,9 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         _2Star = _ChoiceStage.GetComponent<Stage>()._2Star;
         _3Star = _ChoiceStage.GetComponent<Stage>()._3Star;
 
-        Object obj = PrefabUtility.GetCorrespondingObjectFromSource(_ChoiceStage.transform.GetChild(0));
-        _StageModel = (GameObject)obj;
+
+        GameObject obj = _ChoiceStage.transform.GetChild(0).gameObject;
+        _StageModelName = obj.name;
 
         SceneManager.LoadScene("FadeScene");
     }
@@ -196,8 +197,4 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         return _ChoiceStage;
     }
 
-    public GameObject GetStageModel()
-    {
-        return _StageModel;
-    }
 }

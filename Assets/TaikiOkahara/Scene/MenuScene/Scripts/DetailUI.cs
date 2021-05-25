@@ -15,7 +15,7 @@ public class DetailUI : MonoBehaviour
 
     private int _StageClearPercentage;
 
-    void FixedUpdate()
+    void Update()
     {
 
         float dph = Input.GetAxis("D Pad Horizontal");
