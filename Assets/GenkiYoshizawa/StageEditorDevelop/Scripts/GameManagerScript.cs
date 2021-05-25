@@ -141,4 +141,10 @@ public class GameManagerScript : MonoBehaviour
         _GameUI.SetActive(true);
     }
 
+    public void SetClear()
+    {
+        _TurnManager.GetComponent<TurnManager>().enabled = false;
+        _GameUI.SetActive(false);
+    }
+
 }
