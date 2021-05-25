@@ -35,6 +35,7 @@ public class CameraWork : MonoBehaviour
     private List<Transform> _TurnOverTransform = new List<Transform>();                                       // 反転用のトランスフォーム、0:表側のギリギリ　1:ちょうどステージの真ん中　2:裏側のギリギリ
 
     private float CameraRotateOffset;                                                                           // レベルデザインをミスった報い
+    private float CameraRotateOffset_z;                                                                           // 「反転」用
 
     // カメラ裏表判定フラグ
     [SerializeField] private bool _IsFront;                                                                    // カメラが今表ならtrue
@@ -45,6 +46,7 @@ public class CameraWork : MonoBehaviour
     // 入れ替え・ひっくり返し
     [SerializeField] private float _PlayerTurnSwapCameraWorkTime = 1.0f;                    // カメラワーク時間
     private bool _PlayerIsSwap;                 // 「入れ替え中」フラグ
+    private bool _PlayerIsTurn;                 // 「反転中」フラグ
 
 
 
@@ -92,8 +94,8 @@ public class CameraWork : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F))
         {
             //PlayerMoveCameraWork();     // 「移動」後
-            PlayerSwapCameraWork();     // 「入れ替え」後
-            //PlayerTurnCameraWork();     // 「反転」後
+            //PlayerSwapCameraWork();     // 「入れ替え」後
+            PlayerTurnCameraWork();     // 「反転」後
         }
         // ↑を押したら「ゲームスタート」
         if (Input.GetKeyDown(KeyCode.G))
@@ -123,8 +125,7 @@ public class CameraWork : MonoBehaviour
                 this.gameObject.transform.position = _GameManagerScript.GetPlayer().transform.position + rPVposOffset;
             }
         }
-
-
+        
     }
 
     //------------------------------------------------------------------------------------------------------------
@@ -196,7 +197,7 @@ public class CameraWork : MonoBehaviour
     }
 
 
-    // 「プレイヤー移動選択時のカメラワーク(引数：int 移動先のブロック配列の要素数)-----------------------------------------------------------------------
+    // 「プレイヤー移動選択時」のカメラワーク(引数：int 移動先のブロック配列の要素数)-----------------------------------------------------------------------
     public void PlayerMoveCameraWork(Vector2Int BlockNum)
     {
         // プレイヤーの現在トランスフォームを更新
@@ -222,7 +223,7 @@ public class CameraWork : MonoBehaviour
             // 次の移動先ブロック座標にカメラワーク
             rPVposOffset = new Vector3(_PlayerViewPosOffset.x, -(_PlayerViewPosOffset.y), _PlayerViewPosOffset.z);     // 裏面用オフセット
             iTween.MoveTo(this.gameObject, iTween.Hash("x", NextMoveToBlock_transform.position.x + rPVposOffset.x, "y", _PlayerCurTransform.position.y + rPVposOffset.y, "z", NextMoveToBlock_transform.position.z + rPVposOffset.z, "time", _TopViewToPlayerView_MoveTime));
-            iTween.RotateTo(this.gameObject, iTween.Hash("x", _PlayerViewRotOffset.x, "y", _PlayerViewRotOffset.y, "z", _PlayerViewRotOffset.z, "time", _TopViewToPlayerView_RotateTime));
+            iTween.RotateTo(this.gameObject, iTween.Hash("x", _rPlayerViewRotOffset.x, "y", _rPlayerViewRotOffset.y, "z", _rPlayerViewRotOffset.z, "time", _TopViewToPlayerView_RotateTime));
             
         }
 
@@ -265,37 +266,29 @@ public class CameraWork : MonoBehaviour
     // プレイヤーひっくり返し用カメラワーク----------------------------------------------------------------------------------------------
     public void PlayerTurnCameraWork()
     {
-        // プレイヤーの現在のトランスフォームを取得してこのカメラをプレイヤーの子供にする
-        _PlayerObject = _GameManagerScript.GetPlayer();
-
-        if(_IsFront)
-        {
-            this.gameObject.transform.position = _PlayerObject.transform.position + _PlayerViewPosOffset;
-            // カメラのrotationを合わせる
-            this.gameObject.transform.rotation = Quaternion.Euler(_PlayerViewRotOffset.x, _PlayerViewRotOffset.y, _PlayerViewRotOffset.z);
-        }
-        else
+        
+        if (_IsFront)
         {
             // 裏側のみオフセットを更新
             rPVposOffset = new Vector3(_PlayerViewPosOffset.x, -(_PlayerViewPosOffset.y), _PlayerViewPosOffset.z);
-            this.gameObject.transform.position = _PlayerObject.transform.position + rPVposOffset;
-            // カメラのrotationを合わせる
-            this.gameObject.transform.rotation = Quaternion.Euler(_rPlayerViewRotOffset.x, _rPlayerViewRotOffset.y, _rPlayerViewRotOffset.z);
+            iTween.MoveTo(this.gameObject, iTween.Hash("x", _PlayerObject.transform.position.x + rPVposOffset.x, "y", _PlayerObject.transform.position.y + rPVposOffset.y, "z", _PlayerObject.transform.position.z + rPVposOffset.z, "time", 0.3f
+                , "easeType", iTween.EaseType.linear));
+            iTween.RotateTo(this.gameObject
+                    , iTween.Hash("x", _rPlayerViewRotOffset.x, "y", _rPlayerViewRotOffset.y, "z", _rPlayerViewRotOffset.z, "time", _PlayerTurnSwapCameraWorkTime
+                    , "easeType", iTween.EaseType.linear));
         }
-        
-        this.gameObject.transform.parent = _PlayerObject.transform;
-
-        // 指定時間後に関数を呼び出す
-        Invoke(nameof(PlayerTurn_EndFunc), _PlayerTurnSwapCameraWorkTime);
-    }
-    void PlayerTurn_EndFunc()
-    {
-
-        this.gameObject.transform.parent = null;
+        else
+        {
+            iTween.MoveTo(this.gameObject, iTween.Hash("x", _PlayerObject.transform.position.x + _PlayerViewPosOffset.x, "y", _PlayerObject.transform.position.y + _PlayerViewPosOffset.y, "z", _PlayerObject.transform.position.z + _PlayerViewPosOffset.z, "time", 0.3f
+                , "easeType", iTween.EaseType.linear));
+            iTween.RotateTo(this.gameObject
+                    , iTween.Hash("x", _PlayerViewRotOffset.x, "y", _PlayerViewRotOffset.y, "z", _PlayerViewRotOffset.z, "time", _PlayerTurnSwapCameraWorkTime
+                    , "easeType", iTween.EaseType.linear));
+        }
 
         _IsFront = !_IsFront;
         _IsTopView = false;
-
+        
     }
 
 
