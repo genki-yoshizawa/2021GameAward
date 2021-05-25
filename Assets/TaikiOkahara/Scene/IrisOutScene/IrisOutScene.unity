@@ -579,6 +579,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Target: {fileID: 1791977364}
   _IrisMat: {fileID: 2100000, guid: 9da37df9065f3e8478e8672b096a4d2a, type: 2}
+  _OffsetY: 0
 --- !u!1 &641042132
 GameObject:
   m_ObjectHideFlags: 0
@@ -917,7 +918,6 @@ GameObject:
   - component: {fileID: 1791977368}
   - component: {fileID: 1791977367}
   - component: {fileID: 1791977366}
-  - component: {fileID: 1791977365}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -925,18 +925,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1791977365
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1791977364}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 224f4292aebf6254392223dd8c4ca8c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &1791977366
 BoxCollider:
   m_ObjectHideFlags: 0

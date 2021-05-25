@@ -33,6 +33,8 @@ public class CameraWork : MonoBehaviour
     // カメラ反転用
     private List<Transform> _TurnOverTransform = new List<Transform>();                                       // 反転用のトランスフォーム、0:表側のギリギリ　1:ちょうどステージの真ん中　2:裏側のギリギリ
 
+    private float CameraRotateOffset;                                                                           // レベルデザインをミスった報い
+
     // カメラ裏表判定フラグ
     [SerializeField] private bool _IsFront;                                                                    // カメラが今表ならtrue
 
@@ -64,159 +66,182 @@ public class CameraWork : MonoBehaviour
         {
             _TurnOverTransform.Add(_TurnOverPoint[i].transform.transform);
         }
-        
-    }
 
-    private bool _isPlayer = true;
+        // 初期視点を俯瞰視点に設定
+        _IsTopView = true;
+
+        CameraRotateOffset = 90.0f;
+
+    }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T))
+        //// テスト用 ////
+        // →を押したら「プレイヤー⇔俯瞰視点」
+        if(Input.GetKeyDown(KeyCode.T))
         {
-            if (_isPlayer)
-                PlayerViewToTopViewCameraWork();
-            else
-                TopViewToPlayerViewCameraWork();
-            _isPlayer = !_isPlayer;
+            TopViewToPlayerViewCameraWork();
         }
+        // ←を押したら「プレイヤー操作後」
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            //PlayerMoveCameraWork();     // プレイヤーが呼ばないと検証不可。たぶん大丈夫。
+
+        }
+        // ↑を押したら「ゲームスタート」
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            GameStartCameraWork();
+        }
+        // ↓を押したら「裏表反転」
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            TurnOverCameraWork();
+        }
+        //// テスト用 ////
+        
+
+
     }
 
     //------------------------------------------------------------------------------------------------------------
-    // 「俯瞰視点→プレイヤー」のカメラワーク
-    void TopViewToPlayerViewCameraWork()
+    // 「俯瞰視点⇔プレイヤー」のカメラワーク
+    public void TopViewToPlayerViewCameraWork()
     {
+
+        if(_IsTopView)
+        {   // 「俯瞰視点→プレイヤー」のカメラワーク
+
+            if (_IsFront && _PlayerObject.GetComponent<PlayerControl>().GetIsFront())
+            {   // カメラが表の時の処理
+                // 俯瞰視点にカメラをセット
+                this.gameObject.transform.transform.position = _TopViewTransform[0].position;
+                this.gameObject.transform.transform.rotation = _TopViewTransform[0].rotation;
+
+                // プレイヤー追従視点にカメラワーク
+                iTween.MoveTo(this.gameObject, (_PlayerOldTransform.position + _PlayerViewPosOffset), _TopViewToPlayerView_MoveTime);
+                iTween.RotateTo(this.gameObject, iTween.Hash("x", _PlayerViewRotOffset.x, "y", _PlayerViewRotOffset.y, "z", _PlayerViewRotOffset.z, "time", _TopViewToPlayerView_RotateTime));
+                
+                _IsTopView = false;
+
+            }
+            else if (!_IsFront && !_PlayerObject.GetComponent<PlayerControl>().GetIsFront())
+            {   // カメラが裏の時の処理
+                // 俯瞰視点にカメラをセット
+                this.gameObject.transform.transform.position = _TopViewTransform[1].position;
+                this.gameObject.transform.transform.rotation = _TopViewTransform[1].rotation;
+
+                // プレイヤー追従視点にカメラワーク
+                // 裏面用にプレイヤー追従カメラのオフセットを設定
+                Vector3 rPVposOffset = new Vector3(_PlayerViewPosOffset.x, -(_PlayerViewPosOffset.y), _PlayerViewPosOffset.z);
+                iTween.MoveTo(this.gameObject, (_PlayerOldTransform.position + rPVposOffset), _TopViewToPlayerView_MoveTime);
+                iTween.RotateTo(this.gameObject, iTween.Hash("x", _rPlayerViewRotOffset.x, "y", _rPlayerViewRotOffset.y, "z", _rPlayerViewRotOffset.z, "time", _TopViewToPlayerView_RotateTime));
+
+                _IsTopView = false;
+
+            }
+
+        }
+        else
+        {   // 「プレイヤー→俯瞰視点」のカメラワーク
+            if (_IsFront)
+            {   // カメラが表の時の処理
+                // プレイヤー追従視点にカメラをセット
+                this.gameObject.transform.transform.position = (_PlayerOldTransform.position + _PlayerViewPosOffset);
+                this.gameObject.transform.rotation = Quaternion.Euler(_PlayerViewRotOffset.x, _PlayerViewRotOffset.y, _PlayerViewRotOffset.z);
+
+                // 俯瞰視点にカメラワーク
+                iTween.MoveTo(this.gameObject, _TopViewTransform[0].position, _TopViewToPlayerView_MoveTime);
+                iTween.RotateTo(this.gameObject, iTween.Hash("x", _TopViewTransform[0].localEulerAngles.x, "y", (_TopViewTransform[0].localEulerAngles.y + CameraRotateOffset), "z", _TopViewTransform[0].localEulerAngles.z, "time", _TopViewToPlayerView_RotateTime));
+            }
+            else
+            {   // カメラが裏の時の処理
+                // プレイヤー追従視点にカメラをセット
+                Vector3 rPVposOffset = new Vector3(_PlayerViewPosOffset.x, -(_PlayerViewPosOffset.y), _PlayerViewPosOffset.z);
+                this.gameObject.transform.transform.position = (_PlayerOldTransform.position + rPVposOffset);
+                this.gameObject.transform.rotation = Quaternion.Euler(_rPlayerViewRotOffset.x, _rPlayerViewRotOffset.y, _rPlayerViewRotOffset.z);
+
+                // 俯瞰視点にカメラワーク
+                iTween.MoveTo(this.gameObject, _TopViewTransform[1].position, _TopViewToPlayerView_MoveTime);
+                iTween.RotateTo(this.gameObject, iTween.Hash("x", _TopViewTransform[1].localEulerAngles.x, "y", (_TopViewTransform[1].localEulerAngles.y + CameraRotateOffset), "z", _TopViewTransform[1].localEulerAngles.z, "time", _TopViewToPlayerView_RotateTime));
+            }
+
+            _IsTopView = true;
+
+        }
+        
+    }
+
+
+    // 「プレイヤー移動選択時のカメラワーク(引数：int 移動先のブロック配列の要素数)
+    public void PlayerMoveCameraWork(Vector2Int BlockNum)
+    {
+        // プレイヤーの現在トランスフォームを更新
+        _PlayerObject = _GameManagerScript.GetPlayer();
+        _PlayerCurTransform = _PlayerObject.transform.transform;
+        _PlayerOldTransform = _PlayerCurTransform;
+        
+        // 次の移動先ブロックのTransformを取得
+        Transform NextMoveToBlock_transform;
+        NextMoveToBlock_transform = _GameManagerScript.GetBlock(BlockNum).transform;
+        
         if (_IsFront)
         {   // カメラが表の時の処理
-            // 俯瞰視点にカメラをセット
-            this.gameObject.transform.transform.position = _TopViewTransform[0].position;
-            this.gameObject.transform.transform.rotation = _TopViewTransform[0].rotation;
-            
-            // プレイヤー追従視点にカメラワーク
-            iTween.MoveTo(this.gameObject, (_PlayerOldTransform.position + _PlayerViewPosOffset), _TopViewToPlayerView_MoveTime);
+
+            // 次の移動先ブロック座標にカメラワーク
+            iTween.MoveTo(this.gameObject, iTween.Hash("x", NextMoveToBlock_transform.position.x + _PlayerViewPosOffset.x, "y", _PlayerCurTransform.position.y + _PlayerViewPosOffset.y, "z", NextMoveToBlock_transform.position.z + _PlayerViewPosOffset.z, "time", _TopViewToPlayerView_RotateTime));
             iTween.RotateTo(this.gameObject, iTween.Hash("x", _PlayerViewRotOffset.x, "y", _PlayerViewRotOffset.y, "z", _PlayerViewRotOffset.z, "time", _TopViewToPlayerView_RotateTime));
             
         }
         else
         {   // カメラが裏の時の処理
-            // 俯瞰視点にカメラをセット
-            this.gameObject.transform.transform.position = _TopViewTransform[1].position;
-            this.gameObject.transform.transform.rotation = _TopViewTransform[1].rotation;
 
-            // プレイヤー追従視点にカメラワーク
-            // 裏面用にプレイヤー追従カメラのオフセットを設定
-            Vector3 rPVposOffset = new Vector3( _PlayerViewPosOffset.x, -(_PlayerViewPosOffset.y), _PlayerViewPosOffset.z );
-            iTween.MoveTo(this.gameObject, (_PlayerOldTransform.position + rPVposOffset), _TopViewToPlayerView_MoveTime);
-            iTween.RotateTo(this.gameObject, iTween.Hash("x", _rPlayerViewRotOffset.x, "y", _rPlayerViewRotOffset.y, "z", _rPlayerViewRotOffset.z, "time", _TopViewToPlayerView_RotateTime));
-
+            // 次の移動先ブロック座標にカメラワーク
+            Vector3 rPVposOffset = new Vector3(_PlayerViewPosOffset.x, -(_PlayerViewPosOffset.y), _PlayerViewPosOffset.z);     // 裏面用オフセット
+            iTween.MoveTo(this.gameObject, iTween.Hash("x", NextMoveToBlock_transform.position.x + rPVposOffset.x, "y", _PlayerCurTransform.position.y + rPVposOffset.y, "z", NextMoveToBlock_transform.position.z + rPVposOffset.z, "time", _TopViewToPlayerView_RotateTime));
+            iTween.RotateTo(this.gameObject, iTween.Hash("x", _PlayerViewRotOffset.x, "y", _PlayerViewRotOffset.y, "z", _PlayerViewRotOffset.z, "time", _TopViewToPlayerView_RotateTime));
+            
         }
 
         _IsTopView = false;
 
     }
 
-    // 「プレイヤー→俯瞰視点」のカメラワーク
-    void PlayerViewToTopViewCameraWork()
-    {
-        if (_IsFront)
-        {   // カメラが表の時の処理
-            // プレイヤー追従視点にカメラをセット
-            this.gameObject.transform.transform.position = (_PlayerOldTransform.position + _PlayerViewPosOffset);
-            this.gameObject.transform.rotation = Quaternion.Euler(_PlayerViewRotOffset.x, _PlayerViewRotOffset.y, _PlayerViewRotOffset.z);
-
-            // 俯瞰視点にカメラワーク
-            iTween.MoveTo(this.gameObject, _TopViewTransform[0].position, _TopViewToPlayerView_MoveTime);
-            iTween.RotateTo(this.gameObject, iTween.Hash("x", _TopViewTransform[0].localEulerAngles.x, "y", _TopViewTransform[0].localEulerAngles.y, "z", _TopViewTransform[0].localEulerAngles.z, "time", _TopViewToPlayerView_RotateTime));
-            
-        }
-        else
-        {   // カメラが裏の時の処理
-            // プレイヤー追従視点にカメラをセット
-            Vector3 rPVposOffset = new Vector3(_PlayerViewPosOffset.x, -(_PlayerViewPosOffset.y), _PlayerViewPosOffset.z);
-            this.gameObject.transform.transform.position = (_PlayerOldTransform.position + rPVposOffset);
-            this.gameObject.transform.rotation = Quaternion.Euler(_rPlayerViewRotOffset.x, _rPlayerViewRotOffset.y, _rPlayerViewRotOffset.z);
-
-            // 俯瞰視点にカメラワーク
-            iTween.MoveTo(this.gameObject, _TopViewTransform[1].position, _TopViewToPlayerView_MoveTime);
-            iTween.RotateTo(this.gameObject, iTween.Hash("x", _TopViewTransform[1].localEulerAngles.x, "y", _TopViewTransform[1].localEulerAngles.y, "z", _TopViewTransform[1].localEulerAngles.z, "time", _TopViewToPlayerView_RotateTime));
-
-        }
-
-        _IsTopView = true;
-
-    }
-
-    // 「プレイヤー操作後」のカメラワーク     // →未検証だが、多分大丈夫
-    void PlayerMoveCameraWork()
-    {
-        if (_IsFront)
-        {   // カメラが表の時の処理
-            // プレイヤーの現在トランスフォームを記録
-            _PlayerObject = _GameManagerScript.GetPlayer();
-            _PlayerCurTransform = _PlayerObject.transform.transform;
-
-            // プレイヤーの前座標にカメラを設定
-            this.gameObject.transform.transform.position = (_PlayerOldTransform.position + _PlayerViewPosOffset);
-            this.gameObject.transform.rotation = Quaternion.Euler(_PlayerViewRotOffset.x, _PlayerViewRotOffset.y, _PlayerViewRotOffset.z);
-
-            // プレイヤーの現在座標にカメラワーク
-            iTween.MoveTo(this.gameObject, (_PlayerCurTransform.position + _PlayerViewPosOffset), _TopViewToPlayerView_MoveTime);
-            iTween.RotateTo(this.gameObject, iTween.Hash("x", _PlayerViewRotOffset.x, "y", _PlayerViewRotOffset.y, "z", _PlayerViewRotOffset.z, "time", _TopViewToPlayerView_RotateTime));
-            
-        }
-        else
-        {   // カメラが裏の時の処理
-            // プレイヤーの現在トランスフォームを記録
-            _PlayerObject = _GameManagerScript.GetPlayer();
-            _PlayerCurTransform = _PlayerObject.transform.transform;
-
-            // プレイヤーの前座標にカメラを設定
-            Vector3 rPVposOffset = new Vector3(_PlayerViewPosOffset.x, -(_PlayerViewPosOffset.y), _PlayerViewPosOffset.z);
-            this.gameObject.transform.transform.position = (_PlayerOldTransform.position + rPVposOffset);
-            this.gameObject.transform.rotation = Quaternion.Euler(_rPlayerViewRotOffset.x, _rPlayerViewRotOffset.y, _rPlayerViewRotOffset.z);
-
-            // プレイヤーの現在座標にカメラワーク
-            iTween.MoveTo(this.gameObject, (_PlayerCurTransform.position + _PlayerViewPosOffset), _TopViewToPlayerView_MoveTime);
-            iTween.RotateTo(this.gameObject, iTween.Hash("x", _PlayerViewRotOffset.x, "y", _PlayerViewRotOffset.y, "z", _PlayerViewRotOffset.z, "time", _TopViewToPlayerView_RotateTime));
-            
-        }
-
-        _IsTopView = false;
-
-    }
 
     // 「裏表切り替え」のカメラワーク
-    void TurnOverCameraWork()
+    public void TurnOverCameraWork()
     {
         if(!_IsTopView)     // 俯瞰視点じゃない場合俯瞰視点になるカメラワーク
         {
             if (_IsFront)
             {   // カメラが表の時の処理
                 // 俯瞰視点にカメラワーク
-                iTween.MoveTo(this.gameObject, _TopViewTransform[0].position, _TopViewToPlayerView_MoveTime);
+                iTween.MoveTo(this.gameObject, iTween.Hash("x", _TopViewTransform[0].position.x, "y", _TopViewTransform[0].position.y, "z", _TopViewTransform[0].position.z, "time", _TurnOverCameraWork_MoveTime
+                , "easeType", iTween.EaseType.linear));
+                
                 iTween.RotateTo(this.gameObject
-                    ,iTween.Hash("x", _TopViewTransform[0].localEulerAngles.x, "y", _TopViewTransform[0].localEulerAngles.y, "z", _TopViewTransform[0].localEulerAngles.z, "time", _TopViewToPlayerView_MoveTime
+                    ,iTween.Hash("x", _TopViewTransform[0].localEulerAngles.x, "y", (_TopViewTransform[0].localEulerAngles.y + CameraRotateOffset), "z", _TopViewTransform[0].localEulerAngles.z, "time", _TurnOverCameraWork_MoveTime
                     , "oncomplete", "TurnOverCameraWork2"
                     , "oncompletetarget", this.gameObject));
             }
             else
             {   // カメラが裏の時の処理
                 // 俯瞰視点にカメラワーク
-                iTween.MoveTo(this.gameObject, _TopViewTransform[1].position, _TopViewToPlayerView_MoveTime);
+                iTween.MoveTo(this.gameObject, iTween.Hash("x", _TopViewTransform[1].position.x, "y", _TopViewTransform[1].position.y, "z", _TopViewTransform[1].position.z, "time", _TurnOverCameraWork_MoveTime
+                , "easeType", iTween.EaseType.linear));
+                
                 iTween.RotateTo(this.gameObject
-                    , iTween.Hash("x", _TopViewTransform[1].localEulerAngles.x, "y", _TopViewTransform[1].localEulerAngles.y, "z", _TopViewTransform[1].localEulerAngles.z, "time", _TopViewToPlayerView_MoveTime
+                    , iTween.Hash("x", _TopViewTransform[1].localEulerAngles.x, "y", (_TopViewTransform[1].localEulerAngles.y + CameraRotateOffset), "z", _TopViewTransform[1].localEulerAngles.z, "time", _TurnOverCameraWork_MoveTime
                     , "oncomplete", "TurnOverCameraWork2"
                     , "oncompletetarget", this.gameObject));
             }
-
         }
         else
         {
-            
             this.TurnOverCameraWork2();
         }
     }
-
     void TurnOverCameraWork2()
     {
         if (_IsFront)
@@ -225,7 +250,7 @@ public class CameraWork : MonoBehaviour
             iTween.MoveTo(this.gameObject, iTween.Hash("x", _TurnOverTransform[0].position.x, "y", _TurnOverTransform[0].position.y, "z", _TurnOverTransform[0].position.z, "time", _TurnOverCameraWork_MoveTime
                 , "easeType", iTween.EaseType.linear));
             iTween.RotateTo(this.gameObject
-                    , iTween.Hash("x", _TurnOverTransform[0].localEulerAngles.x, "y", _TurnOverTransform[0].localEulerAngles.y, "z", _TurnOverTransform[0].localEulerAngles.z, "time", _TurnOverCameraWork_RotateTime
+                    , iTween.Hash("x", _TurnOverTransform[0].localEulerAngles.x, "y", (_TurnOverTransform[0].localEulerAngles.y + CameraRotateOffset), "z", _TurnOverTransform[0].localEulerAngles.z, "time", _TurnOverCameraWork_RotateTime
                     , "easeType", iTween.EaseType.linear
                     , "oncomplete", "TurnOverCameraWork3"
                     , "oncompletetarget", this.gameObject));
@@ -236,25 +261,23 @@ public class CameraWork : MonoBehaviour
             iTween.MoveTo(this.gameObject, iTween.Hash("x", _TurnOverTransform[2].position.x, "y", _TurnOverTransform[2].position.y, "z", _TurnOverTransform[2].position.z, "time", _TurnOverCameraWork_MoveTime
                 , "easeType", iTween.EaseType.linear));
             iTween.RotateTo(this.gameObject
-                    , iTween.Hash("x", _TurnOverTransform[2].localEulerAngles.x, "y", _TurnOverTransform[2].localEulerAngles.y, "z", _TurnOverTransform[2].localEulerAngles.z, "time", _TurnOverCameraWork_RotateTime
+                    , iTween.Hash("x", _TurnOverTransform[2].localEulerAngles.x, "y", (_TurnOverTransform[2].localEulerAngles.y + CameraRotateOffset), "z", _TurnOverTransform[2].localEulerAngles.z, "time", _TurnOverCameraWork_RotateTime
                     , "easeType", iTween.EaseType.linear
                     , "oncomplete", "TurnOverCameraWork3"
                     , "oncompletetarget", this.gameObject));
         }
     }
-
     void TurnOverCameraWork3()
     {
         // ちょうどステージの真ん中にカメラワーク
         iTween.MoveTo(this.gameObject, iTween.Hash("x", _TurnOverTransform[1].position.x, "y", _TurnOverTransform[1].position.y, "z", _TurnOverTransform[1].position.z, "time", _TurnOverCameraWork_MoveTime
             , "easeType", iTween.EaseType.linear));
         iTween.RotateTo(this.gameObject
-                , iTween.Hash("x", _TurnOverTransform[1].localEulerAngles.x, "y", _TurnOverTransform[1].localEulerAngles.y, "z", _TurnOverTransform[1].localEulerAngles.z, "time", _TurnOverCameraWork_RotateTime
+                , iTween.Hash("x", _TurnOverTransform[1].localEulerAngles.x, "y", (_TurnOverTransform[1].localEulerAngles.y + CameraRotateOffset), "z", _TurnOverTransform[1].localEulerAngles.z, "time", _TurnOverCameraWork_RotateTime
                 , "easeType", iTween.EaseType.linear
                 , "oncomplete", "TurnOverCameraWork4"
                 , "oncompletetarget", this.gameObject));
     }
-
     void TurnOverCameraWork4()
     {
         if (_IsFront)
@@ -263,7 +286,7 @@ public class CameraWork : MonoBehaviour
             iTween.MoveTo(this.gameObject, iTween.Hash("x", _TurnOverTransform[2].position.x, "y", _TurnOverTransform[2].position.y, "z", _TurnOverTransform[2].position.z, "time", _TurnOverCameraWork_MoveTime
                 , "easeType", iTween.EaseType.linear));
             iTween.RotateTo(this.gameObject
-                    , iTween.Hash("x", _TurnOverTransform[2].localEulerAngles.x, "y", _TurnOverTransform[2].localEulerAngles.y, "z", _TurnOverTransform[2].localEulerAngles.z, "time", _TurnOverCameraWork_RotateTime
+                    , iTween.Hash("x", _TurnOverTransform[2].localEulerAngles.x, "y", (_TurnOverTransform[2].localEulerAngles.y + CameraRotateOffset), "z", _TurnOverTransform[2].localEulerAngles.z, "time", _TurnOverCameraWork_RotateTime
                     , "easeType", iTween.EaseType.linear
                     , "oncomplete", "TurnOverCameraWork5"
                     , "oncompletetarget", this.gameObject));
@@ -274,13 +297,12 @@ public class CameraWork : MonoBehaviour
             iTween.MoveTo(this.gameObject, iTween.Hash("x", _TurnOverTransform[0].position.x, "y", _TurnOverTransform[0].position.y, "z", _TurnOverTransform[0].position.z, "time", _TurnOverCameraWork_MoveTime
                 , "easeType", iTween.EaseType.linear));
             iTween.RotateTo(this.gameObject
-                    , iTween.Hash("x", _TurnOverTransform[0].localEulerAngles.x, "y", _TurnOverTransform[0].localEulerAngles.y, "z", _TurnOverTransform[0].localEulerAngles.z, "time", _TurnOverCameraWork_RotateTime
+                    , iTween.Hash("x", _TurnOverTransform[0].localEulerAngles.x, "y", (_TurnOverTransform[0].localEulerAngles.y + CameraRotateOffset), "z", _TurnOverTransform[0].localEulerAngles.z, "time", _TurnOverCameraWork_RotateTime
                     , "easeType", iTween.EaseType.linear
                     , "oncomplete", "TurnOverCameraWork5"
                     , "oncompletetarget", this.gameObject));
         }
     }
-
     void TurnOverCameraWork5()
     {
         if (_IsFront)
@@ -288,7 +310,7 @@ public class CameraWork : MonoBehaviour
             // 裏側の俯瞰視点にカメラワーク
             iTween.MoveTo(this.gameObject, iTween.Hash("x", _TopViewTransform[1].position.x, "y", _TopViewTransform[1].position.y, "z", _TopViewTransform[1].position.z, "time", _TurnOverCameraWork_MoveTime
                 , "easeType", iTween.EaseType.linear));
-            iTween.RotateTo(this.gameObject, iTween.Hash("x", _TopViewTransform[1].localEulerAngles.x, "y", _TopViewTransform[1].localEulerAngles.y, "z", _TopViewTransform[1].localEulerAngles.z, "time", _TurnOverCameraWork_RotateTime
+            iTween.RotateTo(this.gameObject, iTween.Hash("x", _TopViewTransform[1].localEulerAngles.x, "y", (_TopViewTransform[1].localEulerAngles.y + CameraRotateOffset), "z", _TopViewTransform[1].localEulerAngles.z, "time", _TurnOverCameraWork_RotateTime
                 , "easeType", iTween.EaseType.linear));
         }
         else
@@ -296,22 +318,23 @@ public class CameraWork : MonoBehaviour
             // 表側の俯瞰視点にカメラワーク
             iTween.MoveTo(this.gameObject, iTween.Hash("x", _TopViewTransform[0].position.x, "y", _TopViewTransform[0].position.y, "z", _TopViewTransform[0].position.z, "time", _TurnOverCameraWork_MoveTime
                 , "easeType", iTween.EaseType.linear));
-            iTween.RotateTo(this.gameObject, iTween.Hash("x", _TopViewTransform[0].localEulerAngles.x, "y", _TopViewTransform[0].localEulerAngles.y, "z", _TopViewTransform[0].localEulerAngles.z, "time", _TurnOverCameraWork_RotateTime
+            iTween.RotateTo(this.gameObject, iTween.Hash("x", _TopViewTransform[0].localEulerAngles.x, "y", (_TopViewTransform[0].localEulerAngles.y + CameraRotateOffset), "z", _TopViewTransform[0].localEulerAngles.z, "time", _TurnOverCameraWork_RotateTime
                 , "easeType", iTween.EaseType.linear));
         }
 
         _IsFront = !_IsFront;
+        _IsTopView = true;
 
     }
 
 
     // 「ゲームスタート時」のカメラワーク
-    void GameStartCameraWork()
+    public void GameStartCameraWork()
     {
         // 暫定的に「俯瞰視点→プレイヤー」のカメラワークを設定
 
-        if (_IsFront)
-        {   // カメラが表の時の処理
+        if (_PlayerObject.GetComponent<PlayerControl>().GetIsFront())
+        {   // プレイヤーが表スタートの時の処理
             // 俯瞰視点にカメラをセット
             this.gameObject.transform.transform.position = _TopViewTransform[0].position;
             this.gameObject.transform.transform.rotation = _TopViewTransform[0].rotation;
@@ -320,9 +343,11 @@ public class CameraWork : MonoBehaviour
             iTween.MoveTo(this.gameObject, (_PlayerOldTransform.position + _PlayerViewPosOffset), _TopViewToPlayerView_MoveTime);
             iTween.RotateTo(this.gameObject, iTween.Hash("x", _PlayerViewRotOffset.x, "y", _PlayerViewRotOffset.y, "z", _PlayerViewRotOffset.z, "time", _TopViewToPlayerView_RotateTime));
 
+            _IsTopView = false;
+
         }
-        else
-        {   // カメラが裏の時の処理
+        else if (!_PlayerObject.GetComponent<PlayerControl>().GetIsFront())
+        {   // プレイヤーが裏スタートの時の処理
             // 俯瞰視点にカメラをセット
             this.gameObject.transform.transform.position = _TopViewTransform[1].position;
             this.gameObject.transform.transform.rotation = _TopViewTransform[1].rotation;
@@ -333,33 +358,30 @@ public class CameraWork : MonoBehaviour
             iTween.MoveTo(this.gameObject, (_PlayerOldTransform.position + rPVposOffset), _TopViewToPlayerView_MoveTime);
             iTween.RotateTo(this.gameObject, iTween.Hash("x", _rPlayerViewRotOffset.x, "y", _rPlayerViewRotOffset.y, "z", _rPlayerViewRotOffset.z, "time", _TopViewToPlayerView_RotateTime));
 
-        }
+            _IsTopView = false;
 
-        _IsTopView = false;
+        }
 
     }
 
 
 
     // IsFrontを取得(カメラが表を映しているか否か)
-    bool GetCameraWorkIsFront()
+    public bool GetCameraWorkIsFront()
     {
         return _IsFront;
     }
 
     // IsFrontを設定(パネル操作時に裏面に行った時に使う)
-    void SetCameraWorkIsFront(bool FrontOrBack)
+    public void SetCameraWorkIsFront(bool FrontOrBack)
     {
         _IsFront = FrontOrBack;
     }
-    
+
     // カメラ俯瞰視点判定フラグ
-    bool GetIsTopView()
+    public bool GetIsTopView()
     {
         return _IsTopView;
     }
-
-
-
-
+    
 }
