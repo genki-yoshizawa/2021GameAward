@@ -172,15 +172,15 @@ public class ClearScreen : MonoBehaviour
         }
 
 
-        if(Input.GetKeyDown("joystick button 0"))
-            SceneManager.LoadScene("MenuScene");
-
+        if (Input.GetKeyDown("joystick button 0") || Input.GetKeyDown(KeyCode.Return))
+            StageManager.Instance.NextStage();
+            //SceneManager.LoadScene("MenuScene");
     }
 
     public void DisplayClearScreen(int score)
     {
         GameObject obj = GameObject.FindGameObjectWithTag("Manager");
-        obj.GetComponent<GameManagerScript>().SetPause();
+        //obj.GetComponent<GameManagerScript>().SetClear();
 
         _Score = score;
         _TurnScoreNumber.GetComponent<TurnScore>().SetScore(score);
