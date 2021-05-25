@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &4100035690983284304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4933105662467854050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9cd25e1fc74a0b4bad51294541cc8d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Resolution: 0
 --- !u!1 &7100963243512670062
 GameObject:
   m_ObjectHideFlags: 0
@@ -32,19 +45,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4100035690983284304
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4933105662467854050}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9cd25e1fc74a0b4bad51294541cc8d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _Resolution: 0
 --- !u!1001 &2282507759020339857
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -145,11 +145,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3549584534331288944, guid: ac8dfceb85c636749b9063ed1acfca0b, type: 3}
       propertyPath: _PlayerViewPosOffset.y
-      value: 1
+      value: 1.3
       objectReference: {fileID: 0}
     - target: {fileID: 3549584534331288944, guid: ac8dfceb85c636749b9063ed1acfca0b, type: 3}
       propertyPath: _PlayerViewPosOffset.z
-      value: -2
+      value: -2.5
       objectReference: {fileID: 0}
     - target: {fileID: 3549584534331288944, guid: ac8dfceb85c636749b9063ed1acfca0b, type: 3}
       propertyPath: _PlayerViewRotOffset.x
