@@ -180,7 +180,7 @@ public class ClearScreen : MonoBehaviour
     public void DisplayClearScreen(int score)
     {
         GameObject obj = GameObject.FindGameObjectWithTag("Manager");
-        //obj.GetComponent<GameManagerScript>().SetClear();
+        obj.GetComponent<GameManagerScript>().SetClear();
 
         _Score = score;
         _TurnScoreNumber.GetComponent<TurnScore>().SetScore(score);
