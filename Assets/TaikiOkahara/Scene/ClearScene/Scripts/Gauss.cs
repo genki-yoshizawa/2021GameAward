@@ -59,7 +59,7 @@ public class Gauss : MonoBehaviour
     }
 
 
-    void Update()
+    void FixedUpdate()
     {
         Camera cam = Camera.main;
         this.transform.position = cam.transform.position;

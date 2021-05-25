@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class StartButton : MonoBehaviour
 {
-    void Update()
+    void FixedUpdate()
     {
         if (Input.GetKeyDown("joystick button 0"))
             OnStartButtonClick();
