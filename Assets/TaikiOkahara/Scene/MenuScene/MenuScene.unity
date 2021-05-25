@@ -468,11 +468,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3519db023654c3046b6eca389fd9cd5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _SceneName: SampleStage
+  _SceneName: SceneB
   _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 14
-  _MaxTurn: 0
+  _MaxTurn: 30
   _3Star: 0
   _2Star: 0
   _1Star: 0
@@ -577,11 +577,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3519db023654c3046b6eca389fd9cd5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _SceneName: SampleStage
+  _SceneName: SceneB
   _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 15
-  _MaxTurn: 0
+  _MaxTurn: 30
   _3Star: 0
   _2Star: 0
   _1Star: 0
@@ -634,11 +634,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3519db023654c3046b6eca389fd9cd5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _SceneName: SampleStage
+  _SceneName: SceneB
   _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 110
-  _MaxTurn: 0
+  _MaxTurn: 30
   _3Star: 0
   _2Star: 0
   _1Star: 0
@@ -766,11 +766,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3519db023654c3046b6eca389fd9cd5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _SceneName: SampleStage
+  _SceneName: SceneB
   _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 16
-  _MaxTurn: 0
+  _MaxTurn: 30
   _3Star: 0
   _2Star: 0
   _1Star: 0
@@ -1002,7 +1002,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &739908212
 GameObject:
@@ -1288,11 +1288,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3519db023654c3046b6eca389fd9cd5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _SceneName: SampleStage
+  _SceneName: SceneB
   _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 17
-  _MaxTurn: 0
+  _MaxTurn: 30
   _3Star: 0
   _2Star: 0
   _1Star: 0
@@ -1401,7 +1401,7 @@ MonoBehaviour:
   _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 12
-  _MaxTurn: 0
+  _MaxTurn: 30
   _3Star: 0
   _2Star: 0
   _1Star: 0
@@ -1633,7 +1633,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &996913634
 PrefabInstance:
@@ -2110,8 +2110,9 @@ Transform:
   - {fileID: 1917870041}
   - {fileID: 1734435945}
   - {fileID: 495454894}
+  - {fileID: 1499098663}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1372083624 stripped
 Transform:
@@ -2151,7 +2152,7 @@ MonoBehaviour:
   _ClearPercentage: 90
   _StageName: {fileID: 0}
   _StageNumber: 11
-  _MaxTurn: 0
+  _MaxTurn: 30
   _3Star: 0
   _2Star: 0
   _1Star: 0
@@ -2183,7 +2184,7 @@ GameObject:
   - component: {fileID: 1499098661}
   - component: {fileID: 1499098660}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: MenuCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2264,8 +2265,8 @@ RectTransform:
   - {fileID: 739908213}
   - {fileID: 2088241980}
   - {fileID: 144668527}
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_Father: {fileID: 1350327153}
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2316,11 +2317,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3519db023654c3046b6eca389fd9cd5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _SceneName: SampleStage
+  _SceneName: SceneB
   _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 19
-  _MaxTurn: 0
+  _MaxTurn: 30
   _3Star: 0
   _2Star: 0
   _1Star: 0
@@ -7126,7 +7127,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: -180, y: 0, z: 0}
 --- !u!1001 &1904687518
 PrefabInstance:
@@ -7229,11 +7230,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3519db023654c3046b6eca389fd9cd5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _SceneName: SampleStage
+  _SceneName: SceneB
   _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 18
-  _MaxTurn: 0
+  _MaxTurn: 30
   _3Star: 0
   _2Star: 0
   _1Star: 0
@@ -7281,11 +7282,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3519db023654c3046b6eca389fd9cd5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _SceneName: SampleStage
+  _SceneName: SceneB
   _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 13
-  _MaxTurn: 0
+  _MaxTurn: 30
   _3Star: 0
   _2Star: 0
   _1Star: 0
