@@ -172,9 +172,9 @@ public class ClearScreen : MonoBehaviour
         }
 
 
-        if (Input.GetKeyDown("joystick button 0") || Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown("joystick button 1") || Input.GetKeyDown(KeyCode.Return))
             StageManager.Instance.NextStage();
-            //SceneManager.LoadScene("MenuScene");
+            
     }
 
     public void DisplayClearScreen(int score)
@@ -192,6 +192,10 @@ public class ClearScreen : MonoBehaviour
             _Comment.GetComponent<Image>().sprite = _Comments[1];
         else
             _Comment.GetComponent<Image>().sprite = _Comments[2];
+
+
+        //ƒNƒŠ[ƒ““x‚ğ100‚É‚·‚é
+        StageManager.Instance.GetChoiceStageObject().GetComponent<Stage>().SetClearParsentage(100);
 
 
         _PauseFlag = true;
