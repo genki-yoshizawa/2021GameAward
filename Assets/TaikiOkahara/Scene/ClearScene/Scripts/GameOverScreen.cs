@@ -108,7 +108,7 @@ public class GameOverScreen : MonoBehaviour
        
 
         GameObject obj = GameObject.FindGameObjectWithTag("Manager");
-        //obj.GetComponent<GameManagerScript>().SetPause();
+        obj.GetComponent<GameManagerScript>().SetPause();
         _PauseFlag = true;
         if (_Pause != null)
             _Pause.SetActive(false);

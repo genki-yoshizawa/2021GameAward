@@ -72,7 +72,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
             InputRightButton();
         else if (dph < 0)
             InputLeftButton();
-        else if (Input.GetKeyDown("joystick button 0") && !_Move)
+        else if (Input.GetKeyDown("joystick button 1") && !_Move)
             GameStart();
 
 
@@ -202,4 +202,25 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         return _ChoiceStage;
     }
 
+    public void NextStage()
+    {
+        int stageNum = _ChoiceStageNumber;
+
+        if(Digit(stageNum) == 3)
+        {
+            Debug.Log("全ステージクリア！次の星へ！！");
+        }
+        else
+        {
+            int idx = _ChoiceStage.transform.GetSiblingIndex();
+            idx++;
+
+        }
+    }
+
+    int Digit(int num)
+    {
+        // Mathf.Log10(0)はNegativeInfinityを返すため、別途処理する。
+        return (num == 0) ? 1 : ((int)Mathf.Log10(num) + 1);
+    }
 }

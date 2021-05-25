@@ -468,7 +468,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3519db023654c3046b6eca389fd9cd5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _SceneName: 
+  _SceneName: SampleStage
   _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 14
@@ -577,7 +577,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3519db023654c3046b6eca389fd9cd5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _SceneName: 
+  _SceneName: SampleStage
   _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 15
@@ -634,7 +634,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3519db023654c3046b6eca389fd9cd5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _SceneName: 
+  _SceneName: SampleStage
   _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 110
@@ -766,7 +766,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3519db023654c3046b6eca389fd9cd5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _SceneName: 
+  _SceneName: SampleStage
   _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 16
@@ -1288,7 +1288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3519db023654c3046b6eca389fd9cd5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _SceneName: 
+  _SceneName: SampleStage
   _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 17
@@ -1397,7 +1397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3519db023654c3046b6eca389fd9cd5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _SceneName: 
+  _SceneName: SampleStage
   _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 12
@@ -2316,7 +2316,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3519db023654c3046b6eca389fd9cd5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _SceneName: 
+  _SceneName: SampleStage
   _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 19
@@ -7229,7 +7229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3519db023654c3046b6eca389fd9cd5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _SceneName: 
+  _SceneName: SampleStage
   _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 18
@@ -7281,7 +7281,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3519db023654c3046b6eca389fd9cd5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _SceneName: 
+  _SceneName: SampleStage
   _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 13
