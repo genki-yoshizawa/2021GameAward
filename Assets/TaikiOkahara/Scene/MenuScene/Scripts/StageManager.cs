@@ -256,7 +256,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         _1Star = _ChoiceStage.GetComponent<Stage>()._1Star;
         _2Star = _ChoiceStage.GetComponent<Stage>()._2Star;
         _3Star = _ChoiceStage.GetComponent<Stage>()._3Star;
-
+        _MaxTurn = _ChoiceStage.GetComponent<Stage>()._MaxTurn;
 
         GameObject obj = _ChoiceStage.transform.GetChild(0).gameObject;
         _StageModelName = obj.name;
