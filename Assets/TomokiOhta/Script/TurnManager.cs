@@ -9,11 +9,11 @@ public class TurnManager : MonoBehaviour
     [Header("ターンが進んでいるかの確認用")]
     [SerializeField] private int _TurnCount = 0;
 
-    [Header("終了ターンをいれてください")]
-    [SerializeField] private int _TurnLimit = 10;
-
     [Header("疲れるまでのターン数をいれてください")]
     [SerializeField] private int _TurnTiredLimit = 5;
+
+    //最大ターン数
+    private int _TurnLimit;
 
     private bool _PlayerTurn = true;
     private bool _EnemyTurn  = false;
@@ -31,6 +31,8 @@ public class TurnManager : MonoBehaviour
 
         GameObject[][] blocks = _GameManagerScript.GetBlocks();
         List<GameObject> enemys = _GameManagerScript.GetEnemys();
+
+        _TurnLimit = StageManager._MaxTurn;
 
         //ブロックのスクリプト取得
         foreach(var blocklist in blocks)
@@ -53,7 +55,7 @@ public class TurnManager : MonoBehaviour
     {
         if (_PlayerTurn)
         {
-            if (!_PlayerScript.GetIsExist())
+            if (!_PlayerScript.GetIsExist() || _TurnLimit <= _TurnCount)
                 return;
 
             //ターン数が少なくなると疲れる
