@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Threading;
 
 public class PlayerControl : MonoBehaviour
 {
@@ -132,6 +131,24 @@ public class PlayerControl : MonoBehaviour
                 _PassedTime = 0.0f;
                 NowWalkAnim = false;
             }
+        }
+
+        //現在のアニメーション情報を取得
+        var clipInfo = _Animator.GetCurrentAnimatorClipInfo(0)[0];
+
+        //クリア確認
+        if (clipInfo.clip.name == "Clear")
+        {
+            var clearScreenScript = _ClearScreen.GetComponent<ClearScreen>();
+            clearScreenScript.DisplayClearScreen(_TurnManager.GetTurnCount());
+        }
+
+        //ゲームオーバー確認
+        if (clipInfo.clip.name == "GameOvered")
+        {
+            //ここでgameoverを呼び出す
+            //var gameOverScript = _ClearScreen.GetComponent<GameOverScreen>();
+            //gameOverScript.DisplayGameOverScreen();
         }
 
     }
@@ -352,10 +369,7 @@ public class PlayerControl : MonoBehaviour
 
                 //敵がいなくなったことを確認したらゲームを終わらせに行く
                 if (remainEnemy.Count <= 0)
-                {
-                    var clearScreenScript = _ClearScreen.GetComponent<ClearScreen>();
-                    clearScreenScript.DisplayClearScreen(_TurnManager.GetTurnCount());
-                }
+                    _Animator.SetBool("Clear", true);
             }
             else
             {
@@ -365,14 +379,6 @@ public class PlayerControl : MonoBehaviour
             //_CommandSelect = 3;   存在意義が分からないけど一応残しておく
             _FukidasiScript.ResetAnimPattern();
             turnEnd = true;
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad1))
-        {
-            PlayerTurnOver(_FrontBlock);
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad2))
-        {
-            PlayerRotate(_FrontBlock);
         }
 
         return turnEnd;
@@ -385,7 +391,12 @@ public class PlayerControl : MonoBehaviour
 
     public void SetLocalPosition(Vector2Int position) { _LocalPosition = position; }
     public void SetIsFront(bool isFront){ _IsFront = isFront; }
-    public void SetIsExist(bool isExist) { _IsExist = isExist; }
+    public void SetIsExist(bool isExist)
+    {
+        if (isExist)
+            SetDead();
+        _IsExist = isExist;
+    }
 
 
     //前のブロックの情報取得
