@@ -271,10 +271,12 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
             if (child.gameObject.GetComponent<Stage>() != null)
                 child.gameObject.GetComponent<Stage>().enabled = false;
 
-            GameObject canv = GameObject.Find("MenuCanvas");
-            canv.gameObject.SetActive(false);
+            if(GameObject.Find("MenuCanvas") != null)
+            {
+                GameObject canv = GameObject.Find("MenuCanvas");
+                canv.gameObject.SetActive(false);
+            }
         }
-        //_NextStage = false;
     }
 
     public GameObject GetChoiceStageObject()
