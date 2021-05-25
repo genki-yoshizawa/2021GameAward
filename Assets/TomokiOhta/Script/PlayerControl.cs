@@ -496,7 +496,6 @@ public class PlayerControl : MonoBehaviour
         {
             enemyScript = enemy.GetComponent<EnemyControl>();
             if (position == enemyScript.GetLocalPosition() && _IsFront && enemyScript.GetIsFront())
-                )
                 return enemy;
         }
 
