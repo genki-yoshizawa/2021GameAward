@@ -196,6 +196,8 @@ public class PauseManager : MonoBehaviour
 
     public void OnClickMenu()
     {
+
         SceneManager.LoadScene("MenuScene");
+        StageManager.Instance.UpdateUI();
     }
 }

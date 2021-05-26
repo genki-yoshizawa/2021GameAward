@@ -189,6 +189,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         if (Digit(stageNum) == 3)
         {
             Debug.Log("全ステージクリア！次の星へ！！");
+            SceneManager.LoadScene("MenuScene");
         }
         else
         {
@@ -291,6 +292,14 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         ChageNextStage();
       
     }
+
+    public void UpdateUI()
+    {
+        _DetailUI.gameObject.GetComponent<DetailUI>().DetailUIAnimation();
+        _DetailUI.gameObject.GetComponent<DetailUINumber>().SetScore(_ChoiceStage.GetComponent<Stage>().GetClearParsentage());
+        return;
+    }
+
 
     int Digit(int num)
     {

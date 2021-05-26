@@ -473,9 +473,9 @@ MonoBehaviour:
   _StageName: {fileID: 0}
   _StageNumber: 14
   _MaxTurn: 30
-  _3Star: 0
-  _2Star: 0
-  _1Star: 0
+  _3Star: 10
+  _2Star: 15
+  _1Star: 16
 --- !u!1001 &433659851
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -582,9 +582,9 @@ MonoBehaviour:
   _StageName: {fileID: 0}
   _StageNumber: 15
   _MaxTurn: 30
-  _3Star: 0
-  _2Star: 0
-  _1Star: 0
+  _3Star: 7
+  _2Star: 12
+  _1Star: 13
 --- !u!4 &491220798 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7394991771717797575, guid: 17b653fe1b4fe764181d9d967262b4a8, type: 3}
@@ -639,9 +639,9 @@ MonoBehaviour:
   _StageName: {fileID: 0}
   _StageNumber: 110
   _MaxTurn: 30
-  _3Star: 0
-  _2Star: 0
-  _1Star: 0
+  _3Star: 23
+  _2Star: 33
+  _1Star: 31
 --- !u!1 &500678365
 GameObject:
   m_ObjectHideFlags: 0
@@ -771,9 +771,9 @@ MonoBehaviour:
   _StageName: {fileID: 0}
   _StageNumber: 16
   _MaxTurn: 30
-  _3Star: 0
-  _2Star: 0
-  _1Star: 0
+  _3Star: 21
+  _2Star: 26
+  _1Star: 27
 --- !u!1 &621362608
 GameObject:
   m_ObjectHideFlags: 0
@@ -1293,9 +1293,9 @@ MonoBehaviour:
   _StageName: {fileID: 0}
   _StageNumber: 17
   _MaxTurn: 30
-  _3Star: 0
-  _2Star: 0
-  _1Star: 0
+  _3Star: 17
+  _2Star: 21
+  _1Star: 22
 --- !u!1001 &749818765
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1402,9 +1402,9 @@ MonoBehaviour:
   _StageName: {fileID: 0}
   _StageNumber: 12
   _MaxTurn: 30
-  _3Star: 0
-  _2Star: 0
-  _1Star: 0
+  _3Star: 16
+  _2Star: 21
+  _1Star: 22
 --- !u!4 &862131317 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7394991771717797575, guid: 17b653fe1b4fe764181d9d967262b4a8, type: 3}
@@ -2149,13 +2149,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _SceneName: 1-1
-  _ClearPercentage: 90
+  _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 11
   _MaxTurn: 30
-  _3Star: 0
-  _2Star: 0
-  _1Star: 0
+  _3Star: 5
+  _2Star: 10
+  _1Star: 11
 --- !u!4 &1416500304
 Transform:
   m_ObjectHideFlags: 0
@@ -2322,9 +2322,9 @@ MonoBehaviour:
   _StageName: {fileID: 0}
   _StageNumber: 19
   _MaxTurn: 30
-  _3Star: 0
-  _2Star: 0
-  _1Star: 0
+  _3Star: 32
+  _2Star: 40
+  _1Star: 41
 --- !u!1 &1778370546
 GameObject:
   m_ObjectHideFlags: 0
@@ -7235,9 +7235,9 @@ MonoBehaviour:
   _StageName: {fileID: 0}
   _StageNumber: 18
   _MaxTurn: 30
-  _3Star: 0
-  _2Star: 0
-  _1Star: 0
+  _3Star: 19
+  _2Star: 24
+  _1Star: 25
 --- !u!1 &1921309068
 GameObject:
   m_ObjectHideFlags: 0
@@ -7287,9 +7287,9 @@ MonoBehaviour:
   _StageName: {fileID: 0}
   _StageNumber: 13
   _MaxTurn: 30
-  _3Star: 0
-  _2Star: 0
-  _1Star: 0
+  _3Star: 11
+  _2Star: 20
+  _1Star: 21
 --- !u!1 &2088241979
 GameObject:
   m_ObjectHideFlags: 0
@@ -7518,7 +7518,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -8750563325967366506, guid: dee5d9ec20367934ca63d2cde023e136, type: 3}
+  m_Sprite: {fileID: -4677205242863488633, guid: dee5d9ec20367934ca63d2cde023e136, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

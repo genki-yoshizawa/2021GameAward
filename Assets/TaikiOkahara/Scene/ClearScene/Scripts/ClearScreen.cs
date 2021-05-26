@@ -88,9 +88,9 @@ public class ClearScreen : MonoBehaviour
         }
 
         //スコアに応じてアニメーションを分岐
-        if(_Score < StageManager._3Star)
+        if(_Score <= StageManager._3Star)
             _StarAnimator.SetTrigger("ThreeStar");
-        else if(_Score < StageManager._2Star)
+        else if(_Score <= StageManager._2Star)
             _StarAnimator.SetTrigger("TwoStar");
         else
             _StarAnimator.SetTrigger("OneStar");
@@ -173,7 +173,10 @@ public class ClearScreen : MonoBehaviour
 
 
         if (Input.GetKeyDown("joystick button 1") || Input.GetKeyDown(KeyCode.Return))
+        {
+            this.gameObject.SetActive(false);
             StageManager.Instance.NextStage();
+        }
             
     }
 
@@ -186,12 +189,12 @@ public class ClearScreen : MonoBehaviour
         _TurnScoreNumber.GetComponent<TurnScore>().SetScore(score);
 
         //スコアに応じてアニメーションを分岐
-        if (_Score < StageManager._3Star)
-            _Comment.GetComponent<Image>().sprite = _Comments[0];
-        else if (_Score < StageManager._2Star)
+        if (_Score <= StageManager._3Star)
+            _Comment.GetComponent<Image>().sprite = _Comments[2];
+        else if (_Score <= StageManager._2Star)
             _Comment.GetComponent<Image>().sprite = _Comments[1];
         else
-            _Comment.GetComponent<Image>().sprite = _Comments[2];
+            _Comment.GetComponent<Image>().sprite = _Comments[0];
 
 
         //クリーン度を100にする
