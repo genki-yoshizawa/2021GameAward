@@ -354,6 +354,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ClearScreen
       objectReference: {fileID: 0}
+    - target: {fileID: 1759198751337076925, guid: af3c7be6746c9134d89030c89ec99d8a, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1759198751765872095, guid: af3c7be6746c9134d89030c89ec99d8a, type: 3}
       propertyPath: _Pause
       value: 

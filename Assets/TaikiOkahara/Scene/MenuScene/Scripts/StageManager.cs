@@ -143,6 +143,10 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         }
 
 
+        _ChoiceStageNumber = _ChoiceStage.GetComponent<Stage>().GetStageNumber();
+        _DetailUI.transform.GetChild(2).GetComponent<MenuStageNumber>().SetScore(_ChoiceStageNumber);
+
+
         StageMove();
 
 
@@ -189,6 +193,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         if (Digit(stageNum) == 3)
         {
             Debug.Log("全ステージクリア！次の星へ！！");
+            SceneManager.LoadScene("MenuScene");
         }
         else
         {
@@ -252,7 +257,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
     {
         _StageName = _ChoiceStage.GetComponent<Stage>().GetSceneName();
 
-        _ChoiceStageNumber = _ChoiceStage.GetComponent<Stage>().GetStageNumber();
+        //_ChoiceStageNumber = _ChoiceStage.GetComponent<Stage>().GetStageNumber();
         _1Star = _ChoiceStage.GetComponent<Stage>()._1Star;
         _2Star = _ChoiceStage.GetComponent<Stage>()._2Star;
         _3Star = _ChoiceStage.GetComponent<Stage>()._3Star;
@@ -291,6 +296,18 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         ChageNextStage();
       
     }
+
+    public void UpdateUI()
+    {
+        _DetailUI.gameObject.GetComponent<DetailUI>().DetailUIAnimation();
+        _DetailUI.gameObject.GetComponent<DetailUINumber>().SetScore(_ChoiceStage.GetComponent<Stage>().GetClearParsentage());
+
+        _ChoiceStageNumber = _ChoiceStage.GetComponent<Stage>().GetStageNumber();
+        _DetailUI.transform.GetChild(2).GetComponent<MenuStageNumber>().SetScore(_ChoiceStageNumber);
+
+        return;
+    }
+
 
     int Digit(int num)
     {

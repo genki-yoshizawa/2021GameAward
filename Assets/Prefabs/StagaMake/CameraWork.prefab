@@ -207,6 +207,10 @@ PrefabInstance:
       propertyPath: _TopViewCameraPoint.Array.data[1]
       value: 
       objectReference: {fileID: 2344349217050135651}
+    - target: {fileID: 3549584534331288946, guid: ac8dfceb85c636749b9063ed1acfca0b, type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 55
+      objectReference: {fileID: 0}
     - target: {fileID: 3549584534331288947, guid: ac8dfceb85c636749b9063ed1acfca0b, type: 3}
       propertyPath: m_RootOrder
       value: 0
