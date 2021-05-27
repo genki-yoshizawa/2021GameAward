@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerControl : MonoBehaviour
 {
     [Header("使いたい音声ファイルを入れてください。")]
-    [SerializeField] private AudioClip audioClip;
+    [SerializeField] private AudioClip[] _AudioClip;
 
     [Header("プレイヤーの向きを入れてください。")]
     [SerializeField]private Vector2Int _Direction;
@@ -70,6 +70,12 @@ public class PlayerControl : MonoBehaviour
     //ターンマネージャー
     private TurnManager _TurnManager;
 
+    //今コマンド入力を受け付けるか
+    private bool _CanSelectCommand;
+
+    //キー入力で右を押したのか？
+    private bool _IsRight = false;
+
     public void Start()
     {
         //初手FindWithTag
@@ -123,7 +129,7 @@ public class PlayerControl : MonoBehaviour
                 _Animator.SetBool("Walk", false);
             }
 
-            transform.Rotate(0.0f, 90.0f * (time / _WalkTime), 0.0f);
+            transform.Rotate(0.0f, 90.0f * (time / _WalkTime) * (_IsRight ? 1.0f : -1.0f), 0.0f);
 
             if (!_Animator.GetBool("Walk"))
             {
@@ -134,6 +140,18 @@ public class PlayerControl : MonoBehaviour
 
         //現在のアニメーション情報を取得
         var clipInfo = _Animator.GetCurrentAnimatorClipInfo(0)[0];
+
+        //アニメーションが再生中はコマンド操作を受け付けない...はずなのにダメ
+        if (clipInfo.clip.name != "Wait" && clipInfo.clip.name != "Tired")
+        {
+            _CanSelectCommand = false;
+            Debug.Log("うけつけへんで");
+        }
+        else
+            _CanSelectCommand = true;
+
+        if (_CanSelectCommand)
+            Debug.Log("真です");
 
         //クリア確認
         if (clipInfo.clip.name == "Clear")
@@ -243,6 +261,7 @@ public class PlayerControl : MonoBehaviour
     private void PlayerMove()
     {
         Move(_Direction);
+        AudioManager.Instance.PlaySE(_AudioClip[0]);
         SetFrontBlock();
     }
 
@@ -274,6 +293,12 @@ public class PlayerControl : MonoBehaviour
     {
         bool turnEnd = false;
 
+        if (!_CanSelectCommand)
+        {
+            Debug.Log("チェック");
+            return turnEnd;
+        }
+
         //Startで取得するのでターン開始時に手動で取得
         if (_FrontBlock == null)
             SetFrontBlock();
@@ -281,24 +306,28 @@ public class PlayerControl : MonoBehaviour
         //吹き出しのアニメーション終了を確認したら生成する
         if (_FukidasiScript.GetAnimPattern() == -1)
         {
-            _FukidasiScript.SetAnimPattern(_CanActionList.Count);
-            if (CheckEnemy(_LocalPosition + _Direction) != null)
+            if (_FrontBlock != null)
             {
-                //前に敵がいたのでそれ用の画像を出す
-                _FukidasiScript.SetActPattern(_CanActionList, true);
-            }
-            else
-                _FukidasiScript.SetActPattern(_CanActionList);
+                AudioManager.Instance.PlaySE(_AudioClip[1]);
 
-            //カーソルを一番上に設定
-            _CommandSelect = _CanActionList.Count - 1;
-            var icon = _FukidasiObj.transform.GetChild(4).GetComponent<RectTransform>();
-            icon.anchoredPosition = 
-                new Vector3(icon.localPosition.x, _CorsorStartPosition.y + (20.0f * _CommandSelect), _CorsorStartPosition.z);
+                _FukidasiScript.SetAnimPattern(_CanActionList.Count);
+                if (CheckEnemy(_LocalPosition + _Direction) != null)
+                {
+                    //前に敵がいたのでそれ用の画像を出す
+                    _FukidasiScript.SetActPattern(_CanActionList, true);
+                }
+                else
+                    _FukidasiScript.SetActPattern(_CanActionList);
+
+                //カーソルを一番上に設定
+                _CommandSelect = _CanActionList.Count - 1;
+                var icon = _FukidasiObj.transform.GetChild(4).GetComponent<RectTransform>();
+                icon.anchoredPosition =
+                    new Vector3(icon.localPosition.x, _CorsorStartPosition.y + (20.0f * _CommandSelect), _CorsorStartPosition.z);
+            }
         }
 
         //プレイヤー左右回転
-        //きょろきょろしすぎるとコマンドが消えたまま出てこなくなるので注意
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             //向き変更時に歩行アニメーション再生
@@ -306,6 +335,7 @@ public class PlayerControl : MonoBehaviour
             {
                 _Animator.SetBool("Walk", true);
                 _NowWalkAnim = true;
+                _IsRight = true;
             }
             else
                 transform.Rotate(0.0f, 90.0f, 0.0f);
@@ -323,6 +353,7 @@ public class PlayerControl : MonoBehaviour
             {
                 _Animator.SetBool("Walk", true);
                 _NowWalkAnim = true;
+                _IsRight = false;
             }
             else
                 transform.Rotate(0.0f, -90.0f, 0.0f);
@@ -369,6 +400,8 @@ public class PlayerControl : MonoBehaviour
             var enemy = CheckEnemy(_LocalPosition + _Direction);
             if (enemy != null)
             {
+                AudioManager.Instance.PlaySE(_AudioClip[3]);
+
                 _Animator.SetTrigger("Capture");
                 _GameManagerScript.KillEnemy(enemy);
                 var remainEnemy = _GameManagerScript.GetEnemys();
@@ -379,6 +412,8 @@ public class PlayerControl : MonoBehaviour
             }
             else
             {
+                AudioManager.Instance.PlaySE(_AudioClip[2]);
+
                 CommandAction(_CommandSelect);
             }
 
