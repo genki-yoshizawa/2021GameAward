@@ -1105,11 +1105,19 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameOverScreen
       objectReference: {fileID: 0}
+    - target: {fileID: 2440608675992719684, guid: d19d1c00df328c246bb3dd48e493c6ca, type: 3}
+      propertyPath: _Gauss
+      value: 
+      objectReference: {fileID: 1760862460}
+    - target: {fileID: 2440608675992719684, guid: d19d1c00df328c246bb3dd48e493c6ca, type: 3}
+      propertyPath: _Pause
+      value: 
+      objectReference: {fileID: 1362091354}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d19d1c00df328c246bb3dd48e493c6ca, type: 3}
 --- !u!1 &1501869519 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 2440608675596812127, guid: d19d1c00df328c246bb3dd48e493c6ca, type: 3}
+  m_CorrespondingSourceObject: {fileID: 2440608675992719682, guid: d19d1c00df328c246bb3dd48e493c6ca, type: 3}
   m_PrefabInstance: {fileID: 1501869518}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1642780533

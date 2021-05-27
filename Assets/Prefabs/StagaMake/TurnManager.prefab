@@ -44,5 +44,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _TurnCount: 0
-  _TurnLimit: 10
   _TurnTiredLimit: 5
+  _WaitTime: 0.7
+  _TurnLimit: 10

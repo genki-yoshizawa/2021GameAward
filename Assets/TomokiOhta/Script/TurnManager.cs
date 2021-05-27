@@ -12,6 +12,9 @@ public class TurnManager : MonoBehaviour
     [Header("疲れるまでのターン数をいれてください")]
     [SerializeField] private int _TurnTiredLimit = 5;
 
+    [Header("敵の行動までの待ち時間を入れてください"), SerializeField]
+    private float _WaitTime;
+
     //最大ターン数
     [SerializeField]
     private int _TurnLimit;
@@ -57,14 +60,19 @@ public class TurnManager : MonoBehaviour
     {
         if (_PlayerTurn)
         {
+            //時間切れ
             if (_TurnLimit <= _TurnCount)
                 _PlayerScript.SetDead();
 
+            //死んでいたらターンは渡さない
             if (!_PlayerScript.GetIsExist())
+            {
+                _PlayerTurn = false;
                 return;
+            }
 
             //ターン数が少なくなると疲れる
-            if (_TurnLimit < _TurnTiredLimit)
+            if ((_TurnLimit - _TurnTiredLimit) <= _TurnCount )
                 _PlayerScript.SetTired(true);
 
             if (_PlayerScript.PlayerTurn())
@@ -78,11 +86,8 @@ public class TurnManager : MonoBehaviour
         }
         else if (_EnemyTurn)
         {
-            foreach (var enemy in _EnemyScript)
-                enemy.EnemyTurn();
-
+            StartCoroutine("EnemyTurn");
             _EnemyTurn = false;
-            _BlockTurn = true;
         }
         else if (_BlockTurn)
         {
@@ -102,4 +107,14 @@ public class TurnManager : MonoBehaviour
     public int GetTurnLimit() { return _TurnLimit; }
 
     public void SetTurnLimit(int limit) { _TurnLimit = limit; }
+
+    private IEnumerator EnemyTurn()
+    {
+        yield return new WaitForSeconds(0.7f);
+
+        foreach (var enemy in _EnemyScript)
+            enemy.EnemyTurn();
+
+        _BlockTurn = true;
+    }
 }

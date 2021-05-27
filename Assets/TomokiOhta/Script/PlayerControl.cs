@@ -23,7 +23,6 @@ public class PlayerControl : MonoBehaviour
     [Header("クリア画面"), SerializeField] private GameObject _ClearScreen;
     [Header("ゲームオーバー画面"), SerializeField] private GameObject _GameOverScreen;
 
-    [Header("向き変更時に歩行アニメーションを再生するか"), SerializeField] private bool IsWalkAnim;
     private bool _NowWalkAnim = false;
 
     //アニメーションスタートからの経過時間
@@ -96,6 +95,8 @@ public class PlayerControl : MonoBehaviour
         _CorsorStartPosition = _FukidasiObj.transform.GetChild(_AnimMax).localPosition;
 
         _TurnManager = GameObject.FindGameObjectWithTag("TurnManager").GetComponent<TurnManager>();
+
+        AudioManager.Instance.PlayGameBGM(_AudioClip[0], _AudioClip[1]);
     }
 
     public void Update()
@@ -246,7 +247,7 @@ public class PlayerControl : MonoBehaviour
     private void PlayerMove()
     {
         Move(_Direction);
-        AudioManager.Instance.PlaySE(_AudioClip[0]);
+        AudioManager.Instance.PlaySE(_AudioClip[2]);
         SetFrontBlock();
     }
 
@@ -290,6 +291,10 @@ public class PlayerControl : MonoBehaviour
         if (clipInfo.clip.name == "Walk" || clipInfo.clip.name == "PanelAction" || clipInfo.clip.name == "Capture")
             return turnEnd;
 
+        //死ぬ
+        if (clipInfo.clip.name == "GameOver")
+            return turnEnd;
+
         //Startで取得するのでターン開始時に手動で取得
         if (_FrontBlock == null)
             SetFrontBlock();
@@ -301,7 +306,7 @@ public class PlayerControl : MonoBehaviour
 
             if (!(_FrontBlock == null || enemys.Count == 0))
             {
-                AudioManager.Instance.PlaySE(_AudioClip[1]);
+                AudioManager.Instance.PlaySE(_AudioClip[3]);
 
                 _FukidasiScript.SetAnimPattern(_CanActionList.Count);
                 if (CheckEnemy(_LocalPosition + _Direction) != null)
@@ -323,15 +328,9 @@ public class PlayerControl : MonoBehaviour
         //プレイヤー左右回転
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            //向き変更時に歩行アニメーション再生
-            if (IsWalkAnim)
-            {
-                _Animator.SetBool("Walk", true);
-                _NowWalkAnim = true;
-                _IsRight = true;
-            }
-            else
-                transform.Rotate(0.0f, 90.0f, 0.0f);
+            _Animator.SetBool("Walk", true);
+            _NowWalkAnim = true;
+            _IsRight = true;
 
             RotateMySelf(_LocalPosition, _IsFront ? 90.0f : -90.0f);
             
@@ -342,14 +341,9 @@ public class PlayerControl : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             //向き変更時に歩行アニメーション再生
-            if (IsWalkAnim)
-            {
-                _Animator.SetBool("Walk", true);
-                _NowWalkAnim = true;
-                _IsRight = false;
-            }
-            else
-                transform.Rotate(0.0f, -90.0f, 0.0f);
+            _Animator.SetBool("Walk", true);
+            _NowWalkAnim = true;
+            _IsRight = false;
 
             RotateMySelf(_LocalPosition, _IsFront ? -90.0f : 90.0f);
             SetFrontBlock();
@@ -396,7 +390,7 @@ public class PlayerControl : MonoBehaviour
             var enemy = CheckEnemy(_LocalPosition + _Direction);
             if (enemy != null)
             {
-                AudioManager.Instance.PlaySE(_AudioClip[3]);
+                AudioManager.Instance.PlaySE(_AudioClip[5]);
 
                 _Animator.SetTrigger("Capture");
                 _GameManagerScript.KillEnemy(enemy);
@@ -410,7 +404,7 @@ public class PlayerControl : MonoBehaviour
             }
             else
             {
-                AudioManager.Instance.PlaySE(_AudioClip[2]);
+                AudioManager.Instance.PlaySE(_AudioClip[4]);
 
                 CommandAction(_CommandSelect);
             }
@@ -420,7 +414,12 @@ public class PlayerControl : MonoBehaviour
             turnEnd = true;
         }
 
-        return turnEnd;
+        if (Input.GetKeyDown(KeyCode.Keypad5))
+        {
+            AudioManager.Instance.StopBGM();
+        }
+
+            return turnEnd;
     }
 
     public Vector2Int GetLocalPosition() { return _LocalPosition; }
@@ -432,7 +431,7 @@ public class PlayerControl : MonoBehaviour
     public void SetIsFront(bool isFront){ _IsFront = isFront; }
     public void SetIsExist(bool isExist)
     {
-        if (isExist)
+        if (!isExist)
             SetDead();
         _IsExist = isExist;
     }
