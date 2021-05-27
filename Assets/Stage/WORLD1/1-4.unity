@@ -804,6 +804,11 @@ Camera:
   m_CorrespondingSourceObject: {fileID: 4933105662467854060, guid: ddbd29d1198ad7e46b160e9af79b07da, type: 3}
   m_PrefabInstance: {fileID: 309509684}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &309509687 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7100963243512670062, guid: ddbd29d1198ad7e46b160e9af79b07da, type: 3}
+  m_PrefabInstance: {fileID: 309509684}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &530087523
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1422,6 +1427,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4441832640358362244, guid: 5706cdc5162b45c46822cbea6ac08329, type: 3}
+      propertyPath: _FrontWorldImage
+      value: 
+      objectReference: {fileID: 21300000, guid: 7225db76d2ca4014db264202e02533b5, type: 3}
+    - target: {fileID: 6697255894657581272, guid: 5706cdc5162b45c46822cbea6ac08329, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 7225db76d2ca4014db264202e02533b5, type: 3}
     - target: {fileID: 6697255896083332675, guid: 5706cdc5162b45c46822cbea6ac08329, type: 3}
       propertyPath: m_Name
       value: BackGround
@@ -1535,6 +1548,10 @@ PrefabInstance:
       propertyPath: _Player
       value: 
       objectReference: {fileID: 747307486}
+    - target: {fileID: 5322210636608615477, guid: 80af85b9bf7a4a345b11283cdfe8735e, type: 3}
+      propertyPath: _CameraWork
+      value: 
+      objectReference: {fileID: 309509687}
     - target: {fileID: 5322210636608615477, guid: 80af85b9bf7a4a345b11283cdfe8735e, type: 3}
       propertyPath: _TurnManager
       value: 
