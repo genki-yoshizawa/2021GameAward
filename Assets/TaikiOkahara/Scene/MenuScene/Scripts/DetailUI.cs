@@ -26,7 +26,7 @@ public class DetailUI : MonoBehaviour
             AnimationReset();
 
 
-        _StageClearPercentage = StageManager.Instance.GetChoiceStageObject().GetComponent<Stage>().GetClearParsentage();
+        
 
         switch(_StageClearPercentage)
         {
@@ -59,10 +59,13 @@ public class DetailUI : MonoBehaviour
     public void DetailUIAnimation()
     {
         _Animator.SetBool("isAnimation", true);
+        _StageClearPercentage = StageManager.Instance.GetChoiceStageObject().GetComponent<Stage>().GetClearParsentage();
     }
 
     public void AnimationReset()
     {
         _Animator.SetBool("isAnimation", false);
+        _StageClearPercentage = StageManager.Instance.GetChoiceStageObject().GetComponent<Stage>().GetClearParsentage();
     }
+
 }
