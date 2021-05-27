@@ -13,7 +13,7 @@ public class Gauss : MonoBehaviour
 
     public int Resolution { get { return _Resolution; } set { _Resolution = value; } }
 
-    void Awake()
+    void Start()
     {
         var shader = Shader.Find("Hidden/Gauss");
         _Material = new Material(shader);
@@ -57,6 +57,7 @@ public class Gauss : MonoBehaviour
 
         Graphics.ExecuteCommandBuffer(command);
     }
+
 
 
     void FixedUpdate()
