@@ -27,7 +27,7 @@ public class TurnCountFrameScript : MonoBehaviour
         _TurnManagerScript = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerScript>().GetTurnManager().GetComponent<TurnManager>();
 
         List<int> number = new List<int>();
-        int turnLimit = _TurnLimit = _TurnManagerScript.GetTurnLimit();
+        int turnLimit = _TurnLimit = StageManager._MaxTurn;
         int digit = turnLimit;
         if (digit <= 0)
         {

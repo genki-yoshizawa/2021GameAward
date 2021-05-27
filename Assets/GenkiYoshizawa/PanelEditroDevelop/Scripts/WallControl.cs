@@ -120,12 +120,12 @@ public class WallControl : GimmicControl
         // 自分のパネル位置とオブジェクトパネル位置が一緒かどうかで分岐
         if (objectPosition == panelPosition)//自分のパネル位置とオブジェクトパネル位置が一緒
         {
-            if (wallDirection == direction)//オブジェクト向きと壁向きが一緒
+            if (wallDirection == direction * (transform.parent == transform.parent.parent.GetChild(0) ? 1 : -1) )//オブジェクト向きと壁向きが一緒 //裏世界のときは向き反転
                 return false;
         }
         else//自分のパネル位置とオブジェクトパネル位置が異なる
         {
-            if (wallDirection != direction)//オブジェクト向きと壁向きが一緒
+            if (wallDirection != direction * (transform.parent == transform.parent.parent.GetChild(0) ? 1 : -1))//オブジェクト向きと壁向きが一緒 //裏世界のときは向き反転
                 return false;
         }
 

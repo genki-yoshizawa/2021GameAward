@@ -29,8 +29,15 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
     private Vector3[] _StartPos;
     private Vector3[] _EndPos;
 
+    [SerializeField]
+    private Animator _Fade;
 
-
+    [SerializeField]
+    private AudioClip _ButtonCursorSound;//カーソル移動音
+    [SerializeField]
+    private AudioClip _ButtonDecisionSound;//決定音
+    [SerializeField]
+    private AudioClip _ButtonChoiceSound;//選択音
 
     public static int _ChoiceStageNumber = 0;
     public static int _MaxTurn = 0;
@@ -68,13 +75,13 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
 
     void Update()
     {
-        //ChageNextStage();
-
-
+      
 
         string curStageName = SceneManager.GetActiveScene().name;
         if(curStageName == "MenuScene")
         {
+
+
             for (int i = 0; i < _ChidCount; i++)
             {
 
@@ -83,13 +90,12 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
 
                 if (transform.GetChild(i).gameObject.GetComponent<Stage>() != null)
                     transform.GetChild(i).gameObject.GetComponent<Stage>().enabled = true;
-
-
                
             }
 
             transform.GetChild(_ChidCount).gameObject.SetActive(true);
 
+            _DetailUI.gameObject.GetComponent<DetailUINumber>().SetScore(_ChoiceStage.GetComponent<Stage>().GetClearParsentage());
         }
         else
         {
@@ -101,9 +107,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
                 if (transform.GetChild(i).gameObject.GetComponent<Stage>() != null)
                     transform.GetChild(i).gameObject.GetComponent<Stage>().enabled = false;
 
-                
             }
-
 
             transform.GetChild(_ChidCount).gameObject.SetActive(false);
 
@@ -118,7 +122,12 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         else if (dph < 0)
             InputLeftButton();
         else if ((Input.GetKeyDown("joystick button 1") || (Input.GetKeyDown(KeyCode.Return))) && !_Move)
+        {
+            this.GetComponent<AudioSource>().volume = 0.25f;
+            this.GetComponent<AudioSource>().PlayOneShot(_ButtonDecisionSound);
             GameStart();
+        }
+
 
 
         for (int i = 0; i < _ChidCount; i++)
@@ -144,7 +153,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
 
 
         _ChoiceStageNumber = _ChoiceStage.GetComponent<Stage>().GetStageNumber();
-        _DetailUI.transform.GetChild(2).GetComponent<MenuStageNumber>().SetScore(_ChoiceStageNumber);
+        _DetailUI.transform.GetChild(0).GetComponent<MenuStageNumber>().SetScore(_ChoiceStageNumber);
 
 
         StageMove();
@@ -180,6 +189,14 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
             _Move = false;
         }
 
+        float dph = Input.GetAxis("D Pad Horizontal");
+        if (dph != 0)
+        {
+            _DetailUI.gameObject.GetComponent<DetailUI>().AnimationReset();
+        }
+
+
+
         _MoveTime += _MoveSpeed * Time.deltaTime;
     }
 
@@ -197,9 +214,11 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         }
         else
         {
+            //クリーン度を100にする
+           _ChoiceStage.GetComponent<Stage>().SetClearParsentage(100);
+
             int idx = _ChoiceStage.transform.GetSiblingIndex();
             idx++;
-            Debug.Log(idx);
             _ChoiceStage = this.transform.GetChild(idx).gameObject;
 
             GameStart();
@@ -214,6 +233,8 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         if (_Move)
             return;
 
+        this.GetComponent<AudioSource>().volume = 0.25f;
+        this.GetComponent<AudioSource>().PlayOneShot(_ButtonCursorSound);
 
         for (int i = 0; i < _ChidCount; i++)
         {
@@ -236,6 +257,8 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         if (_Move)
             return;
 
+        this.GetComponent<AudioSource>().volume = 0.25f;
+        this.GetComponent<AudioSource>().PlayOneShot(_ButtonCursorSound);
 
         for (int i = 0; i < _ChidCount; i++)
         {
@@ -257,7 +280,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
     {
         _StageName = _ChoiceStage.GetComponent<Stage>().GetSceneName();
 
-        //_ChoiceStageNumber = _ChoiceStage.GetComponent<Stage>().GetStageNumber();
+        _ChoiceStageNumber = _ChoiceStage.GetComponent<Stage>().GetStageNumber();
         _1Star = _ChoiceStage.GetComponent<Stage>()._1Star;
         _2Star = _ChoiceStage.GetComponent<Stage>()._2Star;
         _3Star = _ChoiceStage.GetComponent<Stage>()._3Star;
@@ -299,14 +322,16 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
 
     public void UpdateUI()
     {
-        _DetailUI.gameObject.GetComponent<DetailUI>().DetailUIAnimation();
         _DetailUI.gameObject.GetComponent<DetailUINumber>().SetScore(_ChoiceStage.GetComponent<Stage>().GetClearParsentage());
+        //_DetailUI.gameObject.GetComponent<DetailUI>().AnimationReset();
+        _DetailUI.gameObject.GetComponent<DetailUI>().DetailUIAnimation();
 
         _ChoiceStageNumber = _ChoiceStage.GetComponent<Stage>().GetStageNumber();
-        _DetailUI.transform.GetChild(2).GetComponent<MenuStageNumber>().SetScore(_ChoiceStageNumber);
+        _DetailUI.transform.GetChild(0).GetComponent<MenuStageNumber>().SetScore(_ChoiceStageNumber);
 
         return;
     }
+
 
 
     int Digit(int num)

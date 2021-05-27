@@ -86,7 +86,7 @@ public class EnemyControl : MonoBehaviour
 
     private int _TurnCount;
     private int _Count;
-    private float _PosY = 0.07f;    // Y座標固定用
+    private float _PosY = 0.075f;    // Y座標固定用
 
     private Animator _EnemyAnimation;
     private Vector3 _StartPoint;
@@ -339,7 +339,7 @@ public class EnemyControl : MonoBehaviour
 
             _TargetPoint = o.transform.position;
             _StartPoint = this.transform.position;
-            _TargetPoint.y = _PosY;
+            _TargetPoint.y = -_PosY;
 
             // ネズミのローカルポジションを更新
             _EnemyLocalPosition = _NextBlock.GetComponent<BlockConfig>().GetBlockLocalPosition();
