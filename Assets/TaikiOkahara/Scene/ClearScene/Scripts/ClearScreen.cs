@@ -197,10 +197,6 @@ public class ClearScreen : MonoBehaviour
             _Comment.GetComponent<Image>().sprite = _Comments[0];
 
 
-        //ƒNƒŠ[ƒ““x‚ğ100‚É‚·‚é
-        StageManager.Instance.GetChoiceStageObject().GetComponent<Stage>().SetClearParsentage(100);
-
-
         _PauseFlag = true;
         if(_Pause != null)
             _Pause.SetActive(false);

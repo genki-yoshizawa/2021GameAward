@@ -36,6 +36,7 @@ public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBe
         if (instance == null)
         {
             instance = this as T;
+
             DontDestroyOnLoad(this);
             return true;
         }
