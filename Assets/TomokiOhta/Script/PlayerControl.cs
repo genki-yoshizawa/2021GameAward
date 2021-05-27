@@ -287,7 +287,7 @@ public class PlayerControl : MonoBehaviour
         var clipInfo = _Animator.GetCurrentAnimatorClipInfo(0)[0];
 
         //アニメーションが再生中はコマンド操作を受け付けない
-        if (clipInfo.clip.name == "Walk" || clipInfo.clip.name == "Action" || clipInfo.clip.name == "Capture")
+        if (clipInfo.clip.name == "Walk" || clipInfo.clip.name == "PanelAction" || clipInfo.clip.name == "Capture")
             return turnEnd;
 
         //Startで取得するのでターン開始時に手動で取得
@@ -295,7 +295,7 @@ public class PlayerControl : MonoBehaviour
             SetFrontBlock();
 
         //吹き出しのアニメーション終了を確認したら生成する
-        if (_FukidasiScript.GetAnimPattern() == -1)
+        if (_FukidasiScript.GetAnimPattern() == -1 && _IsExist)
         {
             var enemys = _GameManagerScript.GetEnemys();
 
