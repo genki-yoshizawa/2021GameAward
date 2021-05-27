@@ -65,17 +65,26 @@ public class BlockConfig : MonoBehaviour
 
         // 全ブロックの取得
         GameObject[][] blocks = _GameManager.GetComponent<GameManagerScript>().GetBlocks();
+
+        int i = 0;
+
         foreach (GameObject[] blockXLine in blocks)
         {
             foreach (GameObject blockZLine in blockXLine)
             {
+                if(blockZLine != null)
+                    i++;
+
+
                 if (blockZLine == gameObject || blockZLine == null)
                     continue;
+
 
                 if (blockZLine.transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetPanelIndex() == transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetPanelIndex())
                     return true;
             }
         }
+        Debug.Log(i);
         
         return false;
     }

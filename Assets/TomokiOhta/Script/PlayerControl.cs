@@ -145,13 +145,9 @@ public class PlayerControl : MonoBehaviour
         if (clipInfo.clip.name != "Wait" && clipInfo.clip.name != "Tired")
         {
             _CanSelectCommand = false;
-            Debug.Log("うけつけへんで");
         }
         else
             _CanSelectCommand = true;
-
-        if (_CanSelectCommand)
-            Debug.Log("真です");
 
         //クリア確認
         if (clipInfo.clip.name == "Clear")
@@ -191,6 +187,7 @@ public class PlayerControl : MonoBehaviour
         //ゆっくり歩くために現在地と目的地を取得
         _WalkStartPosition = transform.position;
         _WalkTargetPosition = block.transform.position;
+        _WalkTargetPosition.y = transform.position.y;
 
         //Walkのアニメーション開始
         _Animator.SetBool("Walk", true);
@@ -261,7 +258,7 @@ public class PlayerControl : MonoBehaviour
     private void PlayerMove()
     {
         Move(_Direction);
-        AudioManager.Instance.PlaySE(_AudioClip[0]);
+        //AudioManager.Instance.PlaySE(_AudioClip[0]);
         SetFrontBlock();
     }
 
@@ -295,7 +292,6 @@ public class PlayerControl : MonoBehaviour
 
         if (!_CanSelectCommand)
         {
-            Debug.Log("チェック");
             return turnEnd;
         }
 
@@ -308,7 +304,7 @@ public class PlayerControl : MonoBehaviour
         {
             if (_FrontBlock != null)
             {
-                AudioManager.Instance.PlaySE(_AudioClip[1]);
+                //AudioManager.Instance.PlaySE(_AudioClip[1]);
 
                 _FukidasiScript.SetAnimPattern(_CanActionList.Count);
                 if (CheckEnemy(_LocalPosition + _Direction) != null)
@@ -400,7 +396,7 @@ public class PlayerControl : MonoBehaviour
             var enemy = CheckEnemy(_LocalPosition + _Direction);
             if (enemy != null)
             {
-                AudioManager.Instance.PlaySE(_AudioClip[3]);
+                //AudioManager.Instance.PlaySE(_AudioClip[3]);
 
                 _Animator.SetTrigger("Capture");
                 _GameManagerScript.KillEnemy(enemy);
@@ -412,7 +408,7 @@ public class PlayerControl : MonoBehaviour
             }
             else
             {
-                AudioManager.Instance.PlaySE(_AudioClip[2]);
+                //AudioManager.Instance.PlaySE(_AudioClip[2]);
 
                 CommandAction(_CommandSelect);
             }
