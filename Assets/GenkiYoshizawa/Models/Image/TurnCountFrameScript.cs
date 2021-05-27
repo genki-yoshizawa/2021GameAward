@@ -27,7 +27,7 @@ public class TurnCountFrameScript : MonoBehaviour
         _TurnManagerScript = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerScript>().GetTurnManager().GetComponent<TurnManager>();
 
         List<int> number = new List<int>();
-        int turnLimit = _TurnLimit = _TurnManagerScript.GetTurnLimit();
+        int turnLimit = _TurnLimit = StageManager._MaxTurn;
         int digit = turnLimit;
         if (digit <= 0)
         {
@@ -70,6 +70,14 @@ public class TurnCountFrameScript : MonoBehaviour
                 number.Add(displayNumber);
 
             }
+            if(number[0] < 0)
+            {
+                transform.GetChild(0).GetComponent<Image>().sprite = _NumberSprite[0];
+                transform.GetChild(1).GetComponent<Image>().sprite = _NumberSprite[0];
+                _isTurnCountAnim = true;
+                return;
+            }
+
             transform.GetChild(0).GetComponent<Image>().sprite = _NumberSprite[number[0] + 10];
             if (number.Count > 1)
                 transform.GetChild(1).GetComponent<Image>().sprite = _NumberSprite[number[1] + 10];
@@ -100,6 +108,9 @@ public class TurnCountFrameScript : MonoBehaviour
                     number.Add(displayNumber);
 
                 }
+                if(number[0] < 0)
+                    transform.GetChild(0).GetComponent<Image>().sprite = _NumberSprite[0];
+                else
                 transform.GetChild(0).GetComponent<Image>().sprite = _NumberSprite[number[0]];
                 if (number.Count > 1)
                     transform.GetChild(1).GetComponent<Image>().sprite = _NumberSprite[number[1]];

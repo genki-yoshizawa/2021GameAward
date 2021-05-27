@@ -25,7 +25,7 @@ public class WallControl : GimmicControl
         _isRebornAnim = false;
 
         _StartLocalScale = transform.localScale;
-        _StartGlobalPosition = transform.position;
+        _StartGlobalPosition = transform.localPosition;
     }
 
     // Update is called once per frame
@@ -33,7 +33,7 @@ public class WallControl : GimmicControl
     {
         if (_isBreakAnim)
         {
-            _StartGlobalPosition = new Vector3(transform.position.x, _StartGlobalPosition.y, transform.position.z);
+            _StartGlobalPosition = new Vector3(transform.localPosition.x, _StartGlobalPosition.y, transform.localPosition.z);
             float time = Time.deltaTime;
             if ( (_PassedTime += time) > _BreakAnimTime)
             {
@@ -42,7 +42,7 @@ public class WallControl : GimmicControl
             }
 
             // y座標を下げながらyサイズを0に向かわせる
-            transform.position = _StartGlobalPosition + (new Vector3(_StartGlobalPosition.x ,0.0f,_StartGlobalPosition.z) - _StartGlobalPosition) * (_PassedTime / _BreakAnimTime);
+            transform.localPosition = _StartGlobalPosition + (new Vector3(_StartGlobalPosition.x ,0.0f,_StartGlobalPosition.z) - _StartGlobalPosition) * (_PassedTime / _BreakAnimTime);
 
             transform.localScale = _StartLocalScale + (new Vector3(_StartLocalScale.x, 0.0f, _StartLocalScale.z) - _StartLocalScale) * (_PassedTime / _BreakAnimTime);
 
@@ -52,7 +52,7 @@ public class WallControl : GimmicControl
 
         if (_isRebornAnim)
         {
-            _StartGlobalPosition = new Vector3(transform.position.x, _StartGlobalPosition.y, transform.position.z);
+            _StartGlobalPosition = new Vector3(transform.localPosition.x, _StartGlobalPosition.y, transform.localPosition.z);
             float time = Time.deltaTime;
             if ((_PassedTime += time) > _RebornAnimTime)
             {
@@ -64,7 +64,7 @@ public class WallControl : GimmicControl
             //float move = (0.0f - _StartGlobalPosition.y) * (time / _BreakAnimTime);
             //transform.position = new Vector3(transform.position.x, transform.position.y - move, transform.position.z);
             Vector3 beforePos = new Vector3(_StartGlobalPosition.x, 0.0f, _StartGlobalPosition.z);
-            transform.position = beforePos + (_StartGlobalPosition - beforePos) * (_PassedTime / _RebornAnimTime);
+            transform.localPosition = beforePos + (_StartGlobalPosition - beforePos) * (_PassedTime / _RebornAnimTime);
 
             Vector3 beforeScale = new Vector3(_StartLocalScale.x, 0.0f, _StartLocalScale.z);
             transform.localScale = beforeScale + (_StartLocalScale - beforeScale) * (_PassedTime / _RebornAnimTime);
@@ -115,19 +115,17 @@ public class WallControl : GimmicControl
         if (transform.GetComponent<WallConfig>().GetIsBreak() || //壊れているor
             (Mathf.RoundToInt(wallDirection.x) * Mathf.RoundToInt(direction.y) - Mathf.RoundToInt(wallDirection.y) * Mathf.RoundToInt(direction.x)) != 0)//自身の向きとオブジェクトの向きが平行でないなら
         {
-            Debug.Log(wallDirection.x * direction.y - wallDirection.y * direction.x);
-            Debug.Log(wallDirection.x * direction.y - wallDirection.y * direction.x != 0);
             return true;
         }
         // 自分のパネル位置とオブジェクトパネル位置が一緒かどうかで分岐
         if (objectPosition == panelPosition)//自分のパネル位置とオブジェクトパネル位置が一緒
         {
-            if (wallDirection == direction)//オブジェクト向きと壁向きが一緒
+            if (wallDirection == direction * (transform.parent == transform.parent.parent.GetChild(0) ? 1 : -1) )//オブジェクト向きと壁向きが一緒 //裏世界のときは向き反転
                 return false;
         }
         else//自分のパネル位置とオブジェクトパネル位置が異なる
         {
-            if (wallDirection != direction)//オブジェクト向きと壁向きが一緒
+            if (wallDirection != direction * (transform.parent == transform.parent.parent.GetChild(0) ? 1 : -1))//オブジェクト向きと壁向きが一緒 //裏世界のときは向き反転
                 return false;
         }
 

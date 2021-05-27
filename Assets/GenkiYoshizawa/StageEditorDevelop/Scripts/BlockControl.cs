@@ -116,7 +116,7 @@ public class BlockControl : MonoBehaviour
         if (isScan && transform.GetChild(isFront ? 0 : 1).GetComponent<PanelConfig>().GetPanelIndex() != 0)
         {
             List<GameObject> targetBlock = ScanTargetBlock(isFront);
-
+            
             foreach (GameObject target in targetBlock)
             {
                 target.GetComponent<BlockControl>().Rotate(isFront, angle, false);

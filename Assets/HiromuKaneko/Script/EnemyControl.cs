@@ -61,30 +61,37 @@ public class EnemyControl : MonoBehaviour
     [Header("何秒間パニックするか")]
     [SerializeField] protected float _PanicTime = 1.0f;
 
+    [Header("表世界時のテクスチャ")]
+    [SerializeField] Texture _FrontTexture;
+    [Header("裏世界時のテクスチャ")]
+    [SerializeField] Texture _BackTexture;
+    [Header("ネズミに使ってるマテリアルを入れる")]
 
+    public Material TargetMaterial;
     [Header("↓デバッグ用")]
 
 
     // それぞれにGet・Setを作成？
-    [SerializeField] private Vector2Int _EnemyLocalPosition;      // ネズミのいるブロックの座標
-    [SerializeField] private Vector2Int _EnemyDirection;          // ネズミの向いてる方向
-    [SerializeField] private bool _IsFront;                       // 表か裏か
-    [SerializeField] private bool _StartEnemyTurn;                // エネミーターンが始まった最初に処理する用
+    private Vector2Int _EnemyLocalPosition;      // ネズミのいるブロックの座標
+    private Vector2Int _EnemyDirection;          // ネズミの向いてる方向
+    private bool _IsFront;                       // 表か裏か
+    private bool _StartEnemyTurn;                // エネミーターンが始まった最初に処理する用
 
     private GameObject _GameManager;                              // ゲームマネージャーを保持
     protected GameObject _Player;                                 // プレイヤーを保持
-    [SerializeField] private GameObject _Cheese;                                   // チーズを保持
+    private GameObject _Cheese;                                   // チーズを保持
 
     // デバッグ用に表示させてだけなので後々SerializeFieldは消す予定
     [SerializeField] protected GameObject _Up, _Down, _Left, _Right, _NextBlock; // 移動可能ブロックの保持、進む先のブロックを保持
 
     private int _TurnCount;
     private int _Count;
-    private float _PosY = 0.07f;    // Y座標固定用
+    private float _PosY = 0.075f;    // Y座標固定用
 
-    [SerializeField] private Animator _EnemyAnimation;
+    private Animator _EnemyAnimation;
     private Vector3 _StartPoint;
     private Vector3 _TargetPoint;
+    private Vector3 _UpdatePosition;
     private float _PassedTime;
     private bool _CheeseBite;
     private bool _PlayerBite;
@@ -102,6 +109,7 @@ public class EnemyControl : MonoBehaviour
         _IsExist = false;
         _Count = 0;
         _PassedTime = 0.0f;
+
     }
 
     // Update is called once per frame
@@ -181,7 +189,7 @@ public class EnemyControl : MonoBehaviour
 
         }
 
-    var clipInfo = _EnemyAnimation.GetCurrentAnimatorClipInfo(0)[0];   // 引数はLayer番号、配列の0番目
+        var clipInfo = _EnemyAnimation.GetCurrentAnimatorClipInfo(0)[0];   // 引数はLayer番号、配列の0番目
 
         // 現在のアニメーションがDeadだったらオブジェクトを削除する
         if (clipInfo.clip.name == "Dead")
@@ -270,7 +278,7 @@ public class EnemyControl : MonoBehaviour
     // 待機関数
     void Idle()
     {
-        _EnemyAnimation.SetBool("Wait", true);
+        // _EnemyAnimation.SetBool("Wait", true);
         if (_Count > 0)
         {
             EnemyTurn();
@@ -298,6 +306,7 @@ public class EnemyControl : MonoBehaviour
 
             _TargetPoint = o.transform.position;
             _StartPoint = this.transform.position;
+            _TargetPoint.y = _PosY;
 
             // ネズミのローカルポジションを更新
             _EnemyLocalPosition = _NextBlock.GetComponent<BlockConfig>().GetBlockLocalPosition();
@@ -330,6 +339,7 @@ public class EnemyControl : MonoBehaviour
 
             _TargetPoint = o.transform.position;
             _StartPoint = this.transform.position;
+            _TargetPoint.y = -_PosY;
 
             // ネズミのローカルポジションを更新
             _EnemyLocalPosition = _NextBlock.GetComponent<BlockConfig>().GetBlockLocalPosition();
@@ -361,7 +371,7 @@ public class EnemyControl : MonoBehaviour
 
                     }
                     else
-                    _EnemyAnimation.SetBool("Walk", true);
+                        _EnemyAnimation.SetBool("Walk", true);
                 }
 
                 _EnemyAnimation.SetBool("Walk", true);
@@ -2743,7 +2753,7 @@ public class EnemyControl : MonoBehaviour
             }
 
 
-            
+
 
 
         }
@@ -2765,7 +2775,7 @@ public class EnemyControl : MonoBehaviour
 
     public void PlayerKill()
     {
-        if(_Player.gameObject.GetComponent<PlayerControl>().GetIsFront())
+        if (_Player.gameObject.GetComponent<PlayerControl>().GetIsFront())
         {
 
         }
@@ -2775,6 +2785,21 @@ public class EnemyControl : MonoBehaviour
     // エネミーを行く方向・かじる方向へ回転させる
     public void Rotate()
     {
+        if(_IsFront)
+            TargetMaterial.SetTexture("_MainTex", _FrontTexture);
+        else
+            TargetMaterial.SetTexture("_MainTex", _BackTexture);
+
+
+        _UpdatePosition = this.transform.position;
+
+        if(_IsFront)
+            _UpdatePosition.y = _PosY;
+        else
+            _UpdatePosition.y = _PosY * -1;
+
+        this.transform.position = _UpdatePosition;
+
         float y = 90.0f;
         if (_IsFront)
         {
@@ -2826,8 +2851,10 @@ public class EnemyControl : MonoBehaviour
         //ひっくり返す
         if (_IsFront)
             _IsFront = false;
+
         else
             _IsFront = true;
+
     }
 
     // ブロック側で呼び出す　自分の位置を入れ替える関数
