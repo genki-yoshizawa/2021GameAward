@@ -35,7 +35,6 @@ public class TurnManager : MonoBehaviour
 
         //ターン数取得できないなんで
         _TurnLimit = StageManager._MaxTurn;
-        //_TurnLimit = 30;
 
         //ブロックのスクリプト取得
         foreach(var blocklist in blocks)
