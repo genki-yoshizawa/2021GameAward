@@ -2387,6 +2387,11 @@ PrefabInstance:
       objectReference: {fileID: 49613407}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d19d1c00df328c246bb3dd48e493c6ca, type: 3}
+--- !u!1 &948786417 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2440608675992719682, guid: d19d1c00df328c246bb3dd48e493c6ca, type: 3}
+  m_PrefabInstance: {fileID: 948786416}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &979909874
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2617,6 +2622,10 @@ PrefabInstance:
       propertyPath: _FukidasiObj
       value: 
       objectReference: {fileID: 731521778}
+    - target: {fileID: 1585705306440433839, guid: 6158f0bf8f46c844c81e9cf816963c00, type: 3}
+      propertyPath: _GameOverScreen
+      value: 
+      objectReference: {fileID: 948786417}
     - target: {fileID: 1927794913386874087, guid: 6158f0bf8f46c844c81e9cf816963c00, type: 3}
       propertyPath: m_Name
       value: CatAnimation
