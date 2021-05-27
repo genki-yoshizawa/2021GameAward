@@ -1169,17 +1169,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _AudioClip:
+  - {fileID: 8300000, guid: 183cadf3384d66f4baa4074d8d7965c2, type: 3}
+  - {fileID: 8300000, guid: 06f12f2e98aa82e4e81d5be032771050, type: 3}
   - {fileID: 8300000, guid: 3332dbdacdcae824587c1d8760637ad1, type: 3}
   - {fileID: 8300000, guid: 392a82caf6e2e5c4f87e9f5c808edfcf, type: 3}
   - {fileID: 8300000, guid: 60c0f0d228bb0fb48bb1fbf085652121, type: 3}
   - {fileID: 8300000, guid: 6d20326eb8344e0449e62352d5306894, type: 3}
+  - {fileID: 8300000, guid: 6d20326eb8344e0449e62352d5306894, type: 3}
   _Direction: {x: 0, y: 1}
   _FukidasiObj: {fileID: 8912895626404942289, guid: c4b51f6447ab1d34cbac28952a2d790e, type: 3}
   _WalkTime: 1
-  _ActionTime: 0.01
+  _RotateTime: 0.5
   _ClearScreen: {fileID: 0}
   _GameOverScreen: {fileID: 0}
-  IsWalkAnim: 0
 --- !u!1 &1928443941589281878
 GameObject:
   m_ObjectHideFlags: 0

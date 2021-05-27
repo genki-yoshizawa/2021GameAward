@@ -95,6 +95,8 @@ public class PlayerControl : MonoBehaviour
         _CorsorStartPosition = _FukidasiObj.transform.GetChild(_AnimMax).localPosition;
 
         _TurnManager = GameObject.FindGameObjectWithTag("TurnManager").GetComponent<TurnManager>();
+
+        AudioManager.Instance.PlayGameBGM(_AudioClip[0], _AudioClip[1]);
     }
 
     public void Update()
@@ -245,7 +247,7 @@ public class PlayerControl : MonoBehaviour
     private void PlayerMove()
     {
         Move(_Direction);
-        AudioManager.Instance.PlaySE(_AudioClip[0]);
+        AudioManager.Instance.PlaySE(_AudioClip[2]);
         SetFrontBlock();
     }
 
@@ -304,7 +306,7 @@ public class PlayerControl : MonoBehaviour
 
             if (!(_FrontBlock == null || enemys.Count == 0))
             {
-                AudioManager.Instance.PlaySE(_AudioClip[1]);
+                AudioManager.Instance.PlaySE(_AudioClip[3]);
 
                 _FukidasiScript.SetAnimPattern(_CanActionList.Count);
                 if (CheckEnemy(_LocalPosition + _Direction) != null)
@@ -388,7 +390,7 @@ public class PlayerControl : MonoBehaviour
             var enemy = CheckEnemy(_LocalPosition + _Direction);
             if (enemy != null)
             {
-                AudioManager.Instance.PlaySE(_AudioClip[3]);
+                AudioManager.Instance.PlaySE(_AudioClip[5]);
 
                 _Animator.SetTrigger("Capture");
                 _GameManagerScript.KillEnemy(enemy);
@@ -402,7 +404,7 @@ public class PlayerControl : MonoBehaviour
             }
             else
             {
-                AudioManager.Instance.PlaySE(_AudioClip[2]);
+                AudioManager.Instance.PlaySE(_AudioClip[4]);
 
                 CommandAction(_CommandSelect);
             }
@@ -412,7 +414,12 @@ public class PlayerControl : MonoBehaviour
             turnEnd = true;
         }
 
-        return turnEnd;
+        if (Input.GetKeyDown(KeyCode.Keypad5))
+        {
+            AudioManager.Instance.StopBGM();
+        }
+
+            return turnEnd;
     }
 
     public Vector2Int GetLocalPosition() { return _LocalPosition; }
@@ -424,7 +431,7 @@ public class PlayerControl : MonoBehaviour
     public void SetIsFront(bool isFront){ _IsFront = isFront; }
     public void SetIsExist(bool isExist)
     {
-        if (isExist)
+        if (!isExist)
             SetDead();
         _IsExist = isExist;
     }

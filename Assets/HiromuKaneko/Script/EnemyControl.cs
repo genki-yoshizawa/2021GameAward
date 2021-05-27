@@ -367,7 +367,7 @@ public class EnemyControl : MonoBehaviour
                     if (_Player.gameObject.GetComponent<PlayerControl>().GetLocalPosition() == _EnemyLocalPosition)
                     {
                         _EnemyAnimation.SetTrigger("Attack");
-                        _Player.gameObject.GetComponent<PlayerControl>().SetIsExist(true);
+                        _Player.gameObject.GetComponent<PlayerControl>().SetIsExist(false);
 
                     }
                     else
@@ -2779,7 +2779,7 @@ public class EnemyControl : MonoBehaviour
         {
 
         }
-        _Player.gameObject.GetComponent<PlayerControl>().SetIsExist(true);
+        _Player.gameObject.GetComponent<PlayerControl>().SetIsExist(false);
     }
 
     // エネミーを行く方向・かじる方向へ回転させる
