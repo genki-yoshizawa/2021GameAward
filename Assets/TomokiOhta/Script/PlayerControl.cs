@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerControl : MonoBehaviour
 {
     [Header("使いたい音声ファイルを入れてください。")]
-    [SerializeField] private AudioClip[] audioClip;
+    [SerializeField] private AudioClip[] _AudioClip;
 
     [Header("プレイヤーの向きを入れてください。")]
     [SerializeField]private Vector2Int _Direction;
@@ -261,6 +261,7 @@ public class PlayerControl : MonoBehaviour
     private void PlayerMove()
     {
         Move(_Direction);
+        AudioManager.Instance.PlaySE(_AudioClip[0]);
         SetFrontBlock();
     }
 
@@ -305,20 +306,25 @@ public class PlayerControl : MonoBehaviour
         //吹き出しのアニメーション終了を確認したら生成する
         if (_FukidasiScript.GetAnimPattern() == -1)
         {
-            _FukidasiScript.SetAnimPattern(_CanActionList.Count);
-            if (CheckEnemy(_LocalPosition + _Direction) != null)
+            if (_FrontBlock != null)
             {
-                //前に敵がいたのでそれ用の画像を出す
-                _FukidasiScript.SetActPattern(_CanActionList, true);
-            }
-            else
-                _FukidasiScript.SetActPattern(_CanActionList);
+                AudioManager.Instance.PlaySE(_AudioClip[1]);
 
-            //カーソルを一番上に設定
-            _CommandSelect = _CanActionList.Count - 1;
-            var icon = _FukidasiObj.transform.GetChild(4).GetComponent<RectTransform>();
-            icon.anchoredPosition = 
-                new Vector3(icon.localPosition.x, _CorsorStartPosition.y + (20.0f * _CommandSelect), _CorsorStartPosition.z);
+                _FukidasiScript.SetAnimPattern(_CanActionList.Count);
+                if (CheckEnemy(_LocalPosition + _Direction) != null)
+                {
+                    //前に敵がいたのでそれ用の画像を出す
+                    _FukidasiScript.SetActPattern(_CanActionList, true);
+                }
+                else
+                    _FukidasiScript.SetActPattern(_CanActionList);
+
+                //カーソルを一番上に設定
+                _CommandSelect = _CanActionList.Count - 1;
+                var icon = _FukidasiObj.transform.GetChild(4).GetComponent<RectTransform>();
+                icon.anchoredPosition =
+                    new Vector3(icon.localPosition.x, _CorsorStartPosition.y + (20.0f * _CommandSelect), _CorsorStartPosition.z);
+            }
         }
 
         //プレイヤー左右回転
@@ -394,6 +400,8 @@ public class PlayerControl : MonoBehaviour
             var enemy = CheckEnemy(_LocalPosition + _Direction);
             if (enemy != null)
             {
+                AudioManager.Instance.PlaySE(_AudioClip[3]);
+
                 _Animator.SetTrigger("Capture");
                 _GameManagerScript.KillEnemy(enemy);
                 var remainEnemy = _GameManagerScript.GetEnemys();
@@ -404,6 +412,8 @@ public class PlayerControl : MonoBehaviour
             }
             else
             {
+                AudioManager.Instance.PlaySE(_AudioClip[2]);
+
                 CommandAction(_CommandSelect);
             }
 
