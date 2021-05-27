@@ -653,6 +653,11 @@ PrefabInstance:
       objectReference: {fileID: 1225017617}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d19d1c00df328c246bb3dd48e493c6ca, type: 3}
+--- !u!1 &607046539 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2440608675992719682, guid: d19d1c00df328c246bb3dd48e493c6ca, type: 3}
+  m_PrefabInstance: {fileID: 607046538}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &649509782
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2343,7 +2348,7 @@ PrefabInstance:
     - target: {fileID: 1585705306440433839, guid: 6158f0bf8f46c844c81e9cf816963c00, type: 3}
       propertyPath: _GameOverScreen
       value: 
-      objectReference: {fileID: 1780380548}
+      objectReference: {fileID: 607046539}
     - target: {fileID: 1927794913386874087, guid: 6158f0bf8f46c844c81e9cf816963c00, type: 3}
       propertyPath: m_Name
       value: CatAnimation
@@ -2923,11 +2928,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9678235ce8cb9b4194fdd253e86b710, type: 3}
---- !u!1 &1780380548 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2440608675596812127, guid: d19d1c00df328c246bb3dd48e493c6ca, type: 3}
-  m_PrefabInstance: {fileID: 607046538}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1803308618
 GameObject:
   m_ObjectHideFlags: 0
