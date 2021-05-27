@@ -247,27 +247,12 @@ public class BlockControl : MonoBehaviour
         {
             targetBlockLocalPosition.Add(target.GetComponent<BlockConfig>().GetBlockLocalPosition());
         }
-
-        // 自分を取り除く
-        //foreach (GameObject target in targetBlock)
-        //{
-        //    if (gameObject == target)
-        //    {
-        //        targetBlock.Remove(target);
-        //        break;
-        //    }
-        //}
-
-        // 現段階では3つ以上のスワップはバグる(手直し中)
+        
         // 配列要素入れ替え処理
         // ゲームマネージャー内の配列入れ替え
-        //gameManagerScript.SwapBlockArray(gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition(), targetBlock[0].GetComponent<BlockConfig>().GetBlockLocalPosition());
         gameManagerScript.SwapBlockArray(targetBlock);
 
         // それぞれのブロックのローカルポジションを入れ替え
-        //Vector2Int localTemp = gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition();
-        //gameObject.GetComponent<BlockConfig>().SetBlockLocalPosition(targetBlock[0].GetComponent<BlockConfig>().GetBlockLocalPosition());
-        //targetBlock[0].GetComponent<BlockConfig>().SetBlockLocalPosition(localTemp);
         Vector2Int localTemp = targetBlock[targetBlock.Count - 1].GetComponent<BlockConfig>().GetBlockLocalPosition();
         for (int n = targetBlock.Count - 1; n > 0; --n) 
         {
@@ -277,15 +262,6 @@ public class BlockControl : MonoBehaviour
 
 
         // ブロックのグローバル座標を入れ替える
-        //Vector3 globalTemp = gameObject.transform.position;
-        //gameObject.transform.position = targetBlock[0].transform.position;
-        //targetBlock[0].transform.position = globalTemp;
-        //Vector3 globalTemp = targetBlock[targetBlock.Count - 1].transform.position;
-        //for (int n = targetBlock.Count - 1; n > 0; --n)
-        //{
-        //    targetBlock[n].transform.position = targetBlock[n - 1].transform.position;
-        //}
-        //targetBlock[0].transform.position = globalTemp;
         for (int n = targetBlock.Count - 1; n > 0; --n)
         {
             targetBlock[n].GetComponent<BlockControl>().SetisSwapAnim();
