@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerControl : MonoBehaviour
 {
     [Header("使いたい音声ファイルを入れてください。")]
-    [SerializeField] private AudioClip[] audioClip;
+    [SerializeField] private AudioClip[] _AudioClip;
 
     [Header("プレイヤーの向きを入れてください。")]
     [SerializeField]private Vector2Int _Direction;
@@ -17,8 +17,8 @@ public class PlayerControl : MonoBehaviour
     [Header("歩く時間")]
     [SerializeField] private float _WalkTime = 1.0f;
 
-    [Header("行動終了後の待機時間")]
-    [SerializeField] private float _ActionTime = 0.01f;
+    [Header("方向転換にかかる時間")]
+    [SerializeField] private float _RotateTime = 0.5f;
 
     [Header("クリア画面"), SerializeField] private GameObject _ClearScreen;
     [Header("ゲームオーバー画面"), SerializeField] private GameObject _GameOverScreen;
@@ -70,9 +70,6 @@ public class PlayerControl : MonoBehaviour
     //ターンマネージャー
     private TurnManager _TurnManager;
 
-    //今コマンド入力を受け付けるか
-    private bool _CanSelectCommand;
-
     //キー入力で右を押したのか？
     private bool _IsRight = false;
 
@@ -96,7 +93,7 @@ public class PlayerControl : MonoBehaviour
         _WalkTargetPosition = new Vector3(0.0f, 0.0f, 0.0f);
         _PassedTime = 0.0f;
 
-        _CorsorStartPosition = _FukidasiObj.transform.GetChild(4).localPosition;
+        _CorsorStartPosition = _FukidasiObj.transform.GetChild(_AnimMax).localPosition;
 
         _TurnManager = GameObject.FindGameObjectWithTag("TurnManager").GetComponent<TurnManager>();
     }
@@ -124,12 +121,12 @@ public class PlayerControl : MonoBehaviour
         if (_Animator.GetBool("Walk") && _NowWalkAnim == true)
         {
             float time = Time.deltaTime;
-            if ((_PassedTime += time) > _WalkTime)
+            if ((_PassedTime += time) > _RotateTime)
             {
                 _Animator.SetBool("Walk", false);
             }
 
-            transform.Rotate(0.0f, 90.0f * (time / _WalkTime) * (_IsRight ? 1.0f : -1.0f), 0.0f);
+            transform.Rotate(0.0f, 90.0f * (time / _RotateTime) * (_IsRight ? 1.0f : -1.0f), 0.0f);
 
             if (!_Animator.GetBool("Walk"))
             {
@@ -140,18 +137,6 @@ public class PlayerControl : MonoBehaviour
 
         //現在のアニメーション情報を取得
         var clipInfo = _Animator.GetCurrentAnimatorClipInfo(0)[0];
-
-        //アニメーションが再生中はコマンド操作を受け付けない...はずなのにダメ
-        if (clipInfo.clip.name != "Wait" && clipInfo.clip.name != "Tired")
-        {
-            _CanSelectCommand = false;
-            Debug.Log("うけつけへんで");
-        }
-        else
-            _CanSelectCommand = true;
-
-        if (_CanSelectCommand)
-            Debug.Log("真です");
 
         //クリア確認
         if (clipInfo.clip.name == "Clear")
@@ -191,6 +176,7 @@ public class PlayerControl : MonoBehaviour
         //ゆっくり歩くために現在地と目的地を取得
         _WalkStartPosition = transform.position;
         _WalkTargetPosition = block.transform.position;
+        _WalkTargetPosition.y = transform.position.y;
 
         //Walkのアニメーション開始
         _Animator.SetBool("Walk", true);
@@ -239,7 +225,6 @@ public class PlayerControl : MonoBehaviour
 
     public void TurnOverMySelf(Vector2Int position, Vector3 axis)
     {
-
         //TurnOver時に呼び出される関数
         if (position != _LocalPosition)
             return;
@@ -261,6 +246,7 @@ public class PlayerControl : MonoBehaviour
     private void PlayerMove()
     {
         Move(_Direction);
+        AudioManager.Instance.PlaySE(_AudioClip[0]);
         SetFrontBlock();
     }
 
@@ -283,6 +269,7 @@ public class PlayerControl : MonoBehaviour
     private void PlayerTurnOver(GameObject block)
     {
         var blockScript = block.GetComponent<BlockControl>();
+        block.GetComponent<BlockConfig>().PanelRemoveAttention(_IsFront);
         blockScript.TurnOver(_IsFront, _Direction);
         _Animator.SetBool("Action", true);
         SetFrontBlock();
@@ -292,33 +279,45 @@ public class PlayerControl : MonoBehaviour
     {
         bool turnEnd = false;
 
-        if (!_CanSelectCommand)
-        {
-            Debug.Log("チェック");
+        //アニメーション遷移中だったら動かなくする
+        if (_Animator.IsInTransition(0))
             return turnEnd;
-        }
+
+        //現在のアニメーション情報を取得
+        var clipInfo = _Animator.GetCurrentAnimatorClipInfo(0)[0];
+
+        //アニメーションが再生中はコマンド操作を受け付けない
+        if (clipInfo.clip.name == "Walk" || clipInfo.clip.name == "PanelAction" || clipInfo.clip.name == "Capture")
+            return turnEnd;
 
         //Startで取得するのでターン開始時に手動で取得
         if (_FrontBlock == null)
             SetFrontBlock();
 
         //吹き出しのアニメーション終了を確認したら生成する
-        if (_FukidasiScript.GetAnimPattern() == -1)
+        if (_FukidasiScript.GetAnimPattern() == -1 && _IsExist)
         {
-            _FukidasiScript.SetAnimPattern(_CanActionList.Count);
-            if (CheckEnemy(_LocalPosition + _Direction) != null)
-            {
-                //前に敵がいたのでそれ用の画像を出す
-                _FukidasiScript.SetActPattern(_CanActionList, true);
-            }
-            else
-                _FukidasiScript.SetActPattern(_CanActionList);
+            var enemys = _GameManagerScript.GetEnemys();
 
-            //カーソルを一番上に設定
-            _CommandSelect = _CanActionList.Count - 1;
-            var icon = _FukidasiObj.transform.GetChild(4).GetComponent<RectTransform>();
-            icon.anchoredPosition = 
-                new Vector3(icon.localPosition.x, _CorsorStartPosition.y + (20.0f * _CommandSelect), _CorsorStartPosition.z);
+            if (!(_FrontBlock == null || enemys.Count == 0))
+            {
+                AudioManager.Instance.PlaySE(_AudioClip[1]);
+
+                _FukidasiScript.SetAnimPattern(_CanActionList.Count);
+                if (CheckEnemy(_LocalPosition + _Direction) != null)
+                {
+                    //前に敵がいたのでそれ用の画像を出す
+                    _FukidasiScript.SetActPattern(_CanActionList, true);
+                }
+                else
+                    _FukidasiScript.SetActPattern(_CanActionList);
+
+                //カーソルを一番上に設定
+                _CommandSelect = _CanActionList.Count - 1;
+                var icon = _FukidasiObj.transform.GetChild(_AnimMax).GetComponent<RectTransform>();
+                icon.anchoredPosition =
+                    new Vector3(icon.localPosition.x, _CorsorStartPosition.y + (20.0f * _CommandSelect), _CorsorStartPosition.z);
+            }
         }
 
         //プレイヤー左右回転
@@ -366,7 +365,7 @@ public class PlayerControl : MonoBehaviour
                 _CommandSelect++;
 
                 //アイコンのtransform取得
-                var icon = _FukidasiObj.transform.GetChild(4).GetComponent<RectTransform>();
+                var icon = _FukidasiObj.transform.GetChild(_AnimMax).GetComponent<RectTransform>();
                 icon.anchoredPosition = new Vector3(icon.localPosition.x, icon.localPosition.y + 20.0f, icon.localPosition.z);
 
                 //文字のsprite変更
@@ -380,7 +379,7 @@ public class PlayerControl : MonoBehaviour
                 _CommandSelect--;
 
                 //アイコンのtransform取得
-                var icon = _FukidasiObj.transform.GetChild(4).GetComponent<RectTransform>();
+                var icon = _FukidasiObj.transform.GetChild(_AnimMax).GetComponent<RectTransform>();
                 icon.anchoredPosition = new Vector3(icon.localPosition.x, icon.localPosition.y - 20.0f, icon.localPosition.z);
 
                 //文字のsprite変更
@@ -391,19 +390,28 @@ public class PlayerControl : MonoBehaviour
         //Enterキーで行動 ターンを進める
         if (Input.GetKeyDown(KeyCode.Return))
         {
+            if (_FrontBlock == null)
+                return turnEnd;
+
             var enemy = CheckEnemy(_LocalPosition + _Direction);
             if (enemy != null)
             {
+                AudioManager.Instance.PlaySE(_AudioClip[3]);
+
                 _Animator.SetTrigger("Capture");
                 _GameManagerScript.KillEnemy(enemy);
                 var remainEnemy = _GameManagerScript.GetEnemys();
 
                 //敵がいなくなったことを確認したらゲームを終わらせに行く
                 if (remainEnemy.Count <= 0)
+                {
                     _Animator.SetBool("Clear", true);
+                }
             }
             else
             {
+                AudioManager.Instance.PlaySE(_AudioClip[2]);
+
                 CommandAction(_CommandSelect);
             }
 
