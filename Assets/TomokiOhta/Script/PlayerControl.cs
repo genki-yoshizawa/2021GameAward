@@ -23,7 +23,6 @@ public class PlayerControl : MonoBehaviour
     [Header("クリア画面"), SerializeField] private GameObject _ClearScreen;
     [Header("ゲームオーバー画面"), SerializeField] private GameObject _GameOverScreen;
 
-    [Header("向き変更時に歩行アニメーションを再生するか"), SerializeField] private bool IsWalkAnim;
     private bool _NowWalkAnim = false;
 
     //アニメーションスタートからの経過時間
@@ -290,6 +289,10 @@ public class PlayerControl : MonoBehaviour
         if (clipInfo.clip.name == "Walk" || clipInfo.clip.name == "PanelAction" || clipInfo.clip.name == "Capture")
             return turnEnd;
 
+        //死ぬ
+        if (clipInfo.clip.name == "GameOver")
+            return turnEnd;
+
         //Startで取得するのでターン開始時に手動で取得
         if (_FrontBlock == null)
             SetFrontBlock();
@@ -323,15 +326,9 @@ public class PlayerControl : MonoBehaviour
         //プレイヤー左右回転
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            //向き変更時に歩行アニメーション再生
-            if (IsWalkAnim)
-            {
-                _Animator.SetBool("Walk", true);
-                _NowWalkAnim = true;
-                _IsRight = true;
-            }
-            else
-                transform.Rotate(0.0f, 90.0f, 0.0f);
+            _Animator.SetBool("Walk", true);
+            _NowWalkAnim = true;
+            _IsRight = true;
 
             RotateMySelf(_LocalPosition, _IsFront ? 90.0f : -90.0f);
             
@@ -342,14 +339,9 @@ public class PlayerControl : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             //向き変更時に歩行アニメーション再生
-            if (IsWalkAnim)
-            {
-                _Animator.SetBool("Walk", true);
-                _NowWalkAnim = true;
-                _IsRight = false;
-            }
-            else
-                transform.Rotate(0.0f, -90.0f, 0.0f);
+            _Animator.SetBool("Walk", true);
+            _NowWalkAnim = true;
+            _IsRight = false;
 
             RotateMySelf(_LocalPosition, _IsFront ? -90.0f : 90.0f);
             SetFrontBlock();

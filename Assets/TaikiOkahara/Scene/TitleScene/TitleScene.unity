@@ -444,8 +444,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Source: []
-  _BgVolume: 0
-  _SeVolume: 0
+  _BgVolume: 0.7
+  _SeVolume: 0.7
 --- !u!4 &829626109
 Transform:
   m_ObjectHideFlags: 0
