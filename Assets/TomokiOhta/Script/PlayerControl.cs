@@ -225,7 +225,6 @@ public class PlayerControl : MonoBehaviour
 
     public void TurnOverMySelf(Vector2Int position, Vector3 axis)
     {
-
         //TurnOveréûÇ…åƒÇ—èoÇ≥ÇÍÇÈä÷êî
         if (position != _LocalPosition)
             return;
@@ -270,6 +269,7 @@ public class PlayerControl : MonoBehaviour
     private void PlayerTurnOver(GameObject block)
     {
         var blockScript = block.GetComponent<BlockControl>();
+        block.GetComponent<BlockConfig>().PanelRemoveAttention(_IsFront);
         blockScript.TurnOver(_IsFront, _Direction);
         _Animator.SetBool("Action", true);
         SetFrontBlock();
