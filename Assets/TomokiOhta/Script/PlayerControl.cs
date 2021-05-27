@@ -306,7 +306,9 @@ public class PlayerControl : MonoBehaviour
         //吹き出しのアニメーション終了を確認したら生成する
         if (_FukidasiScript.GetAnimPattern() == -1)
         {
-            if (_FrontBlock != null)
+            var enemys = _GameManagerScript.GetEnemys();
+
+            if (!(_FrontBlock == null || enemys.Count == 0))
             {
                 AudioManager.Instance.PlaySE(_AudioClip[1]);
 
@@ -397,6 +399,9 @@ public class PlayerControl : MonoBehaviour
         //Enterキーで行動 ターンを進める
         if (Input.GetKeyDown(KeyCode.Return))
         {
+            if (_FrontBlock == null)
+                return turnEnd;
+
             var enemy = CheckEnemy(_LocalPosition + _Direction);
             if (enemy != null)
             {
@@ -408,7 +413,10 @@ public class PlayerControl : MonoBehaviour
 
                 //敵がいなくなったことを確認したらゲームを終わらせに行く
                 if (remainEnemy.Count <= 0)
+                {
                     _Animator.SetBool("Clear", true);
+                    //_FukidasiScript.SetAnimPattern(-2);
+                }
             }
             else
             {
