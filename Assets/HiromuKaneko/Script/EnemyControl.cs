@@ -49,6 +49,9 @@ public class EnemyControl : MonoBehaviour
     [Header("嗅覚範囲")]
     [SerializeField] private int _CheeseSearchRange = 0;
 
+    [Header("表スタートならチェックを入れる裏なら外す")]
+    private bool _IsFront;                       // 表か裏か
+
     [Header("デバッグカラーの設定")]
     [SerializeField] private Color _DebugColor = new Color(1f, 1f, 0, 0.5f);
 
@@ -72,9 +75,8 @@ public class EnemyControl : MonoBehaviour
 
 
     // それぞれにGet・Setを作成？
-    private Vector2Int _EnemyLocalPosition;      // ネズミのいるブロックの座標
+    [SerializeField] private Vector2Int _EnemyLocalPosition;      // ネズミのいるブロックの座標
     private Vector2Int _EnemyDirection;          // ネズミの向いてる方向
-    private bool _IsFront;                       // 表か裏か
     private bool _StartEnemyTurn;                // エネミーターンが始まった最初に処理する用
 
     private GameObject _GameManager;                              // ゲームマネージャーを保持
@@ -93,9 +95,9 @@ public class EnemyControl : MonoBehaviour
     private Vector3 _TargetPoint;
     private Vector3 _UpdatePosition;
     private float _PassedTime;
-    private bool _CheeseBite;
-    private bool _PlayerBite;
-    private bool _IsExist;
+    private bool  _CheeseBite;
+    private bool  _PlayerBite;
+    private bool  _IsExist;
 
     // Start is called before the first frame update
     void Start()
@@ -104,7 +106,6 @@ public class EnemyControl : MonoBehaviour
         GameObject parent = transform.root.gameObject;
         _EnemyLocalPosition = parent.GetComponent<BlockConfig>().GetBlockLocalPosition();
         _EnemyAnimation = gameObject.GetComponent<Animator>();
-        _IsFront = true;
         _CheeseBite = false;
         _IsExist = false;
         _Count = 0;
@@ -366,9 +367,7 @@ public class EnemyControl : MonoBehaviour
                 {
                     if (_Player.gameObject.GetComponent<PlayerControl>().GetLocalPosition() == _EnemyLocalPosition)
                     {
-                        _EnemyAnimation.SetTrigger("Attack");
-                        _Player.gameObject.GetComponent<PlayerControl>().SetIsExist(true);
-
+                        PlayerKill();
                     }
                     else
                         _EnemyAnimation.SetBool("Walk", true);
@@ -414,72 +413,81 @@ public class EnemyControl : MonoBehaviour
         // 生きていれば動ける
         if (_IsExist == false)
         {
-            if (_StartEnemyTurn)
+            _Player = _GameManager.gameObject.GetComponent<GameManagerScript>().GetPlayer();
+            if (_Player.GetComponent<PlayerControl>().GetLocalPosition() != _EnemyLocalPosition)
             {
-                _Count = _ActCount;
-                _StartEnemyTurn = false;
+                if (_StartEnemyTurn)
+                {
+                    _Count = _ActCount;
+                    _StartEnemyTurn = false;
+                }
+
+                Wait();
+                // エネミーステートを変更する関数を呼ぶ
+
+
+                // 右Shiftで裏に行く（戻れない）
+                if (Input.GetKeyDown(KeyCode.RightShift))
+                {
+                    _IsFront = false;
+                    this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
+
+                    GameObject ob;
+                    GameObject parent = transform.root.gameObject;
+                    ob = parent.transform.GetChild(1).gameObject;
+                    transform.parent = ob.transform;
+
+                }
+
+                // ここでレベル別に処理を書く？
+                // ChangeState();
+                switch (_EnemyLevel)
+                {
+                    case EnemyLevel.LEVEL1:
+                        Level1();
+                        break;
+                    case EnemyLevel.LEVEL2:
+                        Level2();
+                        break;
+                    case EnemyLevel.LEVEL3:
+                        Level3();
+                        break;
+                    case EnemyLevel.LEVEL4:
+                        Level4();
+                        break;
+                    case EnemyLevel.LEVEL5:
+                        Level5();
+                        break;
+                    case EnemyLevel.LEVEL6:
+                        Level6();
+                        break;
+                    case EnemyLevel.LEVEL7:
+                        Level7();
+                        break;
+                }
+
+
+                switch (_EnemyState)
+                {
+                    case EnemyState.IDLE:
+                        Idle();
+                        break;
+                    case EnemyState.STAY:
+                        Stay();
+                        break;
+                    case EnemyState.MOVE:
+                        Move();
+                        break;
+                    case EnemyState.BREAK:
+                        Break();
+                        break;
+
+                }
             }
-
-            Wait();
-            // エネミーステートを変更する関数を呼ぶ
-
-
-            // 右Shiftで裏に行く（戻れない）
-            if (Input.GetKeyDown(KeyCode.RightShift))
+            else
             {
-                _IsFront = false;
-                this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
 
-                GameObject ob;
-                GameObject parent = transform.root.gameObject;
-                ob = parent.transform.GetChild(1).gameObject;
-                transform.parent = ob.transform;
-
-            }
-
-            // ここでレベル別に処理を書く？
-            // ChangeState();
-            switch (_EnemyLevel)
-            {
-                case EnemyLevel.LEVEL1:
-                    Level1();
-                    break;
-                case EnemyLevel.LEVEL2:
-                    Level2();
-                    break;
-                case EnemyLevel.LEVEL3:
-                    Level3();
-                    break;
-                case EnemyLevel.LEVEL4:
-                    Level4();
-                    break;
-                case EnemyLevel.LEVEL5:
-                    Level5();
-                    break;
-                case EnemyLevel.LEVEL6:
-                    Level6();
-                    break;
-                case EnemyLevel.LEVEL7:
-                    Level7();
-                    break;
-            }
-
-
-            switch (_EnemyState)
-            {
-                case EnemyState.IDLE:
-                    Idle();
-                    break;
-                case EnemyState.STAY:
-                    Stay();
-                    break;
-                case EnemyState.MOVE:
-                    Move();
-                    break;
-                case EnemyState.BREAK:
-                    Break();
-                    break;
-
+                PlayerKill();
             }
 
         }
@@ -2775,10 +2783,7 @@ public class EnemyControl : MonoBehaviour
 
     public void PlayerKill()
     {
-        if (_Player.gameObject.GetComponent<PlayerControl>().GetIsFront())
-        {
-
-        }
+        _EnemyAnimation.SetTrigger("Attack");
         _Player.gameObject.GetComponent<PlayerControl>().SetIsExist(true);
     }
 
