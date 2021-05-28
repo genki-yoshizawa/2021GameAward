@@ -32,9 +32,9 @@ public class EnemyControl : MonoBehaviour
 
 
     // 必要そうな変数をとりあえず用意
-    [SerializeField] protected EnemyState _EnemyState = EnemyState.IDLE;
+    protected EnemyState _EnemyState = EnemyState.IDLE;
     [SerializeField] protected EnemyLevel _EnemyLevel = EnemyLevel.LEVEL1;
-    [SerializeField] protected EnemyState _NextState = EnemyState.IDLE;
+    protected EnemyState _NextState = EnemyState.IDLE;
 
 
     [Header("１ターンの行動回数")]
@@ -115,8 +115,8 @@ public class EnemyControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        Rotate();
+        if(!_IsExist)
+            Rotate();
 
         if (_EnemyState == EnemyState.IDLE)
         {
@@ -2801,14 +2801,14 @@ public class EnemyControl : MonoBehaviour
             TargetMaterial.SetTexture("_MainTex", _BackTexture);
 
 
-        _UpdatePosition = this.transform.position;
+        //_UpdatePosition = this.transform.position;
 
-        if(_IsFront)
-            _UpdatePosition.y = _PosY;
-        else
-            _UpdatePosition.y = _PosY * -1;
+        //if(_IsFront)
+        //    _UpdatePosition.y = _PosY;
+        //else
+        //    _UpdatePosition.y = _PosY * -1;
 
-        this.transform.position = _UpdatePosition;
+        //this.transform.position = _UpdatePosition;
 
         float y = 90.0f;
         if (_IsFront)
@@ -2902,7 +2902,38 @@ public class EnemyControl : MonoBehaviour
     public void SetDestroy()
     {
         _IsExist = true;
+
         transform.parent = null;
+        StartCoroutine("DelayCapturedAnimation");
+    }
+
+    [SerializeField] private float _CapturedDelayTime = 1.0f;
+    private IEnumerator  DelayCapturedAnimation()
+    {
+        yield return new WaitForSeconds(_CapturedDelayTime);
+
+        float y = 90.0f;
+
+        _Player = _GameManager.gameObject.GetComponent<GameManagerScript>().GetPlayer();
+        Vector2Int playerlocalposition = _Player.gameObject.GetComponent<PlayerControl>().GetLocalPosition();
+
+        // プレイヤーがエネミーの下のパネルにいるとき上を向く
+        if (_EnemyLocalPosition.y > playerlocalposition.y)
+            this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+
+        // プレイヤーがエネミーの上のパネルにいるとき下を向く
+        if (_EnemyLocalPosition.y < playerlocalposition.y)
+            this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
+
+        // 右にプレイヤーがいたら左を向く
+        if (_EnemyLocalPosition.x < playerlocalposition.x)
+            this.transform.rotation = Quaternion.Euler(0.0f, y * -1, 0.0f);
+
+        // 左にプレイヤーがいたら右を向く
+        if (_EnemyLocalPosition.x > playerlocalposition.x)
+            this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
+
+
         _EnemyAnimation.SetBool("Captured", true);
     }
 
