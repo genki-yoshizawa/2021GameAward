@@ -10,8 +10,14 @@ public class AudioManager : MonoBehaviour
 
     [SerializeField] AudioSource[] _Source;
 
+    [Header("音量"),SerializeField] private float _SeVolume;
     [SerializeField] private float _BgVolume;
-    [SerializeField] private float _SeVolume;
+
+    [Header("フェードアウトまでに何秒かかるか"), SerializeField]
+    private float _FadeOutTime;
+    private float _PassedTime = 0.0f;
+    private bool _IsFadeOut = false;
+
 
     public static AudioManager Instance
     {
@@ -36,29 +42,75 @@ public class AudioManager : MonoBehaviour
     {
         _Source = GetComponents<AudioSource>();
 
-        _Source[0].volume = _BgVolume;
-        _Source[0].loop = true;
-        _Source[1].volume = _SeVolume;
-        _Source[1].loop = false;
-        //_Source[2].volume = _BgVolume;
+        _Source[0].volume = _SeVolume;
+        _Source[0].loop = false;
+
+        _Source[1].volume = _BgVolume;
+        _Source[1].loop = true;
+
+        _Source[2].volume = 0.0f;
+        _Source[2].loop = true;
     }
 
     public void Update()
     {
+        if (_IsFadeOut)
+        {
+            float time = Time.deltaTime;
+            if((_PassedTime += time) > _FadeOutTime)
+            {
+                _Source[1].Stop();
+                _Source[1].volume = _BgVolume;
+                _Source[2].Stop();
+                _Source[2].volume = 0.0f;
+
+                _IsFadeOut = false;
+            }
+            if (_Source[1].volume <= 0.01f)  //丸め誤差警戒
+                _Source[2].volume = _BgVolume * (1 - _PassedTime / _FadeOutTime);
+            else
+                _Source[1].volume = _BgVolume * (1 - _PassedTime / _FadeOutTime);
+        }
     }
 
-    public void PlayBGM(AudioClip audioClip)
+    //ゲーム画面用のPlayBGM関数
+    public void PlayGameBGM(AudioClip clip1, AudioClip clip2)
     {
-        _Source[0].PlayOneShot(audioClip, _BgVolume);
+        _Source[1].clip = clip1;
+        _Source[2].clip = clip2;
+
+        _Source[1].Play();
+        _Source[2].Play();
+    }
+    
+    //反転してから呼び出してください
+    public void ReverseBGM(bool isFront)
+    {
+        if (isFront)
+        {
+            _Source[1].volume = _BgVolume;
+            _Source[2].volume = 0.0f;
+        }
+        else
+        {
+            _Source[1].volume = 0.0f;
+            _Source[2].volume = _BgVolume;
+        }
+
     }
 
     public void PlaySE(AudioClip audioClip)
     {
-        _Source[1].PlayOneShot(audioClip, _SeVolume);
+        _Source[0].PlayOneShot(audioClip, _SeVolume);
     }
 
-    public void SetBGMVol()
-    {
+    public void SetSEVol( float vol) {_SeVolume = vol; }
 
+    public void ResetSEVol() {_SeVolume = 0.7f; }
+
+    public void StopBGM()
+    {
+        _IsFadeOut = true;
     }
 }
+ 

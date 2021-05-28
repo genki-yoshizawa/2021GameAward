@@ -367,7 +367,9 @@ public class EnemyControl : MonoBehaviour
                 {
                     if (_Player.gameObject.GetComponent<PlayerControl>().GetLocalPosition() == _EnemyLocalPosition)
                     {
-                        PlayerKill();
+                        _EnemyAnimation.SetTrigger("Attack");
+                        _Player.gameObject.GetComponent<PlayerControl>().SetIsExist(false);
+
                     }
                     else
                         _EnemyAnimation.SetBool("Walk", true);
@@ -2785,6 +2787,11 @@ public class EnemyControl : MonoBehaviour
     {
         _EnemyAnimation.SetTrigger("Attack");
         _Player.gameObject.GetComponent<PlayerControl>().SetIsExist(true);
+        if (_Player.gameObject.GetComponent<PlayerControl>().GetIsFront())
+        {
+
+        }
+        _Player.gameObject.GetComponent<PlayerControl>().SetIsExist(false);
     }
 
     // エネミーを行く方向・かじる方向へ回転させる
