@@ -49,9 +49,6 @@ public class EnemyControl : MonoBehaviour
     [Header("嗅覚範囲")]
     [SerializeField] private int _CheeseSearchRange = 0;
 
-    [Header("表スタートならチェックを入れる裏なら外す")]
-    private bool _IsFront;                       // 表か裏か
-
     [Header("デバッグカラーの設定")]
     [SerializeField] private Color _DebugColor = new Color(1f, 1f, 0, 0.5f);
 
@@ -98,6 +95,7 @@ public class EnemyControl : MonoBehaviour
     private bool  _CheeseBite;
     private bool  _PlayerBite;
     private bool  _IsExist;
+    private bool _IsFront;
 
     // Start is called before the first frame update
     void Start()
@@ -105,6 +103,7 @@ public class EnemyControl : MonoBehaviour
         _GameManager = GameObject.FindGameObjectWithTag("Manager");
         GameObject parent = transform.root.gameObject;
         _EnemyLocalPosition = parent.GetComponent<BlockConfig>().GetBlockLocalPosition();
+        _IsFront = (transform.parent == transform.parent.parent.GetChild(0));
         _EnemyAnimation = gameObject.GetComponent<Animator>();
         _CheeseBite = false;
         _IsExist = false;
