@@ -448,9 +448,9 @@ MonoBehaviour:
   - {fileID: 829626107}
   - {fileID: 829626110}
   - {fileID: 829626111}
-  _SeVolume: 0.7
-  _BgVolume: 0.35
-  _FadeOutTime: 0.5
+  _SeVolume: 0.4
+  _BgVolume: 0.2
+  _FadeOutTime: 3
 --- !u!4 &829626109
 Transform:
   m_ObjectHideFlags: 0

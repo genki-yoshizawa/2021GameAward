@@ -48,6 +48,15 @@ public class PauseManager : MonoBehaviour
     [SerializeField]
     private GameObject _Menu;
 
+    [SerializeField]
+    private AudioClip _PauseStartSound;
+
+    [SerializeField]
+    private AudioClip _Selectound;
+
+    [SerializeField]
+    private AudioClip _DecisionSound;
+
     private enum FadeType
     {
         NONE,
@@ -85,10 +94,18 @@ public class PauseManager : MonoBehaviour
         FadeOut();
 
 
+    
+
+
         if ((_Restart.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Selected") && Input.GetKeyDown("joystick button 1")))
+        {
             OnClickRestart();
+        }
         else if (_Menu.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Selected") && Input.GetKeyDown("joystick button 1"))
+        {
             OnClickMenu();
+           
+        }
 
         if (Input.GetKeyDown(KeyCode.Escape) ||(Input.GetKeyDown("joystick button 2"))
             || (_PauseOut.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Selected") && Input.GetKeyDown("joystick button 1")))
@@ -101,11 +118,22 @@ public class PauseManager : MonoBehaviour
                     GameObject obj;
                     obj = GameObject.FindGameObjectWithTag("Manager");
                     obj.GetComponent<GameManagerScript>().SetPause();
+
+                    //AudioManager.Instance.PauseBGM();
+                    AudioManager.Instance.SetSEVol(0.125f);
+                    AudioManager.Instance.SetBGMVol(0.05f);
+                    AudioManager.Instance.PlaySE(_PauseStartSound);
+                    AudioManager.Instance.ResetSEVol();
                     break;
 
                 case FadeType.DO:
                     _FadeType = FadeType.OUT;
                     PoseOutAnimation();
+
+                    //AudioManager.Instance.UnpauseBGM();
+                    AudioManager.Instance.ResetBGMVol();
+                    AudioManager.Instance.PlaySE(_PauseStartSound);
+
                     break;
 
                 default:
@@ -190,13 +218,17 @@ public class PauseManager : MonoBehaviour
 
     public void OnClickRestart()
     {
+        AudioManager.Instance.PlaySE(_DecisionSound);
         string restartStageName = SceneManager.GetActiveScene().name;
+        //AudioManager.Instance.UnpauseBGM();
         SceneManager.LoadScene(restartStageName);
     }
 
     public void OnClickMenu()
     {
-
+        //AudioManager.Instance.StopBGM();
+        AudioManager.Instance.StopBGM();
+        AudioManager.Instance.PlaySE(_DecisionSound);
         SceneManager.LoadScene("MenuScene");
         StageManager.Instance.UpdateUI();
     }

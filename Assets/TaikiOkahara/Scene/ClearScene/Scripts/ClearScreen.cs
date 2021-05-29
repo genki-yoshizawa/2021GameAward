@@ -185,6 +185,7 @@ public class ClearScreen : MonoBehaviour
         {
             this.gameObject.SetActive(false);
             StageManager.Instance.NextStage();
+            AudioManager.Instance.StopNowBGM();
         }
             
     }
@@ -192,13 +193,15 @@ public class ClearScreen : MonoBehaviour
 
     private void PlayClapSound()
     {
-        //this.GetComponent<AudioSource>().PlayOneShot(_ClearClapSound);
         AudioManager.Instance.PlaySE(_ClearClapSound);
+
         _ClapSound = false;
     }
 
     public void DisplayClearScreen(int score)
     {
+        AudioManager.Instance.SetBGMVol(0.05f);
+
         GameObject obj = GameObject.FindGameObjectWithTag("Manager");
         obj.GetComponent<GameManagerScript>().SetClear();
 
@@ -212,7 +215,6 @@ public class ClearScreen : MonoBehaviour
             _Comment.GetComponent<Image>().sprite = _Comments[1];
         else
             _Comment.GetComponent<Image>().sprite = _Comments[0];
-
 
         _ClapSound = true;
         _PauseFlag = true;

@@ -72,6 +72,11 @@ public class PlayerControl : MonoBehaviour
     //キー入力で右を押したのか？
     private bool _IsRight = false;
 
+    //クリア及びGameOver判定
+    private bool _IsClear;
+    private bool _IsGameOver;
+
+
     public void Start()
     {
         //初手FindWithTag
@@ -97,6 +102,9 @@ public class PlayerControl : MonoBehaviour
         _TurnManager = GameObject.FindGameObjectWithTag("TurnManager").GetComponent<TurnManager>();
 
         AudioManager.Instance.PlayGameBGM(_AudioClip[0], _AudioClip[1]);
+
+        _IsClear = false;
+        _IsGameOver = false;
     }
 
     public void Update()
@@ -142,30 +150,25 @@ public class PlayerControl : MonoBehaviour
         //クリア確認
         if (clipInfo.clip.name == "Clear")
         {
-            var clearScreenScript = _ClearScreen.GetComponent<ClearScreen>();
-            clearScreenScript.DisplayClearScreen(_TurnManager.GetTurnCount());
+            if (!_IsClear)
+            {
+                var clearScreenScript = _ClearScreen.GetComponent<ClearScreen>();
+                clearScreenScript.DisplayClearScreen(_TurnManager.GetTurnCount());
+                _IsClear = true;
+            }
         }
 
         //ゲームオーバー確認
         if (clipInfo.clip.name == "GameOvered")
         {
-            var gameOverScript = _GameOverScreen.GetComponent<GameOverScreen>();
-            gameOverScript.DisplayGameOverScreen();
+            if (!_IsGameOver)
+            {
+                var gameOverScript = _GameOverScreen.GetComponent<GameOverScreen>();
+                gameOverScript.DisplayGameOverScreen();
+                _IsGameOver = true;
+            }
         }
 
-    }
-
-    public void PlayerInit()
-    {
-        _IsExist = true;
-        _LocalPosition = _StartPostion;
-        _Direction = _StartDirection;
-        _WalkStartPosition  = new Vector3(0.0f, 0.0f, 0.0f);
-        _WalkTargetPosition = new Vector3(0.0f, 0.0f, 0.0f);
-        _PassedTime = 0.0f;
-
-        if (_Animator.GetBool("Tired"))
-            SetTired(false);
     }
 
     private void Move(Vector2Int direction)

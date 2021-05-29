@@ -109,8 +109,8 @@ public class GameOverScreen : MonoBehaviour
 
     public void DisplayGameOverScreen()
     {
-       
 
+        AudioManager.Instance.SetBGMVol(0.05f);
         GameObject obj = GameObject.FindGameObjectWithTag("Manager");
         obj.GetComponent<GameManagerScript>().SetPause();
         _PauseFlag = true;
