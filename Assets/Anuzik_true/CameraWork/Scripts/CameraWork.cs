@@ -48,7 +48,8 @@ public class CameraWork : MonoBehaviour
     private bool _PlayerIsSwap;                 // 「入れ替え中」フラグ
     private bool _PlayerIsTurn;                 // 「反転中」フラグ
 
-
+    private float _PreLRTrigger;
+    private float _PreRStick;
 
     //------------------------------------------------------------------------------------------------------------
     // Start is called before the first frame update
@@ -79,14 +80,19 @@ public class CameraWork : MonoBehaviour
 
         CameraRotateOffset = 90.0f;
 
+        _PreLRTrigger = 0.0f;
+        _PreRStick = 0.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
+        float curLRTrigger = Mathf.Abs(Input.GetAxis("Controller_L_R_Trigger"));
+        float curRStick = Mathf.Abs(Input.GetAxis("Controller_R_Stick_Horizontal"));
+
         //// テスト用 ////
         // →を押したら「プレイヤー⇔俯瞰視点」
-        if(Input.GetKeyDown(KeyCode.T))
+        if (Input.GetKeyDown(KeyCode.T) || (curLRTrigger > 0.7f && _PreLRTrigger <= 0.7f)) 
         {
             TopViewToPlayerViewCameraWork();
         }
@@ -103,7 +109,7 @@ public class CameraWork : MonoBehaviour
             GameStartCameraWork();
         }
         // ↓を押したら「裏表反転」
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) || (curRStick > 0.5f && _PreRStick <= 0.5f))
         {
             TurnOverCameraWork();
         }
@@ -125,7 +131,9 @@ public class CameraWork : MonoBehaviour
                 this.gameObject.transform.position = _GameManagerScript.GetPlayer().transform.position + rPVposOffset;
             }
         }
-        
+
+        _PreLRTrigger = curLRTrigger;
+        _PreRStick = curRStick;
     }
 
     //------------------------------------------------------------------------------------------------------------
