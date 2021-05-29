@@ -97,18 +97,18 @@ public class PauseManager : MonoBehaviour
     
 
 
-        if ((_Restart.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Selected") && Input.GetKeyDown("joystick button 1")))
+        if ((_Restart.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Selected") && (/*Input.GetKeyDown("joystick button 1")*/Input.GetButtonDown("Controller_B") || Input.GetKeyDown(KeyCode.Return))))
         {
             OnClickRestart();
         }
-        else if (_Menu.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Selected") && Input.GetKeyDown("joystick button 1"))
+        else if (_Menu.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Selected") && (/*Input.GetKeyDown("joystick button 1")*/Input.GetButtonDown("Controller_B") || Input.GetKeyDown(KeyCode.Return)))
         {
             OnClickMenu();
            
         }
 
         if (Input.GetKeyDown(KeyCode.Escape) ||(Input.GetKeyDown("joystick button 2"))
-            || (_PauseOut.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Selected") && Input.GetKeyDown("joystick button 1")))
+            || (_PauseOut.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Selected") && (/*Input.GetKeyDown("joystick button 1")*/Input.GetButtonDown("Controller_B") || Input.GetKeyDown(KeyCode.Return))))
         {
             switch(_FadeType)
             {

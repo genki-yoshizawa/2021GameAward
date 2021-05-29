@@ -427,17 +427,17 @@ public class EnemyControl : MonoBehaviour
 
 
                 // 右Shiftで裏に行く（戻れない）
-                if (Input.GetKeyDown(KeyCode.RightShift))
-                {
-                    _IsFront = false;
-                    this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
+                //if (Input.GetKeyDown(KeyCode.RightShift))
+                //{
+                //    _IsFront = false;
+                //    this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
 
-                    GameObject ob;
-                    GameObject parent = transform.root.gameObject;
-                    ob = parent.transform.GetChild(1).gameObject;
-                    transform.parent = ob.transform;
+                //    GameObject ob;
+                //    GameObject parent = transform.root.gameObject;
+                //    ob = parent.transform.GetChild(1).gameObject;
+                //    transform.parent = ob.transform;
 
-                }
+                //}
 
                 // ここでレベル別に処理を書く？
                 // ChangeState();

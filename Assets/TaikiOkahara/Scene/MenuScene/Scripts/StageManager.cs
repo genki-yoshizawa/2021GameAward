@@ -115,13 +115,14 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         }
 
 
-        float dph = Input.GetAxis("D Pad Horizontal");
+        float dph = Input.GetAxis("Controller_D_Pad_Horizontal");
+        float lsh = Input.GetAxis("Controller_L_Stick_Horizontal");
 
-        if (dph > 0)
+        if (dph > 0 || lsh > 0.5f || Input.GetKeyDown(KeyCode.RightArrow))
             InputRightButton();
-        else if (dph < 0)
+        else if (dph < 0 || lsh < -0.5f || Input.GetKeyDown(KeyCode.LeftArrow))
             InputLeftButton();
-        else if ((Input.GetKeyDown("joystick button 1") || (Input.GetKeyDown(KeyCode.Return))) && !_Move)
+        else if ((/*Input.GetKeyDown("joystick button 1")*/Input.GetButtonDown("Controller_B") || (Input.GetKeyDown(KeyCode.Return))) && !_Move)
         {
             this.GetComponent<AudioSource>().volume = 0.1f;
             this.GetComponent<AudioSource>().PlayOneShot(_ButtonDecisionSound);
@@ -189,8 +190,9 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
             _Move = false;
         }
 
-        float dph = Input.GetAxis("D Pad Horizontal");
-        if (dph != 0)
+        float dph = Input.GetAxis("Controller_D_Pad_Horizontal");
+        float lsh = Input.GetAxis("Controller_L_Stick_Horizontal");
+        if (dph != 0 || (lsh < 0.5f && lsh > 0.5f) || Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow))
         {
             _DetailUI.gameObject.GetComponent<DetailUI>().AnimationReset();
         }

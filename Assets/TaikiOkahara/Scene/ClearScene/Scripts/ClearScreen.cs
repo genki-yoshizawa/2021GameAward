@@ -181,7 +181,7 @@ public class ClearScreen : MonoBehaviour
         }
 
 
-        if (Input.GetKeyDown("joystick button 1") || Input.GetKeyDown(KeyCode.Return))
+        if (/*Input.GetKeyDown("joystick button 1")*/Input.GetButtonDown("Controller_B") || Input.GetKeyDown(KeyCode.Return))
         {
             this.gameObject.SetActive(false);
             StageManager.Instance.NextStage();

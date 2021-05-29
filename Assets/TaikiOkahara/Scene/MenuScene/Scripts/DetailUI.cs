@@ -20,9 +20,10 @@ public class DetailUI : MonoBehaviour
     void Update()
     {
 
-        float dph = Input.GetAxis("D Pad Horizontal");
+        float dph = Input.GetAxis("Controller_D_Pad_Horizontal");
+        float lsh = Input.GetAxis("Controller_L_Stick_Horizontal");
 
-        if (dph != 0)
+        if (dph != 0 || (lsh < 0.5f && lsh > 0.5f) || Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow))
             AnimationReset();
 
 

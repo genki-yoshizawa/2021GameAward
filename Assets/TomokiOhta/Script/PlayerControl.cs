@@ -329,7 +329,7 @@ public class PlayerControl : MonoBehaviour
         }
 
         //プレイヤー左右回転
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (/*Input.GetKeyDown(KeyCode.RightArrow)*/Input.GetAxis("Controller_L_Stick_Horizontal") > 0.5f || Input.GetAxis("Controller_D_Pad_Horizontal") > 0.5f)
         {
             _Animator.SetBool("Walk", true);
             _NowWalkAnim = true;
@@ -341,7 +341,7 @@ public class PlayerControl : MonoBehaviour
 
             _FukidasiScript.ResetAnimPattern();
         }
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (/*Input.GetKeyDown(KeyCode.LeftArrow)*/Input.GetAxis("Controller_L_Stick_Horizontal") < -0.5f || Input.GetAxis("Controller_D_Pad_Horizontal") < -0.5f)
         {
             //向き変更時に歩行アニメーション再生
             _Animator.SetBool("Walk", true);
@@ -355,7 +355,7 @@ public class PlayerControl : MonoBehaviour
         }
 
         //上下矢印でコマンド選択
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (/*Input.GetKeyDown(KeyCode.UpArrow)*/Input.GetAxis("Controller_L_Stick_Vertical") > 0.5f || Input.GetAxis("Controller_D_Pad_Vertical") > 0.5f)
         {
             if (_CommandSelect < _CanActionList.Count - 1)
             {
@@ -369,7 +369,7 @@ public class PlayerControl : MonoBehaviour
                 _FukidasiScript.SetActPattern(_CanActionList, false, _CommandSelect + 1);
             }
         }
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        else if (/*Input.GetKeyDown(KeyCode.DownArrow)*/Input.GetAxis("Controller_L_Stick_Vertical") < -0.5f || Input.GetAxis("Controller_D_Pad_Vertical") < -0.5f)
         {
             if (_CommandSelect > 0)
             {
@@ -385,7 +385,7 @@ public class PlayerControl : MonoBehaviour
         }
 
         //Enterキーで行動 ターンを進める
-        if (Input.GetKeyDown(KeyCode.Return))
+        if ( Input.GetButtonDown("Controller_B")|| Input.GetKeyDown(KeyCode.Return))
         {
             if (_FrontBlock == null)
                 return turnEnd;

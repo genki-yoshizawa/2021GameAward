@@ -88,7 +88,7 @@ public class CameraWork : MonoBehaviour
     void Update()
     {
         float curLRTrigger = Mathf.Abs(Input.GetAxis("Controller_L_R_Trigger"));
-        float curRStick = Mathf.Abs(Input.GetAxis("Controller_R_Stick_Horizontal"));
+        float curRStick = Mathf.Abs(Input.GetAxis("Controller_R_Stick_Vertical"));
 
         //// テスト用 ////
         // →を押したら「プレイヤー⇔俯瞰視点」
