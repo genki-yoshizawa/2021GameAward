@@ -192,8 +192,11 @@ public class ClearScreen : MonoBehaviour
 
     private void PlayClapSound()
     {
+        Debug.Log("Count");
         //this.GetComponent<AudioSource>().PlayOneShot(_ClearClapSound);
+        AudioManager.Instance.SetSEVol(0.125f);
         AudioManager.Instance.PlaySE(_ClearClapSound);
+
         _ClapSound = false;
     }
 
@@ -213,7 +216,7 @@ public class ClearScreen : MonoBehaviour
         else
             _Comment.GetComponent<Image>().sprite = _Comments[0];
 
-
+        Debug.Log("ClearCount");
         _ClapSound = true;
         _PauseFlag = true;
         if(_Pause != null)

@@ -48,6 +48,15 @@ public class PauseManager : MonoBehaviour
     [SerializeField]
     private GameObject _Menu;
 
+    [SerializeField]
+    private AudioClip _PauseStartSound;
+
+    [SerializeField]
+    private AudioClip _Selectound;
+
+    [SerializeField]
+    private AudioClip _DecisionSound;
+
     private enum FadeType
     {
         NONE,
@@ -85,10 +94,26 @@ public class PauseManager : MonoBehaviour
         FadeOut();
 
 
+        //if(_Restart.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Selected") ||
+        //    _Menu.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Selected") ||
+        //    _PauseOut.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Selected"))
+        //{
+        //    //this.GetComponent<AudioSource>().PlayOneShot(_Selectound);
+        //    AudioManager.Instance.SetSEVol(0.25f);
+        //    AudioManager.Instance.PlaySE(_Selectound);
+        //}
+
+
         if ((_Restart.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Selected") && Input.GetKeyDown("joystick button 1")))
+        {
+            AudioManager.Instance.PlaySE(_DecisionSound);
             OnClickRestart();
+        }
         else if (_Menu.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Selected") && Input.GetKeyDown("joystick button 1"))
+        {
             OnClickMenu();
+            AudioManager.Instance.PlaySE(_DecisionSound);
+        }
 
         if (Input.GetKeyDown(KeyCode.Escape) ||(Input.GetKeyDown("joystick button 2"))
             || (_PauseOut.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Selected") && Input.GetKeyDown("joystick button 1")))
@@ -101,11 +126,22 @@ public class PauseManager : MonoBehaviour
                     GameObject obj;
                     obj = GameObject.FindGameObjectWithTag("Manager");
                     obj.GetComponent<GameManagerScript>().SetPause();
+                    
+                    //AudioManager.Instance.StopBGM();
+                    //AudioManager.Instance.
+                    AudioManager.Instance.SetSEVol(0.25f);
+                    AudioManager.Instance.PlaySE(_PauseStartSound);
+
                     break;
 
                 case FadeType.DO:
                     _FadeType = FadeType.OUT;
                     PoseOutAnimation();
+
+                    //AudioManager.Instance.PlayGameBGM;
+                    AudioManager.Instance.SetSEVol(0.25f);
+                    AudioManager.Instance.PlaySE(_PauseStartSound);
+
                     break;
 
                 default:
