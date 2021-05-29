@@ -32,9 +32,9 @@ public class EnemyControl : MonoBehaviour
 
 
     // 必要そうな変数をとりあえず用意
-    [SerializeField] protected EnemyState _EnemyState = EnemyState.IDLE;
+    protected EnemyState _EnemyState = EnemyState.IDLE;
     [SerializeField] protected EnemyLevel _EnemyLevel = EnemyLevel.LEVEL1;
-    [SerializeField] protected EnemyState _NextState = EnemyState.IDLE;
+    protected EnemyState _NextState = EnemyState.IDLE;
 
 
     [Header("１ターンの行動回数")]
@@ -72,9 +72,8 @@ public class EnemyControl : MonoBehaviour
 
 
     // それぞれにGet・Setを作成？
-    private Vector2Int _EnemyLocalPosition;      // ネズミのいるブロックの座標
+    [SerializeField] private Vector2Int _EnemyLocalPosition;      // ネズミのいるブロックの座標
     private Vector2Int _EnemyDirection;          // ネズミの向いてる方向
-    private bool _IsFront;                       // 表か裏か
     private bool _StartEnemyTurn;                // エネミーターンが始まった最初に処理する用
 
     private GameObject _GameManager;                              // ゲームマネージャーを保持
@@ -93,9 +92,10 @@ public class EnemyControl : MonoBehaviour
     private Vector3 _TargetPoint;
     private Vector3 _UpdatePosition;
     private float _PassedTime;
-    private bool _CheeseBite;
-    private bool _PlayerBite;
-    private bool _IsExist;
+    private bool  _CheeseBite;
+    private bool  _PlayerBite;
+    private bool  _IsExist;
+    private bool _IsFront;
 
     // Start is called before the first frame update
     void Start()
@@ -103,8 +103,8 @@ public class EnemyControl : MonoBehaviour
         _GameManager = GameObject.FindGameObjectWithTag("Manager");
         GameObject parent = transform.root.gameObject;
         _EnemyLocalPosition = parent.GetComponent<BlockConfig>().GetBlockLocalPosition();
+        _IsFront = (transform.parent == transform.parent.parent.GetChild(0));
         _EnemyAnimation = gameObject.GetComponent<Animator>();
-        _IsFront = true;
         _CheeseBite = false;
         _IsExist = false;
         _Count = 0;
@@ -115,8 +115,8 @@ public class EnemyControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        Rotate();
+        if(!_IsExist)
+            Rotate();
 
         if (_EnemyState == EnemyState.IDLE)
         {
@@ -366,8 +366,7 @@ public class EnemyControl : MonoBehaviour
                 {
                     if (_Player.gameObject.GetComponent<PlayerControl>().GetLocalPosition() == _EnemyLocalPosition)
                     {
-                        _EnemyAnimation.SetTrigger("Attack");
-                        _Player.gameObject.GetComponent<PlayerControl>().SetIsExist(false);
+                        PlayerKill();
 
                     }
                     else
@@ -414,71 +413,84 @@ public class EnemyControl : MonoBehaviour
         // 生きていれば動ける
         if (_IsExist == false)
         {
-            if (_StartEnemyTurn)
+            _Player = _GameManager.gameObject.GetComponent<GameManagerScript>().GetPlayer();
+            if (_Player.GetComponent<PlayerControl>().GetLocalPosition() != _EnemyLocalPosition)
             {
-                _Count = _ActCount;
-                _StartEnemyTurn = false;
+                if (_StartEnemyTurn)
+                {
+                    _Count = _ActCount;
+                    _StartEnemyTurn = false;
+                }
+
+                Wait();
+                // エネミーステートを変更する関数を呼ぶ
+
+
+                // 右Shiftで裏に行く（戻れない）
+                if (Input.GetKeyDown(KeyCode.RightShift))
+                {
+                    _IsFront = false;
+                    this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
+
+                    GameObject ob;
+                    GameObject parent = transform.root.gameObject;
+                    ob = parent.transform.GetChild(1).gameObject;
+                    transform.parent = ob.transform;
+
+                }
+
+                // ここでレベル別に処理を書く？
+                // ChangeState();
+                switch (_EnemyLevel)
+                {
+                    case EnemyLevel.LEVEL1:
+                        Level1();
+                        break;
+                    case EnemyLevel.LEVEL2:
+                        Level2();
+                        break;
+                    case EnemyLevel.LEVEL3:
+                        Level3();
+                        break;
+                    case EnemyLevel.LEVEL4:
+                        Level4();
+                        break;
+                    case EnemyLevel.LEVEL5:
+                        Level5();
+                        break;
+                    case EnemyLevel.LEVEL6:
+                        Level6();
+                        break;
+                    case EnemyLevel.LEVEL7:
+                        Level7();
+                        break;
+                }
+
+
+                switch (_EnemyState)
+                {
+                    case EnemyState.IDLE:
+                        Idle();
+                        break;
+                    case EnemyState.STAY:
+                        Stay();
+                        break;
+                    case EnemyState.MOVE:
+                        Move();
+                        break;
+                    case EnemyState.BREAK:
+                        Break();
+                        break;
+
+                }
             }
-
-            Wait();
-            // エネミーステートを変更する関数を呼ぶ
-
-
-            // 右Shiftで裏に行く（戻れない）
-            if (Input.GetKeyDown(KeyCode.RightShift))
+            else
             {
-                _IsFront = false;
-                this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
+                if (!_Player.gameObject.GetComponent<PlayerControl>().GetIsFront())
+                {
+                    PlayerKill();
 
-                GameObject ob;
-                GameObject parent = transform.root.gameObject;
-                ob = parent.transform.GetChild(1).gameObject;
-                transform.parent = ob.transform;
-
-            }
-
-            // ここでレベル別に処理を書く？
-            // ChangeState();
-            switch (_EnemyLevel)
-            {
-                case EnemyLevel.LEVEL1:
-                    Level1();
-                    break;
-                case EnemyLevel.LEVEL2:
-                    Level2();
-                    break;
-                case EnemyLevel.LEVEL3:
-                    Level3();
-                    break;
-                case EnemyLevel.LEVEL4:
-                    Level4();
-                    break;
-                case EnemyLevel.LEVEL5:
-                    Level5();
-                    break;
-                case EnemyLevel.LEVEL6:
-                    Level6();
-                    break;
-                case EnemyLevel.LEVEL7:
-                    Level7();
-                    break;
-            }
-
-
-            switch (_EnemyState)
-            {
-                case EnemyState.IDLE:
-                    Idle();
-                    break;
-                case EnemyState.STAY:
-                    Stay();
-                    break;
-                case EnemyState.MOVE:
-                    Move();
-                    break;
-                case EnemyState.BREAK:
-                    Break();
-                    break;
+                }
 
             }
 
@@ -2775,11 +2787,9 @@ public class EnemyControl : MonoBehaviour
 
     public void PlayerKill()
     {
-        if (_Player.gameObject.GetComponent<PlayerControl>().GetIsFront())
-        {
-
-        }
+        _EnemyAnimation.SetTrigger("Attack");
         _Player.gameObject.GetComponent<PlayerControl>().SetIsExist(false);
+
     }
 
     // エネミーを行く方向・かじる方向へ回転させる
@@ -2791,14 +2801,14 @@ public class EnemyControl : MonoBehaviour
             TargetMaterial.SetTexture("_MainTex", _BackTexture);
 
 
-        _UpdatePosition = this.transform.position;
+        //_UpdatePosition = this.transform.position;
 
-        if(_IsFront)
-            _UpdatePosition.y = _PosY;
-        else
-            _UpdatePosition.y = _PosY * -1;
+        //if(_IsFront)
+        //    _UpdatePosition.y = _PosY;
+        //else
+        //    _UpdatePosition.y = _PosY * -1;
 
-        this.transform.position = _UpdatePosition;
+        //this.transform.position = _UpdatePosition;
 
         float y = 90.0f;
         if (_IsFront)
@@ -2892,7 +2902,38 @@ public class EnemyControl : MonoBehaviour
     public void SetDestroy()
     {
         _IsExist = true;
+
         transform.parent = null;
+        StartCoroutine("DelayCapturedAnimation");
+    }
+
+    [SerializeField] private float _CapturedDelayTime = 1.0f;
+    private IEnumerator  DelayCapturedAnimation()
+    {
+        yield return new WaitForSeconds(_CapturedDelayTime);
+
+        float y = 90.0f;
+
+        _Player = _GameManager.gameObject.GetComponent<GameManagerScript>().GetPlayer();
+        Vector2Int playerlocalposition = _Player.gameObject.GetComponent<PlayerControl>().GetLocalPosition();
+
+        // プレイヤーがエネミーの下のパネルにいるとき上を向く
+        if (_EnemyLocalPosition.y > playerlocalposition.y)
+            this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+
+        // プレイヤーがエネミーの上のパネルにいるとき下を向く
+        if (_EnemyLocalPosition.y < playerlocalposition.y)
+            this.transform.rotation = Quaternion.Euler(0.0f, y * 2, 0.0f);
+
+        // 右にプレイヤーがいたら左を向く
+        if (_EnemyLocalPosition.x < playerlocalposition.x)
+            this.transform.rotation = Quaternion.Euler(0.0f, y * -1, 0.0f);
+
+        // 左にプレイヤーがいたら右を向く
+        if (_EnemyLocalPosition.x > playerlocalposition.x)
+            this.transform.rotation = Quaternion.Euler(0.0f, y, 0.0f);
+
+
         _EnemyAnimation.SetBool("Captured", true);
     }
 

@@ -35,6 +35,11 @@ public class ClearScreen : MonoBehaviour
     private Sprite[] _Comments;
 
 
+    [SerializeField]
+    private AudioClip _ClearClapSound;
+    private bool _ClapSound = false;
+
+
     bool _PauseFlag = false;
     float _Intencity = 0;
 
@@ -127,7 +132,11 @@ public class ClearScreen : MonoBehaviour
 
         _ClearScreenAnimator.SetBool("Clear", true);
         _StarParticle.SetBool("StarParticle", true);
-        
+
+        if(_ClapSound)
+            PlayClapSound();
+
+
         return;
     }
 
@@ -180,6 +189,14 @@ public class ClearScreen : MonoBehaviour
             
     }
 
+
+    private void PlayClapSound()
+    {
+        //this.GetComponent<AudioSource>().PlayOneShot(_ClearClapSound);
+        AudioManager.Instance.PlaySE(_ClearClapSound);
+        _ClapSound = false;
+    }
+
     public void DisplayClearScreen(int score)
     {
         GameObject obj = GameObject.FindGameObjectWithTag("Manager");
@@ -197,6 +214,7 @@ public class ClearScreen : MonoBehaviour
             _Comment.GetComponent<Image>().sprite = _Comments[0];
 
 
+        _ClapSound = true;
         _PauseFlag = true;
         if(_Pause != null)
             _Pause.SetActive(false);
