@@ -68,7 +68,6 @@ public class AudioManager : MonoBehaviour
             if((_PassedTime += time) > _FadeOutTime)
             {
                 _Source[1].Stop();
-                //_Source[1].volume = _BgVolume;
                 _Source[1].volume = _StartBGMVolume;
                 _Source[2].Stop();
                 _Source[2].volume = 0.0f;
@@ -91,11 +90,9 @@ public class AudioManager : MonoBehaviour
     //ÉQÅ[ÉÄâÊñ ópÇÃPlayBGMä÷êî
     public void PlayGameBGM(AudioClip clip1, AudioClip clip2)
     {
-        if (_Source[1].isPlaying)
-            _Source[1].UnPause();
+        _Source[1].volume = _StartBGMVolume;
+        _Source[2].volume = 0.0f;
 
-        if (_Source[2].isPlaying)
-            _Source[2].UnPause();
 
         _Source[1].clip = clip1;
         _Source[2].clip = clip2;
@@ -127,11 +124,21 @@ public class AudioManager : MonoBehaviour
 
     public void SetBGMVol(float vol)
     {
+        if (_Source[1].volume <= 0.01f)  //ä€ÇﬂåÎç∑åxâ˙
+            _Source[2].volume = vol;
+        else
+            _Source[1].volume = vol;
+
         _BgVolume = vol;
     }
 
     public void ResetBGMVol()
     {
+        if (_Source[1].volume <= 0.01f)  //ä€ÇﬂåÎç∑åxâ˙
+            _Source[2].volume = _StartBGMVolume;
+        else
+            _Source[1].volume = _StartBGMVolume;
+
         _BgVolume = _StartBGMVolume;
     }
 
@@ -144,16 +151,11 @@ public class AudioManager : MonoBehaviour
         _IsFadeOut = true;
     }
 
-    public void PauseBGM()
+    public void StopNowBGM()
     {
-        _Source[0].Pause();
-        _Source[1].Pause();
+        _Source[1].Stop();
+        _Source[2].Stop();
     }
 
-    public void UnpauseBGM()
-    {
-        _Source[0].UnPause();
-        _Source[1].UnPause();
-    }
 }
  

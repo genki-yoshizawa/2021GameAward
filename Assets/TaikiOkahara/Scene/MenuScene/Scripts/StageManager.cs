@@ -123,7 +123,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
             InputLeftButton();
         else if ((Input.GetKeyDown("joystick button 1") || (Input.GetKeyDown(KeyCode.Return))) && !_Move)
         {
-            this.GetComponent<AudioSource>().volume = 0.25f;
+            this.GetComponent<AudioSource>().volume = 0.1f;
             this.GetComponent<AudioSource>().PlayOneShot(_ButtonDecisionSound);
             GameStart();
         }
@@ -233,7 +233,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         if (_Move)
             return;
 
-        this.GetComponent<AudioSource>().volume = 0.25f;
+        this.GetComponent<AudioSource>().volume = 0.05f;
         this.GetComponent<AudioSource>().PlayOneShot(_ButtonCursorSound);
 
         for (int i = 0; i < _ChidCount; i++)
@@ -257,7 +257,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         if (_Move)
             return;
 
-        this.GetComponent<AudioSource>().volume = 0.25f;
+        this.GetComponent<AudioSource>().volume = 0.05f;
         this.GetComponent<AudioSource>().PlayOneShot(_ButtonCursorSound);
 
         for (int i = 0; i < _ChidCount; i++)
@@ -324,7 +324,6 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
     public void UpdateUI()
     {
         _DetailUI.gameObject.GetComponent<DetailUINumber>().SetScore(_ChoiceStage.GetComponent<Stage>().GetClearParsentage());
-        //_DetailUI.gameObject.GetComponent<DetailUI>().AnimationReset();
         _DetailUI.gameObject.GetComponent<DetailUI>().DetailUIAnimation();
 
         _ChoiceStageNumber = _ChoiceStage.GetComponent<Stage>().GetStageNumber();

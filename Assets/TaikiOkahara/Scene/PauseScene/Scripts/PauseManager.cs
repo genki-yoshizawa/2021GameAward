@@ -121,9 +121,9 @@ public class PauseManager : MonoBehaviour
 
                     //AudioManager.Instance.PauseBGM();
                     AudioManager.Instance.SetSEVol(0.125f);
-                    AudioManager.Instance.SetBGMVol(0.125f);
+                    AudioManager.Instance.SetBGMVol(0.05f);
                     AudioManager.Instance.PlaySE(_PauseStartSound);
-
+                    AudioManager.Instance.ResetSEVol();
                     break;
 
                 case FadeType.DO:
