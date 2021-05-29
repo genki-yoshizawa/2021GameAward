@@ -35,5 +35,6 @@ public class FadeManager : MonoBehaviour
         yield return new WaitForSeconds(4.0f);
         
         SceneManager.LoadScene(_NextSceneName);
+
     }
 }

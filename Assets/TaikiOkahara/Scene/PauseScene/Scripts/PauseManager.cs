@@ -94,25 +94,17 @@ public class PauseManager : MonoBehaviour
         FadeOut();
 
 
-        //if(_Restart.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Selected") ||
-        //    _Menu.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Selected") ||
-        //    _PauseOut.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Selected"))
-        //{
-        //    //this.GetComponent<AudioSource>().PlayOneShot(_Selectound);
-        //    AudioManager.Instance.SetSEVol(0.25f);
-        //    AudioManager.Instance.PlaySE(_Selectound);
-        //}
+    
 
 
         if ((_Restart.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Selected") && Input.GetKeyDown("joystick button 1")))
         {
-            AudioManager.Instance.PlaySE(_DecisionSound);
             OnClickRestart();
         }
         else if (_Menu.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Selected") && Input.GetKeyDown("joystick button 1"))
         {
             OnClickMenu();
-            AudioManager.Instance.PlaySE(_DecisionSound);
+           
         }
 
         if (Input.GetKeyDown(KeyCode.Escape) ||(Input.GetKeyDown("joystick button 2"))
@@ -126,10 +118,10 @@ public class PauseManager : MonoBehaviour
                     GameObject obj;
                     obj = GameObject.FindGameObjectWithTag("Manager");
                     obj.GetComponent<GameManagerScript>().SetPause();
-                    
-                    //AudioManager.Instance.StopBGM();
-                    //AudioManager.Instance.
-                    AudioManager.Instance.SetSEVol(0.25f);
+
+                    //AudioManager.Instance.PauseBGM();
+                    AudioManager.Instance.SetSEVol(0.125f);
+                    AudioManager.Instance.SetBGMVol(0.125f);
                     AudioManager.Instance.PlaySE(_PauseStartSound);
 
                     break;
@@ -138,8 +130,8 @@ public class PauseManager : MonoBehaviour
                     _FadeType = FadeType.OUT;
                     PoseOutAnimation();
 
-                    //AudioManager.Instance.PlayGameBGM;
-                    AudioManager.Instance.SetSEVol(0.25f);
+                    //AudioManager.Instance.UnpauseBGM();
+                    AudioManager.Instance.ResetBGMVol();
                     AudioManager.Instance.PlaySE(_PauseStartSound);
 
                     break;
@@ -226,13 +218,17 @@ public class PauseManager : MonoBehaviour
 
     public void OnClickRestart()
     {
+        AudioManager.Instance.PlaySE(_DecisionSound);
         string restartStageName = SceneManager.GetActiveScene().name;
+        //AudioManager.Instance.UnpauseBGM();
         SceneManager.LoadScene(restartStageName);
     }
 
     public void OnClickMenu()
     {
-
+        //AudioManager.Instance.StopBGM();
+        AudioManager.Instance.StopBGM();
+        AudioManager.Instance.PlaySE(_DecisionSound);
         SceneManager.LoadScene("MenuScene");
         StageManager.Instance.UpdateUI();
     }

@@ -291,6 +291,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
 
 
         SceneManager.LoadScene("FadeScene");
+
         foreach (Transform child in transform)
         {
             if (child.gameObject.transform.GetChild(0).GetComponent<Renderer>() != null)

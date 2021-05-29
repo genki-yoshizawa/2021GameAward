@@ -68,7 +68,8 @@ public class AudioManager : MonoBehaviour
             if((_PassedTime += time) > _FadeOutTime)
             {
                 _Source[1].Stop();
-                _Source[1].volume = _BgVolume;
+                //_Source[1].volume = _BgVolume;
+                _Source[1].volume = _StartBGMVolume;
                 _Source[2].Stop();
                 _Source[2].volume = 0.0f;
 
@@ -90,6 +91,12 @@ public class AudioManager : MonoBehaviour
     //ÉQÅ[ÉÄâÊñ ópÇÃPlayBGMä÷êî
     public void PlayGameBGM(AudioClip clip1, AudioClip clip2)
     {
+        if (_Source[1].isPlaying)
+            _Source[1].UnPause();
+
+        if (_Source[2].isPlaying)
+            _Source[2].UnPause();
+
         _Source[1].clip = clip1;
         _Source[2].clip = clip2;
 
