@@ -245,6 +245,8 @@ public class PlayerControl : MonoBehaviour
 
         //ƒ‚ƒfƒ‹‚ð”½“]
         RotateMySelf(_LocalPosition, 180.0f, axis.x, axis.y, axis.z);
+
+        AudioManager.Instance.ReverseBGM(_IsFront);
     }
 
     private void PlayerMove()
