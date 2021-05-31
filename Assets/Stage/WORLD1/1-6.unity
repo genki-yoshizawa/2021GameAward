@@ -183,6 +183,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500657813335408470, guid: ad85e0a3c83b2ae49876362282d4818e, type: 3}
+      propertyPath: _canRotate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4500657813335408470, guid: ad85e0a3c83b2ae49876362282d4818e, type: 3}
       propertyPath: _PanelIndex
       value: 2
       objectReference: {fileID: 0}
@@ -2507,6 +2511,10 @@ PrefabInstance:
     - target: {fileID: 4500657813335408470, guid: ad85e0a3c83b2ae49876362282d4818e, type: 3}
       propertyPath: _canSwap
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4500657813335408470, guid: ad85e0a3c83b2ae49876362282d4818e, type: 3}
+      propertyPath: _canRotate
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4500657813335408470, guid: ad85e0a3c83b2ae49876362282d4818e, type: 3}
       propertyPath: _PanelIndex
