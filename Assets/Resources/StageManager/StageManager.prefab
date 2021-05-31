@@ -1040,7 +1040,7 @@ MonoBehaviour:
   _StageName: {fileID: 0}
   _StageNumber: 14
   _MaxTurn: 16
-  _3Star: 2
+  _3Star: 4
   _2Star: 5
   _1Star: 6
 --- !u!1 &2280714148911896268
