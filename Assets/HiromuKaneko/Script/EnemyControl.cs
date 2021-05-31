@@ -118,8 +118,6 @@ public class EnemyControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!_IsExist)
-            Rotate();
 
         if (_EnemyState == EnemyState.IDLE)
         {
@@ -149,6 +147,7 @@ public class EnemyControl : MonoBehaviour
                 _EnemyAnimation.SetBool("Walk", false);
             }
 
+            Rotate();
             transform.position = _StartPoint + (_TargetPoint - _StartPoint) * (_PassedTime / _WalkTime);
 
             if (!_EnemyAnimation.GetBool("Walk"))
@@ -170,6 +169,7 @@ public class EnemyControl : MonoBehaviour
                     _EnemyAnimation.SetBool("Bite", false);
                 }
 
+                Rotate();
                 transform.position = _StartPoint + (_TargetPoint - _StartPoint) * (_PassedTime / _WalkTime);
 
                 if (!_EnemyAnimation.GetBool("Bite"))
@@ -182,6 +182,7 @@ public class EnemyControl : MonoBehaviour
             else
             {
                 float time = Time.deltaTime;
+                Rotate();
                 if ((_PassedTime += time) > _BiteTime)
                 {
                     _EnemyAnimation.SetBool("Bite", false);
