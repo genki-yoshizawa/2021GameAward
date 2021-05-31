@@ -205,28 +205,37 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
     
     void ChageNextStage()
     {
-        //if (!_NextStage) return;
+        //クリーン度を100にする
+        _ChoiceStage.GetComponent<Stage>().SetClearParsentage(100);
 
-        int stageNum = _ChoiceStageNumber;
 
-        if (Digit(stageNum) == 3)
+        bool allStageClear = true;
+        //全てのステージが100ならムービーを流してメニューに戻る
+        for (int i = 0; i < 10; i++)
         {
-            Debug.Log("全ステージクリア！次の星へ！！");
-            SceneManager.LoadScene("MenuScene");
-        }
-        else
-        {
-            //クリーン度を100にする
-           _ChoiceStage.GetComponent<Stage>().SetClearParsentage(100);
-
-            int idx = _ChoiceStage.transform.GetSiblingIndex();
-            idx++;
-            _ChoiceStage = this.transform.GetChild(idx).gameObject;
-
-            GameStart();
+            GameObject obj = this.gameObject.transform.GetChild(i).gameObject;
+            if (obj.GetComponent<Stage>().GetClearParsentage() != 100)
+            {
+                allStageClear = false;
+            }
         }
 
-        //_NextStage = false;
+        if (allStageClear)
+        {
+            //ムービー流す
+            Debug.Log("Movie流すよ");
+            SceneManager.LoadScene("MovieScene");
+            return;
+        }
+
+
+        int idx = _ChoiceStage.transform.GetSiblingIndex();
+        idx++;
+        _ChoiceStage = this.transform.GetChild(idx).gameObject;
+
+        GameStart();
+
+
         return;
     }
 

@@ -309,27 +309,35 @@ public class PlayerControl : MonoBehaviour
 
             if (!(_FrontBlock == null || enemys.Count == 0))
             {
-                AudioManager.Instance.PlaySE(_AudioClip[3]);
-
-                _FukidasiScript.SetAnimPattern(_CanActionList.Count);
-                if (CheckEnemy(_LocalPosition + _Direction) != null)
+                //前のパネルが何かできる
+                if (_CanActionList.Count != 0)
                 {
-                    //前に敵がいたのでそれ用の画像を出す
-                    _FukidasiScript.SetActPattern(_CanActionList, true);
-                }
-                else
-                    _FukidasiScript.SetActPattern(_CanActionList);
+                    _FukidasiScript.SetAnimPattern(_CanActionList.Count);
+                    if (CheckEnemy(_LocalPosition + _Direction) != null)
+                    {
+                        //前に敵がいたのでそれ用の画像を出す
+                        _FukidasiScript.SetActPattern(_CanActionList, true);
+                    }
+                    else
+                    {
+                        _FukidasiScript.SetActPattern(_CanActionList);
+                    }
 
-                //カーソルを一番上に設定
-                _CommandSelect = _CanActionList.Count - 1;
-                var icon = _FukidasiObj.transform.GetChild(_AnimMax).GetComponent<RectTransform>();
-                icon.anchoredPosition =
-                    new Vector3(icon.localPosition.x, _CorsorStartPosition.y + (20.0f * _CommandSelect), _CorsorStartPosition.z);
+                    AudioManager.Instance.PlaySE(_AudioClip[3]);
+
+                    //カーソルを一番上に設定
+                    _CommandSelect = _CanActionList.Count - 1;
+                    var icon = _FukidasiObj.transform.GetChild(_AnimMax).GetComponent<RectTransform>();
+                    icon.anchoredPosition =
+                        new Vector3(icon.localPosition.x, _CorsorStartPosition.y + (20.0f * _CommandSelect), _CorsorStartPosition.z);
+                }
+
+
             }
         }
 
         //プレイヤー左右回転
-        if (/*Input.GetKeyDown(KeyCode.RightArrow)*/Input.GetAxis("Controller_L_Stick_Horizontal") > 0.5f || Input.GetAxis("Controller_D_Pad_Horizontal") > 0.5f)
+        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetAxis("Controller_L_Stick_Horizontal") > 0.5f || Input.GetAxis("Controller_D_Pad_Horizontal") > 0.5f)
         {
             _Animator.SetBool("Walk", true);
             _NowWalkAnim = true;
@@ -341,7 +349,7 @@ public class PlayerControl : MonoBehaviour
 
             _FukidasiScript.ResetAnimPattern();
         }
-        if (/*Input.GetKeyDown(KeyCode.LeftArrow)*/Input.GetAxis("Controller_L_Stick_Horizontal") < -0.5f || Input.GetAxis("Controller_D_Pad_Horizontal") < -0.5f)
+        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetAxis("Controller_L_Stick_Horizontal") < -0.5f || Input.GetAxis("Controller_D_Pad_Horizontal") < -0.5f)
         {
             //向き変更時に歩行アニメーション再生
             _Animator.SetBool("Walk", true);
@@ -355,7 +363,7 @@ public class PlayerControl : MonoBehaviour
         }
 
         //上下矢印でコマンド選択
-        if (/*Input.GetKeyDown(KeyCode.UpArrow)*/Input.GetAxis("Controller_L_Stick_Vertical") > 0.5f || Input.GetAxis("Controller_D_Pad_Vertical") > 0.5f)
+        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetAxis("Controller_L_Stick_Vertical") > 0.5f || Input.GetAxis("Controller_D_Pad_Vertical") > 0.5f)
         {
             if (_CommandSelect < _CanActionList.Count - 1)
             {
@@ -369,7 +377,7 @@ public class PlayerControl : MonoBehaviour
                 _FukidasiScript.SetActPattern(_CanActionList, false, _CommandSelect + 1);
             }
         }
-        else if (/*Input.GetKeyDown(KeyCode.DownArrow)*/Input.GetAxis("Controller_L_Stick_Vertical") < -0.5f || Input.GetAxis("Controller_D_Pad_Vertical") < -0.5f)
+        else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetAxis("Controller_L_Stick_Vertical") < -0.5f || Input.GetAxis("Controller_D_Pad_Vertical") < -0.5f)
         {
             if (_CommandSelect > 0)
             {
