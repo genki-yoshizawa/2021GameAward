@@ -4804,6 +4804,7 @@ MonoBehaviour:
   _WalkTime: 1
   _BiteTime: 1
   _PanicTime: 1
+  _CapturedDelayTime: 1.25
   _FrontTexture: {fileID: 2800000, guid: bbf4d3b262db0984f89628270f2b6c38, type: 3}
   _BackTexture: {fileID: 2800000, guid: 6fc84317f7a4ee84db2f30e63e63e68a, type: 3}
   TargetMaterial: {fileID: 2100000, guid: f997916495a090f4183c3670b619fd4c, type: 2}
@@ -4813,7 +4814,6 @@ MonoBehaviour:
   _Left: {fileID: 0}
   _Right: {fileID: 0}
   _NextBlock: {fileID: 0}
-  _CapturedDelayTime: 1.25
 --- !u!1 &8994806821200140453
 GameObject:
   m_ObjectHideFlags: 0
