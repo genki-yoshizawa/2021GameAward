@@ -624,10 +624,10 @@ MonoBehaviour:
   _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 18
-  _MaxTurn: 35
-  _3Star: 19
-  _2Star: 24
-  _1Star: 25
+  _MaxTurn: 40
+  _3Star: 25
+  _2Star: 29
+  _1Star: 30
 --- !u!1 &2280714148342519858
 GameObject:
   m_ObjectHideFlags: 0
@@ -1039,10 +1039,10 @@ MonoBehaviour:
   _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 14
-  _MaxTurn: 26
-  _3Star: 10
-  _2Star: 15
-  _1Star: 16
+  _MaxTurn: 16
+  _3Star: 2
+  _2Star: 5
+  _1Star: 6
 --- !u!1 &2280714148911896268
 GameObject:
   m_ObjectHideFlags: 0
@@ -1091,10 +1091,10 @@ MonoBehaviour:
   _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 15
-  _MaxTurn: 29
-  _3Star: 14
-  _2Star: 18
-  _1Star: 19
+  _MaxTurn: 23
+  _3Star: 9
+  _2Star: 12
+  _1Star: 13
 --- !u!1 &2280714148988771195
 GameObject:
   m_ObjectHideFlags: 0
@@ -2249,10 +2249,10 @@ MonoBehaviour:
   _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 17
-  _MaxTurn: 32
-  _3Star: 17
-  _2Star: 21
-  _1Star: 22
+  _MaxTurn: 28
+  _3Star: 12
+  _2Star: 17
+  _1Star: 18
 --- !u!1 &8257257946936396790
 GameObject:
   m_ObjectHideFlags: 0
