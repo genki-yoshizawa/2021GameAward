@@ -490,7 +490,7 @@ public class EnemyControl : MonoBehaviour
             }
             else
             {
-                if (!_Player.gameObject.GetComponent<PlayerControl>().GetIsFront())
+                if (!_Player.gameObject.GetComponent<PlayerControl>().GetIsFront() && !_IsFront)
                 {
                     PlayerKill();
 
