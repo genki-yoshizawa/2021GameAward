@@ -9,8 +9,7 @@ public class TurnManager : MonoBehaviour
     [Header("ターンが進んでいるかの確認用")]
     [SerializeField] private int _TurnCount = 0;
 
-    [Header("疲れるまでのターン数をいれてください")]
-    [SerializeField] private int _TurnTiredLimit = 5;
+    private int _TurnTiredLimit;
 
     [Header("敵の行動までの待ち時間を入れてください"), SerializeField]
     private float _WaitTime;
@@ -36,11 +35,11 @@ public class TurnManager : MonoBehaviour
         GameObject[][] blocks = _GameManagerScript.GetBlocks();
         List<GameObject> enemys = _GameManagerScript.GetEnemys();
 
-        //ターン数取得できないなんで
         _TurnLimit = StageManager._MaxTurn;
+        _TurnTiredLimit = StageManager._1Star;
 
         //ブロックのスクリプト取得
-        foreach(var blocklist in blocks)
+        foreach (var blocklist in blocks)
         {
             foreach (var block in blocklist)
             {
@@ -62,7 +61,7 @@ public class TurnManager : MonoBehaviour
         {
             //時間切れ
             if (_TurnLimit <= _TurnCount)
-                _PlayerScript.SetDead();
+                _PlayerScript.SetIsExist(false);
 
             //死んでいたらターンは渡さない
             if (!_PlayerScript.GetIsExist())
@@ -72,7 +71,7 @@ public class TurnManager : MonoBehaviour
             }
 
             //ターン数が少なくなると疲れる
-            if ((_TurnLimit - _TurnTiredLimit) <= _TurnCount )
+            if (_TurnTiredLimit <= _TurnCount )
                 _PlayerScript.SetTired(true);
 
             if (_PlayerScript.PlayerTurn())
