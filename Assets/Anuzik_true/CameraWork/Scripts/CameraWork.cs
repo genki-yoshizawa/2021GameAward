@@ -475,4 +475,5 @@ public class CameraWork : MonoBehaviour
         return _IsTopView;
     }
     
+    public bool GetIsFront() { return _IsFront; }
 }
