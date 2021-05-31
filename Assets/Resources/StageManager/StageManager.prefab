@@ -569,7 +569,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _SceneName: 1-3
-  _ClearPercentage: 100
+  _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 13
   _MaxTurn: 30
@@ -621,7 +621,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _SceneName: 1-8
-  _ClearPercentage: 100
+  _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 18
   _MaxTurn: 30
@@ -984,7 +984,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _SceneName: 1-9
-  _ClearPercentage: 100
+  _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 19
   _MaxTurn: 30
@@ -1036,7 +1036,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _SceneName: 1-4
-  _ClearPercentage: 100
+  _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 14
   _MaxTurn: 30
@@ -1088,7 +1088,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _SceneName: 1-5
-  _ClearPercentage: 100
+  _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 15
   _MaxTurn: 30
@@ -1320,7 +1320,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _SceneName: 1-10
-  _ClearPercentage: 100
+  _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 110
   _MaxTurn: 30
@@ -1598,7 +1598,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _SceneName: 1-2
-  _ClearPercentage: 100
+  _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 12
   _MaxTurn: 30
@@ -1879,7 +1879,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _SceneName: 1-6
-  _ClearPercentage: 100
+  _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 16
   _MaxTurn: 30
@@ -2246,7 +2246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _SceneName: 1-7
-  _ClearPercentage: 100
+  _ClearPercentage: 0
   _StageName: {fileID: 0}
   _StageNumber: 17
   _MaxTurn: 30
