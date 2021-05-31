@@ -50,4 +50,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Stage/WORLD1/1-10.unity
     guid: eedf0792ec3e0fd4499d445a15d09407
+  - enabled: 1
+    path: Assets/TaikiOkahara/Scene/MovieScene/MovieScene.unity
+    guid: e1a54816e9620f54aba8f1e66be2294f
   m_configObjects: {}
