@@ -28,7 +28,7 @@ public class RocketScript : MonoBehaviour
 
     public IEnumerator RocketLaunch()
     {
-        while(!/*Input.GetKeyDown("joystick button 1")*/Input.GetButtonDown("Controller_B") || Input.GetButtonDown("Controller_View") || Input.GetKeyDown(KeyCode.Return))
+        while(!/*Input.GetKeyDown("joystick button 1")*/(Input.GetButtonDown("Controller_B") || Input.GetButtonDown("Controller_Menu") || Input.GetKeyDown(KeyCode.Return)))
         {
             yield return null;
         }

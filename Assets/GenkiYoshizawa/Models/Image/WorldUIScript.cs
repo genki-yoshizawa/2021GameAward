@@ -9,18 +9,20 @@ public class WorldUIScript : MonoBehaviour
     [SerializeField] private Sprite _FrontSprite;
     [SerializeField] private Sprite _BackSprite;
 
+    [Header("Assetから適用する裏表テクスチャを入れてください")]
+    [SerializeField] private CameraWork _CameraWorkScript;
+
     private PlayerControl _PlayerScript;
 
     // Start is called before the first frame update
     void Start()
     {
-        _PlayerScript = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerScript>().GetPlayer().GetComponent<PlayerControl>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (_PlayerScript.GetIsFront())
+        if (_CameraWorkScript.GetIsFront())
         {
             gameObject.GetComponent<Image>().sprite = _FrontSprite;
         }
