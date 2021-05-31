@@ -309,22 +309,30 @@ public class PlayerControl : MonoBehaviour
 
             if (!(_FrontBlock == null || enemys.Count == 0))
             {
-                AudioManager.Instance.PlaySE(_AudioClip[3]);
-
-                _FukidasiScript.SetAnimPattern(_CanActionList.Count);
-                if (CheckEnemy(_LocalPosition + _Direction) != null)
+                //前のパネルが何かできる
+                if (_CanActionList.Count != 0)
                 {
-                    //前に敵がいたのでそれ用の画像を出す
-                    _FukidasiScript.SetActPattern(_CanActionList, true);
-                }
-                else
-                    _FukidasiScript.SetActPattern(_CanActionList);
+                    _FukidasiScript.SetAnimPattern(_CanActionList.Count);
+                    if (CheckEnemy(_LocalPosition + _Direction) != null)
+                    {
+                        //前に敵がいたのでそれ用の画像を出す
+                        _FukidasiScript.SetActPattern(_CanActionList, true);
+                    }
+                    else
+                    {
+                        _FukidasiScript.SetActPattern(_CanActionList);
+                    }
 
-                //カーソルを一番上に設定
-                _CommandSelect = _CanActionList.Count - 1;
-                var icon = _FukidasiObj.transform.GetChild(_AnimMax).GetComponent<RectTransform>();
-                icon.anchoredPosition =
-                    new Vector3(icon.localPosition.x, _CorsorStartPosition.y + (20.0f * _CommandSelect), _CorsorStartPosition.z);
+                    AudioManager.Instance.PlaySE(_AudioClip[3]);
+
+                    //カーソルを一番上に設定
+                    _CommandSelect = _CanActionList.Count - 1;
+                    var icon = _FukidasiObj.transform.GetChild(_AnimMax).GetComponent<RectTransform>();
+                    icon.anchoredPosition =
+                        new Vector3(icon.localPosition.x, _CorsorStartPosition.y + (20.0f * _CommandSelect), _CorsorStartPosition.z);
+                }
+
+
             }
         }
 
