@@ -17,10 +17,7 @@ public class PauseStageNumber : MonoBehaviour
         _ScoreImage1.enabled = true;
         _ScoreImage2.enabled = true;
 
-
         int score1 = 0, score2 = 0, score3 = 0;
-
-
         var digit = score;
 
 

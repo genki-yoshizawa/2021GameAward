@@ -13,39 +13,23 @@ public class GameOverScreen : MonoBehaviour
     [SerializeField]
     GameObject _Pause = null;
 
-    
-
     [SerializeField]
     private Animator _GameOverScreenAnimator;
 
-   
 
     bool _PauseFlag = false;
     float _Intencity = 0;
-
     float _GaussTime = 1.0f;
-
-
-   
 
     float _GameOverTextStartCount = 0;
     float _GameOverTextStartTime = 0.5f;
-
-  
 
     [SerializeField]
     float _ChangeMenuSceneCount = 0;
     float _ChangeMenuSceneTime = 1.0f;
 
-    void Start()
-    {
-        //DisplayGameOverScreen();
-    }
-
     void Update()
     {
-
-
         GaussFilter();
         GameOverScreenAnim();
         ChangeMenuScene();
@@ -57,12 +41,8 @@ public class GameOverScreen : MonoBehaviour
     {
         if (!_PauseFlag) return;
 
-        if (_Intencity > _GaussTime)
-        {
-            //_PauseFlag = false;
-
-            return;
-        }
+        if (_Intencity > _GaussTime) return;
+        
 
         _Intencity += Time.deltaTime;
 
@@ -80,7 +60,6 @@ public class GameOverScreen : MonoBehaviour
         }
 
         _GameOverScreenAnimator.SetBool("Display", true);
-        //_StarParticle.SetBool("StarParticle", true);
 
         return;
     }

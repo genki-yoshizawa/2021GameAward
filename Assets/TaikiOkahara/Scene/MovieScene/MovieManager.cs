@@ -15,12 +15,6 @@ public class MovieManager : MonoBehaviour
         videoPlayer.Play();
     }
 
-    //// Update is called once per frame
-    //void Update()
-    //{
-        
-    //}
-
 
     public void LoopPointReached(VideoPlayer vp)
     {

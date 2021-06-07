@@ -17,12 +17,6 @@ public class FadeManager : MonoBehaviour
         _Score.GetComponent<FadeStageNumber>().SetScore(stageNumber);
         _NextSceneName = StageManager._StageName;
         StartCoroutine(Display());
-
-
-        //// プレハブを取得
-        //GameObject prefab = (GameObject)Resources.Load("WorldModel/StageModel1");
-        //// プレハブからインスタンスを生成
-        //Instantiate(prefab, new Vector3(0,0,0), Quaternion.identity);
     }
 
     void Update()
@@ -35,6 +29,5 @@ public class FadeManager : MonoBehaviour
         yield return new WaitForSeconds(4.0f);
         
         SceneManager.LoadScene(_NextSceneName);
-
     }
 }

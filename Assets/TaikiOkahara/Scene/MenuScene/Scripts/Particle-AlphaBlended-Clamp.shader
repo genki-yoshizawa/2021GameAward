@@ -50,19 +50,16 @@
 					o.vertex = UnityObjectToClipPos(v.vertex);
 					o.color = v.color;
 					o.texcoord = TRANSFORM_TEX(v.texcoord, _MainTex);
-					o.texcoord2.xy = v.texcoord.zw; // Copy TEXCOORD0.zw
+					o.texcoord2.xy = v.texcoord.zw;
 					UNITY_TRANSFER_FOG(o,o.vertex);
 					return o;
 				}
 
 				fixed4 frag(v2f i) : SV_Target
 				{
-					//fixed4 texColor = i.color * tex2D(_MainTex, i.texcoord);
 					fixed4 texColor = tex2D(_MainTex, i.texcoord);
-				fixed4 col = texColor * i.color;// *i.texcoord.x;
-					//fixed4 col = i.color * step(i.texcoord2.x, texColor.b);
-					//col.rgb *= col.a;
-					UNITY_APPLY_FOG_COLOR(i.fogCoord, col, fixed4(0,0,0,0)); // fog towards black due to our blend mode
+				fixed4 col = texColor * i.color;
+				UNITY_APPLY_FOG_COLOR(i.fogCoord, col, fixed4(0, 0, 0, 0));
 					return col;
 				}
 				ENDCG

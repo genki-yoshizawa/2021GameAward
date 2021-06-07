@@ -65,10 +65,6 @@ public class ClearScreen : MonoBehaviour
 
     private int _Score;
 
-    void Start()
-    {
-        //DisplayClearScreen();
-    }
 
     void Update()
     {
@@ -108,12 +104,7 @@ public class ClearScreen : MonoBehaviour
     {
         if (!_PauseFlag) return;
 
-        if(_Intencity > _GaussTime)
-        {
-            //_PauseFlag = false;
-            
-            return;
-        }
+        if(_Intencity > _GaussTime) return;
          
         _Intencity += Time.deltaTime;
 
