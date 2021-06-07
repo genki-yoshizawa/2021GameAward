@@ -309,6 +309,7 @@ public class PlayerControl : MonoBehaviour
         {
             var enemys = _GameManagerScript.GetEnemys();
 
+            //バグ 移動と捕獲が同時に出る
             if (!(_FrontBlock == null || enemys.Count == 0))
             {
                 //前のパネルが何かできる
@@ -414,17 +415,17 @@ public class PlayerControl : MonoBehaviour
                 {
                     _Animator.SetBool("Clear", true);
                 }
+                _FukidasiScript.ResetAnimPattern();
+                turnEnd = true;
             }
-            else
+            else if(_CanActionList.Count != 0)
             {
                 AudioManager.Instance.PlaySE(_AudioClip[4]);
 
                 CommandAction(_CommandSelect);
+                _FukidasiScript.ResetAnimPattern();
+                turnEnd = true;
             }
-
-            //_CommandSelect = 3;   存在意義が分からないけど一応残しておく
-            _FukidasiScript.ResetAnimPattern();
-            turnEnd = true;
         }
 
         if (Input.GetKeyDown(KeyCode.Keypad5))
