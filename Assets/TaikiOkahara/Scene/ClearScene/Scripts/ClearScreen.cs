@@ -7,54 +7,27 @@ using UnityEngine.SceneManagement;
 public class ClearScreen : MonoBehaviour
 {
 
-    [SerializeField]
-    Gauss _Gauss;
-
-    [SerializeField]
-    GameObject _Pause = null;
-
-    [SerializeField]
-    private Animator _StarAnimator;
-
-    [SerializeField]
-    private Animator _ClearScreenAnimator;
-
-    [SerializeField]
-    private GameObject _Comment;
-
-    [SerializeField]
-    private GameObject _TurnNumber;
-
-    [SerializeField]
-    private GameObject _TurnScoreNumber;
-
-    [SerializeField]
-    private Animator _StarParticle;
-
-    [SerializeField]
-    private Sprite[] _Comments;
-
-
-    [SerializeField]
-    private AudioClip _ClearClapSound;
+    [SerializeField] Gauss _Gauss;
+    [SerializeField] GameObject _Pause = null;
+    [SerializeField] private Animator _StarAnimator;
+    [SerializeField] private Animator _ClearScreenAnimator;
+    [SerializeField] private GameObject _Comment;
+    [SerializeField] private GameObject _TurnNumber;
+    [SerializeField] private GameObject _TurnScoreNumber;
+    [SerializeField] private Animator _StarParticle;
+    [SerializeField] private Sprite[] _Comments;
+    [SerializeField] private AudioClip _ClearClapSound;
+   
     private bool _ClapSound = false;
-
-
     bool _PauseFlag = false;
     float _Intencity = 0;
-
     float _GaussTime = 1.0f;
-
-
     float _StarStartCount = 0;
     float _StarStartTime = 1.0f;
-
     float _ClearTextStartCount = 0;
     float _ClearTextStartTime = 3.0f;
-
     float _CommentStartCount = 0;
     float _CommentStartTime = 4.0f;
-
     float _TurnNumberStartCount = 0;
     float _TurnNumberStartTime = 1.0f;
 
