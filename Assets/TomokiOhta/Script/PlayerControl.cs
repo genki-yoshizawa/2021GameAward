@@ -315,27 +315,32 @@ public class PlayerControl : MonoBehaviour
                 //前のパネルが何かできる
                 if (_CanActionList.Count != 0)
                 {
-                    _FukidasiScript.SetAnimPattern(_CanActionList.Count);
+                    var icon = _FukidasiObj.transform.GetChild(_AnimMax).GetComponent<RectTransform>();
+
                     if (CheckEnemy(_LocalPosition + _Direction) != null)
                     {
                         //前に敵がいたのでそれ用の画像を出す
+                        _FukidasiScript.SetAnimPattern(1);
                         _FukidasiScript.SetActPattern(_CanActionList, true);
+
+                        //カーソル位置の設定
+                        _CommandSelect = 0;
                     }
                     else
                     {
+                        _FukidasiScript.SetAnimPattern(_CanActionList.Count);
                         _FukidasiScript.SetActPattern(_CanActionList);
+
+                        //カーソル位置の設定
+                        _CommandSelect = _CanActionList.Count - 1;
                     }
 
                     AudioManager.Instance.PlaySE(_AudioClip[3]);
 
                     //カーソルを一番上に設定
-                    _CommandSelect = _CanActionList.Count - 1;
-                    var icon = _FukidasiObj.transform.GetChild(_AnimMax).GetComponent<RectTransform>();
                     icon.anchoredPosition =
                         new Vector3(icon.localPosition.x, _CorsorStartPosition.y + (20.0f * _CommandSelect), _CorsorStartPosition.z);
                 }
-
-
             }
         }
 
@@ -368,7 +373,7 @@ public class PlayerControl : MonoBehaviour
         //上下矢印でコマンド選択
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetAxis("Controller_L_Stick_Vertical") > 0.5f || Input.GetAxis("Controller_D_Pad_Vertical") > 0.5f)
         {
-            if (_CommandSelect < _CanActionList.Count - 1)
+            if (_CommandSelect < _CanActionList.Count - 1 && CheckEnemy(_LocalPosition + _Direction) == null)
             {
                 _CommandSelect++;
 
@@ -382,7 +387,7 @@ public class PlayerControl : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetAxis("Controller_L_Stick_Vertical") < -0.5f || Input.GetAxis("Controller_D_Pad_Vertical") < -0.5f)
         {
-            if (_CommandSelect > 0)
+            if (_CommandSelect > 0 && CheckEnemy(_LocalPosition + _Direction) == null)
             {
                 _CommandSelect--;
 
