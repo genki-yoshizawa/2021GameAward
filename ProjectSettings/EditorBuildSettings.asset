@@ -6,10 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/TaikiOkahara/Scene/TitleScene/TitleScene.unity
+    path: Assets/Scenes/TitleScene.unity
     guid: 7fdf0736ce477fb49a04cd396935cdf1
   - enabled: 1
-    path: Assets/TaikiOkahara/Scene/MenuScene/MenuScene.unity
+    path: Assets/Scenes/MenuScene.unity
     guid: 10025097179fb674983f3e777c520734
   - enabled: 0
     path: Assets/TomokiOhta/TestScene/SceneB.unity
@@ -18,7 +18,7 @@ EditorBuildSettings:
     path: Assets/GenkiYoshizawa/TestStage/SampleStage.unity
     guid: 894d88caaf22fd94bb6bd56fc9be5e38
   - enabled: 1
-    path: Assets/TaikiOkahara/Scene/FadeScene/FadeScene.unity
+    path: Assets/Resources/FadeScene.unity
     guid: c8d4f910e8634344c96f0f3da737f93f
   - enabled: 1
     path: Assets/Stage/WORLD1/1-1.unity
@@ -51,6 +51,6 @@ EditorBuildSettings:
     path: Assets/Stage/WORLD1/1-10.unity
     guid: eedf0792ec3e0fd4499d445a15d09407
   - enabled: 1
-    path: Assets/TaikiOkahara/Scene/MovieScene/MovieScene.unity
+    path: Assets/Scenes/MovieScene.unity
     guid: e1a54816e9620f54aba8f1e66be2294f
   m_configObjects: {}
