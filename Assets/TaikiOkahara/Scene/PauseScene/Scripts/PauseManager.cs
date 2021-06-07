@@ -55,6 +55,9 @@ public class PauseManager : MonoBehaviour
         string name = "WorldModel/" + StageManager._StageModelName;
         GameObject obj = (GameObject)Resources.Load(name);
 
+        if (obj == null)
+            return;
+
         _StageModel.transform.GetChild(0).GetComponent<Renderer>().sharedMaterial = obj.transform.GetComponent<Renderer>().sharedMaterial;
         _StageNumberUI.GetComponent<PauseStageNumber>().SetScore(StageManager._ChoiceStageNumber);
     }
