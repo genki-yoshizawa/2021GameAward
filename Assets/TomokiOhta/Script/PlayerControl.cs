@@ -428,11 +428,6 @@ public class PlayerControl : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Keypad5))
-        {
-            AudioManager.Instance.StopBGM();
-        }
-
             return turnEnd;
     }
 
@@ -480,12 +475,12 @@ public class PlayerControl : MonoBehaviour
         if (blockScript.CheckPanelTurnOver(_IsFront))
             _CanActionList.Add(2);
 
-        //ˆÚ“®‰Â”\‚È‚ç1‚ð“ü‚ê‚é
-        if (blockScript.CheckPanelMove(_IsFront, _LocalPosition, _Direction))
+        //‰ñ“]‰Â”\‚È‚ç1‚ð“ü‚ê‚é
+        if (blockScript.CheckPanelRotate(_IsFront))
             _CanActionList.Add(1);
 
-        //‰ñ“]‰Â”\‚È‚ç0‚ð“ü‚ê‚é
-        if (blockScript.CheckPanelRotate(_IsFront))
+        //ˆÚ“®‰Â”\‚È‚ç0‚ð“ü‚ê‚é
+        if (blockScript.CheckPanelMove(_IsFront, _LocalPosition, _Direction))
             _CanActionList.Add(0);
     }
 
@@ -499,10 +494,10 @@ public class PlayerControl : MonoBehaviour
                 switch (act)
                 {
                     case 0:
-                        PlayerRotate(_FrontBlock);
+                        PlayerMove();
                         break;
                     case 1:
-                        PlayerMove();
+                        PlayerRotate(_FrontBlock);
                         break;
                     case 2:
                         PlayerTurnOver(_FrontBlock);

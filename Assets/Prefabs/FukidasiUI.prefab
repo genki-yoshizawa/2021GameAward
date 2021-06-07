@@ -288,7 +288,7 @@ GameObject:
   - component: {fileID: 8912895627351903119}
   - component: {fileID: 8912895627351903118}
   m_Layer: 5
-  m_Name: act02
+  m_Name: act01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -306,11 +306,11 @@ RectTransform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 8912895628452179481}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 14.6666565, y: 10.933331}
+  m_AnchoredPosition: {x: 14.6666565, y: 31.4}
   m_SizeDelta: {x: 100, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8912895627351903119
@@ -363,7 +363,7 @@ GameObject:
   - component: {fileID: 8912895627757942206}
   - component: {fileID: 8912895627757942205}
   m_Layer: 5
-  m_Name: act01
+  m_Name: act02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -381,11 +381,11 @@ RectTransform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 8912895628452179481}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 15.53331, y: 31.4}
+  m_AnchoredPosition: {x: 15.53331, y: 10.93333}
   m_SizeDelta: {x: 100, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8912895627757942206
@@ -559,8 +559,8 @@ RectTransform:
   m_Children:
   - {fileID: 8912895626664840076}
   - {fileID: 8912895626823219992}
-  - {fileID: 8912895627351903117}
   - {fileID: 8912895627757942204}
+  - {fileID: 8912895627351903117}
   - {fileID: 8912895626341907620}
   m_Father: {fileID: 8912895628231397262}
   m_RootOrder: 0
@@ -640,10 +640,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ActSprite:
-  - {fileID: -2130005583034063330, guid: 89638ff947c7ab04a98afb53948136ac, type: 3}
-  - {fileID: -3266590123848627995, guid: 89638ff947c7ab04a98afb53948136ac, type: 3}
   - {fileID: 2603161423602805999, guid: 89638ff947c7ab04a98afb53948136ac, type: 3}
   - {fileID: -7478313239484501179, guid: 89638ff947c7ab04a98afb53948136ac, type: 3}
+  - {fileID: -2130005583034063330, guid: 89638ff947c7ab04a98afb53948136ac, type: 3}
+  - {fileID: -3266590123848627995, guid: 89638ff947c7ab04a98afb53948136ac, type: 3}
   - {fileID: -6776914444954656585, guid: 89638ff947c7ab04a98afb53948136ac, type: 3}
   - {fileID: -5758134134724806001, guid: 89638ff947c7ab04a98afb53948136ac, type: 3}
   - {fileID: -6290697964671020295, guid: 89638ff947c7ab04a98afb53948136ac, type: 3}
