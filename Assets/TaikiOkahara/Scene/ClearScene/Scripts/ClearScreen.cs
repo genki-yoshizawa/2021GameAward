@@ -38,6 +38,10 @@ public class ClearScreen : MonoBehaviour
 
     private int _Score;
 
+    void Start()
+    {
+        _Gauss = Camera.main.GetComponent<Gauss>();        
+    }
 
     void Update()
     {

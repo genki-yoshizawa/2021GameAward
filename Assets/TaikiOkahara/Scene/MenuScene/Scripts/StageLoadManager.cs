@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class StageLoadManager : MonoBehaviour
 {
-    // Start is called before the first frame update
     void Start()
     {
         GameObject obj = GameObject.Find("StageManager");
@@ -17,7 +16,6 @@ public class StageLoadManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         
