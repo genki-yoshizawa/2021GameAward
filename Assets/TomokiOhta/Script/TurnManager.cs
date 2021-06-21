@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class TurnManager : MonoBehaviour
 {
+    //GameManager
     private GameManagerScript _GameManagerScript;
+    //CommandUI
+    private CommandUI _CommandUI;
 
     [Header("ターンが進んでいるかの確認用")]
     [SerializeField] private int _TurnCount = 0;
@@ -29,6 +32,7 @@ public class TurnManager : MonoBehaviour
     void Start()
     {
         _GameManagerScript = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerScript>();
+        _CommandUI = GameObject.FindGameObjectWithTag("Command").GetComponent<CommandUI>();
 
         _PlayerScript = _GameManagerScript.GetPlayer().GetComponent<PlayerControl>();
 
