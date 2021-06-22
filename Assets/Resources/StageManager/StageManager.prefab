@@ -55,14 +55,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b72362327d7aba8479852731d824a439, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Radius: 3
   _ChoiceStage: {fileID: 2280714147832351753}
   _DetailUI: {fileID: 2280714149232127785}
-  _MoveSpeed: 5
   _Fade: {fileID: 895697316997497685}
   _ButtonCursorSound: {fileID: 8300000, guid: 7223005ab0448174e928cfc3c25f76bd, type: 3}
   _ButtonDecisionSound: {fileID: 8300000, guid: 510b3725d49eb604aa6be2d3f2ca3fab, type: 3}
-  _ButtonChoiceSound: {fileID: 0}
 --- !u!82 &6323298271262702614
 AudioSource:
   m_ObjectHideFlags: 0
@@ -936,8 +933,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50c51ad4929cdc84785facbd271c10de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Length: 7
-  _Speed: 4
   _Direction: -1
 --- !u!1 &2280714148588174383
 GameObject:
@@ -2198,8 +2193,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50c51ad4929cdc84785facbd271c10de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Length: 7
-  _Speed: 4
   _Direction: 1
 --- !u!1 &2280714149846658597
 GameObject:
