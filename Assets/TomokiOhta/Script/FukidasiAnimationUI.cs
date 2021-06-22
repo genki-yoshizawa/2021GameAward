@@ -26,19 +26,10 @@ public class FukidasiAnimationUI : MonoBehaviour
 
         _FukidasiAnimator = GetComponent<Animator>();
         _RectTransform = GetComponent<RectTransform>();
-
-
     }
 
     public void Update()
     {
-        //ビルボード処理
-        //Vector3 p = _Camera.transform.position;
-        //p.x = transform.position.x;
-        //p.y = transform.position.y;
-        //p.z = transform.position.z;
-        //this.transform.LookAt(p);
-
         var playerScript = _Player.GetComponent<PlayerControl>();
 
         if (playerScript.GetIsFront())

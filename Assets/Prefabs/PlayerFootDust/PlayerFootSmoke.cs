@@ -24,7 +24,7 @@ public class PlayerFootSmoke : MonoBehaviour
 
         float distance = Vector3.Distance(_CurPos, _PrePosition);
 
-        Debug.Log(distance);
+        //Debug.Log(distance);
 
 
         // ‘¬“x‚ª0ˆÈŠO‚È‚ç
