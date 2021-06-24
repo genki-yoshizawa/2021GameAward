@@ -387,13 +387,14 @@ public class EnemyControl : MonoBehaviour
                 {
                     if (_Player.gameObject.GetComponent<PlayerControl>().GetLocalPosition() == _EnemyLocalPosition)
                     {
+                        this.GetComponent<GameOverEnemy>().StartGameOverEnemyAnimation();
 
                         _Player.gameObject.GetComponent<PlayerControl>().SetIsExist(false);
                     }
                 }
 
 
-                    _EnemyAnimation.SetBool("Walk", true);
+                _EnemyAnimation.SetBool("Walk", true);
 
             }
 

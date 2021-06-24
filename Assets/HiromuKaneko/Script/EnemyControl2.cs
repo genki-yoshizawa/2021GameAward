@@ -450,7 +450,7 @@
 //    List<Panel> MovePanel = new List<Panel>();
 
 //    // 経路探索関数　
-//    public void RouteSearch(GameObject Panel,Vector2Int Direction)
+//    public void RouteSearch(GameObject Panel, Vector2Int Direction)
 //    {
 
 //        // プレイヤーのいるポジションを取得
@@ -476,44 +476,53 @@
 
 //    public void WallCount(Vector2Int Direction)
 //    {
+//        Vector2Int Dir = new Vector2Int();
 
 //        // 壁測定をするパネルを入れるリスト
 //        List<Panel> WallCountPanel = new List<Panel>();
 
 //        // 保持しているブロックの向きと一致するまで回す？
-//        for(int i = 0; i < MovePanel.Count;i++)
+//        for (int i = 0; i < MovePanel.Count; i++)
 //        {
-//            if (MovePanel[i].Direction == new Vector2Int(0,1) || MovePanel[i].Direction == new Vector2Int(0,-1))
+
+//            // 上か下なら左右のＸに１を入れる  それ以外はＹに１を入れる
+//            if (MovePanel[i].Direction == new Vector2Int(0, 1) || MovePanel[i].Direction == new Vector2Int(0, -1))
 //            {
+//                Dir = new Vector2Int(1, 0);
+//            }
+//            else
+//            {
+//                Dir = new Vector2Int(0, 1);
 
 //            }
 
+//            // エネミーに隣接しているパネル
 //            WallCountPanel.Add(MovePanel[i]);
 
-//            Panel Left = new Panel();
-//            Panel Right = new Panel();
+//            Panel MinusDirPanel = new Panel();
+//            Panel PlusDirPanel = new Panel();
 
-//            Left.PanelObj = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock(MovePanel[i].PanelObj.GetComponent<BlockConfig>().GetBlockLocalPosition() + new Vector2Int(-1, 0));
-//            Right.PanelObj = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock(MovePanel[i].PanelObj.GetComponent<BlockConfig>().GetBlockLocalPosition() + new Vector2Int(1, 0));
+//            MinusDirPanel.PanelObj = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock(MovePanel[i].PanelObj.GetComponent<BlockConfig>().GetBlockLocalPosition() + (-Dir));
+//            PlusDirPanel.PanelObj = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock(MovePanel[i].PanelObj.GetComponent<BlockConfig>().GetBlockLocalPosition() + Dir);
 
-//            if (Left.PanelObj != null)
-//                WallCountPanel.Add(Left);
+//            if (MinusDirPanel.PanelObj != null)
+//                WallCountPanel.Add(MinusDirPanel);
 
-//            if (Right.PanelObj != null)
-//                WallCountPanel.Add(Right);
+//            if (PlusDirPanel.PanelObj != null)
+//                WallCountPanel.Add(PlusDirPanel);
 
 //            Panel obj = new Panel();
 //            obj.PanelObj = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock(MovePanel[i].PanelObj.GetComponent<BlockConfig>().GetBlockLocalPosition() + MovePanel[i].Direction);
 //            WallCountPanel.Add(obj);
 
-//            Left.PanelObj = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock(obj.PanelObj.GetComponent<BlockConfig>().GetBlockLocalPosition() + new Vector2Int(-1, 0));
-//            Right.PanelObj = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock(obj.PanelObj.GetComponent<BlockConfig>().GetBlockLocalPosition() + new Vector2Int(1, 0));
+//            MinusDirPanel.PanelObj = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock(MovePanel[i].PanelObj.GetComponent<BlockConfig>().GetBlockLocalPosition() + (-Dir));
+//            PlusDirPanel.PanelObj = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock(MovePanel[i].PanelObj.GetComponent<BlockConfig>().GetBlockLocalPosition() + Dir);
 
-//            if (Left.PanelObj != null)
-//                WallCountPanel.Add(Left);
+//            if (MinusDirPanel.PanelObj != null)
+//                WallCountPanel.Add(MinusDirPanel);
 
-//            if (Right.PanelObj != null)
-//                WallCountPanel.Add(Right);
+//            if (PlusDirPanel.PanelObj != null)
+//                WallCountPanel.Add(PlusDirPanel);
 //        }
 
 //        // 壁の数を数える
@@ -555,10 +564,10 @@
 //        else
 //        {
 //            // 経路探索
-//            RouteSearch(_Up,    new Vector2Int( 0,  1));
-//            RouteSearch(_Down,  new Vector2Int( 0, -1));
-//            RouteSearch(_Left,  new Vector2Int(-1,  0));
-//            RouteSearch(_Right, new Vector2Int( 1,  0));
+//            RouteSearch(_Up, new Vector2Int(0, 1));
+//            RouteSearch(_Down, new Vector2Int(0, -1));
+//            RouteSearch(_Left, new Vector2Int(-1, 0));
+//            RouteSearch(_Right, new Vector2Int(1, 0));
 
 //            // 壁測定
 

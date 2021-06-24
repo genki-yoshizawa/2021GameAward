@@ -4738,6 +4738,7 @@ GameObject:
   - component: {fileID: 8618758596643089070}
   - component: {fileID: 8075308426167416855}
   - component: {fileID: 8075308426167416852}
+  - component: {fileID: 1637879605061773830}
   m_Layer: 0
   m_Name: AnimationEnemy
   m_TagString: Untagged
@@ -4814,6 +4815,18 @@ MonoBehaviour:
   _Left: {fileID: 0}
   _Right: {fileID: 0}
   _NextBlock: {fileID: 0}
+--- !u!114 &1637879605061773830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8993736744569483284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 039e93b9ca7aa1443baaf8d5831a97c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8994806821200140453
 GameObject:
   m_ObjectHideFlags: 0
