@@ -76,6 +76,8 @@ public class PlayerControl : MonoBehaviour
     private bool _IsClear;
     private bool _IsGameOver;
 
+    //関数ポインタのようなもの
+    private delegate int a(int ab);
 
     public void Start()
     {
@@ -122,7 +124,10 @@ public class PlayerControl : MonoBehaviour
             transform.position = _WalkStartPosition + (_WalkTargetPosition - _WalkStartPosition) * (_PassedTime / _WalkTime);
 
             if (!_Animator.GetBool("Walk"))
+            {
                 _PassedTime = 0.0f;
+                _GameManagerScript.GetCamera().transform.GetComponent<MainCameraScript>().SetIsPlayerMove(false);
+            }
         }
 
 
@@ -175,7 +180,11 @@ public class PlayerControl : MonoBehaviour
     {
         //前のブロック取得
         var block = _GameManagerScript.GetBlock(_LocalPosition + direction);
-        _GameManagerScript.GetCamera().transform.GetComponent<CameraWork>().PlayerMoveCameraWork(_LocalPosition + direction);
+
+        var camera = _GameManagerScript.GetCamera();
+
+        if(camera)
+            camera.GetComponent<MainCameraScript>().SetIsPlayerMove(true);
 
         //ゆっくり歩くために現在地と目的地を取得
         _WalkStartPosition = transform.position;
@@ -212,7 +221,9 @@ public class PlayerControl : MonoBehaviour
     public void SwapMySelf(List<Vector2Int> position)
     {
         //カメラ位置の更新
-        _GameManagerScript.GetCamera().GetComponent<CameraWork>().PlayerSwapCameraWork();
+        var camera = _GameManagerScript.GetCamera();
+        if(camera)
+            camera.GetComponent<MainCameraScript>().SetIsPlayerSwap();
 
         //Swap時に呼び出される関数、親オブジェクトであるブロックの移動についていくだけ
         foreach (Vector2Int pos in position)
@@ -234,9 +245,9 @@ public class PlayerControl : MonoBehaviour
             return;
 
         //カメラ位置の更新
-        var camera = _GameManagerScript.GetCamera().GetComponent<CameraWork>();
-        if (camera != null)
-            camera.PlayerTurnCameraWork();
+        var camera = _GameManagerScript.GetCamera().GetComponent<MainCameraScript>();
+        if (camera)
+            camera.SetIsPlayerTurnOver();
         else
             Debug.Log("かめらないよ！！！！");
 
@@ -293,11 +304,7 @@ public class PlayerControl : MonoBehaviour
         var clipInfo = _Animator.GetCurrentAnimatorClipInfo(0)[0];
 
         //アニメーションが再生中はコマンド操作を受け付けない
-        if (clipInfo.clip.name == "Walk" || clipInfo.clip.name == "PanelAction" || clipInfo.clip.name == "Capture")
-            return turnEnd;
-
-        //死ぬ
-        if (clipInfo.clip.name == "GameOver")
+        if (clipInfo.clip.name == "Walk" || clipInfo.clip.name == "PanelAction" || clipInfo.clip.name == "Capture" || clipInfo.clip.name == "GameOver")
             return turnEnd;
 
         //Startで取得するのでターン開始時に手動で取得
@@ -309,33 +316,37 @@ public class PlayerControl : MonoBehaviour
         {
             var enemys = _GameManagerScript.GetEnemys();
 
-            //バグ 移動と捕獲が同時に出る
             if (!(_FrontBlock == null || enemys.Count == 0))
             {
                 //前のパネルが何かできる
                 if (_CanActionList.Count != 0)
                 {
-                    _FukidasiScript.SetAnimPattern(_CanActionList.Count);
+                    var icon = _FukidasiObj.transform.GetChild(_AnimMax).GetComponent<RectTransform>();
+
                     if (CheckEnemy(_LocalPosition + _Direction) != null)
                     {
                         //前に敵がいたのでそれ用の画像を出す
+                        _FukidasiScript.SetAnimPattern(1);
                         _FukidasiScript.SetActPattern(_CanActionList, true);
+
+                        //カーソル位置の設定
+                        _CommandSelect = 0;
                     }
                     else
                     {
+                        _FukidasiScript.SetAnimPattern(_CanActionList.Count);
                         _FukidasiScript.SetActPattern(_CanActionList);
+
+                        //カーソル位置の設定
+                        _CommandSelect = _CanActionList.Count - 1;
                     }
 
                     AudioManager.Instance.PlaySE(_AudioClip[3]);
 
                     //カーソルを一番上に設定
-                    _CommandSelect = _CanActionList.Count - 1;
-                    var icon = _FukidasiObj.transform.GetChild(_AnimMax).GetComponent<RectTransform>();
                     icon.anchoredPosition =
                         new Vector3(icon.localPosition.x, _CorsorStartPosition.y + (20.0f * _CommandSelect), _CorsorStartPosition.z);
                 }
-
-
             }
         }
 
@@ -368,7 +379,7 @@ public class PlayerControl : MonoBehaviour
         //上下矢印でコマンド選択
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetAxis("Controller_L_Stick_Vertical") > 0.5f || Input.GetAxis("Controller_D_Pad_Vertical") > 0.5f)
         {
-            if (_CommandSelect < _CanActionList.Count - 1)
+            if (_CommandSelect < _CanActionList.Count - 1 && CheckEnemy(_LocalPosition + _Direction) == null)
             {
                 _CommandSelect++;
 
@@ -382,7 +393,7 @@ public class PlayerControl : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetAxis("Controller_L_Stick_Vertical") < -0.5f || Input.GetAxis("Controller_D_Pad_Vertical") < -0.5f)
         {
-            if (_CommandSelect > 0)
+            if (_CommandSelect > 0 && CheckEnemy(_LocalPosition + _Direction) == null)
             {
                 _CommandSelect--;
 
@@ -426,11 +437,6 @@ public class PlayerControl : MonoBehaviour
                 _FukidasiScript.ResetAnimPattern();
                 turnEnd = true;
             }
-        }
-
-        if (Input.GetKeyDown(KeyCode.Keypad5))
-        {
-            AudioManager.Instance.StopBGM();
         }
 
             return turnEnd;
@@ -480,12 +486,12 @@ public class PlayerControl : MonoBehaviour
         if (blockScript.CheckPanelTurnOver(_IsFront))
             _CanActionList.Add(2);
 
-        //移動可能なら1を入れる
-        if (blockScript.CheckPanelMove(_IsFront, _LocalPosition, _Direction))
+        //回転可能なら1を入れる
+        if (blockScript.CheckPanelRotate(_IsFront))
             _CanActionList.Add(1);
 
-        //回転可能なら0を入れる
-        if (blockScript.CheckPanelRotate(_IsFront))
+        //移動可能なら0を入れる
+        if (blockScript.CheckPanelMove(_IsFront, _LocalPosition, _Direction))
             _CanActionList.Add(0);
     }
 
@@ -499,10 +505,10 @@ public class PlayerControl : MonoBehaviour
                 switch (act)
                 {
                     case 0:
-                        PlayerRotate(_FrontBlock);
+                        PlayerMove();
                         break;
                     case 1:
-                        PlayerMove();
+                        PlayerRotate(_FrontBlock);
                         break;
                     case 2:
                         PlayerTurnOver(_FrontBlock);

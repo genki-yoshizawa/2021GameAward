@@ -48,35 +48,15 @@ public class Stage : MonoBehaviour
         _Time += Time.deltaTime;
         float sin = Mathf.Sin(_Time * _Speed) * _Range;
         Vector3 pos = transform.position;
-        pos.y = sin;// + _StartY;
+        pos.y = sin;
         transform.position = pos;
 
 
         transform.Rotate(0.01f, 0.01f, 0.0f);
     }
 
-    public string GetSceneName()
-    {
-        return _SceneName;
-    }
-
-    public int GetClearParsentage()
-    {
-        return _ClearPercentage;
-    }
-
-    public void SetClearParsentage(int clean)
-    {
-        _ClearPercentage = clean;
-    }
-
-    public int GetMatTurn()
-    {
-        return _MaxTurn;
-    }
-
-    public int GetStageNumber()
-    {
-        return _StageNumber;
-    }
+    public string GetSceneName(){ return _SceneName;}
+    public int GetClearParsentage(){ return _ClearPercentage;}
+    public void SetClearParsentage(int clean){ _ClearPercentage = clean;}
+    public int GetStageNumber(){ return _StageNumber;}
 }

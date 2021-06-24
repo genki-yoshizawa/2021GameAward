@@ -38,7 +38,6 @@ Shader"Custom/IrisShader"{
                     //ここでカメラに写っている色情報を取得する
                     fixed4 c = tex2D(_MainTex,i.uv);
                     //uv座標のｙから0.5を引いた値の絶対値（ここでは画面の真ん中を(0.5,0.5)としている）
-                    //fixed l = abs(i.uv.y - 0.5);
                     //lの値が＿Length以下ならそのまま描画する。違うのなら黒く描画
 
 

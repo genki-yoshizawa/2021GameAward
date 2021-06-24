@@ -3,8 +3,6 @@ Shader "Custom/AlphaGradation"
 	Properties
 	{
 		_MainTex("Sprite Texture", 2D) = "white" {}
-		//_FadeTex("Fade Texture", 2D) = "white" {}
-		//_Color("Tint", Color) = (1,1,1,1)
 		_Alpha("Alpha",Range(0,1.5)) = 0.0
 	}
 
@@ -45,10 +43,8 @@ Shader "Custom/AlphaGradation"
 				half2 texcoord  : TEXCOORD0;
 			};
 
-			//fixed4 _Color;
 			fixed _Alpha;
 			sampler2D _MainTex;
-			//sampler2D _FadeTex;
 			float4 _MainTex_ST;
 
 			// 頂点シェーダーの基本
@@ -57,24 +53,15 @@ Shader "Custom/AlphaGradation"
 				v2f OUT;
 				OUT.vertex = UnityObjectToClipPos(IN.vertex);
 				OUT.texcoord = IN.texcoord;
-//#ifdef UNITY_HALF_TEXEL_OFFSET
-//				OUT.vertex.xy += (_ScreenParams.zw - 1.0) * float2(-1,1);
-//#endif
-				//OUT.texcoord = TRANSFORM_TEX(IN.texcoord, _MainTex);
 				return OUT;
 			}
 
 			// 通常のフラグメントシェーダー
 			fixed4 frag(v2f IN) : SV_Target
 			{
-				//half alpha = tex2D(_MainTex, IN.texcoord).a;
-				//alpha = saturate(1 - alpha - (_Alpha * 2 - 1));
 				fixed4 color = tex2D(_MainTex, IN.texcoord);
-				//half fadeAlpha = tex2D(_FadeTex, IN.texcoord).a;
-				//half alpha = (fadeAlpha > 0.5) ? color.a : 0;
-				//half alpha = (_Alpha > IN.texcoord.x)? color.a : ( 1 - IN.texcoord.x/(_Alpha)) * color.a;
 
-				half alpha = 0;// = (> ) ? color.a : (1 - IN.texcoord.x / (_Alpha)) * color.a;
+				half alpha = 0;
 				if (_Alpha < IN.texcoord.x)
 				{
 					alpha = 0;
@@ -85,7 +72,6 @@ Shader "Custom/AlphaGradation"
 				}
 
 				return fixed4(color.r, color.g, color.b,alpha);
-				//return color;
 
 			}
 			ENDCG

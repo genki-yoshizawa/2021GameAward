@@ -20,42 +20,19 @@ public class PauseManager : MonoBehaviour
     private float _FadeCount = 0;
 
 
-    [SerializeField]
-    private GameObject _Image;
-
-    [SerializeField]
-    private Animator _StageModelAnimator;
-
-    [SerializeField]
-    private Animator _DetailUIAnimator;
-
-    [SerializeField]
-    private GameObject _StageNumberUI;
-
-    [SerializeField]
-    private Animator _UIAnimator;
-
-    [SerializeField]
-    Button _StartSetButton;//ポーズ画面に入ったとき選択中のボタン
-
-    [SerializeField]
-    private GameObject _StageModel;
-
-    [SerializeField]
-    private GameObject _PauseOut;
-    [SerializeField]
-    private GameObject _Restart;
-    [SerializeField]
-    private GameObject _Menu;
-
-    [SerializeField]
-    private AudioClip _PauseStartSound;
-
-    [SerializeField]
-    private AudioClip _Selectound;
-
-    [SerializeField]
-    private AudioClip _DecisionSound;
+    [SerializeField] private GameObject _Image;
+    [SerializeField] private Animator _StageModelAnimator;
+    [SerializeField] private Animator _DetailUIAnimator;
+    [SerializeField] private GameObject _StageNumberUI;
+    [SerializeField] private Animator _UIAnimator;
+    [SerializeField] Button _StartSetButton;//ポーズ画面に入ったとき選択中のボタン
+    [SerializeField] private GameObject _StageModel;
+    [SerializeField] private GameObject _PauseOut;
+    [SerializeField] private GameObject _Restart;
+    [SerializeField] private GameObject _Menu;
+    [SerializeField] private AudioClip _PauseStartSound;
+    [SerializeField] private AudioClip _Selectound;
+    [SerializeField] private AudioClip _DecisionSound;
 
     private enum FadeType
     {
@@ -77,6 +54,9 @@ public class PauseManager : MonoBehaviour
 
         string name = "WorldModel/" + StageManager._StageModelName;
         GameObject obj = (GameObject)Resources.Load(name);
+
+        if (obj == null)
+            return;
 
         _StageModel.transform.GetChild(0).GetComponent<Renderer>().sharedMaterial = obj.transform.GetComponent<Renderer>().sharedMaterial;
         _StageNumberUI.GetComponent<PauseStageNumber>().SetScore(StageManager._ChoiceStageNumber);
@@ -119,7 +99,6 @@ public class PauseManager : MonoBehaviour
                     obj = GameObject.FindGameObjectWithTag("Manager");
                     obj.GetComponent<GameManagerScript>().SetPause();
 
-                    //AudioManager.Instance.PauseBGM();
                     AudioManager.Instance.SetSEVol(0.125f);
                     AudioManager.Instance.SetBGMVol(0.05f);
                     AudioManager.Instance.PlaySE(_PauseStartSound);
@@ -130,7 +109,6 @@ public class PauseManager : MonoBehaviour
                     _FadeType = FadeType.OUT;
                     PoseOutAnimation();
 
-                    //AudioManager.Instance.UnpauseBGM();
                     AudioManager.Instance.ResetBGMVol();
                     AudioManager.Instance.PlaySE(_PauseStartSound);
 
@@ -220,13 +198,11 @@ public class PauseManager : MonoBehaviour
     {
         AudioManager.Instance.PlaySE(_DecisionSound);
         string restartStageName = SceneManager.GetActiveScene().name;
-        //AudioManager.Instance.UnpauseBGM();
         SceneManager.LoadScene(restartStageName);
     }
 
     public void OnClickMenu()
     {
-        //AudioManager.Instance.StopBGM();
         AudioManager.Instance.StopBGM();
         AudioManager.Instance.PlaySE(_DecisionSound);
         SceneManager.LoadScene("MenuScene");

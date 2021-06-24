@@ -12,16 +12,13 @@ public class TitleLogoSmoke : MonoBehaviour
 
     bool _IsStart = false;
 
-    [SerializeField]
-    float _Distance, _Hight;
+    float _Distance = 6.0f, _Hight = 0.0f;
 
-    [SerializeField]
-    float _Time;
+    float _Time = 0.5f;
 
     float _TimeCount = 0;
 
-    [SerializeField]
-    float _MaxSize;
+    float _MaxSize = 3.5f;
 
 
     private Vector3 _LeftStartPos, _RightStartPos;

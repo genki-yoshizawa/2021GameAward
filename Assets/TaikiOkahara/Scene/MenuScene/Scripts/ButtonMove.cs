@@ -4,13 +4,9 @@ using UnityEngine;
 
 public class ButtonMove : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private float _Length = 7.0f;
 
-    [SerializeField]
-    private float _Length;
-
-    [SerializeField]
-    private float _Speed;
+    private float _Speed = 4.0f;
 
 
     [SerializeField]
@@ -28,7 +24,6 @@ public class ButtonMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         float sin = Mathf.Sin((Time.time) * _Speed * _Direction) * _Length;
         Vector3 nexPos = _StartPos + new Vector3(sin, 0.0f, 0.0f);
         _Pos.localPosition = nexPos;
