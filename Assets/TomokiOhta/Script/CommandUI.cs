@@ -7,6 +7,8 @@ public class CommandUI : MonoBehaviour
     [Header("actäiî[óp"), SerializeField]
     private Sprite[] _CommandSprite;
 
+    
+
     void Start()
     {
         
@@ -15,5 +17,20 @@ public class CommandUI : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void CommandSelect()
+    {
+
+    }
+
+    private void DrawCommand()
+    {
+
+    }
+
+    private void UnDrawCommand()
+    {
+
     }
 }

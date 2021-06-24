@@ -76,6 +76,8 @@ public class PlayerControl : MonoBehaviour
     private bool _IsClear;
     private bool _IsGameOver;
 
+    //関数ポインタのようなもの
+    private delegate int a(int ab);
 
     public void Start()
     {
@@ -122,7 +124,10 @@ public class PlayerControl : MonoBehaviour
             transform.position = _WalkStartPosition + (_WalkTargetPosition - _WalkStartPosition) * (_PassedTime / _WalkTime);
 
             if (!_Animator.GetBool("Walk"))
+            {
                 _PassedTime = 0.0f;
+                _GameManagerScript.GetCamera().transform.GetComponent<MainCameraScript>().SetIsPlayerMove(false);
+            }
         }
 
 
@@ -175,7 +180,11 @@ public class PlayerControl : MonoBehaviour
     {
         //前のブロック取得
         var block = _GameManagerScript.GetBlock(_LocalPosition + direction);
-        _GameManagerScript.GetCamera().transform.GetComponent<CameraWork>().PlayerMoveCameraWork(_LocalPosition + direction);
+
+        var camera = _GameManagerScript.GetCamera();
+
+        if(camera)
+            camera.GetComponent<MainCameraScript>().SetIsPlayerMove(true);
 
         //ゆっくり歩くために現在地と目的地を取得
         _WalkStartPosition = transform.position;
@@ -212,7 +221,9 @@ public class PlayerControl : MonoBehaviour
     public void SwapMySelf(List<Vector2Int> position)
     {
         //カメラ位置の更新
-        _GameManagerScript.GetCamera().GetComponent<CameraWork>().PlayerSwapCameraWork();
+        var camera = _GameManagerScript.GetCamera();
+        if(camera)
+            camera.GetComponent<MainCameraScript>().SetIsPlayerSwap();
 
         //Swap時に呼び出される関数、親オブジェクトであるブロックの移動についていくだけ
         foreach (Vector2Int pos in position)
@@ -234,9 +245,9 @@ public class PlayerControl : MonoBehaviour
             return;
 
         //カメラ位置の更新
-        var camera = _GameManagerScript.GetCamera().GetComponent<CameraWork>();
-        if (camera != null)
-            camera.PlayerTurnCameraWork();
+        var camera = _GameManagerScript.GetCamera().GetComponent<MainCameraScript>();
+        if (camera)
+            camera.SetIsPlayerTurnOver();
         else
             Debug.Log("かめらないよ！！！！");
 
@@ -293,11 +304,7 @@ public class PlayerControl : MonoBehaviour
         var clipInfo = _Animator.GetCurrentAnimatorClipInfo(0)[0];
 
         //アニメーションが再生中はコマンド操作を受け付けない
-        if (clipInfo.clip.name == "Walk" || clipInfo.clip.name == "PanelAction" || clipInfo.clip.name == "Capture")
-            return turnEnd;
-
-        //死ぬ
-        if (clipInfo.clip.name == "GameOver")
+        if (clipInfo.clip.name == "Walk" || clipInfo.clip.name == "PanelAction" || clipInfo.clip.name == "Capture" || clipInfo.clip.name == "GameOver")
             return turnEnd;
 
         //Startで取得するのでターン開始時に手動で取得
@@ -309,7 +316,6 @@ public class PlayerControl : MonoBehaviour
         {
             var enemys = _GameManagerScript.GetEnemys();
 
-            //バグ 移動と捕獲が同時に出る
             if (!(_FrontBlock == null || enemys.Count == 0))
             {
                 //前のパネルが何かできる
