@@ -29,7 +29,7 @@
 //        public GameObject PanelObj;
 //        public Vector2Int Direction;
 //    };
-    
+
 //    protected enum BreakTurn
 //    {
 //        RANDOM,
@@ -483,7 +483,7 @@
 //        // 保持しているブロックの向きと一致するまで回す？
 //        for(int i = 0; i < MovePanel.Count;i++)
 //        {
-//            if (MovePanel[i].Direction == new Vector2Int())
+//            if (MovePanel[i].Direction == new Vector2Int(0,1) || MovePanel[i].Direction == new Vector2Int(0,-1))
 //            {
 
 //            }

@@ -383,7 +383,17 @@ public class EnemyControl : MonoBehaviour
                         _EnemyAnimation.SetBool("Walk", true);
                 }
 
-                _EnemyAnimation.SetBool("Walk", true);
+                if (_Player.gameObject.GetComponent<PlayerControl>().GetIsFront() != _IsFront)
+                {
+                    if (_Player.gameObject.GetComponent<PlayerControl>().GetLocalPosition() == _EnemyLocalPosition)
+                    {
+
+                        _Player.gameObject.GetComponent<PlayerControl>().SetIsExist(false);
+                    }
+                }
+
+
+                    _EnemyAnimation.SetBool("Walk", true);
 
             }
 
