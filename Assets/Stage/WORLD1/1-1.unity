@@ -369,8 +369,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 342349547}
-  m_LocalRotation: {x: 0.36212456, y: -0, z: -0, w: 0.93212974}
-  m_LocalPosition: {x: 0, y: 2.21, z: -2.12}
+  m_LocalRotation: {x: 0.2564737, y: -0, z: -0, w: 0.96655124}
+  m_LocalPosition: {x: 0, y: 1.8, z: -2.68}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2048361331}
@@ -453,11 +453,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _InputDeadZone: 0.3
-  _ToPlayerOffset: 2.8736737
+  _ToPlayerOffset: 3.0859845
   _ToPlayerOffsetMax: 10
   _ToPlayerOffsetMin: 0.5
   _CameraVelocityHorizontal: 0.1
   _CameraVelocityVertical: 0.1
+  _GameStartCameraWorkTime: 1
   _EditTopView: 0
 --- !u!1 &377583765 stripped
 GameObject:
@@ -481,7 +482,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4320651164276382667, guid: 480eef6a109238445a179b0023185a61, type: 3}
       propertyPath: _PanelIndex
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4320651164276382667, guid: 480eef6a109238445a179b0023185a61, type: 3}
       propertyPath: _canTurnOver
@@ -616,7 +617,7 @@ PrefabInstance:
     - target: {fileID: 5322210636608615477, guid: 80af85b9bf7a4a345b11283cdfe8735e, type: 3}
       propertyPath: _CameraWork
       value: 
-      objectReference: {fileID: 1161957489}
+      objectReference: {fileID: 2048361330}
     - target: {fileID: 5322210636608615477, guid: 80af85b9bf7a4a345b11283cdfe8735e, type: 3}
       propertyPath: _TurnManager
       value: 
@@ -763,6 +764,38 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4214812457154390650, guid: 480eef6a109238445a179b0023185a61, type: 3}
+      propertyPath: _canSwap
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4214812457154390650, guid: 480eef6a109238445a179b0023185a61, type: 3}
+      propertyPath: _SwapIndex
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4214812457154390650, guid: 480eef6a109238445a179b0023185a61, type: 3}
+      propertyPath: _PanelIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4214812457154390650, guid: 480eef6a109238445a179b0023185a61, type: 3}
+      propertyPath: _canTurnOver
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320651164276382667, guid: 480eef6a109238445a179b0023185a61, type: 3}
+      propertyPath: _canSwap
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320651164276382667, guid: 480eef6a109238445a179b0023185a61, type: 3}
+      propertyPath: _SwapIndex
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320651164276382667, guid: 480eef6a109238445a179b0023185a61, type: 3}
+      propertyPath: _PanelIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320651164276382667, guid: 480eef6a109238445a179b0023185a61, type: 3}
+      propertyPath: _canTurnOver
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6612586452748659346, guid: 480eef6a109238445a179b0023185a61, type: 3}
       propertyPath: m_Name
       value: NomalPanel_Green (3)
@@ -1034,7 +1067,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4320651164276382667, guid: 480eef6a109238445a179b0023185a61, type: 3}
       propertyPath: _PanelIndex
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4320651164276382667, guid: 480eef6a109238445a179b0023185a61, type: 3}
       propertyPath: _canTurnOver
@@ -1115,7 +1148,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1141437032}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 2.33, y: 5.11, z: -0.36}
+  m_LocalPosition: {x: 2.33, y: 5.11, z: 0.16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2048361331}
@@ -1133,11 +1166,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2115a7780715744b9aa08e9171d9e8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1161957489 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7100963243512670062, guid: ddbd29d1198ad7e46b160e9af79b07da, type: 3}
-  m_PrefabInstance: {fileID: 1760862458}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1294797329 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8912895628452179480, guid: c4b51f6447ab1d34cbac28952a2d790e, type: 3}
@@ -1812,6 +1840,38 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4214812457154390650, guid: 480eef6a109238445a179b0023185a61, type: 3}
+      propertyPath: _canSwap
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4214812457154390650, guid: 480eef6a109238445a179b0023185a61, type: 3}
+      propertyPath: _SwapIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4214812457154390650, guid: 480eef6a109238445a179b0023185a61, type: 3}
+      propertyPath: _PanelIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4214812457154390650, guid: 480eef6a109238445a179b0023185a61, type: 3}
+      propertyPath: _canTurnOver
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320651164276382667, guid: 480eef6a109238445a179b0023185a61, type: 3}
+      propertyPath: _canSwap
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320651164276382667, guid: 480eef6a109238445a179b0023185a61, type: 3}
+      propertyPath: _SwapIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320651164276382667, guid: 480eef6a109238445a179b0023185a61, type: 3}
+      propertyPath: _PanelIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320651164276382667, guid: 480eef6a109238445a179b0023185a61, type: 3}
+      propertyPath: _canTurnOver
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6612586452748659346, guid: 480eef6a109238445a179b0023185a61, type: 3}
       propertyPath: m_Name
       value: NomalPanel_Green (2)

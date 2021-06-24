@@ -78,6 +78,9 @@ public class TurnManager : MonoBehaviour
             if (_TurnTiredLimit <= _TurnCount )
                 _PlayerScript.SetTired(true);
 
+            //コマンド選択
+            _CommandUI.CommandSelect();
+
             if (_PlayerScript.PlayerTurn())
             {
                 _PlayerTurn = false;

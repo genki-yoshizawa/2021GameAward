@@ -356,4 +356,9 @@ public class BlockControl : MonoBehaviour
     public void SetisSwapAnim() { _isSwapAnim = true; }
     public void SetSwapGlobalPosition(Vector3 pos) { _SwapGlobalPosition = pos; }
     public void SetStartGlobalPosition() { _StartGlobalPosition = transform.position; }
+
+    public bool GetisSwapAnim() { return _isSwapAnim; }
+    public bool GetisTurnOverAnim() { return _isTurnOverAnim; }
+    public float GetTuenOverAnimTime() { return _TurnOverAnimTime; } //カメラワークに必要
+    public float GetAnimPassedTime() { return _PassedTime; } //アニメーションの経過時間を渡す関数
 }
