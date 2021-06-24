@@ -33,6 +33,7 @@ public class Stage : MonoBehaviour
     private float _StartPos;
     private float _Speed = 1.0f;
 
+    float _YPos = -0.3f;
 
     private float _Time = 0;
 
@@ -48,7 +49,7 @@ public class Stage : MonoBehaviour
         _Time += Time.deltaTime;
         float sin = Mathf.Sin(_Time * _Speed) * _Range;
         Vector3 pos = transform.position;
-        pos.y = sin;
+        pos.y = sin + _YPos;
         transform.position = pos;
 
 
