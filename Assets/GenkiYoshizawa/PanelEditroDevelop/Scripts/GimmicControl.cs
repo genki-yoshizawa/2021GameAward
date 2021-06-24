@@ -28,5 +28,7 @@ public class GimmicControl : MonoBehaviour
         return 0;
     }
 
+    public virtual bool IsWall() { return false; }
+    public virtual bool IsCheese() { return false; }
 
 }

@@ -38,7 +38,7 @@ public class EnemyControl : MonoBehaviour
 
 
     [Header("１ターンの行動回数")]
-    [SerializeField, TooltipAttribute("１ターンの行動回数"), Range(0, 2)] protected int _ActCount;           // 敵の行動回数    （１～２？）
+    [SerializeField, TooltipAttribute("１ターンの行動回数"), Range(0, 2)] protected int _ActCount;         // 敵の行動回数    （１～２？）
 
     [Header("壁をかじるレベル")]
     [SerializeField, TooltipAttribute("かじれる壁のレベル"), Range(0, 3)] protected int _BreakLevel;       // かじるレベル    （０～３？）
@@ -118,6 +118,7 @@ public class EnemyControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (_IsFront)
             TargetMaterial.SetTexture("_MainTex", _FrontTexture);
         else
@@ -524,559 +525,68 @@ public class EnemyControl : MonoBehaviour
         Vector3 playerpos = _Player.transform.position;
 
         GameObject moveobj = null;
-        Vector2Int movedirection = new Vector2Int();
 
-        float distance = 0.0f;
-        float distance2 = 10000.0f;
-        float tmp = 0.0f;
-        float tmp2 = 0.0f;
-        float random;
+        float distance;
 
+        _EnemyState = EnemyState.STAY;
 
         if (_TurnCount == 0)
         {
             _TurnCount++;
-            _EnemyState = EnemyState.STAY;
+            return;
         }
+
+        if (_IsFront)
+            distance = 0.0f;
+        else
+            distance = 1000.0f;
+
+
+        // チーズみつけてる
+        if (_Cheese != null)
+        {
+            CheeseMove();
+        }
+        // チーズ見つけてない
         else
         {
+            moveobj = SelectMovePanel(_Up, moveobj, new Vector2Int(0, 1), distance);
+            moveobj = SelectMovePanel(_Down, moveobj, new Vector2Int(0, -1), distance);
+            moveobj = SelectMovePanel(_Left, moveobj, new Vector2Int(-1, 0), distance);
+            moveobj = SelectMovePanel(_Right, moveobj, new Vector2Int(1, 0), distance);
 
-            // チーズみつけてる
-            if (_Cheese != null)
+            // ムーブ先がなければStayする
+            if (moveobj == null)
             {
-                // 表
-                if (_IsFront)
+                return;
+            }
+
+            // プレイヤーとムーブ先のパネルの距離を取得
+            float tmp = Vector3.Distance(playerpos, moveobj.transform.position);
+
+            // プレイヤーとネズミの距離を取得
+            float tmp2 = Vector3.Distance(playerpos, this.transform.position);
+
+            if (_IsFront)
+            {
+                if (tmp2 < tmp)
                 {
-                    if (_Up != null)
-                    {
-                        _EnemyDirection = new Vector2Int(0, 1);
-                        tmp = Vector3.Distance(_Cheese.transform.position, _Up.transform.position);
-                        if (tmp == distance2)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Up;
-                                    distance2 = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp < distance2)
-                        {
-                            if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Up;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-
-                    if (_Down != null)
-                    {
-                        _EnemyDirection = new Vector2Int(0, -1);
-                        tmp = Vector3.Distance(_Cheese.transform.position, _Down.transform.position);
-                        if (tmp == distance2)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Down;
-                                    distance2 = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp < distance2)
-                        {
-                            if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Down;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-
-                    if (_Left != null)
-                    {
-                        _EnemyDirection = new Vector2Int(-1, 0);
-                        tmp = Vector3.Distance(_Cheese.transform.position, _Left.transform.position);
-                        if (tmp == distance2)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Left;
-                                    distance2 = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp < distance2)
-                        {
-                            if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Left;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-
-                    if (_Right != null)
-                    {
-                        _EnemyDirection = new Vector2Int(1, 0);
-                        tmp = Vector3.Distance(_Cheese.transform.position, _Right.transform.position);
-                        if (tmp == distance2)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Right;
-                                    distance2 = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp < distance2)
-                        {
-                            if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Right;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-                }
-                // 裏
-                else
-                {
-                    if (_Up != null)
-                    {
-                        _EnemyDirection = new Vector2Int(0, 1);
-                        tmp = Vector3.Distance(_Cheese.transform.position, _Up.transform.position);
-                        if (tmp == distance2)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Up;
-                                    distance2 = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp < distance2)
-                        {
-                            if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Up;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-
-                    if (_Down != null)
-                    {
-                        _EnemyDirection = new Vector2Int(0, -1);
-                        tmp = Vector3.Distance(_Cheese.transform.position, _Down.transform.position);
-                        if (tmp == distance2)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Down;
-                                    distance2 = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp < distance2)
-                        {
-                            if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Down;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-
-                    if (_Left != null)
-                    {
-                        _EnemyDirection = new Vector2Int(-1, 0);
-                        tmp = Vector3.Distance(_Cheese.transform.position, _Left.transform.position);
-                        if (tmp == distance2)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Left;
-                                    distance2 = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp < distance2)
-                        {
-                            if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Left;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-
-                    if (_Right != null)
-                    {
-                        _EnemyDirection = new Vector2Int(1, 0);
-                        tmp = Vector3.Distance(_Cheese.transform.position, _Right.transform.position);
-                        if (tmp == distance2)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Right;
-                                    distance2 = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp < distance2)
-                        {
-                            if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Right;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-                }
-
-                // チーズとネズミのいる位置を比較
-                tmp2 = Vector3.Distance(_Cheese.transform.position, this.transform.position);
-                if (moveobj != null)
-                {
-                    // チーズとムーブ先のパネルの位置を比較
-                    tmp = Vector3.Distance(_Cheese.transform.position, moveobj.transform.position);
-                    if (tmp < tmp2)
-                    {
-                        _EnemyDirection = movedirection;
-                        _NextBlock = moveobj;
-                        _EnemyState = EnemyState.MOVE;
-                    }
-                }
-                else
-                {
-                    _EnemyState = EnemyState.STAY;
-
+                    _NextBlock = moveobj;
+                    _EnemyState = EnemyState.MOVE;
                 }
             }
-            // チーズ見つけてない
             else
             {
-                // 表
-                if (_IsFront)
+                if (tmp < tmp2)
                 {
-                    if (_Up != null)
-                    {
-                        _EnemyDirection = new Vector2Int(0, 1);
-                        tmp = Vector3.Distance(playerpos, _Up.transform.position);
-                        if (tmp == distance)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Up;
-                                    distance = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp > distance)
-                        {
-                            if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Up;
-                                distance = tmp;
-                            }
-                        }
-                    }
-
-                    if (_Down != null)
-                    {
-                        _EnemyDirection = new Vector2Int(0, -1);
-                        tmp = Vector3.Distance(playerpos, _Down.transform.position);
-
-
-                        if (tmp == distance)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Down;
-                                    distance = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp > distance)
-                        {
-                            if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Down;
-                                distance = tmp;
-                            }
-                        }
-                    }
-
-                    if (_Left != null)
-                    {
-                        _EnemyDirection = new Vector2Int(-1, 0);
-                        tmp = Vector3.Distance(playerpos, _Left.transform.position);
-
-                        if (tmp == distance)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Left;
-                                    distance = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp > distance)
-                        {
-                            if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Left;
-                                distance = tmp;
-                            }
-                        }
-                    }
-
-                    if (_Right != null)
-                    {
-                        _EnemyDirection = new Vector2Int(1, 0);
-                        tmp = Vector3.Distance(playerpos, _Right.transform.position);
-
-                        if (tmp == distance)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Right;
-                                    distance = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp > distance)
-                        {
-                            if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Right;
-                                distance = tmp;
-                            }
-                        }
-                    }
-
-                    // プレイヤーとネズミの距離を取得
-                    tmp2 = Vector3.Distance(playerpos, this.transform.position);
-                    if (moveobj != null)
-                    {
-                        // プレイヤーとムーブ先のパネルの距離を取得
-                        tmp = Vector3.Distance(playerpos, moveobj.transform.position);
-
-                        if (tmp2 < tmp)
-                        {
-                            _EnemyDirection = movedirection;
-                            _NextBlock = moveobj;
-                            _EnemyState = EnemyState.MOVE;
-                        }
-                        else
-                            _EnemyState = EnemyState.STAY;
-
-                    }
-                    else
-                        _EnemyState = EnemyState.STAY;
-
-                }
-                // 裏
-                else
-                {
-                    if (_Up != null)
-                    {
-                        _EnemyDirection = new Vector2Int(0, 1);
-                        tmp = Vector3.Distance(playerpos, _Up.transform.position);
-                        if (tmp == distance2)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Up;
-                                    distance2 = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp < distance2)
-                        {
-                            if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Up;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-
-                    if (_Down != null)
-                    {
-                        _EnemyDirection = new Vector2Int(0, -1);
-                        tmp = Vector3.Distance(playerpos, _Down.transform.position);
-                        if (tmp == distance2)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Down;
-                                    distance2 = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp < distance2)
-                        {
-                            if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Down;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-
-                    if (_Left != null)
-                    {
-                        _EnemyDirection = new Vector2Int(-1, 0);
-                        tmp = Vector3.Distance(playerpos, _Left.transform.position);
-                        if (tmp == distance2)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Left;
-                                    distance2 = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp < distance2)
-                        {
-                            if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Left;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-
-                    if (_Right != null)
-                    {
-                        _EnemyDirection = new Vector2Int(1, 0);
-                        tmp = Vector3.Distance(playerpos, _Right.transform.position);
-                        if (tmp == distance2)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Right;
-                                    distance2 = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp < distance2)
-                        {
-                            if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Right;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-
-                    // プレイヤーとネズミの距離を取得
-                    tmp2 = Vector3.Distance(playerpos, this.transform.position);
-                    if (moveobj != null)
-                    {
-                        // プレイヤーとムーブ先のパネルの距離を取得
-                        tmp = Vector3.Distance(playerpos, moveobj.transform.position);
-
-                        if (tmp < tmp2)
-                        {
-                            _EnemyDirection = movedirection;
-                            _NextBlock = moveobj;
-                            _EnemyState = EnemyState.MOVE;
-                        }
-                        else
-                            _EnemyState = EnemyState.STAY;
-
-                    }
-                    else
-                        _EnemyState = EnemyState.STAY;
-
+                    _NextBlock = moveobj;
+                    _EnemyState = EnemyState.MOVE;
                 }
             }
-            _TurnCount = 0;
         }
+        _TurnCount = 0;
     }
+
 
     // ２ターンに１度行動する　たまに１ターンに１度行動（現状30%位）　かじることはしない
     public void Level3()
@@ -1087,15 +597,12 @@ public class EnemyControl : MonoBehaviour
         Vector3 playerpos = _Player.transform.position;
 
         GameObject moveobj = null;
-        Vector2Int movedirection = new Vector2Int();
 
-        float distance = 0.0f;
-        float distance2 = 10000.0f;
-        float tmp = 0.0f;
-        float tmp2 = 0.0f;
-        float random;
+        float distance;
 
-        random = Random.value;
+        float random = Random.value;
+
+        //  random = Random.value;
 
         if (random < 0.3)
         {
@@ -1105,548 +612,58 @@ public class EnemyControl : MonoBehaviour
         if (_TurnCount == 0)
         {
             _TurnCount++;
-            _EnemyState = EnemyState.STAY;
+            return;
         }
+
+        if (_IsFront)
+            distance = 0.0f;
+        else
+            distance = 1000.0f;
+
+        // チーズみつけてる
+        if (_Cheese != null)
+        {
+            CheeseMove();
+        }
+        // チーズ見つけてない
         else
         {
+            moveobj = SelectMovePanel(_Up, moveobj, new Vector2Int(0, 1), distance);
+            moveobj = SelectMovePanel(_Down, moveobj, new Vector2Int(0, -1), distance);
+            moveobj = SelectMovePanel(_Left, moveobj, new Vector2Int(-1, 0), distance);
+            moveobj = SelectMovePanel(_Right, moveobj, new Vector2Int(1, 0), distance);
 
-            // チーズみつけてる
-            if (_Cheese != null)
+            // ムーブ先がなければStayする
+            if (moveobj == null)
             {
-                // 表
-                if (_IsFront)
+                return;
+            }
+
+            // プレイヤーとムーブ先のパネルの距離を取得
+            float tmp = Vector3.Distance(playerpos, moveobj.transform.position);
+
+            // プレイヤーとネズミの距離を取得
+            float tmp2 = Vector3.Distance(playerpos, this.transform.position);
+
+            if (_IsFront)
+            {
+                if (tmp2 < tmp)
                 {
-                    if (_Up != null)
-                    {
-                        _EnemyDirection = new Vector2Int(0, 1);
-                        tmp = Vector3.Distance(_Cheese.transform.position, _Up.transform.position);
-                        if (tmp == distance2)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Up;
-                                    distance2 = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp < distance2)
-                        {
-                            if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Up;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-
-                    if (_Down != null)
-                    {
-                        _EnemyDirection = new Vector2Int(0, -1);
-                        tmp = Vector3.Distance(_Cheese.transform.position, _Down.transform.position);
-                        if (tmp == distance2)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Down;
-                                    distance2 = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp < distance2)
-                        {
-                            if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Down;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-
-                    if (_Left != null)
-                    {
-                        _EnemyDirection = new Vector2Int(-1, 0);
-                        tmp = Vector3.Distance(_Cheese.transform.position, _Left.transform.position);
-                        if (tmp == distance2)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Left;
-                                    distance2 = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp < distance2)
-                        {
-                            if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Left;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-
-                    if (_Right != null)
-                    {
-                        _EnemyDirection = new Vector2Int(1, 0);
-                        tmp = Vector3.Distance(_Cheese.transform.position, _Right.transform.position);
-                        if (tmp == distance2)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Right;
-                                    distance2 = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp < distance2)
-                        {
-                            if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Right;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-                }
-                // 裏
-                else
-                {
-                    if (_Up != null)
-                    {
-                        _EnemyDirection = new Vector2Int(0, 1);
-                        tmp = Vector3.Distance(_Cheese.transform.position, _Up.transform.position);
-                        if (tmp == distance2)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Up;
-                                    distance2 = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp < distance2)
-                        {
-                            if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Up;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-
-                    if (_Down != null)
-                    {
-                        _EnemyDirection = new Vector2Int(0, -1);
-                        tmp = Vector3.Distance(_Cheese.transform.position, _Down.transform.position);
-                        if (tmp == distance2)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Down;
-                                    distance2 = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp < distance2)
-                        {
-                            if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Down;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-
-                    if (_Left != null)
-                    {
-                        _EnemyDirection = new Vector2Int(-1, 0);
-                        tmp = Vector3.Distance(_Cheese.transform.position, _Left.transform.position);
-                        if (tmp == distance2)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Left;
-                                    distance2 = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp < distance2)
-                        {
-                            if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Left;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-
-                    if (_Right != null)
-                    {
-                        _EnemyDirection = new Vector2Int(1, 0);
-                        tmp = Vector3.Distance(_Cheese.transform.position, _Right.transform.position);
-                        if (tmp == distance2)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Right;
-                                    distance2 = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp < distance2)
-                        {
-                            if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Right;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-                }
-
-                // チーズとネズミのいる位置を比較
-                tmp2 = Vector3.Distance(_Cheese.transform.position, this.transform.position);
-                if (moveobj != null)
-                {
-                    // チーズとムーブ先のパネルの位置を比較
-                    tmp = Vector3.Distance(_Cheese.transform.position, moveobj.transform.position);
-                    if (tmp < tmp2)
-                    {
-                        _EnemyDirection = movedirection;
-                        _NextBlock = moveobj;
-                        _EnemyState = EnemyState.MOVE;
-                    }
-                }
-                else
-                {
-                    _EnemyState = EnemyState.STAY;
-
+                    _NextBlock = moveobj;
+                    _EnemyState = EnemyState.MOVE;
                 }
             }
-            // チーズ見つけてない
             else
             {
-                // 表
-                if (_IsFront)
+                if (tmp < tmp2)
                 {
-                    if (_Up != null)
-                    {
-                        _EnemyDirection = new Vector2Int(0, 1);
-                        tmp = Vector3.Distance(playerpos, _Up.transform.position);
-                        if (tmp == distance)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Up;
-                                    distance = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp > distance)
-                        {
-                            if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Up;
-                                distance = tmp;
-                            }
-                        }
-                    }
-
-                    if (_Down != null)
-                    {
-                        _EnemyDirection = new Vector2Int(0, -1);
-                        tmp = Vector3.Distance(playerpos, _Down.transform.position);
-
-
-                        if (tmp == distance)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Down;
-                                    distance = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp > distance)
-                        {
-                            if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Down;
-                                distance = tmp;
-                            }
-                        }
-                    }
-
-                    if (_Left != null)
-                    {
-                        _EnemyDirection = new Vector2Int(-1, 0);
-                        tmp = Vector3.Distance(playerpos, _Left.transform.position);
-
-                        if (tmp == distance)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Left;
-                                    distance = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp > distance)
-                        {
-                            if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Left;
-                                distance = tmp;
-                            }
-                        }
-                    }
-
-                    if (_Right != null)
-                    {
-                        _EnemyDirection = new Vector2Int(1, 0);
-                        tmp = Vector3.Distance(playerpos, _Right.transform.position);
-
-                        if (tmp == distance)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Right;
-                                    distance = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp > distance)
-                        {
-                            if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Right;
-                                distance = tmp;
-                            }
-                        }
-                    }
-
-                    // プレイヤーとネズミの距離を取得
-                    tmp2 = Vector3.Distance(playerpos, this.transform.position);
-                    if (moveobj != null)
-                    {
-                        // プレイヤーとムーブ先のパネルの距離を取得
-                        tmp = Vector3.Distance(playerpos, moveobj.transform.position);
-
-                        if (tmp2 < tmp)
-                        {
-                            _EnemyDirection = movedirection;
-                            _NextBlock = moveobj;
-                            _EnemyState = EnemyState.MOVE;
-                        }
-                        else
-                            _EnemyState = EnemyState.STAY;
-
-                    }
-                    else
-                        _EnemyState = EnemyState.STAY;
-
-                }
-                // 裏
-                else
-                {
-                    if (_Up != null)
-                    {
-                        _EnemyDirection = new Vector2Int(0, 1);
-                        tmp = Vector3.Distance(playerpos, _Up.transform.position);
-                        if (tmp == distance2)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Up;
-                                    distance2 = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp < distance2)
-                        {
-                            if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Up;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-
-                    if (_Down != null)
-                    {
-                        _EnemyDirection = new Vector2Int(0, -1);
-                        tmp = Vector3.Distance(playerpos, _Down.transform.position);
-                        if (tmp == distance2)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Down;
-                                    distance2 = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp < distance2)
-                        {
-                            if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Down;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-
-                    if (_Left != null)
-                    {
-                        _EnemyDirection = new Vector2Int(-1, 0);
-                        tmp = Vector3.Distance(playerpos, _Left.transform.position);
-                        if (tmp == distance2)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Left;
-                                    distance2 = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp < distance2)
-                        {
-                            if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Left;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-
-                    if (_Right != null)
-                    {
-                        _EnemyDirection = new Vector2Int(1, 0);
-                        tmp = Vector3.Distance(playerpos, _Right.transform.position);
-                        if (tmp == distance2)
-                        {
-                            random = Random.value;
-                            if (random < 0.5f)
-                            {
-                                if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                                {
-                                    movedirection = _EnemyDirection;
-                                    moveobj = _Right;
-                                    distance2 = tmp;
-                                }
-                            }
-                        }
-                        else if (tmp < distance2)
-                        {
-                            if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Right;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-
-                    // プレイヤーとネズミの距離を取得
-                    tmp2 = Vector3.Distance(playerpos, this.transform.position);
-                    if (moveobj != null)
-                    {
-                        // プレイヤーとムーブ先のパネルの距離を取得
-                        tmp = Vector3.Distance(playerpos, moveobj.transform.position);
-
-                        if (tmp < tmp2)
-                        {
-                            _EnemyDirection = movedirection;
-                            _NextBlock = moveobj;
-                            _EnemyState = EnemyState.MOVE;
-                        }
-                        else
-                            _EnemyState = EnemyState.STAY;
-
-                    }
-                    else
-                        _EnemyState = EnemyState.STAY;
-
+                    _NextBlock = moveobj;
+                    _EnemyState = EnemyState.MOVE;
                 }
             }
-            _TurnCount = 0;
         }
+        _TurnCount = 0;
     }
-
 
     // ２ターンに１度行動する　たまに１ターンに１度行動（現状50%位）　レベル１の壁をかじる
     public void Level4()
@@ -3656,7 +2673,8 @@ public class EnemyControl : MonoBehaviour
 
     }
 
-    // 毎ターン行動する。レベル２の硬さのオブジェクトをかじる
+    // 元々の仕様は毎ターン行動する。レベル２の硬さのオブジェクトをかじる
+    // 毎ターン行動する。壁をかじらない
     public void Level6()
 
     {
@@ -3678,255 +2696,7 @@ public class EnemyControl : MonoBehaviour
         // チーズみつけてる
         if (_Cheese != null)
         {
-            // 表
-            if (_IsFront)
-            {
-                if (_Up != null)
-                {
-                    _EnemyDirection = new Vector2Int(0, 1);
-                    tmp = Vector3.Distance(_Cheese.transform.position, _Up.transform.position);
-                    if (tmp == distance2)
-                    {
-                        random = Random.value;
-                        if (random < 0.5f)
-                        {
-                            if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Up;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-                    else if (tmp < distance2)
-                    {
-                        if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                        {
-                            movedirection = _EnemyDirection;
-                            moveobj = _Up;
-                            distance2 = tmp;
-                        }
-                    }
-                }
-
-                if (_Down != null)
-                {
-                    _EnemyDirection = new Vector2Int(0, -1);
-                    tmp = Vector3.Distance(_Cheese.transform.position, _Down.transform.position);
-                    if (tmp == distance2)
-                    {
-                        random = Random.value;
-                        if (random < 0.5f)
-                        {
-                            if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Down;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-                    else if (tmp < distance2)
-                    {
-                        if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                        {
-                            movedirection = _EnemyDirection;
-                            moveobj = _Down;
-                            distance2 = tmp;
-                        }
-                    }
-                }
-
-                if (_Left != null)
-                {
-                    _EnemyDirection = new Vector2Int(-1, 0);
-                    tmp = Vector3.Distance(_Cheese.transform.position, _Left.transform.position);
-                    if (tmp == distance2)
-                    {
-                        random = Random.value;
-                        if (random < 0.5f)
-                        {
-                            if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Left;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-                    else if (tmp < distance2)
-                    {
-                        if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                        {
-                            movedirection = _EnemyDirection;
-                            moveobj = _Left;
-                            distance2 = tmp;
-                        }
-                    }
-                }
-
-                if (_Right != null)
-                {
-                    _EnemyDirection = new Vector2Int(1, 0);
-                    tmp = Vector3.Distance(_Cheese.transform.position, _Right.transform.position);
-                    if (tmp == distance2)
-                    {
-                        random = Random.value;
-                        if (random < 0.5f)
-                        {
-                            if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Right;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-                    else if (tmp < distance2)
-                    {
-                        if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                        {
-                            movedirection = _EnemyDirection;
-                            moveobj = _Right;
-                            distance2 = tmp;
-                        }
-                    }
-                }
-            }
-            // 裏
-            else
-            {
-                if (_Up != null)
-                {
-                    _EnemyDirection = new Vector2Int(0, 1);
-                    tmp = Vector3.Distance(_Cheese.transform.position, _Up.transform.position);
-                    if (tmp == distance2)
-                    {
-                        random = Random.value;
-                        if (random < 0.5f)
-                        {
-                            if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Up;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-                    else if (tmp < distance2)
-                    {
-                        if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                        {
-                            movedirection = _EnemyDirection;
-                            moveobj = _Up;
-                            distance2 = tmp;
-                        }
-                    }
-                }
-
-                if (_Down != null)
-                {
-                    _EnemyDirection = new Vector2Int(0, -1);
-                    tmp = Vector3.Distance(_Cheese.transform.position, _Down.transform.position);
-                    if (tmp == distance2)
-                    {
-                        random = Random.value;
-                        if (random < 0.5f)
-                        {
-                            if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Down;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-                    else if (tmp < distance2)
-                    {
-                        if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                        {
-                            movedirection = _EnemyDirection;
-                            moveobj = _Down;
-                            distance2 = tmp;
-                        }
-                    }
-                }
-
-                if (_Left != null)
-                {
-                    _EnemyDirection = new Vector2Int(-1, 0);
-                    tmp = Vector3.Distance(_Cheese.transform.position, _Left.transform.position);
-                    if (tmp == distance2)
-                    {
-                        random = Random.value;
-                        if (random < 0.5f)
-                        {
-                            if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Left;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-                    else if (tmp < distance2)
-                    {
-                        if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                        {
-                            movedirection = _EnemyDirection;
-                            moveobj = _Left;
-                            distance2 = tmp;
-                        }
-                    }
-                }
-
-                if (_Right != null)
-                {
-                    _EnemyDirection = new Vector2Int(1, 0);
-                    tmp = Vector3.Distance(_Cheese.transform.position, _Right.transform.position);
-                    if (tmp == distance2)
-                    {
-                        random = Random.value;
-                        if (random < 0.5f)
-                        {
-                            if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                            {
-                                movedirection = _EnemyDirection;
-                                moveobj = _Right;
-                                distance2 = tmp;
-                            }
-                        }
-                    }
-                    else if (tmp < distance2)
-                    {
-                        if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
-                        {
-                            movedirection = _EnemyDirection;
-                            moveobj = _Right;
-                            distance2 = tmp;
-                        }
-                    }
-                }
-            }
-
-            // チーズとネズミのいる位置を比較
-            tmp2 = Vector3.Distance(_Cheese.transform.position, this.transform.position);
-            if (moveobj != null)
-            {
-                // チーズとムーブ先のパネルの位置を比較
-                tmp = Vector3.Distance(_Cheese.transform.position, moveobj.transform.position);
-                if (tmp < tmp2)
-                {
-                    _EnemyDirection = movedirection;
-                    _NextBlock = moveobj;
-                    _EnemyState = EnemyState.MOVE;
-                }
-            }
-            else
-            {
-                _EnemyState = EnemyState.STAY;
-
-            }
+            CheeseMove();
         }
         // チーズ見つけてない
         else
@@ -4216,6 +2986,154 @@ public class EnemyControl : MonoBehaviour
 
     }
 
+    // チーズをみつけていたらチーズの方へ向かう
+    private void CheeseMove()
+    {
+
+
+        GameObject moveobj = null;
+        Vector2Int movedirection = new Vector2Int();
+
+        float distance = 10000.0f;
+        float tmp = 0.0f;
+        float tmp2 = 0.0f;
+        float random;
+
+        if (_Up != null)
+        {
+            _EnemyDirection = new Vector2Int(0, 1);
+            tmp = Vector3.Distance(_Cheese.transform.position, _Up.transform.position);
+            if (tmp == distance)
+            {
+                random = Random.value;
+                if (random < 0.5f)
+                {
+                    if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                    {
+                        movedirection = _EnemyDirection;
+                        moveobj = _Up;
+                        distance = tmp;
+                    }
+                }
+            }
+            else if (tmp < distance)
+            {
+                if (_Up.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                {
+                    movedirection = _EnemyDirection;
+                    moveobj = _Up;
+                    distance = tmp;
+                }
+            }
+        }
+
+        if (_Down != null)
+        {
+            _EnemyDirection = new Vector2Int(0, -1);
+            tmp = Vector3.Distance(_Cheese.transform.position, _Down.transform.position);
+            if (tmp == distance)
+            {
+                random = Random.value;
+                if (random < 0.5f)
+                {
+                    if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                    {
+                        movedirection = _EnemyDirection;
+                        moveobj = _Down;
+                        distance = tmp;
+                    }
+                }
+            }
+            else if (tmp < distance)
+            {
+                if (_Down.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                {
+                    movedirection = _EnemyDirection;
+                    moveobj = _Down;
+                    distance = tmp;
+                }
+            }
+        }
+
+        if (_Left != null)
+        {
+            _EnemyDirection = new Vector2Int(-1, 0);
+            tmp = Vector3.Distance(_Cheese.transform.position, _Left.transform.position);
+            if (tmp == distance)
+            {
+                random = Random.value;
+                if (random < 0.5f)
+                {
+                    if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                    {
+                        movedirection = _EnemyDirection;
+                        moveobj = _Left;
+                        distance = tmp;
+                    }
+                }
+            }
+            else if (tmp < distance)
+            {
+                if (_Left.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                {
+                    movedirection = _EnemyDirection;
+                    moveobj = _Left;
+                    distance = tmp;
+                }
+            }
+        }
+
+        if (_Right != null)
+        {
+            _EnemyDirection = new Vector2Int(1, 0);
+            tmp = Vector3.Distance(_Cheese.transform.position, _Right.transform.position);
+            if (tmp == distance)
+            {
+                random = Random.value;
+                if (random < 0.5f)
+                {
+                    if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                    {
+                        movedirection = _EnemyDirection;
+                        moveobj = _Right;
+                        distance = tmp;
+                    }
+                }
+            }
+            else if (tmp < distance)
+            {
+                if (_Right.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _EnemyDirection))
+                {
+                    movedirection = _EnemyDirection;
+                    moveobj = _Right;
+                    distance = tmp;
+                }
+            }
+        }
+
+
+
+        // ここの処理間違えて消してしまったからあとで確認が必要
+        // チーズとネズミの距離を取得
+        tmp2 = Vector3.Distance(_Cheese.transform.position, this.transform.position);
+        if (moveobj != null)
+        {
+            // チーズとムーブ先のパネルの距離を取得
+            tmp = Vector3.Distance(_Cheese.transform.position, moveobj.transform.position);
+
+            if (tmp2 < tmp)
+            {
+                _EnemyDirection = movedirection;
+                _NextBlock = moveobj;
+                _EnemyState = EnemyState.MOVE;
+            }
+
+        }
+        else
+            _EnemyState = EnemyState.STAY;
+
+
+    }
 
     public void PlayerKill()
     {
@@ -4361,5 +3279,45 @@ public class EnemyControl : MonoBehaviour
     public Vector2Int GetLocalPosition() { return _EnemyLocalPosition; }
     public void SetCheese(GameObject cheese) { _Cheese = cheese; }
     public int GetCheeseSearchRange() { return _CheeseSearchRange; }
+
+    private GameObject SelectMovePanel(GameObject panelobj, GameObject movepanel, Vector2Int direction, float distance)
+    {
+        _Player = _GameManager.gameObject.GetComponent<GameManagerScript>().GetPlayer();
+        Vector3 playerpos = _Player.transform.position;
+
+        float tmp = 0.0f;
+        float random;
+
+        if (panelobj != null)
+        {
+            //プレイヤーと上パネルの距離を取得
+            tmp = Vector3.Distance(playerpos, panelobj.transform.position);
+
+            random = Random.value;
+
+            if (_IsFront)
+            {
+                // 壁がない・離れる or　同等の距離の時ランダムで決める
+                if (panelobj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, direction) &&
+                   ((tmp == distance && random < 0.5f) || tmp > distance))
+                {
+                    _EnemyDirection = direction;
+                    movepanel = panelobj;
+                    distance = tmp;
+                }
+            }
+            else
+            {
+                if (panelobj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, direction) &&
+                    ((tmp == distance && random < 0.5f) || tmp < distance))
+                {
+                    _EnemyDirection = direction;
+                    movepanel = panelobj;
+                    distance = tmp;
+                }
+            }
+        }
+        return movepanel;
+    }
 }
 
