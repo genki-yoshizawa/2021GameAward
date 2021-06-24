@@ -28,6 +28,11 @@ public class GameOverScreen : MonoBehaviour
     float _ChangeMenuSceneCount = 0;
     float _ChangeMenuSceneTime = 1.0f;
 
+    void Start()
+    {
+        _Gauss = Camera.main.GetComponent<Gauss>();
+    }
+
     void Update()
     {
         GaussFilter();

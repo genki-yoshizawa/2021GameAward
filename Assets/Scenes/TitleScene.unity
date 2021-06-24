@@ -2272,7 +2272,7 @@ GameObject:
   - component: {fileID: 1896666084}
   - component: {fileID: 1896666083}
   m_Layer: 5
-  m_Name: Start
+  m_Name: TitleStart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2514,10 +2514,6 @@ MonoBehaviour:
   _SmokeLeft: {fileID: 1912340769221470851}
   _SmokeRight: {fileID: 773715577}
   _StartButton: {fileID: 1896666081}
-  _Distance: 6
-  _Hight: 0
-  _Time: 0.5
-  _MaxSize: 3.5
 --- !u!4 &2060547878 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3945064856608943147, guid: 0b3b5c2396718d341bd0a251bf5fb880, type: 3}

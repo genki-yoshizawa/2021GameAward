@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class ButtonMove : MonoBehaviour
 {
-    [SerializeField]
-    private float _Length;
+    private float _Length = 7.0f;
 
-    [SerializeField]
-    private float _Speed;
+    private float _Speed = 4.0f;
 
 
     [SerializeField]

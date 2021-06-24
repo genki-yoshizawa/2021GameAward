@@ -10,8 +10,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
 
     private int _ChidCount;
 
-    [SerializeField]
-    private float _Radius  =1;
+    private float _Radius = 3.0f;
 
     [SerializeField]
     private GameObject _ChoiceStage;
@@ -21,8 +20,8 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
 
     
     private bool _Move = false;
-    [SerializeField]
-    private float _MoveSpeed;//移動スピード
+
+    private float _MoveSpeed = 5.0f;//移動スピード
 
     private float _MoveTime = 0.0f;//移動時間総数
 
@@ -36,8 +35,6 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
     private AudioClip _ButtonCursorSound;//カーソル移動音
     [SerializeField]
     private AudioClip _ButtonDecisionSound;//決定音
-    [SerializeField]
-    private AudioClip _ButtonChoiceSound;//選択音
 
     public static int _ChoiceStageNumber = 0;
     public static int _MaxTurn = 0;
