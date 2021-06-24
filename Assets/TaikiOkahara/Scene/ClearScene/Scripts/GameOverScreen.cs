@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class GameOverScreen : MonoBehaviour
 {
 
-    [SerializeField]
+    //[SerializeField]
     Gauss _Gauss;
 
     [SerializeField]
@@ -30,6 +30,7 @@ public class GameOverScreen : MonoBehaviour
 
     void Start()
     {
+        //_Gauss = Camera.main.GetComponent<Gauss>();
         _Gauss = Camera.main.GetComponent<Gauss>();
     }
 

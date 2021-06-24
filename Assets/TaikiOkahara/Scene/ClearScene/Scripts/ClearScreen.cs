@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class ClearScreen : MonoBehaviour
 {
 
-    [SerializeField] Gauss _Gauss;
+    Gauss _Gauss;
     [SerializeField] GameObject _Pause = null;
     [SerializeField] private Animator _StarAnimator;
     [SerializeField] private Animator _ClearScreenAnimator;
@@ -40,7 +40,8 @@ public class ClearScreen : MonoBehaviour
 
     void Start()
     {
-        _Gauss = Camera.main.GetComponent<Gauss>();        
+        //_Gauss = Camera.main.GetComponent<Gauss>();        
+        _Gauss = Camera.main.GetComponent<Gauss>();
     }
 
     void Update()
