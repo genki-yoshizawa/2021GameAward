@@ -8,7 +8,7 @@ public class ClearScreen : MonoBehaviour
 {
 
     Gauss _Gauss;
-    [SerializeField] GameObject _Pause = null;
+    GameObject _Pause = null;
     [SerializeField] private Animator _StarAnimator;
     [SerializeField] private Animator _ClearScreenAnimator;
     [SerializeField] private GameObject _Comment;
@@ -42,6 +42,8 @@ public class ClearScreen : MonoBehaviour
     {
         //_Gauss = Camera.main.GetComponent<Gauss>();        
         _Gauss = Camera.main.GetComponent<Gauss>();
+
+        _Pause = GameObject.Find("Pause");
     }
 
     void Update()
