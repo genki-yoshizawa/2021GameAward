@@ -83,8 +83,6 @@ public class MainCameraScript : MonoBehaviour
             }
         }
 
-        _isFront = _PlayerObject.GetComponent<PlayerControl>().GetIsFront();
-
         GameObject[][] blocks = _GameManager.GetComponent<GameManagerScript>().GetBlocks();
 
         Vector2 minPos = new Vector2(0.0f, 0.0f);
@@ -196,7 +194,9 @@ public class MainCameraScript : MonoBehaviour
             return;
         }
 
-        if (_isGameStartCameraWork) return;
+        // スタートカメラワーク時はreturn
+        if (_isGameStartCameraWork)
+            return;
 
         // プレイヤーが動いている時は入力処理を行わずreturn
         if (_isPlayerMove)
@@ -216,17 +216,17 @@ public class MainCameraScript : MonoBehaviour
         float rightStickVertical = Input.GetAxis("Controller_R_Stick_Vertical");
         float rightStickHorizontal = Input.GetAxis("Controller_R_Stick_Horizontal");
 
-        if (Input.GetButtonDown("Controller_Y"))
+        if (Input.GetButtonDown("Controller_Y") || Input.GetKeyDown(KeyCode.Y)) //暫定的なキーボード入力
         {
             ResetCamera();
         }
 
-        if (Input.GetButtonDown("Controller_RB"))
+        if (Input.GetButtonDown("Controller_RB") || Input.GetKeyDown(KeyCode.T))//暫定的なキーボード入力
         {
             ExchangeTopToFollowPlayer();
         }
 
-        if (Input.GetButtonDown("Controller_LB"))
+        if (Input.GetButtonDown("Controller_LB") || Input.GetKeyDown(KeyCode.R))//暫定的なキーボード入力
         {
             ReturnCamera();
         }
@@ -235,16 +235,30 @@ public class MainCameraScript : MonoBehaviour
             return;
         // これ以降の処理はトップビューの時行わない
 
-        if (trigger < -_InputDeadZone)
+        if (trigger < -_InputDeadZone || Input.GetKey(KeyCode.Keypad9))
             ZoomInOut(/*_isZoomIn = */ false);
-        else if (trigger > _InputDeadZone)
+        else if (trigger > _InputDeadZone || Input.GetKey(KeyCode.Keypad3))
             ZoomInOut(/*_isZoomIn = */ true);
         else
             _ZoomVelocity = 0.0f;
 
+        //暫定的なキーボード入力
+        float horizontalMove = 0.0f;
+        float verticalMove = 0.0f;
+        if (Input.GetKey(KeyCode.Keypad2))
+            verticalMove = -1.0f;
+        if (Input.GetKey(KeyCode.Keypad4))
+            horizontalMove = 1.0f;
+        if (Input.GetKey(KeyCode.Keypad6))
+            horizontalMove = -1.0f;
+        if (Input.GetKey(KeyCode.Keypad8))
+            verticalMove = 1.0f;
         if ((rightStickVertical < -_InputDeadZone || rightStickVertical > _InputDeadZone) || (rightStickHorizontal < -_InputDeadZone || rightStickHorizontal > _InputDeadZone))        
             FreeCamera(new Vector2(rightStickHorizontal, rightStickVertical));
-        
+        else if (verticalMove != 0.0f || horizontalMove != 0.0f)
+            FreeCamera(new Vector2(horizontalMove, verticalMove));
+
+
     }
 
 
@@ -515,6 +529,8 @@ public class MainCameraScript : MonoBehaviour
             }
             yield return null;//こうすることで次のフレームにこれ以降の処理（この場合は先頭）を行うようになる
         }
+
+        _isFront = _PlayerObject.GetComponent<PlayerControl>().GetIsFront();
     }
     
     private IEnumerator PlayerIsMoveCameraWork()
