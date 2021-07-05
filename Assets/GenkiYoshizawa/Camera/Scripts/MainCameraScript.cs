@@ -429,7 +429,8 @@ public class MainCameraScript : MonoBehaviour
 
 
     private void SetCameraIsFront(bool front) { _isFront = front; }
-    private bool GetIsFront() { return _isFront; }
+    public bool GetIsFront() { return _isFront; }
+    public bool GetIsTop() { return _isTop; }
 
     public void SetIsPlayerMove(bool move)
     {
