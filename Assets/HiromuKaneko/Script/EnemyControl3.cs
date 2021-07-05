@@ -151,6 +151,13 @@
 //            {
 //                _PassedTime = _WalkTime;
 //                _EnemyAnimation.SetBool("Walk", false);
+//                if (_Player.gameObject.GetComponent<PlayerControl>().GetIsFront() != _IsFront)
+//                {
+//                    if (_Player.gameObject.GetComponent<PlayerControl>().GetLocalPosition() == _EnemyLocalPosition)
+//                    {
+//                        StartCoroutine("PlayerDown");
+//                    }
+//                }
 //            }
 
 //            Rotate();
@@ -158,6 +165,7 @@
 
 //            if (!_EnemyAnimation.GetBool("Walk"))
 //                _PassedTime = 0.0f;
+
 
 //        }
 
@@ -383,17 +391,6 @@
 //                        _EnemyAnimation.SetBool("Walk", true);
 //                }
 
-//                if (_Player.gameObject.GetComponent<PlayerControl>().GetIsFront() != _IsFront)
-//                {
-//                    if (_Player.gameObject.GetComponent<PlayerControl>().GetLocalPosition() == _EnemyLocalPosition)
-//                    {
-//                        this.GetComponent<GameOverEnemy>().StartGameOverEnemyAnimation();
-
-//                        _Player.gameObject.GetComponent<PlayerControl>().SetIsExist(false);
-//                    }
-//                }
-
-
 //                _EnemyAnimation.SetBool("Walk", true);
 
 //            }
@@ -507,6 +504,15 @@
 //            }
 //            else
 //            {
+
+
+//                if (_Player.gameObject.GetComponent<PlayerControl>().GetIsFront() != _IsFront)
+//                {
+//                    if (_Player.gameObject.GetComponent<PlayerControl>().GetLocalPosition() == _EnemyLocalPosition)
+//                    {
+//                        StartCoroutine("PlayerDown");
+//                    }
+//                }
 //                if (!_Player.gameObject.GetComponent<PlayerControl>().GetIsFront() && !_IsFront)
 //                {
 //                    PlayerKill();
@@ -3143,6 +3149,19 @@
 //        else
 //            _EnemyState = EnemyState.STAY;
 
+
+//    }
+
+//    private IEnumerator PlayerDown()
+//    {
+
+//        this.GetComponent<GameOverEnemy>().StartGameOverEnemyAnimation();
+
+//        yield return new WaitForSeconds(2.0f);
+
+//        _Player.gameObject.GetComponent<PlayerControl>().SetIsExist(false);
+
+//        yield return null;
 
 //    }
 

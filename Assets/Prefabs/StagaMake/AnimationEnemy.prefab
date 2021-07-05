@@ -4796,7 +4796,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a832bf72df3a6434d9baaeb2efbf2e6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _EnemyLevel: 0
+  _EnemyLevel: 5
   _ActCount: 1
   _BreakLevel: 0
   _BreakTurn: 0
@@ -4815,7 +4815,6 @@ MonoBehaviour:
   _Left: {fileID: 0}
   _Right: {fileID: 0}
   _NextBlock: {fileID: 0}
-  _WallDensity: []
 --- !u!114 &1637879605061773830
 MonoBehaviour:
   m_ObjectHideFlags: 0
