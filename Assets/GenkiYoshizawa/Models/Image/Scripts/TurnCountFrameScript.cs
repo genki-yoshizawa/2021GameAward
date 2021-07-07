@@ -7,10 +7,15 @@ public class TurnCountFrameScript : MonoBehaviour
 {
     [Header("Assetから適用する数字テクスチャを入れてください")]
     [SerializeField] private Sprite[] _NumberSprite;
-    [Header("ターン減少テクスチャを表示する秒数")]
+    [Header("ターン減少テクスチャを表示(光らせる)する秒数")]
     [SerializeField] private float _TurnCountAnimTime = 1.0f;
+    [Header("10以上時の数字同士の距離(中心同士)")]
+    [SerializeField] private float _NemuberTextureOffset = 10.0f;
 
-    private List<GameObject> _MyImageObject;
+    GameObject _NumberTextureOneDigit;
+    GameObject _NumberTextureTwoDigit;
+
+    Vector3 _NumberLocalPosition;
 
     private bool _isTurnCountAnim = false;
 
@@ -21,14 +26,21 @@ public class TurnCountFrameScript : MonoBehaviour
 
     private float _PassedTime = 0.0f;
 
+
     // Start is called before the first frame update
     void Start()
     {
         _TurnManagerScript = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerScript>().GetTurnManager().GetComponent<TurnManager>();
-        
+
+        _NumberTextureOneDigit = transform.GetChild(0).gameObject;
+        _NumberTextureTwoDigit = transform.GetChild(1).gameObject;
+
+        _NumberLocalPosition = _NumberTextureOneDigit.transform.localPosition;
+
         int turnLimit = _TurnLimit = StageManager._MaxTurn;
         DisplayTurn(turnLimit, false);
 
+        
     }
 
     // Update is called once per frame
@@ -79,15 +91,27 @@ public class TurnCountFrameScript : MonoBehaviour
             displayNumber = digit % 10;
             digit = digit / 10;
             number.Add(displayNumber);
-
         }
+
+        // 一桁目の数字の設定
         if (number[0] < 0)
-            transform.GetChild(0).GetComponent<Image>().sprite = _NumberSprite[0];
-        else
-            transform.GetChild(0).GetComponent<Image>().sprite = _NumberSprite[number[0] + (isLight ? 10 : 0)];
+            _NumberTextureOneDigit.GetComponent<Image>().sprite = _NumberSprite[0];
+        else                      
+            _NumberTextureOneDigit.GetComponent<Image>().sprite = _NumberSprite[number[0] + (isLight ? 10 : 0)];
+
+        // 二桁目の数字の設定
         if (number.Count > 1)
-            transform.GetChild(1).GetComponent<Image>().sprite = _NumberSprite[number[1] + (isLight ? 10 : 0)];
+        { //桁が二桁
+            _NumberTextureTwoDigit.SetActive(true);
+            _NumberTextureTwoDigit.GetComponent<Image>().sprite = _NumberSprite[number[1] + (isLight ? 10 : 0)];
+            _NumberTextureOneDigit.GetComponent<RectTransform>().localPosition = new Vector3(_NumberLocalPosition.x + _NemuberTextureOffset * 0.5f, _NumberLocalPosition.y, _NumberLocalPosition.z);
+            _NumberTextureTwoDigit.GetComponent<RectTransform>().localPosition = new Vector3(_NumberLocalPosition.x - _NemuberTextureOffset * 0.5f, _NumberLocalPosition.y, _NumberLocalPosition.z);
+        }
         else
-            transform.GetChild(1).GetComponent<Image>().sprite = _NumberSprite[0 + (isLight ? 10 : 0)];
+        { //桁が一桁
+            //_NumberTextureTwoDigit.sprite = _NumberSprite[0 + (isLight ? 10 : 0)];
+            _NumberTextureOneDigit.GetComponent<RectTransform>().localPosition = _NumberLocalPosition;
+            _NumberTextureTwoDigit.SetActive(false);
+        }
     }
 }
