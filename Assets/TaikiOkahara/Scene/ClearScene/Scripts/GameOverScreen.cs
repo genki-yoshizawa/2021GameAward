@@ -10,7 +10,7 @@ public class GameOverScreen : MonoBehaviour
     //[SerializeField]
     Gauss _Gauss;
 
-    [SerializeField]
+    //[SerializeField]
     GameObject _Pause = null;
 
     [SerializeField]
@@ -32,6 +32,8 @@ public class GameOverScreen : MonoBehaviour
     {
         //_Gauss = Camera.main.GetComponent<Gauss>();
         _Gauss = Camera.main.GetComponent<Gauss>();
+
+        _Pause = GameObject.Find("Pause");
     }
 
     void Update()

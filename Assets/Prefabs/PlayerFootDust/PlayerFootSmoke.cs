@@ -30,7 +30,6 @@ public class PlayerFootSmoke : MonoBehaviour
         // 速度が0以外なら
         if (distance != 0)
         {
-            Debug.Log("ケムリ再生");
             // 再生
             if (!_FootSmoke.isEmitting)
             {
@@ -39,7 +38,6 @@ public class PlayerFootSmoke : MonoBehaviour
         }
         else
         {
-            Debug.Log("ケムリ停止");
             // 停止
             if (_FootSmoke.isEmitting)
             {

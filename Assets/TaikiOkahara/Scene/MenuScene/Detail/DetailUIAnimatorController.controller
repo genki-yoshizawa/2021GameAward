@@ -84,7 +84,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: UIDisplay
-  m_Speed: 3
+  m_Speed: 4
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 4861388834130219999}
@@ -165,7 +165,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: UIOut
-  m_Speed: 0
+  m_Speed: 4
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 8367667360451632147}

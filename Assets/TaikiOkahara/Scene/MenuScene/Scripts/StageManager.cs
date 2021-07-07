@@ -66,7 +66,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         }
 
         _DetailUI.gameObject.GetComponent<DetailUI>().DetailUIAnimation();
-        _DetailUI.gameObject.GetComponent<DetailUINumber>().SetScore(_ChoiceStage.GetComponent<Stage>().GetClearParsentage());
+        //_DetailUI.gameObject.GetComponent<DetailUINumber>().SetScore(_ChoiceStage.GetComponent<Stage>().GetClearParsentage());
 
     }
 
@@ -82,8 +82,10 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
             for (int i = 0; i < _ChidCount; i++)
             {
 
-                if (transform.GetChild(i).gameObject.transform.GetChild(0).GetComponent<Renderer>() != null)
-                    transform.GetChild(i).gameObject.transform.GetChild(0).GetComponent<Renderer>().enabled = true;
+                //if (transform.GetChild(i).gameObject.transform.GetChild(0).GetComponent<Renderer>() != null)
+                //    transform.GetChild(i).gameObject.transform.GetChild(0).GetComponent<Renderer>().enabled = true;
+
+                transform.GetChild(i).gameObject.transform.GetChild(0).gameObject.SetActive(true);
 
                 if (transform.GetChild(i).gameObject.GetComponent<Stage>() != null)
                     transform.GetChild(i).gameObject.GetComponent<Stage>().enabled = true;
@@ -92,14 +94,16 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
 
             transform.GetChild(_ChidCount).gameObject.SetActive(true);
 
-            _DetailUI.gameObject.GetComponent<DetailUINumber>().SetScore(_ChoiceStage.GetComponent<Stage>().GetClearParsentage());
+            //_DetailUI.gameObject.GetComponent<DetailUINumber>().SetScore(_ChoiceStage.GetComponent<Stage>().GetClearParsentage());
         }
         else
         {
             for (int i = 0; i < _ChidCount; i++)
             {
-                if (transform.GetChild(i).gameObject.transform.GetChild(0).GetComponent<Renderer>() != null)
-                    transform.GetChild(i).gameObject.transform.GetChild(0).GetComponent<Renderer>().enabled = false;
+                //if (transform.GetChild(i).gameObject.transform.GetChild(0).GetComponent<Renderer>() != null)
+                //    transform.GetChild(i).gameObject.transform.GetChild(0).GetComponent<Renderer>().enabled = false;
+
+                transform.GetChild(i).gameObject.transform.GetChild(0).gameObject.SetActive(false);
 
                 if (transform.GetChild(i).gameObject.GetComponent<Stage>() != null)
                     transform.GetChild(i).gameObject.GetComponent<Stage>().enabled = false;
@@ -141,11 +145,11 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
             if (_ChoiceStage.transform == transform.GetChild(i))
             {
 
-                transform.GetChild(i).GetChild(0).GetComponent<Renderer>().material.color = new Color(0.6f, 0.6f, 0.6f, 1);
+                //transform.GetChild(i).GetChild(0).GetComponent<Renderer>().material.color = new Color(0.6f, 0.6f, 0.6f, 1);
             }
             else
             {
-                transform.GetChild(i).GetChild(0).GetComponent<Renderer>().material.color = new Color(0.3f, 0.3f, 0.3f, 1);
+                //transform.GetChild(i).GetChild(0).GetComponent<Renderer>().material.color = new Color(0.3f, 0.3f, 0.3f, 1);
             }
         }
 
@@ -182,7 +186,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         if (_MoveTime >= 1.0f)
         {
             _DetailUI.gameObject.GetComponent<DetailUI>().DetailUIAnimation();
-            _DetailUI.gameObject.GetComponent<DetailUINumber>().SetScore(_ChoiceStage.GetComponent<Stage>().GetClearParsentage());
+            //_DetailUI.gameObject.GetComponent<DetailUINumber>().SetScore(_ChoiceStage.GetComponent<Stage>().GetClearParsentage());
             _MoveTime = 0.0f;
             _Move = false;
         }
@@ -203,15 +207,15 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
     void ChageNextStage()
     {
         //クリーン度を100にする
-        _ChoiceStage.GetComponent<Stage>().SetClearParsentage(100);
-
+        //_ChoiceStage.GetComponent<Stage>().SetClearParsentage(100);
+        _ChoiceStage.GetComponent<Stage>().Clear();
 
         bool allStageClear = true;
         //全てのステージが100ならムービーを流してメニューに戻る
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < _ChidCount; i++)
         {
             GameObject obj = this.gameObject.transform.GetChild(i).gameObject;
-            if (obj.GetComponent<Stage>().GetClearParsentage() != 100)
+            if (obj.GetComponent<Stage>().GetClear() == false)
             {
                 allStageClear = false;
             }
@@ -302,8 +306,10 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
 
         foreach (Transform child in transform)
         {
-            if (child.gameObject.transform.GetChild(0).GetComponent<Renderer>() != null)
-                child.gameObject.transform.GetChild(0).GetComponent<Renderer>().enabled = false;
+            //if (child.gameObject.transform.GetChild(0).GetComponent<Renderer>() != null)
+            //    child.gameObject.transform.GetChild(0).GetComponent<Renderer>().enabled = false;
+
+            child.gameObject.transform.GetChild(0).gameObject.SetActive(false);
 
             if (child.gameObject.GetComponent<Stage>() != null)
                 child.gameObject.GetComponent<Stage>().enabled = false;
@@ -331,7 +337,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
 
     public void UpdateUI()
     {
-        _DetailUI.gameObject.GetComponent<DetailUINumber>().SetScore(_ChoiceStage.GetComponent<Stage>().GetClearParsentage());
+        //_DetailUI.gameObject.GetComponent<DetailUINumber>().SetScore(_ChoiceStage.GetComponent<Stage>().GetClearParsentage());
         _DetailUI.gameObject.GetComponent<DetailUI>().DetailUIAnimation();
 
         _ChoiceStageNumber = _ChoiceStage.GetComponent<Stage>().GetStageNumber();
