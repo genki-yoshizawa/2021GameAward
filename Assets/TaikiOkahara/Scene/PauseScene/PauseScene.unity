@@ -325,6 +325,10 @@ PrefabInstance:
       propertyPath: m_Navigation.m_Mode
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3685121466858681058, guid: c605f2f86c880cb47b5c4a8a9276f295, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3782935902399608142, guid: c605f2f86c880cb47b5c4a8a9276f295, type: 3}
       propertyPath: m_RootOrder
       value: 2

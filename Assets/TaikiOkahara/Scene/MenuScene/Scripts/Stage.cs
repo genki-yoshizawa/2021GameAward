@@ -10,8 +10,8 @@ public class Stage : MonoBehaviour
     [SerializeField]
     string _SceneName;
 
-    [SerializeField]
-    private int _ClearPercentage;
+    //[SerializeField]
+    //private int _ClearPercentage;
 
     [SerializeField]
     private Image _StageName;
@@ -33,8 +33,11 @@ public class Stage : MonoBehaviour
     private float _StartPos;
     private float _Speed = 1.0f;
 
+    float _YPos = -0.3f;
 
     private float _Time = 0;
+
+    bool _Clear = false;
 
     void Start()
     {
@@ -48,7 +51,7 @@ public class Stage : MonoBehaviour
         _Time += Time.deltaTime;
         float sin = Mathf.Sin(_Time * _Speed) * _Range;
         Vector3 pos = transform.position;
-        pos.y = sin;
+        pos.y = sin + _YPos;
         transform.position = pos;
 
 
@@ -56,7 +59,10 @@ public class Stage : MonoBehaviour
     }
 
     public string GetSceneName(){ return _SceneName;}
-    public int GetClearParsentage(){ return _ClearPercentage;}
-    public void SetClearParsentage(int clean){ _ClearPercentage = clean;}
+    //public int GetClearParsentage(){ return _ClearPercentage;}
+    //public void SetClearParsentage(int clean){ _ClearPercentage = clean;}
     public int GetStageNumber(){ return _StageNumber;}
+
+    public void Clear() { _Clear = true; }
+    public bool GetClear() { return _Clear; }
 }

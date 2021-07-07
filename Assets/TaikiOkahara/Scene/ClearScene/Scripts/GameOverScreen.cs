@@ -7,10 +7,10 @@ using UnityEngine.SceneManagement;
 public class GameOverScreen : MonoBehaviour
 {
 
-    [SerializeField]
+    //[SerializeField]
     Gauss _Gauss;
 
-    [SerializeField]
+    //[SerializeField]
     GameObject _Pause = null;
 
     [SerializeField]
@@ -30,7 +30,10 @@ public class GameOverScreen : MonoBehaviour
 
     void Start()
     {
+        //_Gauss = Camera.main.GetComponent<Gauss>();
         _Gauss = Camera.main.GetComponent<Gauss>();
+
+        _Pause = GameObject.Find("Pause");
     }
 
     void Update()

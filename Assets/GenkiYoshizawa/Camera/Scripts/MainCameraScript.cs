@@ -23,7 +23,7 @@ public class MainCameraScript : MonoBehaviour
     [SerializeField] private float _GameStartCameraWorkTime = 1.0f;
 
     private GameObject _GameManager = null;
-    private GameObject _TopViewObject = null;
+    private List<GameObject> _TopViewObject = null;
     private GameObject _PlayerObject = null;
 
     // 表か
@@ -46,6 +46,8 @@ public class MainCameraScript : MonoBehaviour
     // 正面ベクトルの保存(編集時にも使う)
     private Vector3 _SaveForward;
 
+    [Header("トップビューのカメラ視点の番号(編集用の整数)")]
+    [SerializeField] private int _EditTopViewNumber;
     [Header("トップビューのカメラ視点(編集用のbool)")]
     [SerializeField] private bool _EditTopView;
     private bool _CurEditTopView;
@@ -59,7 +61,7 @@ public class MainCameraScript : MonoBehaviour
     private float _SaveLookAtToPlayerOffset;
 
     private bool _isGameStartCameraWork; //スタート時のカメラワーク
-        
+
     // Start is called before the first frame update
     void Start()
     {
@@ -74,16 +76,16 @@ public class MainCameraScript : MonoBehaviour
 
         _PlayerObject = _GameManager.GetComponent<GameManagerScript>().GetPlayer();
 
+        _TopViewObject = new List<GameObject>();
+
         // ビューポイントが増えた時に対応しやすくするためにfor文
         for (int i = 0; i < transform.parent.childCount; ++i)
         {
             if (!transform.parent.GetChild(i).CompareTag("MainCamera"))
             {
-                _TopViewObject = transform.parent.GetChild(i).gameObject;
+                _TopViewObject.Add(transform.parent.GetChild(i).gameObject);
             }
         }
-
-        _isFront = _PlayerObject.GetComponent<PlayerControl>().GetIsFront();
 
         GameObject[][] blocks = _GameManager.GetComponent<GameManagerScript>().GetBlocks();
 
@@ -179,24 +181,38 @@ public class MainCameraScript : MonoBehaviour
             if (!_EditTopView)
                 return;
 
+            int topViewObjectCount = 0;
+
+            _TopViewObject = new List<GameObject>();
+
             // ビューポイントが増えた時に対応しやすくするためにfor文
             for (int i = 0; i < transform.parent.childCount; ++i)
             {
                 if (!transform.parent.GetChild(i).CompareTag("MainCamera"))
                 {
-                    _TopViewObject = transform.parent.GetChild(i).gameObject;
+                    if (_TopViewObject.Count < i)
+                    {
+                        _TopViewObject.Add(transform.parent.GetChild(i).gameObject);
+                    }
+                    else
+                    {
+                        _TopViewObject[topViewObjectCount] = transform.parent.GetChild(i).gameObject;
+                    }
+                    topViewObjectCount++;
                 }
             }
 
-            if (_TopViewObject == null)
+            if (_TopViewObject.Count <= 0)
                 return;
-            transform.position = _TopViewObject.transform.position;
-            transform.rotation = _TopViewObject.transform.transform.rotation;
+            transform.position = _TopViewObject[_EditTopViewNumber].transform.position;
+            transform.rotation = _TopViewObject[_EditTopViewNumber].transform.transform.rotation;
 
             return;
         }
 
-        if (_isGameStartCameraWork) return;
+        // スタートカメラワーク時はreturn
+        if (_isGameStartCameraWork)
+            return;
 
         // プレイヤーが動いている時は入力処理を行わずreturn
         if (_isPlayerMove)
@@ -216,17 +232,17 @@ public class MainCameraScript : MonoBehaviour
         float rightStickVertical = Input.GetAxis("Controller_R_Stick_Vertical");
         float rightStickHorizontal = Input.GetAxis("Controller_R_Stick_Horizontal");
 
-        if (Input.GetButtonDown("Controller_Y"))
+        if (Input.GetButtonDown("Controller_Y") || Input.GetKeyDown(KeyCode.Y)) //暫定的なキーボード入力
         {
             ResetCamera();
         }
 
-        if (Input.GetButtonDown("Controller_RB"))
+        if (Input.GetButtonDown("Controller_RB") || Input.GetKeyDown(KeyCode.T))//暫定的なキーボード入力
         {
             ExchangeTopToFollowPlayer();
         }
 
-        if (Input.GetButtonDown("Controller_LB"))
+        if (Input.GetButtonDown("Controller_LB") || Input.GetKeyDown(KeyCode.R))//暫定的なキーボード入力
         {
             ReturnCamera();
         }
@@ -235,16 +251,31 @@ public class MainCameraScript : MonoBehaviour
             return;
         // これ以降の処理はトップビューの時行わない
 
-        if (trigger < -_InputDeadZone)
+        if (trigger < -_InputDeadZone || Input.GetKey(KeyCode.Keypad9))
             ZoomInOut(/*_isZoomIn = */ false);
-        else if (trigger > _InputDeadZone)
+        else if (trigger > _InputDeadZone || Input.GetKey(KeyCode.Keypad3))
             ZoomInOut(/*_isZoomIn = */ true);
         else
             _ZoomVelocity = 0.0f;
 
-        if ((rightStickVertical < -_InputDeadZone || rightStickVertical > _InputDeadZone) || (rightStickHorizontal < -_InputDeadZone || rightStickHorizontal > _InputDeadZone))        
+        //暫定的なキーボード入力
+        float horizontalMove = 0.0f;
+        float verticalMove = 0.0f;
+        if (Input.GetKey(KeyCode.Keypad2))
+            verticalMove = -1.0f;
+        if (Input.GetKey(KeyCode.Keypad4))
+            horizontalMove = 1.0f;
+        if (Input.GetKey(KeyCode.Keypad6))
+            horizontalMove = -1.0f;
+        if (Input.GetKey(KeyCode.Keypad8))
+            verticalMove = 1.0f;
+
+        if ((rightStickVertical < -_InputDeadZone || rightStickVertical > _InputDeadZone) || (rightStickHorizontal < -_InputDeadZone || rightStickHorizontal > _InputDeadZone))
             FreeCamera(new Vector2(rightStickHorizontal, rightStickVertical));
-        
+        else if (verticalMove != 0.0f || horizontalMove != 0.0f)
+            FreeCamera(new Vector2(horizontalMove, verticalMove));
+
+
     }
 
 
@@ -275,7 +306,7 @@ public class MainCameraScript : MonoBehaviour
 
         transform.position = _CameraLookAt - transform.forward * _ToPlayerOffset;
     }
-   
+
     // ズームイン・アウトの関数
     private void ZoomInOut(bool isZoomIn)
     {
@@ -319,14 +350,17 @@ public class MainCameraScript : MonoBehaviour
         if (!_isTop)
         {
             _SaveForward = transform.forward;
-            transform.rotation = _TopViewObject.transform.transform.rotation;
+            int topViewObjectNumber = TargetTopViewObject();
+            GameObject targetTopViewObject = _TopViewObject[topViewObjectNumber];
+
+            transform.rotation = targetTopViewObject.transform.transform.rotation;
 
             if (_isFront)
-                transform.position = _TopViewObject.transform.position;
+                transform.position = targetTopViewObject.transform.position;
             else
             {
                 // 裏面の場合はTopViewをxz平面に鏡面反射し、z軸回転
-                transform.position = new Vector3(_TopViewObject.transform.position.x, -_TopViewObject.transform.position.y, -_TopViewObject.transform.position.z);
+                transform.position = new Vector3(targetTopViewObject.transform.position.x, -targetTopViewObject.transform.position.y, -targetTopViewObject.transform.position.z);
                 Vector3 newForward = new Vector3(transform.forward.x, -transform.forward.y, -transform.forward.z);
                 transform.LookAt(transform.position + newForward, -Vector3.up);
 
@@ -335,7 +369,7 @@ public class MainCameraScript : MonoBehaviour
         else
         {
             // トップビュー→通常カメラ
-            _CameraLookAt = _PlayerObject.transform.position;
+            //_CameraLookAt = _PlayerObject.transform.position;
             // 表裏でyの位置を変える
             _CameraLookAt.y = _CameraLookAt.y * (_isFront ? 1 : -1);
 
@@ -400,6 +434,7 @@ public class MainCameraScript : MonoBehaviour
         }
     }
 
+
     private bool CheckPlayerInDisplay()
     {
         Plane[] plane = GeometryUtility.CalculateFrustumPlanes(gameObject.GetComponent<Camera>());
@@ -413,9 +448,88 @@ public class MainCameraScript : MonoBehaviour
         return true;
     }
 
+    private int TargetTopViewObject()
+    {
+        List<int> targetTopViewNumberList = new List<int>();
+
+        for (int i = 0; i < _TopViewObject.Count; ++i)
+        {
+            if (CheckCameraInTopViewRange(_TopViewObject[i]))
+                targetTopViewNumberList.Add(i);
+        }
+
+        int number = 0;
+
+        switch (targetTopViewNumberList.Count)
+        {
+            case 0: // どの範囲にも入っていなかった場合すべてのTopViewの中で一番近いものを選ぶ
+                number = NearestTopViewNumber(null);
+                break;
+            case 1: // 1つの場合それを選ぶ
+                number = targetTopViewNumberList[0];
+                break;
+            default: // 複数ある場合はその選択肢の中で一番近いもの選ぶ
+                number = NearestTopViewNumber(targetTopViewNumberList);
+                break;
+        }
+
+        return number;
+    }
+
+    private bool CheckCameraInTopViewRange(GameObject topView)
+    {
+        TopViewScript script = topView.GetComponent<TopViewScript>();
+        Vector3 position = script.GetTopViewColliderCenter();
+        float range = script.GetTopViewColliderRange();
+
+        if (position.x - range < _CameraLookAt.x && position.x + range > _CameraLookAt.x &&
+            position.z - range < _CameraLookAt.z && position.z + range > _CameraLookAt.z)// xz平面において範囲内
+            return true;
+
+        return false;
+    }
+
+    private int NearestTopViewNumber(List<int> targetNumberList)
+    {
+        // nullが入ってきた場合すべてをチェック
+        if (targetNumberList == null)
+        {
+            targetNumberList = new List<int>();
+            for (int i = 0; i < _TopViewObject.Count; ++i)
+            {
+                targetNumberList.Add(i);
+            }
+        }
+
+        // ターゲットのy座標は0にする
+        Vector3 targetPosition = _TopViewObject[0].transform.position;
+        targetPosition.y = 0f;
+
+        float nearestDistance = Vector3.Distance(_CameraLookAt, targetPosition);
+        int nearestNumber = 0;
+
+        for(int i = 1; i < targetNumberList.Count; ++i)
+        {
+            targetPosition = _TopViewObject[1].transform.position;
+            targetPosition.y = 0f;
+
+            float dist = Vector3.Distance(_CameraLookAt, targetPosition);
+
+            if (nearestDistance > dist)
+            {
+                nearestDistance = dist;
+                nearestNumber = i;
+            }
+        }
+
+        return nearestNumber;
+    }
 
     private void SetCameraIsFront(bool front) { _isFront = front; }
-    private bool GetIsFront() { return _isFront; }
+    public bool GetIsFront() { return _isFront; }
+    public bool GetIsTop() { return _isTop; }
+
+    public float GetInputDeadZone() { return _InputDeadZone; }
 
     public void SetIsPlayerMove(bool move)
     {
@@ -489,8 +603,15 @@ public class MainCameraScript : MonoBehaviour
 
     private IEnumerator GameStartCameraWork()
     {
-        Vector3 currentPosition = _TopViewObject.transform.position;
-        Quaternion currentRotation = _TopViewObject.transform.rotation;
+        // 全トップビューから一番プレイヤーに近いものをスタートカメラワークの最初の位置にする
+        int topViewObjectNumber = NearestTopViewNumber(null);
+
+        Vector3 currentPosition = _TopViewObject[topViewObjectNumber].transform.position;
+        Quaternion currentRotation = _TopViewObject[topViewObjectNumber].transform.rotation;
+
+        yield return null;
+        _CameraLookAt = _PlayerObject.transform.position;
+        transform.position = _CameraLookAt - transform.forward * _ToPlayerOffset;
 
         Vector3 targetPosition = transform.position;
         Quaternion targetRotation = transform.rotation;
@@ -515,6 +636,8 @@ public class MainCameraScript : MonoBehaviour
             }
             yield return null;//こうすることで次のフレームにこれ以降の処理（この場合は先頭）を行うようになる
         }
+
+        _isFront = _PlayerObject.GetComponent<PlayerControl>().GetIsFront();
     }
     
     private IEnumerator PlayerIsMoveCameraWork()
@@ -618,5 +741,12 @@ public class MainCameraScript : MonoBehaviour
             return true;
 
         return false;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = new Color(0f, 0f, 1f, 0.4f);
+
+        Gizmos.DrawSphere(_CameraLookAt, 0.2f);
     }
 }
