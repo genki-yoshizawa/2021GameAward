@@ -70,13 +70,14 @@ public class TurnCountFrameScript : MonoBehaviour
                 DisplayTurn(displayNumber, false);
 
                 _isTurnCountAnim = false;
+                _PassedTime = 0f;
             }
         }
 
         _CurTurnCount = preTurnCount;
     }
 
-    // 数字を表示するための関数（引数で光らせるか決める）
+    // 数字を表示するための関数（引数で光らせるか決める）(二桁以下前提)
     private void DisplayTurn(int displayNumber, bool isLight)
     {
         // 表示する数字

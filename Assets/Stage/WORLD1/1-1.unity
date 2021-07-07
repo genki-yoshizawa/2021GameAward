@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 46633658}
   - component: {fileID: 46633657}
   - component: {fileID: 46633656}
+  - component: {fileID: 46633659}
   m_Layer: 5
   m_Name: CameraOption
   m_TagString: Untagged
@@ -218,6 +219,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 46633654}
   m_CullTransparentMesh: 1
+--- !u!114 &46633659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 46633654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64f4953226d47d34baa8f11c7c9b1e97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &149955104
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -286,6 +299,7 @@ GameObject:
   - component: {fileID: 198735004}
   - component: {fileID: 198735006}
   - component: {fileID: 198735005}
+  - component: {fileID: 198735007}
   m_Layer: 5
   m_Name: TurnCountFrame
   m_TagString: Untagged
@@ -352,6 +366,41 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 198735003}
   m_CullTransparentMesh: 1
+--- !u!114 &198735007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 198735003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5978b703ae9b7dc4f907e04355151b8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _NumberSprite:
+  - {fileID: -4906167379763698644, guid: cc3a624e77ffb20459b432c25d6fa79c, type: 3}
+  - {fileID: -8208058981458656029, guid: cc3a624e77ffb20459b432c25d6fa79c, type: 3}
+  - {fileID: -1547524900322789551, guid: cc3a624e77ffb20459b432c25d6fa79c, type: 3}
+  - {fileID: -744063835384098991, guid: cc3a624e77ffb20459b432c25d6fa79c, type: 3}
+  - {fileID: -7510320563749203690, guid: cc3a624e77ffb20459b432c25d6fa79c, type: 3}
+  - {fileID: -2845440556510888177, guid: cc3a624e77ffb20459b432c25d6fa79c, type: 3}
+  - {fileID: 3168286671896697595, guid: cc3a624e77ffb20459b432c25d6fa79c, type: 3}
+  - {fileID: 9063293069752963073, guid: cc3a624e77ffb20459b432c25d6fa79c, type: 3}
+  - {fileID: -476436919263850630, guid: cc3a624e77ffb20459b432c25d6fa79c, type: 3}
+  - {fileID: 7264112055361014304, guid: cc3a624e77ffb20459b432c25d6fa79c, type: 3}
+  - {fileID: 1384485496926916755, guid: cc3a624e77ffb20459b432c25d6fa79c, type: 3}
+  - {fileID: 7158639785439578848, guid: cc3a624e77ffb20459b432c25d6fa79c, type: 3}
+  - {fileID: 1972285926285650494, guid: cc3a624e77ffb20459b432c25d6fa79c, type: 3}
+  - {fileID: -6675614011154623288, guid: cc3a624e77ffb20459b432c25d6fa79c, type: 3}
+  - {fileID: 6396061110187611003, guid: cc3a624e77ffb20459b432c25d6fa79c, type: 3}
+  - {fileID: -7964204617345445846, guid: cc3a624e77ffb20459b432c25d6fa79c, type: 3}
+  - {fileID: 4184474122472423466, guid: cc3a624e77ffb20459b432c25d6fa79c, type: 3}
+  - {fileID: 7858335516650286758, guid: cc3a624e77ffb20459b432c25d6fa79c, type: 3}
+  - {fileID: 4394865818790748142, guid: cc3a624e77ffb20459b432c25d6fa79c, type: 3}
+  - {fileID: 5864452714880013725, guid: cc3a624e77ffb20459b432c25d6fa79c, type: 3}
+  _TurnCountAnimTime: 1
+  _NemuberTextureOffset: 60
 --- !u!1001 &201959192
 PrefabInstance:
   m_ObjectHideFlags: 0
