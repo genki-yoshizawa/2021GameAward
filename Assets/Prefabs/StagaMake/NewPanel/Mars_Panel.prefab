@@ -115,23 +115,6 @@ MonoBehaviour:
   _TurnOverAnimTime: 1
   _SwapAnimTime: 1
   _SwapPanelFloat: 0.3
---- !u!114 &9196345641202098680
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6802845441316878919}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fae0c403617e9fc418f485b0f2986624, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _canRotate: 0
-  _canTurnOver: 0
-  _canSwap: 0
-  _SwapIndex: 0
-  _PanelIndex: 0
 --- !u!114 &8833207345097344372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,6 +134,23 @@ MonoBehaviour:
   _MarkerOffset: 0.2
   _MarkerPrefab: {fileID: 0}
   _DefaultMaterial: []
+--- !u!114 &9196345641202098680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6802845441316878919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fae0c403617e9fc418f485b0f2986624, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _canRotate: 0
+  _canTurnOver: 0
+  _canSwap: 0
+  _SwapIndex: 0
+  _PanelIndex: 0
 --- !u!1001 &1544759902524358685
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -243,23 +243,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75cd020b2a58d7f448e770c14114a2b0, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75cd020b2a58d7f448e770c14114a2b0, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75cd020b2a58d7f448e770c14114a2b0, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75cd020b2a58d7f448e770c14114a2b0, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75cd020b2a58d7f448e770c14114a2b0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75cd020b2a58d7f448e770c14114a2b0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y

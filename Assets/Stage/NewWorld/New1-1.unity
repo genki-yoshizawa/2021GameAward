@@ -12984,7 +12984,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1591898346}
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.26999998, z: 0}
+  m_LocalPosition: {x: 0, y: 0.125, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_Children:
   - {fileID: 387074060}
@@ -13031,7 +13031,8 @@ MonoBehaviour:
   _Direction: {x: 1, y: 0}
   _FukidasiObj: {fileID: 1294797329}
   _WalkTime: 1
-  _RotateTime: 0.5
+  _RotateTime90: 0.5
+  _RotateTime180: 0.5
   _ClearScreen: {fileID: 1816317428}
   _GameOverScreen: {fileID: 1501869519}
 --- !u!95 &1591898350
@@ -16142,11 +16143,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7882087388452863762, guid: da3ca7d7b0a66b744ad2052bcde2419b, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9806563
+      value: 0.9762659
       objectReference: {fileID: 0}
     - target: {fileID: 7882087388452863762, guid: da3ca7d7b0a66b744ad2052bcde2419b, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.19573757
+      value: 0.2165755
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da3ca7d7b0a66b744ad2052bcde2419b, type: 3}
