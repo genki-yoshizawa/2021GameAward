@@ -16,4 +16,12 @@ public class EnemyMovieChecker : SingletonMonoBehaviour<EnemyMovieChecker>
     public bool GetIsPowerDownMovie() { return _isPowerDownMovie; }
     public bool GetIsPowerUpMovie() { return _isPowerUpMovie; }
     public bool GetIsMovie() { return _isMovie; }
+
+    override protected void Awake()
+    {
+        // 子クラスでAwakeを使う場合は
+        // 必ず親クラスのAwakeをCallして
+        // 複数のGameObjectにアタッチされないようにします.
+        base.Awake();
+    }
 }

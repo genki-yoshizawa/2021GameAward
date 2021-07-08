@@ -638,6 +638,11 @@ public class MainCameraScript : MonoBehaviour
         }
 
         _isFront = _PlayerObject.GetComponent<PlayerControl>().GetIsFront();
+
+        // マネージャーのスタートエネミームービーを呼ぶ
+        // この書き方はエネミーが2体以上の時に対応できない
+        foreach (GameObject enemy in _GameManager.GetComponent<GameManagerScript>().GetEnemys())
+            _GameManager.gameObject.GetComponent<GameManagerScript>().StartEnemyMovie(enemy.GetComponent<EnemyControl>().GetIsFront());
     }
     
     private IEnumerator PlayerIsMoveCameraWork()
