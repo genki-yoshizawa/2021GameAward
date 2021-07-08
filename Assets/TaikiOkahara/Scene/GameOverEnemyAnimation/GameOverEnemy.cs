@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using UnityEditor.Animations;
+//using UnityEditor.Animations;
 
 public class GameOverEnemy : MonoBehaviour
 {
     // Start is called before the first frame update
     Animator _EnemyAnimaiton;
-    AnimatorController _GameOverAnimaiton;
+    //AnimatorController _GameOverAnimaiton;
 
     Vector3 _EnemyRotation;
 
@@ -21,8 +21,8 @@ public class GameOverEnemy : MonoBehaviour
 
     void Start()
     {
-        RuntimeAnimatorController asset = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>("Assets/TaikiOkahara/Scene/GameOverEnemyAnimation/GameOverAnimationController.controller");
-        _GameOverAnimaiton = asset as AnimatorController;
+        //RuntimeAnimatorController asset = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>("Assets/TaikiOkahara/Scene/GameOverEnemyAnimation/GameOverAnimationController.controller");
+        //_GameOverAnimaiton = asset as AnimatorController;
 
         _EnemyAnimaiton = this.GetComponent<Animator>();
 
@@ -89,7 +89,7 @@ public class GameOverEnemy : MonoBehaviour
 
     public void StartGameOverEnemyAnimation()
     {
-        _EnemyAnimaiton.runtimeAnimatorController = _GameOverAnimaiton;
+        //_EnemyAnimaiton.runtimeAnimatorController = _GameOverAnimaiton;
 
 
         StartCoroutine("GameOverAnimation");
