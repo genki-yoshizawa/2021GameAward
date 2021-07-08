@@ -10,8 +10,8 @@ public class Stage : MonoBehaviour
     [SerializeField]
     string _SceneName;
 
-    [SerializeField]
-    private int _ClearPercentage;
+    //[SerializeField]
+    //private int _ClearPercentage;
 
     [SerializeField]
     private Image _StageName;
@@ -37,6 +37,8 @@ public class Stage : MonoBehaviour
 
     private float _Time = 0;
 
+    bool _Clear = false;
+
     void Start()
     {
         _StartPos = Random.Range(0, 2 * Mathf.PI);
@@ -57,7 +59,10 @@ public class Stage : MonoBehaviour
     }
 
     public string GetSceneName(){ return _SceneName;}
-    public int GetClearParsentage(){ return _ClearPercentage;}
-    public void SetClearParsentage(int clean){ _ClearPercentage = clean;}
+    //public int GetClearParsentage(){ return _ClearPercentage;}
+    //public void SetClearParsentage(int clean){ _ClearPercentage = clean;}
     public int GetStageNumber(){ return _StageNumber;}
+
+    public void Clear() { _Clear = true; }
+    public bool GetClear() { return _Clear; }
 }

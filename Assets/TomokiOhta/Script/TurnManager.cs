@@ -79,7 +79,7 @@ public class TurnManager : MonoBehaviour
                 _PlayerScript.SetTired(true);
 
             //コマンド選択
-            _CommandUI.CommandSelect();
+            //_CommandUI.CommandSelect();
 
             if (_PlayerScript.PlayerTurn())
             {

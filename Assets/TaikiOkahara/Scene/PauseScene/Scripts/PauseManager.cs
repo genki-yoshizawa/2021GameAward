@@ -53,18 +53,32 @@ public class PauseManager : MonoBehaviour
 
 
         string name = "WorldModel/" + StageManager._StageModelName;
-        GameObject obj = (GameObject)Resources.Load(name);
+        GameObject prefab = (GameObject)Resources.Load(name);
 
-        if (obj == null)
+
+        
+
+        if (prefab == null)
             return;
 
-        _StageModel.transform.GetChild(0).GetComponent<Renderer>().sharedMaterial = obj.transform.GetComponent<Renderer>().sharedMaterial;
+        //_StageModel.transform.GetChild(0).GetComponent<Renderer>().sharedMaterial = obj.transform.GetComponent<Renderer>().sharedMaterial;
+        Vector3 pos = new Vector3(0, -3.5f, 11.0f);
+        GameObject obj = (GameObject)Instantiate(prefab, pos, Quaternion.identity);
+        obj.transform.localScale = new Vector3(55f, 55f, 55f);
+        obj.transform.parent = _StageModel.transform;
+
+        obj.layer = 7;
+
         _StageNumberUI.GetComponent<PauseStageNumber>().SetScore(StageManager._ChoiceStageNumber);
     }
 
     void Update()
     {
         Pose();
+
+
+        if (_StageModel.transform.childCount != 0)
+            _StageModel.transform.GetChild(0).transform.Rotate(0.01f, 0.01f, 0.0f);
     }
 
     public void Pose()
