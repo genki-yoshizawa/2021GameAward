@@ -877,7 +877,6 @@ public class EnemyControl : MonoBehaviour
     {
         _EnemyAnimation.SetTrigger("Attack");
         _Player.gameObject.GetComponent<PlayerControl>().SetIsExist(false);
-
     }
 
     // エネミーを行く方向・かじる方向へ回転させる
