@@ -209,4 +209,8 @@ public class WallControl : GimmicControl
     {
         _isRebornAnim = true;
     }
+
+
+    public override bool IsWall() { return true; }
+    public override bool IsCheese() { return false; }
 }

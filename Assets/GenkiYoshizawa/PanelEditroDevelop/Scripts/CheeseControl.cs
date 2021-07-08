@@ -77,4 +77,7 @@ public class CheeseControl : GimmicControl
     {
         _isEatenAnim = true;
     }
+
+    public override bool IsWall() { return false; }
+    public override bool IsCheese() { return true; }
 }

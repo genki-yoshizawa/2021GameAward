@@ -91,7 +91,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3807183652f00947ba1d3ca3f379eb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _CommandSprite: []
+  _CommandSprite:
+  - {fileID: 782976544524578539, guid: 2194676c74890b04b99d8ee7528a4ed9, type: 3}
+  - {fileID: 1407780922693021611, guid: 2194676c74890b04b99d8ee7528a4ed9, type: 3}
+  - {fileID: -7903601246816159874, guid: 2194676c74890b04b99d8ee7528a4ed9, type: 3}
+  - {fileID: -8186151918896311864, guid: 2194676c74890b04b99d8ee7528a4ed9, type: 3}
+  - {fileID: 3335791773212708299, guid: 2194676c74890b04b99d8ee7528a4ed9, type: 3}
+  - {fileID: -5952176446182275232, guid: 2194676c74890b04b99d8ee7528a4ed9, type: 3}
+  - {fileID: 9217377352517943172, guid: 2194676c74890b04b99d8ee7528a4ed9, type: 3}
+  - {fileID: -9150134664429080329, guid: 2194676c74890b04b99d8ee7528a4ed9, type: 3}
+  - {fileID: 7171223340937490930, guid: 2194676c74890b04b99d8ee7528a4ed9, type: 3}
+  - {fileID: 8570542224301157559, guid: 2194676c74890b04b99d8ee7528a4ed9, type: 3}
+  - {fileID: 3262348976269921871, guid: 2194676c74890b04b99d8ee7528a4ed9, type: 3}
 --- !u!95 &2075244013495723796
 Animator:
   serializedVersion: 3
@@ -176,7 +187,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 7926282427641474799, guid: 2f1f61ca007579d42a9730316941904b, type: 3}
+  m_Sprite: {fileID: 1407780922693021611, guid: 2194676c74890b04b99d8ee7528a4ed9, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -251,7 +262,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 2516301797657908813, guid: 2f1f61ca007579d42a9730316941904b, type: 3}
+  m_Sprite: {fileID: -8186151918896311864, guid: 2194676c74890b04b99d8ee7528a4ed9, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
