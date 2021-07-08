@@ -28,9 +28,9 @@ public class PanelControl : MonoBehaviour
     private bool _isBright = false;
     private bool _isCurBright = false;
     private MeshRenderer _MeshRenderer;
-    private Material[] _SaveMaterials;
+    //private Material[] _SaveMaterials;
     [Header("Assetから設定するデフォルトマテリアル(オブジェクトに設定されているマテリアルの数)(プランナーはいじる必要なし)")]
-    [SerializeField] private Material[] _DefaultMaterial;
+    //[SerializeField] private Material[] _DefaultMaterial;
     // UI実行後の経過時間
     private float _PassedTime = 0.0f;
 
@@ -41,11 +41,11 @@ public class PanelControl : MonoBehaviour
         _isBright = _isCurBright = false;
 
         _MeshRenderer = GetComponent<MeshRenderer>();
-        _SaveMaterials = new Material[_MeshRenderer.materials.Length];
+        //_SaveMaterials = new Material[_MeshRenderer.materials.Length];
         for(int i = 0; i < _MeshRenderer.materials.Length; ++i)
         {
-            _SaveMaterials[i] = _DefaultMaterial[i];
-            _SaveMaterials[i].CopyPropertiesFromMaterial(_MeshRenderer.materials[i]);
+            //_SaveMaterials[i] = _DefaultMaterial[i];
+            //_SaveMaterials[i].CopyPropertiesFromMaterial(_MeshRenderer.materials[i]);
             //_MeshRenderer.materials[i].CopyPropertiesFromMaterial(_SaveMaterials[i]);
         }
 
@@ -100,23 +100,23 @@ public class PanelControl : MonoBehaviour
 
                     if (_isSinPulse)
                     {
-                        color.r = _SaveMaterials[i].color.r + Mathf.Abs((1.0f - _SaveMaterials[i].color.r) * Mathf.Sin(Mathf.PI * _PassedTime / _CycleTime));
-                        color.g = _SaveMaterials[i].color.g + Mathf.Abs((1.0f - _SaveMaterials[i].color.g) * Mathf.Sin(Mathf.PI * _PassedTime / _CycleTime));
-                        color.b = _SaveMaterials[i].color.b + Mathf.Abs((1.0f - _SaveMaterials[i].color.b) * Mathf.Sin(Mathf.PI * _PassedTime / _CycleTime));
+                        //color.r = _SaveMaterials[i].color.r + Mathf.Abs((1.0f - _SaveMaterials[i].color.r) * Mathf.Sin(Mathf.PI * _PassedTime / _CycleTime));
+                        //color.g = _SaveMaterials[i].color.g + Mathf.Abs((1.0f - _SaveMaterials[i].color.g) * Mathf.Sin(Mathf.PI * _PassedTime / _CycleTime));
+                        //color.b = _SaveMaterials[i].color.b + Mathf.Abs((1.0f - _SaveMaterials[i].color.b) * Mathf.Sin(Mathf.PI * _PassedTime / _CycleTime));
                     }
                     else
                     {
                         if (_PassedTime < _CycleTime * 0.5f)
                         {
-                            color.r = _SaveMaterials[i].color.r + (1.0f - _SaveMaterials[i].color.r) / (_CycleTime * 0.5f) * _PassedTime;
-                            color.g = _SaveMaterials[i].color.g + (1.0f - _SaveMaterials[i].color.g) / (_CycleTime * 0.5f) * _PassedTime;
-                            color.b = _SaveMaterials[i].color.b + (1.0f - _SaveMaterials[i].color.b) / (_CycleTime * 0.5f) * _PassedTime;
+                            //color.r = _SaveMaterials[i].color.r + (1.0f - _SaveMaterials[i].color.r) / (_CycleTime * 0.5f) * _PassedTime;
+                            //color.g = _SaveMaterials[i].color.g + (1.0f - _SaveMaterials[i].color.g) / (_CycleTime * 0.5f) * _PassedTime;
+                            //color.b = _SaveMaterials[i].color.b + (1.0f - _SaveMaterials[i].color.b) / (_CycleTime * 0.5f) * _PassedTime;
                         }
                         else
                         {
-                            color.r = 1.0f - (1.0f - _SaveMaterials[i].color.r) / (_CycleTime * 0.5f) * (_PassedTime - _CycleTime * 0.5f);
-                            color.g = 1.0f - (1.0f - _SaveMaterials[i].color.g) / (_CycleTime * 0.5f) * (_PassedTime - _CycleTime * 0.5f);
-                            color.b = 1.0f - (1.0f - _SaveMaterials[i].color.b) / (_CycleTime * 0.5f) * (_PassedTime - _CycleTime * 0.5f);
+                            //color.r = 1.0f - (1.0f - _SaveMaterials[i].color.r) / (_CycleTime * 0.5f) * (_PassedTime - _CycleTime * 0.5f);
+                            //color.g = 1.0f - (1.0f - _SaveMaterials[i].color.g) / (_CycleTime * 0.5f) * (_PassedTime - _CycleTime * 0.5f);
+                            //color.b = 1.0f - (1.0f - _SaveMaterials[i].color.b) / (_CycleTime * 0.5f) * (_PassedTime - _CycleTime * 0.5f);
                         }
                     }
 
@@ -131,7 +131,7 @@ public class PanelControl : MonoBehaviour
                 for (int i = 0; i < _MeshRenderer.materials.Length; ++i)
                 {
                     //Debug.Log(_SaveMaterials[i]);
-                    _MeshRenderer.materials[i].color = _SaveMaterials[i].color;
+                    //_MeshRenderer.materials[i].color = _SaveMaterials[i].color;
                 }
                 _PassedTime = 0.0f;
             }
