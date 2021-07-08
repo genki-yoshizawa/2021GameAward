@@ -18,13 +18,11 @@ public class EnemyControl : MonoBehaviour
     {
         public GameObject PanelObj;
         public Vector2Int Direction;
+        public bool Exist;
     };
 
     // 必要そうな変数をとりあえず用意
     protected EnemyState _EnemyState = EnemyState.IDLE;
-
-    [Header("１ターンの行動回数")]
-    [SerializeField, TooltipAttribute("１ターンの行動回数"), Range(0, 2)] protected int _ActCount;         // 敵の行動回数    （１～２？）
 
     [Header("嗅覚範囲")]
     [SerializeField] private int _CheeseSearchRange = 0;
@@ -51,11 +49,9 @@ public class EnemyControl : MonoBehaviour
     [Header("ネズミに使ってるマテリアルを入れる")]
 
     public Material TargetMaterial;
-    [Header("↓デバッグ用")]
-
 
     // それぞれにGet・Setを作成？
-    [SerializeField] private Vector2Int _EnemyLocalPosition;      // ネズミのいるブロックの座標
+    private Vector2Int _EnemyLocalPosition;      // ネズミのいるブロックの座標
     private Vector2Int _EnemyDirection;          // ネズミの向いてる方向
     private bool _StartEnemyTurn;                // エネミーターンが始まった最初に処理する用
 
@@ -67,7 +63,6 @@ public class EnemyControl : MonoBehaviour
     [SerializeField] protected GameObject _Up, _Down, _Left, _Right, _NextBlock; // 移動可能ブロックの保持、進む先のブロックを保持
 
     private int _TurnCount;
-    private int _WallCount;
     private float _PosY = 0.075f;    // Y座標固定用
 
     private Animator _EnemyAnimation;
@@ -79,10 +74,10 @@ public class EnemyControl : MonoBehaviour
     private bool _PlayerBite;
     private bool _IsExist;
     private bool _IsFront;
-    public float[] _WallDensity;
-
+    private bool _IsMovePanel = false;  // 逃げるパネルがあるかどうかを判定
+    private bool _IsTwoMax = false;
     // 逃げ先候補のブロックを保持する変数
-    List<Panel> MovePanel = new List<Panel>();
+    List<Panel> _MovePanel = new List<Panel>();
 
     // Start is called before the first frame update
     void Start()
@@ -94,7 +89,6 @@ public class EnemyControl : MonoBehaviour
         _EnemyAnimation = gameObject.GetComponent<Animator>();
         _CheeseBite = false;
         _IsExist = false;
-        _WallCount = 0;
         _PassedTime = 0.0f;
 
     }
@@ -242,14 +236,16 @@ public class EnemyControl : MonoBehaviour
     // 待機関数
     void Idle()
     {
-
+        _NextBlock = null;
+         _MovePanel.Clear();
+        _IsMovePanel = false;
+        _IsTwoMax = false;
     }
 
     // 移動もかじるもしない待機モーションのみでターン終了
     void Stay()
     {
         _EnemyAnimation.SetBool("Panic", true);
-        _WallCount--;
         _EnemyState = EnemyState.IDLE;
     }
 
@@ -337,13 +333,9 @@ public class EnemyControl : MonoBehaviour
             }
 
         }
-        _WallCount--;
-        _NextBlock = null;
-        MovePanel.Clear();
-        _WallDensity = null;
 
         // ステートをIDLEに移行する
-        _EnemyState = EnemyState.IDLE;
+       _EnemyState = EnemyState.IDLE;
 
     }
 
@@ -357,15 +349,13 @@ public class EnemyControl : MonoBehaviour
             {
                 if (_StartEnemyTurn)
                 {
-                    _WallCount = _ActCount;
+
                     _StartEnemyTurn = false;
                 }
 
                 Wait();
 
                 MoveTest();
-
-                Debug.Log("うぇいとむーぶ");
 
                 switch (_EnemyState)
                 {
@@ -396,8 +386,14 @@ public class EnemyControl : MonoBehaviour
     // 経路探索関数　
     public void FarRouteSearch(GameObject Panel, Vector2Int Direction)
     {
+        Panel _Panel = new Panel() { PanelObj = null, Direction = new Vector2Int(0, 0), Exist = false };
+
+        // 引数のゲームオブジェクトがnullの場合nullで入れる
         if (Panel == null)
+        {
+            _MovePanel.Add(_Panel);
             return;
+        }
 
         // プレイヤーのいるポジションを取得
         _Player = _GameManager.gameObject.GetComponent<GameManagerScript>().GetPlayer();
@@ -409,20 +405,33 @@ public class EnemyControl : MonoBehaviour
         // 上下左右のパネルと上記を比較して、短いのを除去する
         float tmp = Vector3.Distance(playerpos, Panel.transform.position);
 
-        Panel _Panel = new Panel() { PanelObj = Panel, Direction = Direction };
+        _Panel = new Panel() { PanelObj = Panel, Direction = Direction, Exist = true };
 
         // プレイヤーとエネミーの距離よりも長ければリストで保持する？
         if (player_enemy_distance < tmp)
         {
-            MovePanel.Add(_Panel);
+            _IsMovePanel = true;
+            _MovePanel.Add(_Panel);
+
+        }
+        else
+        {
+            _Panel.Exist = false;
+            _MovePanel.Add(_Panel);
         }
 
     }
 
     public void NearRouteSearch(GameObject Panel, Vector2Int Direction)
     {
+        Panel _Panel = new Panel() { PanelObj = null, Direction = new Vector2Int(0, 0), Exist = false };
+
+        // 引数のゲームオブジェクトがnullの場合nullで入れる
         if (Panel == null)
+        {
+            _MovePanel.Add(_Panel);
             return;
+        }
 
         // プレイヤーのいるポジションを取得
         _Player = _GameManager.gameObject.GetComponent<GameManagerScript>().GetPlayer();
@@ -434,18 +443,30 @@ public class EnemyControl : MonoBehaviour
         // 上下左右のパネルと上記を比較して、短いのを除去する
         float tmp = Vector3.Distance(playerpos, Panel.transform.position);
 
-        Panel _Panel = new Panel() { PanelObj = Panel, Direction = Direction };
+        _Panel = new Panel() { PanelObj = Panel, Direction = Direction, Exist = true };
 
-        // プレイヤーとエネミーの距離よりも長ければリストで保持する？
+        // プレイヤーとエネミーの距離よりも近ければリストで保持する？
         if (player_enemy_distance > tmp)
         {
-            MovePanel.Add(_Panel);
+            _IsMovePanel = true;
+            _MovePanel.Add(_Panel);
+
+        }
+        else
+        {
+            _Panel.Exist = false;
+            _MovePanel.Add(_Panel);
         }
 
     }
     // 壁の数を数えて壁密度をリターン
     public float WallCount(Panel moveobj)
     {
+
+        // 移動先のパネルがない　移動先に壁がある場合0.0fを返す
+        if (moveobj.PanelObj == null || !moveobj.PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, moveobj.Direction) || moveobj.Exist == false)
+            return 0.0f;
+
         Vector2Int Dir = new Vector2Int();
 
         // 壁測定をするパネルを入れるリスト
@@ -453,14 +474,9 @@ public class EnemyControl : MonoBehaviour
 
         // 上か下なら左右のＸに１を入れる  それ以外はＹに１を入れる
         if (moveobj.Direction == new Vector2Int(0, 1) || moveobj.Direction == new Vector2Int(0, -1))
-        {
             Dir = new Vector2Int(1, 0);
-        }
         else
-        {
             Dir = new Vector2Int(0, 1);
-
-        }
 
         // エネミーに隣接しているパネルを壁測定リストに入れる
         WallCountPanel.Add(moveobj);
@@ -495,12 +511,13 @@ public class EnemyControl : MonoBehaviour
         if (PlusDirPanel.PanelObj != null)
             WallCountPanel.Add(PlusDirPanel);
 
+        int _WallCount = 0;
 
         // 壁の数を数える
         foreach (Panel panel in WallCountPanel)
         {
             // そのパネルにオブジェクトの壁があるかを調べる。あればカウントを増やす
-            CountWall(panel.PanelObj);
+            _WallCount += CountWall(panel.PanelObj);
 
             // 外壁を数える　そのオブジェクトの前後左右をみてＮＵＬＬなら外壁としてカウントする
             // 上から上下左右
@@ -516,9 +533,15 @@ public class EnemyControl : MonoBehaviour
 
         // 壁密度を計算してリターン
         //          壁   /     パネル
-        return _WallCount / WallCountPanel.Count;
+        float retDinsity = (float)_WallCount / WallCountPanel.Count;
+        //Debug.Log(_WallCount);
+        //Debug.Log(WallCountPanel.Count);
+        Debug.Log(retDinsity);
 
+        return retDinsity;
     }
+
+
 
     public void MoveTest()
     {
@@ -533,303 +556,194 @@ public class EnemyControl : MonoBehaviour
         {
             if (_IsFront == true)
             {
-                // 経路探索
-                FarRouteSearch(_Up, new Vector2Int(0, 1));
+                // 経路探索　順路型右用に　右→下→左→上の順で探索
+                FarRouteSearch(_Right, new Vector2Int(1, 0));
                 FarRouteSearch(_Down, new Vector2Int(0, -1));
                 FarRouteSearch(_Left, new Vector2Int(-1, 0));
-                FarRouteSearch(_Right, new Vector2Int(1, 0));
+                FarRouteSearch(_Up, new Vector2Int(0, 1));
 
-                _WallDensity = new float[MovePanel.Count];
-                // 壁測定
-                for (int i = 0; i < MovePanel.Count; i++)
+                float[] WallDensity = new float[4] { 0.0f, 0.0f, 0.0f, 0.0f };
+
+                // 離れるパネルがない時に近づくパネルに移動する用にExistをtrueにしているだけ 
+                if (_IsMovePanel == false)
                 {
-                    _WallDensity[i] = WallCount(MovePanel[i]);
+                    for(int i = 0; i < _MovePanel.Count;i++)
+                    {
+                        Panel _Panel = new Panel() { PanelObj = _MovePanel[i].PanelObj, Direction = _MovePanel[i].Direction, Exist = true };
+                        _MovePanel[i] = _Panel;
+                    }
                 }
 
-
-                // 壁密度比較
-                switch (_WallDensity.Length)
+                // 壁測定
+                for (int i = 0; i < WallDensity.Length; i++)
                 {
-                    case 1:
-                        // 配列が１つの場合
-                        _NextBlock = MovePanel[0].PanelObj;
-                        _EnemyDirection = MovePanel[0].Direction;
-                        break;
-                    case 2:
-                        // 配列が二つの場合
-                        if (_WallDensity[0] < _WallDensity[1])
+                    WallDensity[i] = WallCount(_MovePanel[i]);
+                }
+
+                int MaxElement = 0;
+                float Max = -1.0f;
+
+                // 配列の中で一番壁密度の高いパネルを抽出
+                for (int i = 0; i < WallDensity.Length; i++)
+                {
+                    if (Max < WallDensity[i])
+                    {
+                        MaxElement = i;
+                        Max = WallDensity[i];
+
+                    }
+                    else if(Max == WallDensity[i])
+                    {
+                        _IsTwoMax = true;
+                    }
+
+                }
+
+                // 壁密度の最大値が二つ以上あるときの処理
+                if (_IsTwoMax == true)
+                {
+                    if (Max == WallDensity[0])
+                    {
+                        if(_MovePanel[0].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[0].Direction))
                         {
-                            _NextBlock = MovePanel[1].PanelObj;
-                            _EnemyDirection = MovePanel[1].Direction;
+                            _NextBlock = _MovePanel[0].PanelObj;
+                            _EnemyDirection = _MovePanel[0].Direction;
                         }
-                        else if (_WallDensity[0] > _WallDensity[1])
+                    }
+
+                    if (_NextBlock == null)
+                    {
+                        if (Max == WallDensity[1])
                         {
-                            _NextBlock = MovePanel[0].PanelObj;
-                            _EnemyDirection = MovePanel[0].Direction;
+                            if (_MovePanel[1].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[1].Direction))
+                            {
+                                _NextBlock = _MovePanel[1].PanelObj;
+                                _EnemyDirection = _MovePanel[1].Direction;
+                            }
+                        
                         }
-                        else
+                    }
+
+                    if (_NextBlock == null)
+                    {
+                        if (Max == WallDensity[2])
                         {
-                            // 右
-                            if (MovePanel[0].Direction == new Vector2Int(1, 0))
+                            if (_MovePanel[2].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[2].Direction))
                             {
-                                _NextBlock = MovePanel[0].PanelObj;
-                                _EnemyDirection = MovePanel[0].Direction;
-                            }
-                            else if(MovePanel[1].Direction == new Vector2Int(1, 0))
-                            {
-                                _NextBlock = MovePanel[1].PanelObj;
-                                _EnemyDirection = MovePanel[1].Direction;
+                                _NextBlock = _MovePanel[2].PanelObj;
+                                _EnemyDirection = _MovePanel[2].Direction;
                             }
 
-                            // 下
-                            if (_NextBlock == null)
+                        }
+                    }
+
+                    if (_NextBlock == null)
+                    {
+                        if (Max == WallDensity[3])
+                        {
+                            if (_MovePanel[3].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[3].Direction))
                             {
-                                if (MovePanel[0].Direction == new Vector2Int(0, -1))
-                                {
-                                    _NextBlock = MovePanel[0].PanelObj;
-                                    _EnemyDirection = MovePanel[0].Direction;
-                                }
-                                else if(MovePanel[1].Direction == new Vector2Int(0, -1))
-                                {
-                                    _NextBlock = MovePanel[1].PanelObj;
-                                    _EnemyDirection = MovePanel[1].Direction;
-                                }
 
-                            }
-
-                            // 左
-                            if (_NextBlock == null)
-                            {
-                                if (MovePanel[0].Direction == new Vector2Int(-1, 0))
-                                {
-                                    _NextBlock = MovePanel[0].PanelObj;
-                                    _EnemyDirection = MovePanel[0].Direction;
-                                }
-                                else if(MovePanel[1].Direction == new Vector2Int(-1, 0))
-                                {
-                                    _NextBlock = MovePanel[1].PanelObj;
-                                    _EnemyDirection = MovePanel[1].Direction;
-                                }
-
-                            }
-
-                            // 上
-                            if (_NextBlock == null)
-                            {
-                                if (MovePanel[0].Direction == new Vector2Int(0, -1))
-                                {
-                                    _NextBlock = MovePanel[0].PanelObj;
-                                    _EnemyDirection = MovePanel[0].Direction;
-                                }
-                                else if(MovePanel[1].Direction == new Vector2Int(0, -1))
-                                {
-                                    _NextBlock = MovePanel[1].PanelObj;
-                                    _EnemyDirection = MovePanel[1].Direction;
-                                }
+                                _NextBlock = _MovePanel[3].PanelObj;
+                                _EnemyDirection = _MovePanel[3].Direction;
                             }
                         }
-                        break;
-                    case 3:
-                        // 配列が３つの場合
-                        if (_WallDensity[0] < _WallDensity[1])
-                        {
-                            if (_WallDensity[1] < _WallDensity[2])
-                            {
-                                _NextBlock = MovePanel[2].PanelObj;
-                                _EnemyDirection = MovePanel[2].Direction;
-                            }
-                            else
-                            {
-                                _NextBlock = MovePanel[1].PanelObj;
-                                _EnemyDirection = MovePanel[1].Direction;
-                            }
-                        }
-                        else
-                        {
-                            if (_WallDensity[0] < _WallDensity[2])
-                            {
-                                _NextBlock = MovePanel[2].PanelObj;
-                                _EnemyDirection = MovePanel[2].Direction;
+                    }
 
-                            }
-                            else
-                            {
-                                _NextBlock = MovePanel[0].PanelObj;
-                                _EnemyDirection = MovePanel[0].Direction;
-                            }
-                        }
+                }
+                else
+                {
+                    if (_MovePanel[MaxElement].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[MaxElement].Direction))
+                    {
+                        _NextBlock = _MovePanel[MaxElement].PanelObj;
+                        _EnemyDirection = _MovePanel[MaxElement].Direction;
+                    }
 
-                        int[] maxElement = new int[3] { 0, 0, 0 };
-                        float[] max = new float[3] { 0.0f, 0.0f, 0.0f };
-
-                        // 配列の中で一番壁密度の高いパネルを抽出
-                        for (int i = 0; i < _WallDensity.Length; i++)
-                        {
-                            if (max[0] <= _WallDensity[i])
-                            {
-                                maxElement[i] = i;
-                                max[i] = _WallDensity[i];
-                            }
-                        }
-
-                        if (_NextBlock == null)
-                        {
-                            // 右を探す
-                            for (int i = 0; i < maxElement.Length; i++)
-                            {
-                                if (max[i] != 0.0f)
-                                {
-                                    if (MovePanel[maxElement[i]].Direction == new Vector2Int(1, 0))
-                                    {
-                                        _NextBlock = MovePanel[maxElement[i]].PanelObj;
-                                        _EnemyDirection = MovePanel[maxElement[i]].Direction;
-                                    }
-                                }
-                            }
-                        }
-
-                        if (_NextBlock == null)
-                        {
-                            // 下を探す
-                            for (int i = 0; i < maxElement.Length; i++)
-                            {
-                                if (max[i] != 0.0f)
-                                {
-                                    if (MovePanel[maxElement[i]].Direction == new Vector2Int(0, -1))
-                                    {
-                                        _NextBlock = MovePanel[maxElement[i]].PanelObj;
-                                        _EnemyDirection = MovePanel[maxElement[i]].Direction;
-                                    }
-                                }
-                            }
-                        }
-
-                        if (_NextBlock == null)
-                        {
-                            // 左を探す
-                            for (int i = 0; i < maxElement.Length; i++)
-                            {
-                                if (max[i] != 0.0f)
-                                {
-                                    if (MovePanel[maxElement[i]].Direction == new Vector2Int(-1, 0))
-                                    {
-                                        _NextBlock = MovePanel[maxElement[i]].PanelObj;
-                                        _EnemyDirection = MovePanel[maxElement[i]].Direction;
-                                    }
-                                }
-
-                            }
-                        }
-
-                        if (_NextBlock == null)
-                        {
-                            // 上を探す
-                            for (int i = 0; i < maxElement.Length; i++)
-                            {
-                                if (max[i] != 0.0f)
-                                {
-                                    if (MovePanel[maxElement[i]].Direction == new Vector2Int(0, 1))
-                                    {
-                                        _NextBlock = MovePanel[maxElement[i]].PanelObj;
-                                        _EnemyDirection = MovePanel[maxElement[i]].Direction;
-                                    }
-                                }
-                            }
-                        }
-                        break;
-                    default:
-                        break;
                 }
 
             }
+            // 裏面
             else
             {
-                NearRouteSearch(_Up, new Vector2Int(0, 1));
+                // 経路探索
+                NearRouteSearch(_Right, new Vector2Int(1, 0));
                 NearRouteSearch(_Down, new Vector2Int(0, -1));
                 NearRouteSearch(_Left, new Vector2Int(-1, 0));
-                NearRouteSearch(_Right, new Vector2Int(1, 0));
+                NearRouteSearch(_Up, new Vector2Int(0, 1));
 
+                // 離れるパネルがない時に近づくパネルに移動する用にExistをtrueにしているだけ 
+                if (_IsMovePanel == false)
+                {
+                    for (int i = 0; i < _MovePanel.Count; i++)
+                    {
+                        Panel _Panel = new Panel() { PanelObj = _MovePanel[i].PanelObj, Direction = _MovePanel[i].Direction, Exist = true };
+                        _MovePanel[i] = _Panel;
+                    }
+                }
+
+                // 順路型右でプレイヤーに近づく
                 if (_NextBlock == null)
                 {
                     // 右を探す
-                    for (int i = 0; i < MovePanel.Count; i++)
+                    if (_MovePanel[0].Exist == true)
                     {
-                        if (MovePanel[i].Direction == new Vector2Int(1, 0))
+                        if (_MovePanel[0].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[0].Direction))
                         {
-                            _NextBlock = MovePanel[i].PanelObj;
-                            _EnemyDirection = MovePanel[i].Direction;
+                            _NextBlock = _MovePanel[0].PanelObj;
+                            _EnemyDirection = _MovePanel[0].Direction;
                         }
                     }
                 }
+
                 if (_NextBlock == null)
                 {
                     // 下を探す
-                    for (int i = 0; i < MovePanel.Count; i++)
+                    if (_MovePanel[1].Exist == true)
                     {
-                        if (MovePanel[i].Direction == new Vector2Int(0, -1))
+                        if (_MovePanel[1].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[1].Direction))
                         {
-                            _NextBlock = MovePanel[i].PanelObj;
-                            _EnemyDirection = MovePanel[i].Direction;
+                            _NextBlock = _MovePanel[1].PanelObj;
+                            _EnemyDirection = _MovePanel[1].Direction;
                         }
                     }
                 }
                 if (_NextBlock == null)
                 {
                     // 左を探す
-                    for (int i = 0; i < MovePanel.Count; i++)
+                    if (_MovePanel[2].Exist == true)
                     {
-                        if (MovePanel[i].Direction == new Vector2Int(-1, 0))
+                        if (_MovePanel[2].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[2].Direction))
                         {
-                            _NextBlock = MovePanel[i].PanelObj;
-                            _EnemyDirection = MovePanel[i].Direction;
+                            _NextBlock = _MovePanel[2].PanelObj;
+                            _EnemyDirection = _MovePanel[2].Direction;
                         }
                     }
                 }
                 if (_NextBlock == null)
                 {
                     // 上を探す
-                    for (int i = 0; i < MovePanel.Count; i++)
+                    if (_MovePanel[3].Exist == true)
                     {
-                        if (MovePanel[i].Direction == new Vector2Int(0, 1))
+                        if (_MovePanel[3].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[3].Direction))
                         {
-                            _NextBlock = MovePanel[i].PanelObj;
-                            _EnemyDirection = MovePanel[i].Direction;
+                            _NextBlock = _MovePanel[3].PanelObj;
+                            _EnemyDirection = _MovePanel[3].Direction;
                         }
                     }
                 }
+
             }
+
             _EnemyState = EnemyState.MOVE;
+
         }
     }
 
-    
-
-    // 順路型右用関数
-    //private void RouteTypeRight(Vector2Int Dir)
-    //{
-    //    if (_NextBlock == null)
-    //    {
-    //        // 上を探す
-    //        for (int i = 0; i < maxElement.Length; i++)
-    //        {
-    //            if (max[i] != 0.0f)
-    //            {
-    //                if (MovePanel[maxElement[i]].Direction == new Vector2Int(0, 1))
-    //                {
-    //                    _NextBlock = MovePanel[maxElement[i]].PanelObj;
-    //                    _EnemyDirection = MovePanel[maxElement[i]].Direction;
-    //                }
-    //            }
-    //        }
-    //    }
-
-    //}
-
     // パネルに壁があるかを調べる
-    public void CountWall(GameObject block)
+    public int CountWall(GameObject block)
     {
         GameManagerScript gmScript = _GameManager.GetComponent<GameManagerScript>();
-
+        int count = 0;
         for (int i = 0; i < block.transform.GetChild(0).transform.childCount; ++i)
         {
             // エネミーと一致したら次の子オブジェクトに移る
@@ -845,11 +759,11 @@ public class EnemyControl : MonoBehaviour
                 continue;
 
             // プレイヤーでもなくギミックのチェックエンターも通ったら
-            if (gmScript.GetPlayer() != transform.GetChild(i).gameObject &&
+            if (gmScript.GetPlayer() != block.transform.GetChild(0).transform.GetChild(i).gameObject &&
                 block.transform.GetChild(0).transform.GetChild(i).GetComponent<GimmicControl>().IsWall())
-                _WallCount++;
+                count++;
         }
-
+        return count;
     }
 
     // チーズをみつけていたらチーズの方へ向かう
