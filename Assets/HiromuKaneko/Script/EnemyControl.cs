@@ -74,11 +74,6 @@ public class EnemyControl : MonoBehaviour
         _CheeseBite = false;
         _IsExist = false;
         _PassedTime = 0.0f;
-<<<<<<< HEAD
-=======
-        // マネージャーのスタートアニメーションを呼ぶ
-        //        _GameManager.gameObject.GetComponent<GameManagerScript>().StartEnemyMovie();
->>>>>>> d8a11013a63d749209499476537f8bc5567ba6c8
 
 
     }
@@ -943,12 +938,6 @@ public class EnemyControl : MonoBehaviour
 
         else
             _IsFront = true;
-<<<<<<< HEAD
-=======
-
-        //        _GameManager.gameObject.GetComponent<GameManagerScript>().StartEnemyMovie();  
-
->>>>>>> d8a11013a63d749209499476537f8bc5567ba6c8
     }
 
     // ブロック側で呼び出す　自分の位置を入れ替える関数
