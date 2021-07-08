@@ -101,7 +101,6 @@ public class PlayerControl : MonoBehaviour
         _StartPostion = _LocalPosition;
         _StartDirection = _Direction;
         _IsExist = true;
-        Debug.Log("プレイヤーのスタート");
 
         //アニメーション用の変数
         _WalkStartPosition = new Vector3(0.0f, 0.0f, 0.0f);
