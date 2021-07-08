@@ -75,7 +75,7 @@ public class EnemyControl : MonoBehaviour
         _IsExist = false;
         _PassedTime = 0.0f;
         // マネージャーのスタートアニメーションを呼ぶ
-        //        _GameManager.gameObject.GetComponent<GameManagerScript>().
+        //        _GameManager.gameObject.GetComponent<GameManagerScript>().StartEnemyMovie();
 
 
     }
@@ -693,8 +693,11 @@ public class EnemyControl : MonoBehaviour
 
             }
 
-            _EnemyState = EnemyState.MOVE;
 
+            if (_NextBlock == true)
+                _EnemyState = EnemyState.MOVE;
+            else
+                _EnemyState = EnemyState.STAY;
         }
     }
 
@@ -938,7 +941,8 @@ public class EnemyControl : MonoBehaviour
         else
             _IsFront = true;
 
-        //        _GameManager.gameObject.GetComponent<GameManagerScript>().
+        //        _GameManager.gameObject.GetComponent<GameManagerScript>().StartEnemyMovie();  
+
     }
 
     // ブロック側で呼び出す　自分の位置を入れ替える関数
