@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class EnemyControl : MonoBehaviour
 {
-
     protected enum EnemyState
     {
         IDLE,   // 相手のターン中
@@ -12,17 +11,12 @@ public class EnemyControl : MonoBehaviour
         MOVE,   // 移動
         BREAK   // 壁を壊す
     }
-
-
     public struct Panel
     {
         public GameObject PanelObj;
         public Vector2Int Direction;
         public bool Exist;
     };
-
-    // 必要そうな変数をとりあえず用意
-    protected EnemyState _EnemyState = EnemyState.IDLE;
 
     [Header("嗅覚範囲")]
     [SerializeField] private int _CheeseSearchRange = 0;
@@ -47,37 +41,27 @@ public class EnemyControl : MonoBehaviour
     [Header("裏世界時のテクスチャ")]
     [SerializeField] Texture _BackTexture;
     [Header("ネズミに使ってるマテリアルを入れる")]
-
     public Material TargetMaterial;
 
-    // それぞれにGet・Setを作成？
+    private EnemyState _EnemyState = EnemyState.IDLE;          // エネミーステート変数
+    private List<Panel> _MovePanel = new List<Panel>();        // 逃げ先候補のブロックを保持する変数
+    private GameObject _Up, _Down, _Left, _Right, _NextBlock;  // 上下左右ブロックの保持、進む先のブロックを保持
     private Vector2Int _EnemyLocalPosition;      // ネズミのいるブロックの座標
     private Vector2Int _EnemyDirection;          // ネズミの向いてる方向
-    private bool _StartEnemyTurn;                // エネミーターンが始まった最初に処理する用
-
-    private GameObject _GameManager;                              // ゲームマネージャーを保持
-    protected GameObject _Player;                                 // プレイヤーを保持
-    private GameObject _Cheese;                                   // チーズを保持
-
-    // デバッグ用に表示させてだけなので後々SerializeFieldは消す予定
-    [SerializeField] protected GameObject _Up, _Down, _Left, _Right, _NextBlock; // 移動可能ブロックの保持、進む先のブロックを保持
-
-    private int _TurnCount;
-    private float _PosY = 0.075f;    // Y座標固定用
-
-    private Animator _EnemyAnimation;
-    private Vector3 _StartPoint;
-    private Vector3 _TargetPoint;
-    private Vector3 _UpdatePosition;
-    private float _PassedTime;
-    private bool _CheeseBite;
-    private bool _PlayerBite;
-    private bool _IsExist;
-    private bool _IsFront;
-    private bool _IsMovePanel = false;  // 逃げるパネルがあるかどうかを判定
+    private GameObject _GameManager;             // ゲームマネージャーを保持
+    private GameObject _Player;                  // プレイヤーを保持
+    private GameObject _Cheese;                  // チーズを保持
+    private Animator _EnemyAnimation;            // ネズミのアニメーションの保持
+    private Vector3 _StartPoint;                 // 移動前ポジション
+    private Vector3 _TargetPoint;                // 移動先ポジション
+    private float _PosY = 0.075f;                // Y座標固定用
+    private float _PassedTime;                   // アニメーション用タイム変数
+    private bool _CheeseBite;                    // チーズをかじるとき
+    private bool _PlayerBite;                    // プレイヤーをかじるとき
+    private bool _IsExist;                       // 生存確認用
+    private bool _IsFront;                       // 表裏どっちにいるか
+    private bool _IsMovePanel = false;           // 逃げるパネルがあるかどうかを判定
     private bool _IsTwoMax = false;
-    // 逃げ先候補のブロックを保持する変数
-    List<Panel> _MovePanel = new List<Panel>();
 
     // Start is called before the first frame update
     void Start()
@@ -90,18 +74,19 @@ public class EnemyControl : MonoBehaviour
         _CheeseBite = false;
         _IsExist = false;
         _PassedTime = 0.0f;
+        // マネージャーのスタートアニメーションを呼ぶ
+        //        _GameManager.gameObject.GetComponent<GameManagerScript>().
+
 
     }
 
     // Update is called once per frame
     void Update()
     {
-
         if (_IsFront)
             TargetMaterial.SetTexture("_MainTex", _FrontTexture);
         else
             TargetMaterial.SetTexture("_MainTex", _BackTexture);
-
 
         if (_EnemyState == EnemyState.IDLE)
         {
@@ -116,9 +101,7 @@ public class EnemyControl : MonoBehaviour
             {
                 _EnemyAnimation.SetBool("Panic", false);
                 _PassedTime = 0.0f;
-
             }
-
         }
 
         // 歩くアニメーション
@@ -129,6 +112,13 @@ public class EnemyControl : MonoBehaviour
             {
                 _PassedTime = _WalkTime;
                 _EnemyAnimation.SetBool("Walk", false);
+                if (_Player.gameObject.GetComponent<PlayerControl>().GetIsFront() != _IsFront)
+                {
+                    if (_Player.gameObject.GetComponent<PlayerControl>().GetLocalPosition() == _EnemyLocalPosition)
+                    {
+                        StartCoroutine("PlayerDown");
+                    }
+                }
             }
 
             Rotate();
@@ -136,7 +126,6 @@ public class EnemyControl : MonoBehaviour
 
             if (!_EnemyAnimation.GetBool("Walk"))
                 _PassedTime = 0.0f;
-
         }
 
         // かじるアニメーション
@@ -161,7 +150,6 @@ public class EnemyControl : MonoBehaviour
                     _PassedTime = 0.0f;
                     _CheeseBite = false;
                 }
-
             }
             else
             {
@@ -171,10 +159,8 @@ public class EnemyControl : MonoBehaviour
                 {
                     _EnemyAnimation.SetBool("Bite", false);
                     _PassedTime = 0.0f;
-
                 }
             }
-
         }
 
         var clipInfo = _EnemyAnimation.GetCurrentAnimatorClipInfo(0)[0];   // 引数はLayer番号、配列の0番目
@@ -184,7 +170,6 @@ public class EnemyControl : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-
     }
 
     void Wait()
@@ -192,52 +177,28 @@ public class EnemyControl : MonoBehaviour
         Vector2Int pos = _EnemyLocalPosition;
 
         // 前後左右にブロックがあるか
-        if (_IsFront)
-        {
+        // 上のブロック
+        _EnemyDirection = new Vector2Int(0, 1);
+        _Up = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock((pos + _EnemyDirection));
 
-            // 上のブロック
-            _EnemyDirection = new Vector2Int(0, 1);
-            _Up = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock((pos + _EnemyDirection));
+        // 下のブロック
+        _EnemyDirection = new Vector2Int(0, -1);
+        _Down = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock((pos + _EnemyDirection));
 
-            // 下のブロック
-            _EnemyDirection = new Vector2Int(0, -1);
-            _Down = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock((pos + _EnemyDirection));
+        // 左のブロック
+        _EnemyDirection = new Vector2Int(-1, 0);
+        _Left = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock((pos + _EnemyDirection));
 
-            // 左のブロック
-            _EnemyDirection = new Vector2Int(-1, 0);
-            _Left = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock((pos + _EnemyDirection));
-
-            // 右のブロック
-            _EnemyDirection = new Vector2Int(1, 0);
-            _Right = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock((pos + _EnemyDirection));
-
-
-        }
-        else
-        {
-            // 上のブロック
-            _EnemyDirection = new Vector2Int(0, 1);
-            _Up = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock((pos + _EnemyDirection));
-
-            // 下のブロック
-            _EnemyDirection = new Vector2Int(0, -1);
-            _Down = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock((pos + _EnemyDirection));
-
-            // 左のブロック
-            _EnemyDirection = new Vector2Int(-1, 0);
-            _Left = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock((pos + _EnemyDirection));
-
-            // 右のブロック
-            _EnemyDirection = new Vector2Int(1, 0);
-            _Right = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock((pos + _EnemyDirection));
-        }
+        // 右のブロック
+        _EnemyDirection = new Vector2Int(1, 0);
+        _Right = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock((pos + _EnemyDirection));
     }
 
     // 待機関数
     void Idle()
     {
         _NextBlock = null;
-         _MovePanel.Clear();
+        _MovePanel.Clear();
         _IsMovePanel = false;
         _IsTwoMax = false;
     }
@@ -327,15 +288,12 @@ public class EnemyControl : MonoBehaviour
                     else
                         _EnemyAnimation.SetBool("Walk", true);
                 }
-
                 _EnemyAnimation.SetBool("Walk", true);
-
             }
-
         }
 
         // ステートをIDLEに移行する
-       _EnemyState = EnemyState.IDLE;
+        _EnemyState = EnemyState.IDLE;
 
     }
 
@@ -347,12 +305,6 @@ public class EnemyControl : MonoBehaviour
             _Player = _GameManager.gameObject.GetComponent<GameManagerScript>().GetPlayer();
             if (_Player.GetComponent<PlayerControl>().GetLocalPosition() != _EnemyLocalPosition)
             {
-                if (_StartEnemyTurn)
-                {
-
-                    _StartEnemyTurn = false;
-                }
-
                 Wait();
 
                 MoveTest();
@@ -374,6 +326,14 @@ public class EnemyControl : MonoBehaviour
             }
             else
             {
+
+                if (_Player.gameObject.GetComponent<PlayerControl>().GetIsFront() != _IsFront)
+                {
+                    if (_Player.gameObject.GetComponent<PlayerControl>().GetLocalPosition() == _EnemyLocalPosition)
+                    {
+                        StartCoroutine("PlayerDown");
+                    }
+                }
                 if (!_Player.gameObject.GetComponent<PlayerControl>().GetIsFront() && !_IsFront)
                 {
                     PlayerKill();
@@ -383,7 +343,7 @@ public class EnemyControl : MonoBehaviour
         }
     }
 
-    // 経路探索関数　
+    // 経路探索　近寄る
     public void FarRouteSearch(GameObject Panel, Vector2Int Direction)
     {
         Panel _Panel = new Panel() { PanelObj = null, Direction = new Vector2Int(0, 0), Exist = false };
@@ -422,6 +382,7 @@ public class EnemyControl : MonoBehaviour
 
     }
 
+    // 経路探索　離れる
     public void NearRouteSearch(GameObject Panel, Vector2Int Direction)
     {
         Panel _Panel = new Panel() { PanelObj = null, Direction = new Vector2Int(0, 0), Exist = false };
@@ -541,8 +502,6 @@ public class EnemyControl : MonoBehaviour
         return retDinsity;
     }
 
-
-
     public void MoveTest()
     {
 
@@ -567,7 +526,7 @@ public class EnemyControl : MonoBehaviour
                 // 離れるパネルがない時に近づくパネルに移動する用にExistをtrueにしているだけ 
                 if (_IsMovePanel == false)
                 {
-                    for(int i = 0; i < _MovePanel.Count;i++)
+                    for (int i = 0; i < _MovePanel.Count; i++)
                     {
                         Panel _Panel = new Panel() { PanelObj = _MovePanel[i].PanelObj, Direction = _MovePanel[i].Direction, Exist = true };
                         _MovePanel[i] = _Panel;
@@ -592,7 +551,7 @@ public class EnemyControl : MonoBehaviour
                         Max = WallDensity[i];
 
                     }
-                    else if(Max == WallDensity[i])
+                    else if (Max == WallDensity[i])
                     {
                         _IsTwoMax = true;
                     }
@@ -604,7 +563,7 @@ public class EnemyControl : MonoBehaviour
                 {
                     if (Max == WallDensity[0])
                     {
-                        if(_MovePanel[0].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[0].Direction))
+                        if (_MovePanel[0].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[0].Direction))
                         {
                             _NextBlock = _MovePanel[0].PanelObj;
                             _EnemyDirection = _MovePanel[0].Direction;
@@ -620,7 +579,7 @@ public class EnemyControl : MonoBehaviour
                                 _NextBlock = _MovePanel[1].PanelObj;
                                 _EnemyDirection = _MovePanel[1].Direction;
                             }
-                        
+
                         }
                     }
 
@@ -979,6 +938,7 @@ public class EnemyControl : MonoBehaviour
         else
             _IsFront = true;
 
+        //        _GameManager.gameObject.GetComponent<GameManagerScript>().
     }
 
     // ブロック側で呼び出す　自分の位置を入れ替える関数
@@ -1000,7 +960,6 @@ public class EnemyControl : MonoBehaviour
     {
         Gizmos.color = _DebugColor;
         Vector3 size = new Vector3(1.0f, 0.01f, 1.0f);
-
         for (int x = 0; x < 2 * _CheeseSearchRange + 1; ++x)
         {
             for (int z = 0; z < 2 * _CheeseSearchRange + 1; ++z)
@@ -1012,6 +971,17 @@ public class EnemyControl : MonoBehaviour
         }
     }
 
+    // プレイヤーを裏から攻撃する？
+    private IEnumerator PlayerDown()
+    {
+        this.GetComponent<GameOverEnemy>().StartGameOverEnemyAnimation();
+
+        yield return new WaitForSeconds(2.0f);
+
+        _Player.gameObject.GetComponent<PlayerControl>().SetIsExist(false);
+
+        yield return null;
+    }
     // エネミーを削除する処理
     public void SetDestroy()
     {
@@ -1052,51 +1022,8 @@ public class EnemyControl : MonoBehaviour
 
     public void SetIsFront(bool isfront) { _IsFront = isfront; }
     public bool GetIsFront() { return _IsFront; }
-    public void SetStartEnemyTurn(bool enemyturn) { _StartEnemyTurn = enemyturn; }           // エネミーターンに変わったときにターンマネージャーでtrueにしてほしい
     public void SetLocalPosition(Vector2Int position) { _EnemyLocalPosition = position; }    // 自分のいるブロックの座標を更新する
     public Vector2Int GetLocalPosition() { return _EnemyLocalPosition; }
     public void SetCheese(GameObject cheese) { _Cheese = cheese; }
     public int GetCheeseSearchRange() { return _CheeseSearchRange; }
-
-    private GameObject SelectMovePanel(GameObject panelobj, GameObject movepanel, Vector2Int direction, float distance)
-    {
-        _Player = _GameManager.gameObject.GetComponent<GameManagerScript>().GetPlayer();
-        Vector3 playerpos = _Player.transform.position;
-
-        float tmp = 0.0f;
-        float random;
-
-        if (panelobj != null)
-        {
-            //プレイヤーと上パネルの距離を取得
-            tmp = Vector3.Distance(playerpos, panelobj.transform.position);
-
-            random = Random.value;
-
-            if (_IsFront)
-            {
-                // 壁がない・離れる or　同等の距離の時ランダムで決める
-                if (panelobj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, direction) &&
-                   ((tmp == distance && random < 0.5f) || tmp > distance))
-                {
-                    _EnemyDirection = direction;
-                    movepanel = panelobj;
-                    distance = tmp;
-                }
-            }
-            else
-            {
-                if (panelobj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, direction) &&
-                    ((tmp == distance && random < 0.5f) || tmp < distance))
-                {
-                    _EnemyDirection = direction;
-                    movepanel = panelobj;
-                    distance = tmp;
-                }
-            }
-        }
-        return movepanel;
-    }
-
-
 }
