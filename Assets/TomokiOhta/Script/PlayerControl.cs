@@ -11,9 +11,6 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] private Vector2Int _Direction;
     private Vector2Int _StartDirection;
 
-    [Header("吹き出し")]
-    [SerializeField] private GameObject _FukidasiObj;
-
     [Header("歩く時間")]
     [SerializeField] private float _WalkTime = 1.0f;
 
@@ -358,6 +355,9 @@ public class PlayerControl : MonoBehaviour
                 if (!_FrontBlock)
                     return false;
 
+                if (!_CanMove)
+                    return false;
+
                 var enemy = CheckEnemy(_LocalPosition + _Direction);
 
                 _CommandScript.ActiveSelectCommand(_CanMove, enemy);
@@ -375,21 +375,6 @@ public class PlayerControl : MonoBehaviour
                     _CommandTop = true;
                     _CommandScript.CommandSelect(_CommandTop);
                 }
-
-                if (_CommandSelect < _CanActionList.Count - 1 && CheckEnemy(_LocalPosition + _Direction) == null)
-                {
-                    _CommandSelect++;
-
-                    //アイコンのtransform取得　消す予定
-                    var icon = _FukidasiObj.transform.GetChild(_AnimMax).GetComponent<RectTransform>();
-                    icon.anchoredPosition = new Vector3(icon.localPosition.x, icon.localPosition.y + 20.0f, icon.localPosition.z);
-
-                    //文字のsprite変更
-                    //_FukidasiScript.SetActPattern(_CanActionList, false, _CommandSelect + 1);
-                    //ここが変わる
-
-
-                }
             }
             else if (Input.GetKeyDown(KeyCode.S) || Input.GetAxis("Controller_L_Stick_Vertical") < -0.5f || Input.GetAxis("Controller_D_Pad_Vertical") < -0.5f)
             {
@@ -397,18 +382,6 @@ public class PlayerControl : MonoBehaviour
                 {
                     _CommandTop = false;
                     _CommandScript.CommandSelect(_CommandTop);
-                }
-
-                if (_CommandSelect > 0 && CheckEnemy(_LocalPosition + _Direction) == null)
-                {
-                    _CommandSelect--;
-
-                    //アイコンのtransform取得
-                    var icon = _FukidasiObj.transform.GetChild(_AnimMax).GetComponent<RectTransform>();
-                    icon.anchoredPosition = new Vector3(icon.localPosition.x, icon.localPosition.y - 20.0f, icon.localPosition.z);
-
-                    //文字のsprite変更
-                    //_FukidasiScript.SetActPattern(_CanActionList, false, _CommandSelect + 1);
                 }
             }
 
