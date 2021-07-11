@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5322210636608615478}
   - component: {fileID: 5322210636608615477}
-  - component: {fileID: -3044206955431382081}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Manager
@@ -51,15 +50,3 @@ MonoBehaviour:
   _CameraWork: {fileID: 0}
   _EnemyPowerDownMovie: {fileID: 8161348340315569689, guid: 396286d418444774a9b931bf19be9d1d, type: 3}
   _EnemyPowerUpMovie: {fileID: 596505380233628909, guid: 6f817470096ae004084f16e256bc1945, type: 3}
---- !u!114 &-3044206955431382081
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5322210636608615476}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0fd3043bfea9c1a4d99315091a00e2d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
