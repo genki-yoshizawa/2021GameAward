@@ -251,9 +251,9 @@ public class MainCameraScript : MonoBehaviour
             return;
         // これ以降の処理はトップビューの時行わない
 
-        if (trigger < -_InputDeadZone || Input.GetKey(KeyCode.Keypad9))
+        if (trigger < -_InputDeadZone || Input.GetKey(KeyCode.U))
             ZoomInOut(/*_isZoomIn = */ false);
-        else if (trigger > _InputDeadZone || Input.GetKey(KeyCode.Keypad3))
+        else if (trigger > _InputDeadZone || Input.GetKey(KeyCode.J))
             ZoomInOut(/*_isZoomIn = */ true);
         else
             _ZoomVelocity = 0.0f;
@@ -261,13 +261,13 @@ public class MainCameraScript : MonoBehaviour
         //暫定的なキーボード入力
         float horizontalMove = 0.0f;
         float verticalMove = 0.0f;
-        if (Input.GetKey(KeyCode.Keypad2))
+        if (Input.GetKey(KeyCode.DownArrow))
             verticalMove = -1.0f;
-        if (Input.GetKey(KeyCode.Keypad4))
+        if (Input.GetKey(KeyCode.LeftArrow))
             horizontalMove = 1.0f;
-        if (Input.GetKey(KeyCode.Keypad6))
+        if (Input.GetKey(KeyCode.RightArrow))
             horizontalMove = -1.0f;
-        if (Input.GetKey(KeyCode.Keypad8))
+        if (Input.GetKey(KeyCode.UpArrow))
             verticalMove = 1.0f;
 
         if ((rightStickVertical < -_InputDeadZone || rightStickVertical > _InputDeadZone) || (rightStickHorizontal < -_InputDeadZone || rightStickHorizontal > _InputDeadZone))
@@ -638,6 +638,11 @@ public class MainCameraScript : MonoBehaviour
         }
 
         _isFront = _PlayerObject.GetComponent<PlayerControl>().GetIsFront();
+
+        // マネージャーのスタートエネミームービーを呼ぶ
+        // この書き方はエネミーが2体以上の時に対応できない
+        foreach (GameObject enemy in _GameManager.GetComponent<GameManagerScript>().GetEnemys())
+            _GameManager.gameObject.GetComponent<GameManagerScript>().StartEnemyMovie(enemy.GetComponent<EnemyControl>().GetIsFront());
     }
     
     private IEnumerator PlayerIsMoveCameraWork()

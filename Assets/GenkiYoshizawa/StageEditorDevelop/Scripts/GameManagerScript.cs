@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Video;
 
 public class GameManagerScript : MonoBehaviour
 {
@@ -14,6 +15,11 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField] private GameObject _GameUI;
     [Header("ステージ上のCameraWorkオブジェクトをセットしてください(Hierarchy上のUIFolderオブジェクト)")]
     [SerializeField] private GameObject _CameraWork;
+
+    [Header("プレハブのエネミーパワーダウンムービーをセットしてください")]
+    [SerializeField] private GameObject _EnemyPowerDownMovie;
+    [Header("プレハブのエネミーパワーアップムービーをセットしてください")]
+    [SerializeField] private GameObject _EnemyPowerUpMovie;
 
     // ブロックの配列
     private GameObject[][] _Block;
@@ -149,4 +155,78 @@ public class GameManagerScript : MonoBehaviour
         _GameUI.SetActive(false);
     }
 
+    public void StartEnemyMovie(bool isFront)
+    {
+        if (isFront && !EnemyMovieChecker.Instance.GetIsPowerDownMovie() && EnemyMovieChecker.Instance.GetIsPowerUpMovie())// シングル音から条件判定
+        {
+            StartCoroutine(PowerDownEnemyMovie());
+        }
+        else if (!isFront && !EnemyMovieChecker.Instance.GetIsPowerUpMovie())// シングルトンから条件判定
+        {
+            StartCoroutine(PowerUpEnemyMovie());
+        }
+    }
+
+    private void EnemyIsMovieDown(VideoPlayer vp) { EnemyMovieChecker.Instance.SetIsMovie(false); }
+
+    IEnumerator PowerUpEnemyMovie()
+    {
+        Time.timeScale = 0f;
+        // ポーズスタート
+        Debug.Log("パワーアップムービー始め");
+        EnemyMovieChecker.Instance.SetIsMovie(true);
+        EnemyMovieChecker.Instance.SetIsPowerUpMovie();
+
+        GameObject movieObj = Instantiate(_EnemyPowerUpMovie);
+        movieObj.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
+        movieObj.transform.parent = _GameUI.transform;
+        movieObj.GetComponent<RectTransform>().localPosition = new Vector3(0f, 0f, 0f);
+
+        movieObj.GetComponent<VideoPlayer>().loopPointReached += EnemyIsMovieDown;
+        movieObj.GetComponent<EnemyMovie>().SetPlayer(movieObj.GetComponent<VideoPlayer>());
+
+        movieObj.GetComponent<EnemyMovie>().Play();
+
+        while (EnemyMovieChecker.Instance.GetIsMovie())
+        {
+            yield return null;
+        }
+
+        Destroy(movieObj);
+
+        Debug.Log("パワーアップムービー終了");
+
+        // ポーズ終了
+        Time.timeScale = 1f;
+    }
+
+    IEnumerator PowerDownEnemyMovie()
+    {
+        Time.timeScale = 0f;
+        // ポーズスタート
+        Debug.Log("パワーダウンムービー始め");
+        EnemyMovieChecker.Instance.SetIsMovie(true);
+        EnemyMovieChecker.Instance.SetIsPowerDownMovie();
+
+        GameObject movieObj = Instantiate(_EnemyPowerDownMovie);
+        movieObj.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
+        movieObj.transform.parent = _GameUI.transform;
+        movieObj.GetComponent<RectTransform>().localPosition = new Vector3(0f, 0f, 0f);
+
+        movieObj.GetComponent<VideoPlayer>().loopPointReached += EnemyIsMovieDown;
+        movieObj.GetComponent<EnemyMovie>().SetPlayer(movieObj.GetComponent<VideoPlayer>());
+
+        movieObj.GetComponent<EnemyMovie>().Play();
+
+        while (EnemyMovieChecker.Instance.GetIsMovie())
+        {
+            yield return null;
+        }
+
+        Destroy(movieObj);
+        Debug.Log("パワーダウンムービー終了");
+
+        // ポーズ終了
+        Time.timeScale = 1f;
+    }
 }

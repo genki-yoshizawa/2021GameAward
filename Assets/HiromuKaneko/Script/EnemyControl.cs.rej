@@ -1,0 +1,13 @@
+diff a/Assets/HiromuKaneko/Script/EnemyControl.cs b/Assets/HiromuKaneko/Script/EnemyControl.cs	(rejected hunks)
+@@ -74,6 +74,11 @@
+         _CheeseBite = false;
+         _IsExist = false;
+         _PassedTime = 0.0f;
++<<<<<<< HEAD
++=======
++        // �}�l�[�W���[�̃X�^�[�g�A�j���[�V������Ă�
++        //        _GameManager.gameObject.GetComponent<GameManagerScript>().StartEnemyMovie();
++>>>>>>> d8a11013a63d749209499476537f8bc5567ba6c8
+ 
+ 
+     }

@@ -74,6 +74,11 @@ public class BlockControl : MonoBehaviour
                 time = _TurnOverAnimTime - _PassedTime;
                 _PassedTime = 0.0f;
                 _isTurnOverAnim = false;
+                // マネージャーのスタートエネミームービーを呼ぶ
+                // この書き方はエネミーが2体以上の時に対応できない
+                foreach (GameObject enemy in _GameManager.GetComponent<GameManagerScript>().GetEnemys())
+                    _GameManager.gameObject.GetComponent<GameManagerScript>().StartEnemyMovie(enemy.GetComponent<EnemyControl>().GetIsFront());
+
             }
             else
                 _PassedTime += time;
