@@ -30,35 +30,37 @@ public class CameraOptionScript : MonoBehaviour
         float trigger = Input.GetAxis("Controller_L_R_Trigger");
         float rightStickVertical = Input.GetAxis("Controller_R_Stick_Vertical");
         float rightStickHorizontal = Input.GetAxis("Controller_R_Stick_Horizontal");
+        
+        if (_CameraObject.GetComponent<MainCameraScript>().GetIsTop())
+        {
+            _CameraOptionAnimator.SetFloat("TopViewTime", _PassedTime);
+            _CameraOptionAnimator.SetBool("InputKey", false);
+        }
+        else
+        {
+            _CameraOptionAnimator.SetFloat("UsuallyTime", _PassedTime);
+            _CameraOptionAnimator.SetBool("InputKey", false);
+        }
 
         if ( // カメラ入力
-            Input.GetButtonDown("Controller_Y") || Input.GetKeyDown(KeyCode.Y) ||
-            Input.GetButtonDown("Controller_RB") || Input.GetKeyDown(KeyCode.T) ||
-            Input.GetButtonDown("Controller_LB") || Input.GetKeyDown(KeyCode.R) ||
+            Input.GetButton("Controller_Y") || Input.GetKey(KeyCode.Y) ||
+            Input.GetButton("Controller_RB") || Input.GetKey(KeyCode.T) ||
+            Input.GetButton("Controller_LB") || Input.GetKey(KeyCode.R) ||
             trigger < -_InputDeadZone || Input.GetKey(KeyCode.Keypad9) ||
             trigger > _InputDeadZone || Input.GetKey(KeyCode.Keypad3) ||
             Input.GetKey(KeyCode.Keypad2) || Input.GetKey(KeyCode.Keypad4) || Input.GetKey(KeyCode.Keypad6) || Input.GetKey(KeyCode.Keypad8) ||
             (rightStickVertical < -_InputDeadZone || rightStickVertical > _InputDeadZone) || (rightStickHorizontal < -_InputDeadZone || rightStickHorizontal > _InputDeadZone) ||
             // プレイヤー入力
-            Input.GetKeyDown(KeyCode.RightArrow) || Input.GetAxis("Controller_L_Stick_Horizontal") > 0.5f || Input.GetAxis("Controller_D_Pad_Horizontal") > 0.5f ||
-            Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetAxis("Controller_L_Stick_Horizontal") < -0.5f || Input.GetAxis("Controller_D_Pad_Horizontal") < -0.5f ||
-            Input.GetKeyDown(KeyCode.UpArrow) || Input.GetAxis("Controller_L_Stick_Vertical") > 0.5f || Input.GetAxis("Controller_D_Pad_Vertical") > 0.5f ||
-            Input.GetKeyDown(KeyCode.DownArrow) || Input.GetAxis("Controller_L_Stick_Vertical") < -0.5f || Input.GetAxis("Controller_D_Pad_Vertical") < -0.5f ||
-            Input.GetButtonDown("Controller_B") || Input.GetKeyDown(KeyCode.Return)
+            Input.GetKey(KeyCode.RightArrow) || Input.GetAxis("Controller_L_Stick_Horizontal") > 0.5f || Input.GetAxis("Controller_D_Pad_Horizontal") > 0.5f ||
+            Input.GetKey(KeyCode.LeftArrow) || Input.GetAxis("Controller_L_Stick_Horizontal") < -0.5f || Input.GetAxis("Controller_D_Pad_Horizontal") < -0.5f ||
+            Input.GetKey(KeyCode.UpArrow) || Input.GetAxis("Controller_L_Stick_Vertical") > 0.5f || Input.GetAxis("Controller_D_Pad_Vertical") > 0.5f ||
+            Input.GetKey(KeyCode.DownArrow) || Input.GetAxis("Controller_L_Stick_Vertical") < -0.5f || Input.GetAxis("Controller_D_Pad_Vertical") < -0.5f ||
+            Input.GetButton("Controller_B") || Input.GetKey(KeyCode.Return)
             ) 
         {
-            _CameraOptionAnimator.SetTrigger("InputKey");
+            _CameraOptionAnimator.SetBool("InputKey",true);
             _PassedTime = 0.0f;
             _CameraOptionAnimator.SetFloat("TopViewTime", _PassedTime);
-            _CameraOptionAnimator.SetFloat("UsuallyTime", _PassedTime);
-        }
-
-        if (_CameraObject.GetComponent<MainCameraScript>().GetIsTop())
-        {
-            _CameraOptionAnimator.SetFloat("TopViewTime", _PassedTime);
-        }
-        else
-        {
             _CameraOptionAnimator.SetFloat("UsuallyTime", _PassedTime);
         }
     }
