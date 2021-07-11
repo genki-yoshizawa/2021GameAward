@@ -147,6 +147,15 @@ public class PlayerControl : MonoBehaviour
 
             if (!_Animator.GetBool("Walk"))
             {
+                if(_Direction == Vector2Int.up)
+                    transform.eulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
+                else if(_Direction == Vector2Int.down)
+                    transform.eulerAngles = new Vector3(0.0f, 180.0f, 0.0f);
+                else if(_Direction == Vector2Int.right)
+                    transform.eulerAngles = new Vector3(0.0f, 90.0f, 0.0f);
+                else if(_Direction == Vector2Int.left)
+                    transform.eulerAngles = new Vector3(0.0f, -90.0f, 0.0f);
+
                 _PassedTime = 0.0f;
                 _TurnAngle = 90.0f;
                 _IsWalk = false;
@@ -348,11 +357,18 @@ public class PlayerControl : MonoBehaviour
             //決定を押してコマンド選びの項目へ行く
             if (Input.GetButtonDown("Controller_B") || Input.GetKeyDown(KeyCode.Return))
             {
+                //前にパネルがなければコマンドを表示しない
                 if (!_FrontBlock)
                     return false;
 
+                //前のパネルが何もできないなら
                 if (!_CanMove)
-                    return false;
+                {
+                    if (_CommandAction == null)
+                        return false;
+
+                    _CommandTop = false;
+                }
 
                 var enemy = CheckEnemy(_LocalPosition + _Direction);
 
@@ -366,7 +382,7 @@ public class PlayerControl : MonoBehaviour
             //上下矢印でコマンド選択
             if (Input.GetKeyDown(KeyCode.W) || Input.GetAxis("Controller_L_Stick_Vertical") > 0.5f || Input.GetAxis("Controller_D_Pad_Vertical") > 0.5f)
             {
-                if (_CommandAction != null && CheckEnemy(_LocalPosition + _Direction) == null)
+                if (_CanMove && CheckEnemy(_LocalPosition + _Direction) == null)
                 {
                     _CommandTop = true;
                     _CommandScript.CommandSelect(_CommandTop);
