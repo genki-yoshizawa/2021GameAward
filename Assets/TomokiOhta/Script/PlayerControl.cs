@@ -147,6 +147,15 @@ public class PlayerControl : MonoBehaviour
 
             if (!_Animator.GetBool("Walk"))
             {
+                if(_Direction == Vector2Int.up)
+                    transform.eulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
+                else if(_Direction == Vector2Int.down)
+                    transform.eulerAngles = new Vector3(0.0f, 180.0f, 0.0f);
+                else if(_Direction == Vector2Int.right)
+                    transform.eulerAngles = new Vector3(0.0f, 90.0f, 0.0f);
+                else if(_Direction == Vector2Int.left)
+                    transform.eulerAngles = new Vector3(0.0f, -90.0f, 0.0f);
+
                 _PassedTime = 0.0f;
                 _TurnAngle = 90.0f;
                 _IsWalk = false;
