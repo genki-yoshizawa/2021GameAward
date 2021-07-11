@@ -510,7 +510,7 @@ public class MainCameraScript : MonoBehaviour
 
         for(int i = 1; i < targetNumberList.Count; ++i)
         {
-            targetPosition = _TopViewObject[1].transform.position;
+            targetPosition = _TopViewObject[i].transform.position;
             targetPosition.y = 0f;
 
             float dist = Vector3.Distance(_CameraLookAt, targetPosition);
