@@ -56,12 +56,8 @@ public class PlayerControl : MonoBehaviour
     //どの行動が可能でどの文字を格納するかを管理する
     private List<int> _CanActionList = new List<int>();
 
-    //コマンド選択時に上から何番目にいるか
-    private int _CommandSelect = 3;
-    private bool _CommandTop = true;  //コマンド選択で上を選んでいるか
-
-    //行動コマンドの種類数
-    private readonly int _AnimMax = 4;
+    //コマンド選択で上を選んでいるか
+    private bool _CommandTop = true;  
 
     //ターンマネージャー
     private TurnManager _TurnManager;
@@ -403,6 +399,7 @@ public class PlayerControl : MonoBehaviour
                 else
                     _CommandAction(_FrontBlock);
 
+                _CommandTop = true;
                 _CommandScript.SetDraw(false);
                 _SelectDirection = false;
                 return true;
