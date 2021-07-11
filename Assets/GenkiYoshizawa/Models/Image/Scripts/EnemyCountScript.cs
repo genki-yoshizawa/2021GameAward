@@ -22,9 +22,6 @@ public class EnemyCountScript : MonoBehaviour
 
     private Vector3 _StartLocalScale;
 
-    // スプライトを更新するべきかのフラグ(眠気に任せて書いたので変な名前)
-    private bool _SpriteUpdate = false;
-
     private float _PassedTime = 0.0f;
     // Start is called before the first frame update
     void Start()
@@ -34,7 +31,6 @@ public class EnemyCountScript : MonoBehaviour
         _Enemys = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerScript>().GetEnemys();
 
         _MyImage.sprite = _NumberSprite[_Enemys.Count];
-        _SpriteUpdate = false;
         _CurEnemyCount = _Enemys.Count;
 
         _StartLocalScale = gameObject.GetComponent<RectTransform>().localScale;
@@ -48,7 +44,6 @@ public class EnemyCountScript : MonoBehaviour
         {
             gameObject.GetComponent<RectTransform>().localScale = new Vector3(_EnemyCountMaxScale, _EnemyCountMaxScale, _EnemyCountMaxScale);
             _isEnemyCountAnim = true;
-            _SpriteUpdate = true;
 
             _MyImage.sprite = _NumberSprite[_Enemys.Count + 10];
         }
