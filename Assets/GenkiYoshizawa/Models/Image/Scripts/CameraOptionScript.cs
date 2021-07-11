@@ -49,6 +49,8 @@ public class CameraOptionScript : MonoBehaviour
         {
             _CameraOptionAnimator.SetTrigger("InputKey");
             _PassedTime = 0.0f;
+            _CameraOptionAnimator.SetFloat("TopViewTime", _PassedTime);
+            _CameraOptionAnimator.SetFloat("UsuallyTime", _PassedTime);
         }
 
         if (_CameraObject.GetComponent<MainCameraScript>().GetIsTop())
