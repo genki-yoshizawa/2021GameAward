@@ -2880,19 +2880,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3883039677388121889, guid: 7addd5d3b43fa244cb677143d5bffe09, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 7.6293616
+      value: 1.9047725
       objectReference: {fileID: 0}
     - target: {fileID: 3883039677388121889, guid: 7addd5d3b43fa244cb677143d5bffe09, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.00000087730433
+      value: -3.0947566
       objectReference: {fileID: 0}
     - target: {fileID: 3883039677388121889, guid: 7addd5d3b43fa244cb677143d5bffe09, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071067
+      value: 0.97062254
       objectReference: {fileID: 0}
     - target: {fileID: 3883039677388121889, guid: 7addd5d3b43fa244cb677143d5bffe09, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.7071068
+      value: 0.24060738
       objectReference: {fileID: 0}
     - target: {fileID: 3883039677388121889, guid: 7addd5d3b43fa244cb677143d5bffe09, type: 3}
       propertyPath: m_LocalRotation.y
@@ -2908,11 +2908,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3883039677388121917, guid: 7addd5d3b43fa244cb677143d5bffe09, type: 3}
       propertyPath: _ToPlayerOffset
-      value: 7.3593616
+      value: 3.5
       objectReference: {fileID: 0}
     - target: {fileID: 3883039677388121917, guid: 7addd5d3b43fa244cb677143d5bffe09, type: 3}
       propertyPath: _EditTopViewNumber
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3883039677388121917, guid: 7addd5d3b43fa244cb677143d5bffe09, type: 3}
+      propertyPath: _ToPlayerOffsetMax
+      value: 6.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3883039677388121917, guid: 7addd5d3b43fa244cb677143d5bffe09, type: 3}
+      propertyPath: _ToPlayerOffsetMin
+      value: 1.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3883039677388121917, guid: 7addd5d3b43fa244cb677143d5bffe09, type: 3}
+      propertyPath: _CameraVelocityVertical
+      value: 0.045
+      objectReference: {fileID: 0}
+    - target: {fileID: 3883039677388121917, guid: 7addd5d3b43fa244cb677143d5bffe09, type: 3}
+      propertyPath: _GameStartCameraWorkTime
+      value: 1.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3883039677388121917, guid: 7addd5d3b43fa244cb677143d5bffe09, type: 3}
+      propertyPath: _CameraVelocityHorizontal
+      value: 0.045
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7addd5d3b43fa244cb677143d5bffe09, type: 3}
