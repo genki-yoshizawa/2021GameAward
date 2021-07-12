@@ -5726,8 +5726,35 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 6765079240702817127, guid: 30a9f58d82b4db94a8ced7874e9b5d54, type: 3}
+      propertyPath: _canRotate
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7475485176586239261, guid: 30a9f58d82b4db94a8ced7874e9b5d54, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 30a9f58d82b4db94a8ced7874e9b5d54, type: 3}
+--- !u!1 &2060847910 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3597089579699006380, guid: 30a9f58d82b4db94a8ced7874e9b5d54, type: 3}
+  m_PrefabInstance: {fileID: 2060847909}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2060847911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2060847910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fae0c403617e9fc418f485b0f2986624, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _canRotate: 1
+  _canTurnOver: 0
+  _canSwap: 0
+  _SwapIndex: 0
+  _PanelIndex: 0
 --- !u!1001 &2071383537
 PrefabInstance:
   m_ObjectHideFlags: 0
