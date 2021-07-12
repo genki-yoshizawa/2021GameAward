@@ -12,7 +12,7 @@ public class PlayerControl : MonoBehaviour
     private Vector2Int _StartDirection;
 
     [Header("•à‚­ŽžŠÔ")]
-    [SerializeField] private float _WalkTime = 1.0f;
+    [SerializeField] private float _WalkTime;
 
     [Header("•ûŒü“]Š·‚É‚©‚©‚éŽžŠÔ")]
     [SerializeField] private float _RotateTime90;
