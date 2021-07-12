@@ -45,6 +45,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
     public static string _StageModelName;
     public static bool _NextStage = false;
 
+    private bool firstMenu = true;
 
     void Start()
     {
@@ -78,6 +79,11 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         if(curStageName == "MenuScene")
         {
 
+            if(firstMenu)
+            {
+                _DetailUI.gameObject.GetComponent<DetailUI>().DetailUIAnimation();
+                firstMenu = false;
+            }
 
             for (int i = 0; i < _ChidCount; i++)
             {
@@ -98,6 +104,8 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         }
         else
         {
+            firstMenu = true;
+
             for (int i = 0; i < _ChidCount; i++)
             {
                 //if (transform.GetChild(i).gameObject.transform.GetChild(0).GetComponent<Renderer>() != null)

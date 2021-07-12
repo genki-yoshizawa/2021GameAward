@@ -7,7 +7,7 @@ using UnityEditor;
 public class GameOverEnemy : MonoBehaviour
 {
     // Start is called before the first frame update
-    Animator _EnemyAnimaiton;
+    //Animator _EnemyAnimaiton;
     //AnimatorController _GameOverAnimaiton;
 
     Vector3 _EnemyRotation;
@@ -19,12 +19,13 @@ public class GameOverEnemy : MonoBehaviour
 
     private float _MoveDistance = 0.075f * 2;
 
+
     void Start()
     {
+
         //RuntimeAnimatorController asset = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>("Assets/TaikiOkahara/Scene/GameOverEnemyAnimation/GameOverAnimationController.controller");
         //_GameOverAnimaiton = asset as AnimatorController;
-
-        _EnemyAnimaiton = this.GetComponent<Animator>();
+       
 
     }
 
@@ -52,7 +53,7 @@ public class GameOverEnemy : MonoBehaviour
             rot.x += -1.0f;
             this.transform.rotation = Quaternion.Euler(rot);
             _RotateCount += 1;
-            Debug.Log("回転中");
+            //Debug.Log("回転中");
             yield return null;
         }
 
@@ -67,20 +68,20 @@ public class GameOverEnemy : MonoBehaviour
             _Direction = -1;
         }
 
-        Debug.Log("回転のコルーチン終了");
+        //Debug.Log("回転のコルーチン終了");
 
-        Debug.Log("移動開始");
+        //Debug.Log("移動開始");
         _TranslateStart = true;
 
         // 2秒待つ  
         yield return new WaitForSeconds(1.0f);
 
         _TranslateStart = false;
-        _EnemyAnimaiton.SetBool("Stay", true);
+        this.GetComponent<Animator>().SetBool("Stay", true);
 
         yield return new WaitForSeconds(2.5f);
 
-        _EnemyAnimaiton.enabled = false;
+        this.GetComponent<Animator>().enabled = false;
     }
 
     private void TranslateEnemyPosition()
@@ -94,6 +95,10 @@ public class GameOverEnemy : MonoBehaviour
     {
         //_EnemyAnimaiton.runtimeAnimatorController = _GameOverAnimaiton;
 
+        this.GetComponent<Animator>().runtimeAnimatorController = (RuntimeAnimatorController)RuntimeAnimatorController.Instantiate(Resources.Load("GameOverAnimation/GameOverAnimationController"));
+
+
+        //_EnemyAnimaiton = this.GetComponent<Animator>();
 
         StartCoroutine("GameOverAnimation");
     }

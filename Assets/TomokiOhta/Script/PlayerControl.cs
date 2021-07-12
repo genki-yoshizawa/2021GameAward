@@ -15,10 +15,10 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] private float _WalkTime = 1.0f;
 
     [Header("ï˚å¸ì]ä∑Ç…Ç©Ç©ÇÈéûä‘")]
-    [SerializeField] private float _RotateTime90 = 0.5f;
+    [SerializeField] private float _RotateTime90;
 
     [Header("ï˚å¸ì]ä∑Ç…Ç©Ç©ÇÈéûä‘")]
-    [SerializeField] private float _RotateTime180 = 0.5f;
+    [SerializeField] private float _RotateTime180;
 
     [Header("ÉNÉäÉAâÊñ "), SerializeField] private GameObject _ClearScreen;
     [Header("ÉQÅ[ÉÄÉIÅ[ÉoÅ[âÊñ "), SerializeField] private GameObject _GameOverScreen;
@@ -138,15 +138,28 @@ public class PlayerControl : MonoBehaviour
         if (_Animator.GetBool("Walk") && _IsWalk == true)
         {
             float time = Time.deltaTime;
-            if ((_PassedTime += time) > _RotateTime90)
+
+            if (_TurnAngle == -180.0f)
             {
-                _Animator.SetBool("Walk", false);
+                if ((_PassedTime += time) > _RotateTime180)
+                    _Animator.SetBool("Walk", false);
+
+                transform.Rotate(0.0f, Mathf.Abs(_TurnAngle) * (time / _RotateTime180) * (_TurnAngle > 0.0f ? 1.0f : -1.0f), 0.0f);
+            }
+            else
+            {
+                if ((_PassedTime += time) > _RotateTime90)
+                    _Animator.SetBool("Walk", false);
+
+                transform.Rotate(0.0f, Mathf.Abs(_TurnAngle) * (time / _RotateTime90) * (_TurnAngle > 0.0f ? 1.0f : -1.0f), 0.0f);
             }
 
-            transform.Rotate(0.0f, Mathf.Abs(_TurnAngle) * (time / _RotateTime90) * (_TurnAngle > 0.0f ? 1.0f : -1.0f), 0.0f);
+            //âÒì]
+            //transform.Rotate(0.0f, Mathf.Abs(_TurnAngle) * (time / _RotateTime90) * (_TurnAngle > 0.0f ? 1.0f : -1.0f), 0.0f);
 
             if (!_Animator.GetBool("Walk"))
             {
+                //å¸Ç´ÇÃí≤êÆ
                 if(_Direction == Vector2Int.up)
                     transform.eulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
                 else if(_Direction == Vector2Int.down)
@@ -335,8 +348,8 @@ public class PlayerControl : MonoBehaviour
             
             var blockScript = _FrontBlock.GetComponent<BlockConfig>();
 
-            _CommandScript.SetActPattern(blockScript, enemy, _IsFront, _CanMove);
             _CommandScript.SetUnder(!isUnder);
+            _CommandScript.SetActPattern(blockScript, enemy, _IsFront, _CanMove);
             _CommandScript.SetDraw(true);
         }
 
