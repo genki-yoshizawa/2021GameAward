@@ -54,90 +54,90 @@ public class PanelControl : MonoBehaviour
 
     private void Update()
     {
-        // ネストが一時的に深いけどゲーム完成時には見やすくなる（はず）
-        if (_isMarker)
-        {
-            if (_isMarkerCreate && !_isCurMarkerCreate)
-            {//マーカーを生成する処理
-                // 毎回生成デリートを繰り返すは嫌なので、ステージ毎にマーカーオブジェクトをセットして、Startでオブジェクト取得。
-                // アクティブフラグ、ポジションを切り替えて行うことにする(こっちの案になったら)
-                _Marker = Instantiate(_MarkerPrefab);
+        //// ネストが一時的に深いけどゲーム完成時には見やすくなる（はず）
+        //if (_isMarker)
+        //{
+        //    if (_isMarkerCreate && !_isCurMarkerCreate)
+        //    {//マーカーを生成する処理
+        //        // 毎回生成デリートを繰り返すは嫌なので、ステージ毎にマーカーオブジェクトをセットして、Startでオブジェクト取得。
+        //        // アクティブフラグ、ポジションを切り替えて行うことにする(こっちの案になったら)
+        //        _Marker = Instantiate(_MarkerPrefab);
 
-                bool isFront = transform.parent.GetChild(0) == transform;
-                // マーカーの回転と位置を合わせる
-                if (!isFront)
-                    _Marker.transform.Rotate(Vector3.right, 180);
-                _Marker.transform.position = transform.position + new Vector3(0.0f, isFront ? _MarkerOffset : -_MarkerOffset, 0.0f);
+        //        bool isFront = transform.parent.GetChild(0) == transform;
+        //        // マーカーの回転と位置を合わせる
+        //        if (!isFront)
+        //            _Marker.transform.Rotate(Vector3.right, 180);
+        //        _Marker.transform.position = transform.position + new Vector3(0.0f, isFront ? _MarkerOffset : -_MarkerOffset, 0.0f);
 
-                PanelMarkerScript script = _Marker.GetComponent<PanelMarkerScript>();
-                script.SetCycleTime(_CycleTime);
-                script.SetMaxScale(_MarkerMaxScale);
-                script.SetisSinPulse(_isSinPulse);
-            }
-            else if(!_isMarkerCreate && _isCurMarkerCreate)
-            {//マーカーを破棄する処理
-                Destroy(_Marker);
-            }
+        //        PanelMarkerScript script = _Marker.GetComponent<PanelMarkerScript>();
+        //        script.SetCycleTime(_CycleTime);
+        //        script.SetMaxScale(_MarkerMaxScale);
+        //        script.SetisSinPulse(_isSinPulse);
+        //    }
+        //    else if(!_isMarkerCreate && _isCurMarkerCreate)
+        //    {//マーカーを破棄する処理
+        //        Destroy(_Marker);
+        //    }
 
-            _isCurMarkerCreate = _isMarkerCreate;
-        }
-        else
-        {
-            if (_isBright)
-            {
-                _PassedTime += Time.deltaTime;
-                while (true)
-                {
-                    if (_PassedTime > _CycleTime)
-                        _PassedTime -= _CycleTime;
-                    else
-                        break;
-                }
+        //    _isCurMarkerCreate = _isMarkerCreate;
+        //}
+        //else
+        //{
+        //    if (_isBright)
+        //    {
+        //        _PassedTime += Time.deltaTime;
+        //        while (true)
+        //        {
+        //            if (_PassedTime > _CycleTime)
+        //                _PassedTime -= _CycleTime;
+        //            else
+        //                break;
+        //        }
 
-                for(int i = 0; i < _MeshRenderer.materials.Length; ++i)
-                {
-                    Color color = new Color(0.0f, 0.0f, 0.0f, 1.0f);
+        //        for(int i = 0; i < _MeshRenderer.materials.Length; ++i)
+        //        {
+        //            Color color = new Color(0.0f, 0.0f, 0.0f, 1.0f);
 
-                    if (_isSinPulse)
-                    {
-                        //color.r = _SaveMaterials[i].color.r + Mathf.Abs((1.0f - _SaveMaterials[i].color.r) * Mathf.Sin(Mathf.PI * _PassedTime / _CycleTime));
-                        //color.g = _SaveMaterials[i].color.g + Mathf.Abs((1.0f - _SaveMaterials[i].color.g) * Mathf.Sin(Mathf.PI * _PassedTime / _CycleTime));
-                        //color.b = _SaveMaterials[i].color.b + Mathf.Abs((1.0f - _SaveMaterials[i].color.b) * Mathf.Sin(Mathf.PI * _PassedTime / _CycleTime));
-                    }
-                    else
-                    {
-                        if (_PassedTime < _CycleTime * 0.5f)
-                        {
-                            //color.r = _SaveMaterials[i].color.r + (1.0f - _SaveMaterials[i].color.r) / (_CycleTime * 0.5f) * _PassedTime;
-                            //color.g = _SaveMaterials[i].color.g + (1.0f - _SaveMaterials[i].color.g) / (_CycleTime * 0.5f) * _PassedTime;
-                            //color.b = _SaveMaterials[i].color.b + (1.0f - _SaveMaterials[i].color.b) / (_CycleTime * 0.5f) * _PassedTime;
-                        }
-                        else
-                        {
-                            //color.r = 1.0f - (1.0f - _SaveMaterials[i].color.r) / (_CycleTime * 0.5f) * (_PassedTime - _CycleTime * 0.5f);
-                            //color.g = 1.0f - (1.0f - _SaveMaterials[i].color.g) / (_CycleTime * 0.5f) * (_PassedTime - _CycleTime * 0.5f);
-                            //color.b = 1.0f - (1.0f - _SaveMaterials[i].color.b) / (_CycleTime * 0.5f) * (_PassedTime - _CycleTime * 0.5f);
-                        }
-                    }
+        //            if (_isSinPulse)
+        //            {
+        //                //color.r = _SaveMaterials[i].color.r + Mathf.Abs((1.0f - _SaveMaterials[i].color.r) * Mathf.Sin(Mathf.PI * _PassedTime / _CycleTime));
+        //                //color.g = _SaveMaterials[i].color.g + Mathf.Abs((1.0f - _SaveMaterials[i].color.g) * Mathf.Sin(Mathf.PI * _PassedTime / _CycleTime));
+        //                //color.b = _SaveMaterials[i].color.b + Mathf.Abs((1.0f - _SaveMaterials[i].color.b) * Mathf.Sin(Mathf.PI * _PassedTime / _CycleTime));
+        //            }
+        //            else
+        //            {
+        //                if (_PassedTime < _CycleTime * 0.5f)
+        //                {
+        //                    //color.r = _SaveMaterials[i].color.r + (1.0f - _SaveMaterials[i].color.r) / (_CycleTime * 0.5f) * _PassedTime;
+        //                    //color.g = _SaveMaterials[i].color.g + (1.0f - _SaveMaterials[i].color.g) / (_CycleTime * 0.5f) * _PassedTime;
+        //                    //color.b = _SaveMaterials[i].color.b + (1.0f - _SaveMaterials[i].color.b) / (_CycleTime * 0.5f) * _PassedTime;
+        //                }
+        //                else
+        //                {
+        //                    //color.r = 1.0f - (1.0f - _SaveMaterials[i].color.r) / (_CycleTime * 0.5f) * (_PassedTime - _CycleTime * 0.5f);
+        //                    //color.g = 1.0f - (1.0f - _SaveMaterials[i].color.g) / (_CycleTime * 0.5f) * (_PassedTime - _CycleTime * 0.5f);
+        //                    //color.b = 1.0f - (1.0f - _SaveMaterials[i].color.b) / (_CycleTime * 0.5f) * (_PassedTime - _CycleTime * 0.5f);
+        //                }
+        //            }
 
-                    //color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-                    _MeshRenderer.materials[i].color = color;
-                }
+        //            //color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        //            _MeshRenderer.materials[i].color = color;
+        //        }
                 
-            }
-            else if (!_isBright && _isCurBright)
-            {
-                // 直前まで発光をしていたら元に戻す
-                for (int i = 0; i < _MeshRenderer.materials.Length; ++i)
-                {
-                    //Debug.Log(_SaveMaterials[i]);
-                    //_MeshRenderer.materials[i].color = _SaveMaterials[i].color;
-                }
-                _PassedTime = 0.0f;
-            }
+        //    }
+        //    else if (!_isBright && _isCurBright)
+        //    {
+        //        // 直前まで発光をしていたら元に戻す
+        //        for (int i = 0; i < _MeshRenderer.materials.Length; ++i)
+        //        {
+        //            //Debug.Log(_SaveMaterials[i]);
+        //            //_MeshRenderer.materials[i].color = _SaveMaterials[i].color;
+        //        }
+        //        _PassedTime = 0.0f;
+        //    }
 
-            _isCurBright = _isBright;
-        }
+        //    _isCurBright = _isBright;
+        //}
     }
 
     //このパネルにつくギミック（子オブジェクト）をまとめて処理する
