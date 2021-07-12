@@ -4798,7 +4798,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _CheeseSearchRange: 0
   _DebugColor: {r: 1, g: 1, b: 0, a: 0.5}
-  _WalkTime: 0.5
+  _WalkTime: 0.75
   _BiteTime: 1
   _PanicTime: 1
   _CapturedDelayTime: 1
