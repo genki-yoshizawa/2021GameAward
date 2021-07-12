@@ -389,7 +389,7 @@ public class MainCameraScript : MonoBehaviour
         {
             // トップビュー
             transform.position = new Vector3(transform.position.x, -transform.position.y, transform.position.z);
-            _SaveForward = new Vector3(_SaveForward.x, -_SaveForward.y, _SaveForward.z);
+            _SaveForward = new Vector3(_SaveForward.x, -_SaveForward.y, -_SaveForward.z);
         }
         else
         {
