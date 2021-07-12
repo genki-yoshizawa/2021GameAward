@@ -1179,9 +1179,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 6d20326eb8344e0449e62352d5306894, type: 3}
   - {fileID: 8300000, guid: 6d20326eb8344e0449e62352d5306894, type: 3}
   _Direction: {x: 0, y: 1}
-  _WalkTime: 1
-  _RotateTime90: 0.5
-  _RotateTime180: 0.3
+  _WalkTime: 0.5
+  _RotateTime90: 0.3
+  _RotateTime180: 0.2
   _ClearScreen: {fileID: 0}
   _GameOverScreen: {fileID: 0}
 --- !u!114 &4126733527103290401
