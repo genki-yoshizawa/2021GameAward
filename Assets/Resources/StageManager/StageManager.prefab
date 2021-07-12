@@ -198,7 +198,7 @@ MonoBehaviour:
   _SceneName: New1-1
   _StageName: {fileID: 0}
   _StageNumber: 11
-  _MaxTurn: 21
+  _MaxTurn: 50
   _3Star: 5
   _2Star: 10
   _1Star: 11
@@ -658,7 +658,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2280714148504884091
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1463,7 +1463,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2280714149844828722
 RectTransform:
   m_ObjectHideFlags: 0

@@ -34,6 +34,11 @@ public class PanelControl : MonoBehaviour
     // UI実行後の経過時間
     private float _PassedTime = 0.0f;
 
+
+    private Renderer _Renderer;
+    private Color _BaseColor;
+    private int _ColorCount = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -50,10 +55,28 @@ public class PanelControl : MonoBehaviour
         }
 
         _PassedTime = 0.0f;
+
+        _Renderer = this.GetComponent<Renderer>();
+        _BaseColor = _Renderer.material.color;
     }
 
     private void Update()
     {
+
+        if(_isBright)
+        {
+            float col = (Mathf.Sin(_ColorCount * 0.01f) + 1.0f) * 0.5f;
+            _Renderer.material.color = _BaseColor + new Color(col, col, col);
+            _ColorCount++;
+        }
+        else 
+        {
+            _Renderer.material.color = _BaseColor;
+            _ColorCount = 0;
+
+        }
+
+
         //// ネストが一時的に深いけどゲーム完成時には見やすくなる（はず）
         //if (_isMarker)
         //{
@@ -123,7 +146,7 @@ public class PanelControl : MonoBehaviour
         //            //color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         //            _MeshRenderer.materials[i].color = color;
         //        }
-                
+
         //    }
         //    else if (!_isBright && _isCurBright)
         //    {
