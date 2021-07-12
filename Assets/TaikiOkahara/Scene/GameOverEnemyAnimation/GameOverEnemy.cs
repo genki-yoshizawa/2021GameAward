@@ -35,10 +35,13 @@ public class GameOverEnemy : MonoBehaviour
 
         TranslateEnemyPosition();
 
-        if(Input.GetKeyDown(KeyCode.T))
-        {
-            StartGameOverEnemyAnimation();   
-        }
+
+        //if(Input.GetKeyDown(KeyCode.T))
+        //{
+        //    StartGameOverEnemyAnimation();   
+        //}
+
+
     }
 
     private IEnumerator GameOverAnimation()

@@ -141,12 +141,14 @@ public class GameManagerScript : MonoBehaviour
     {
         _TurnManager.GetComponent<TurnManager>().enabled = false;
         _GameUI.SetActive(false);
+        GetCamera().transform.GetComponent<MainCameraScript>().enabled = false;
     }
 
     public void SetUnPause()
     {
         _TurnManager.GetComponent<TurnManager>().enabled = true;
         _GameUI.SetActive(true);
+        GetCamera().transform.GetComponent<MainCameraScript>().enabled = true;
     }
     
     public void SetClear()

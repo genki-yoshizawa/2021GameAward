@@ -11,9 +11,6 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] private Vector2Int _Direction;
     private Vector2Int _StartDirection;
 
-    [Header("吹き出し")]
-    [SerializeField] private GameObject _FukidasiObj;
-
     [Header("歩く時間")]
     [SerializeField] private float _WalkTime = 1.0f;
 
@@ -59,12 +56,8 @@ public class PlayerControl : MonoBehaviour
     //どの行動が可能でどの文字を格納するかを管理する
     private List<int> _CanActionList = new List<int>();
 
-    //コマンド選択時に上から何番目にいるか
-    private int _CommandSelect = 3;
-    private bool _CommandTop = true;  //コマンド選択で上を選んでいるか
-
-    //行動コマンドの種類数
-    private readonly int _AnimMax = 4;
+    //コマンド選択で上を選んでいるか
+    private bool _CommandTop = true;  
 
     //ターンマネージャー
     private TurnManager _TurnManager;
@@ -154,6 +147,15 @@ public class PlayerControl : MonoBehaviour
 
             if (!_Animator.GetBool("Walk"))
             {
+                if(_Direction == Vector2Int.up)
+                    transform.eulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
+                else if(_Direction == Vector2Int.down)
+                    transform.eulerAngles = new Vector3(0.0f, 180.0f, 0.0f);
+                else if(_Direction == Vector2Int.right)
+                    transform.eulerAngles = new Vector3(0.0f, 90.0f, 0.0f);
+                else if(_Direction == Vector2Int.left)
+                    transform.eulerAngles = new Vector3(0.0f, -90.0f, 0.0f);
+
                 _PassedTime = 0.0f;
                 _TurnAngle = 90.0f;
                 _IsWalk = false;
@@ -355,8 +357,18 @@ public class PlayerControl : MonoBehaviour
             //決定を押してコマンド選びの項目へ行く
             if (Input.GetButtonDown("Controller_B") || Input.GetKeyDown(KeyCode.Return))
             {
+                //前にパネルがなければコマンドを表示しない
                 if (!_FrontBlock)
                     return false;
+
+                //前のパネルが何もできないなら
+                if (!_CanMove)
+                {
+                    if (_CommandAction == null)
+                        return false;
+
+                    _CommandTop = false;
+                }
 
                 var enemy = CheckEnemy(_LocalPosition + _Direction);
 
@@ -370,25 +382,10 @@ public class PlayerControl : MonoBehaviour
             //上下矢印でコマンド選択
             if (Input.GetKeyDown(KeyCode.W) || Input.GetAxis("Controller_L_Stick_Vertical") > 0.5f || Input.GetAxis("Controller_D_Pad_Vertical") > 0.5f)
             {
-                if (_CommandAction != null && CheckEnemy(_LocalPosition + _Direction) == null)
+                if (_CanMove && CheckEnemy(_LocalPosition + _Direction) == null)
                 {
                     _CommandTop = true;
                     _CommandScript.CommandSelect(_CommandTop);
-                }
-
-                if (_CommandSelect < _CanActionList.Count - 1 && CheckEnemy(_LocalPosition + _Direction) == null)
-                {
-                    _CommandSelect++;
-
-                    //アイコンのtransform取得　消す予定
-                    var icon = _FukidasiObj.transform.GetChild(_AnimMax).GetComponent<RectTransform>();
-                    icon.anchoredPosition = new Vector3(icon.localPosition.x, icon.localPosition.y + 20.0f, icon.localPosition.z);
-
-                    //文字のsprite変更
-                    //_FukidasiScript.SetActPattern(_CanActionList, false, _CommandSelect + 1);
-                    //ここが変わる
-
-
                 }
             }
             else if (Input.GetKeyDown(KeyCode.S) || Input.GetAxis("Controller_L_Stick_Vertical") < -0.5f || Input.GetAxis("Controller_D_Pad_Vertical") < -0.5f)
@@ -397,18 +394,6 @@ public class PlayerControl : MonoBehaviour
                 {
                     _CommandTop = false;
                     _CommandScript.CommandSelect(_CommandTop);
-                }
-
-                if (_CommandSelect > 0 && CheckEnemy(_LocalPosition + _Direction) == null)
-                {
-                    _CommandSelect--;
-
-                    //アイコンのtransform取得
-                    var icon = _FukidasiObj.transform.GetChild(_AnimMax).GetComponent<RectTransform>();
-                    icon.anchoredPosition = new Vector3(icon.localPosition.x, icon.localPosition.y - 20.0f, icon.localPosition.z);
-
-                    //文字のsprite変更
-                    //_FukidasiScript.SetActPattern(_CanActionList, false, _CommandSelect + 1);
                 }
             }
 
@@ -430,6 +415,7 @@ public class PlayerControl : MonoBehaviour
                 else
                     _CommandAction(_FrontBlock);
 
+                _CommandTop = true;
                 _CommandScript.SetDraw(false);
                 _SelectDirection = false;
                 return true;

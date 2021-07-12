@@ -54,6 +54,7 @@ public class WallConfig : MonoBehaviour
         }
 
         direction = Quaternion.Euler(0f, angle, 0f) * direction;
+        direction = Quaternion.Euler(-transform.parent.eulerAngles) * direction;
 
         _Direction = new Vector2(direction.x, direction.z);
 

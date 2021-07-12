@@ -360,8 +360,8 @@ public class MainCameraScript : MonoBehaviour
             else
             {
                 // 裏面の場合はTopViewをxz平面に鏡面反射し、z軸回転
-                transform.position = new Vector3(targetTopViewObject.transform.position.x, -targetTopViewObject.transform.position.y, -targetTopViewObject.transform.position.z);
-                Vector3 newForward = new Vector3(transform.forward.x, -transform.forward.y, -transform.forward.z);
+                transform.position = new Vector3(targetTopViewObject.transform.position.x, -targetTopViewObject.transform.position.y, targetTopViewObject.transform.position.z);
+                Vector3 newForward = new Vector3(transform.forward.x, -transform.forward.y, transform.forward.z);
                 transform.LookAt(transform.position + newForward, -Vector3.up);
 
             }
@@ -388,8 +388,8 @@ public class MainCameraScript : MonoBehaviour
         if (_isTop)
         {
             // トップビュー
-            transform.position = new Vector3(transform.position.x, -transform.position.y, -transform.position.z);
-            _SaveForward = new Vector3(_SaveForward.x, -_SaveForward.y, -_SaveForward.z);
+            transform.position = new Vector3(transform.position.x, -transform.position.y, transform.position.z);
+            _SaveForward = new Vector3(_SaveForward.x, -_SaveForward.y, _SaveForward.z);
         }
         else
         {
@@ -510,7 +510,7 @@ public class MainCameraScript : MonoBehaviour
 
         for(int i = 1; i < targetNumberList.Count; ++i)
         {
-            targetPosition = _TopViewObject[1].transform.position;
+            targetPosition = _TopViewObject[i].transform.position;
             targetPosition.y = 0f;
 
             float dist = Vector3.Distance(_CameraLookAt, targetPosition);
