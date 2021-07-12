@@ -335,8 +335,8 @@ public class PlayerControl : MonoBehaviour
             
             var blockScript = _FrontBlock.GetComponent<BlockConfig>();
 
-            _CommandScript.SetActPattern(blockScript, enemy, _IsFront, _CanMove);
             _CommandScript.SetUnder(!isUnder);
+            _CommandScript.SetActPattern(blockScript, enemy, _IsFront, _CanMove);
             _CommandScript.SetDraw(true);
         }
 
