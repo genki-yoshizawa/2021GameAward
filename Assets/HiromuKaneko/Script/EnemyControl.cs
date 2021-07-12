@@ -199,6 +199,8 @@ public class EnemyControl : MonoBehaviour
         _MovePanel.Clear();
         _IsMovePanel = false;
         _IsTwoMax = false;
+        _AroundWallCount = 0;
+        _IsAroundWall = false;
     }
 
     // 移動もかじるもしない待機モーションのみでターン終了
@@ -418,13 +420,21 @@ public class EnemyControl : MonoBehaviour
         }
 
     }
+    private int _AroundWallCount = 0;
+    private bool _IsAroundWall = false;
     // 壁の数を数えて壁密度をリターン
     public float WallCount(Panel moveobj)
     {
 
         // 移動先のパネルがない　移動先に壁がある場合0.0fを返す
-        if (moveobj.PanelObj == null || !moveobj.PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, moveobj.Direction) || moveobj.Exist == false)
+        if ( moveobj.Exist == false)
             return 0.0f;
+
+        if (moveobj.PanelObj == null || !moveobj.PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, moveobj.Direction))
+        {
+            _AroundWallCount++;
+            return 0.0f;
+        }
 
         Vector2Int Dir = new Vector2Int();
 
@@ -490,12 +500,9 @@ public class EnemyControl : MonoBehaviour
                 _WallCount++;
         }
 
-        // 壁密度を計算してリターン
+        // 壁密度を計算してリターン_GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock(panel.PanelObj.GetComponent<BlockConfig>().GetBlockLocalPosition() + new Vector2Int(0, -1))
         //          壁   /     パネル
         float retDinsity = (float)_WallCount / WallCountPanel.Count;
-        //Debug.Log(_WallCount);
-        //Debug.Log(WallCountPanel.Count);
-        Debug.Log(retDinsity);
 
         return retDinsity;
     }
@@ -537,6 +544,14 @@ public class EnemyControl : MonoBehaviour
                     WallDensity[i] = WallCount(_MovePanel[i]);
                 }
 
+
+                if (_AroundWallCount >= 3)
+                {
+
+                    _IsAroundWall = true;
+
+                }
+
                 int MaxElement = 0;
                 float Max = -1.0f;
 
@@ -561,7 +576,7 @@ public class EnemyControl : MonoBehaviour
                 {
                     if (Max == WallDensity[0])
                     {
-                        if(_MovePanel[0].PanelObj != null)
+                        if (_MovePanel[0].PanelObj != null)
                         {
                             if (_MovePanel[0].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[0].Direction))
                             {
@@ -623,11 +638,24 @@ public class EnemyControl : MonoBehaviour
                 {
                     if (_MovePanel[MaxElement].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[MaxElement].Direction))
                     {
-                        _NextBlock = _MovePanel[MaxElement].PanelObj;
-                        _EnemyDirection = _MovePanel[MaxElement].Direction;
+
+                                _NextBlock = _MovePanel[MaxElement].PanelObj;
+                                _EnemyDirection = _MovePanel[MaxElement].Direction;
+                            
+                        
                     }
 
                 }
+
+                if(_NextBlock.gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition() == _Player.gameObject.GetComponent<PlayerControl>().GetLocalPosition())
+                {
+                    _EnemyState = EnemyState.STAY;
+                }
+                else
+                {
+                    _EnemyState = EnemyState.MOVE;
+                }
+
 
             }
             // 裏面
@@ -655,11 +683,16 @@ public class EnemyControl : MonoBehaviour
                     // 右を探す
                     if (_MovePanel[0].Exist == true)
                     {
-                        if (_MovePanel[0].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[0].Direction))
+                        if (_MovePanel[0].PanelObj != null)
                         {
-                            _NextBlock = _MovePanel[0].PanelObj;
-                            _EnemyDirection = _MovePanel[0].Direction;
+
+                            if (_MovePanel[0].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[0].Direction))
+                            {
+                                _NextBlock = _MovePanel[0].PanelObj;
+                                _EnemyDirection = _MovePanel[0].Direction;
+                            }
                         }
+
                     }
                 }
 
@@ -668,11 +701,15 @@ public class EnemyControl : MonoBehaviour
                     // 下を探す
                     if (_MovePanel[1].Exist == true)
                     {
-                        if (_MovePanel[1].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[1].Direction))
+                        if (_MovePanel[1].PanelObj != null)
                         {
-                            _NextBlock = _MovePanel[1].PanelObj;
-                            _EnemyDirection = _MovePanel[1].Direction;
+                            if (_MovePanel[1].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[1].Direction))
+                            {
+                                _NextBlock = _MovePanel[1].PanelObj;
+                                _EnemyDirection = _MovePanel[1].Direction;
+                            }
                         }
+
                     }
                 }
                 if (_NextBlock == null)
@@ -680,11 +717,15 @@ public class EnemyControl : MonoBehaviour
                     // 左を探す
                     if (_MovePanel[2].Exist == true)
                     {
-                        if (_MovePanel[2].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[2].Direction))
+                        if (_MovePanel[2].PanelObj != null)
                         {
-                            _NextBlock = _MovePanel[2].PanelObj;
-                            _EnemyDirection = _MovePanel[2].Direction;
+                            if (_MovePanel[2].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[2].Direction))
+                            {
+                                _NextBlock = _MovePanel[2].PanelObj;
+                                _EnemyDirection = _MovePanel[2].Direction;
+                            }
                         }
+
                     }
                 }
                 if (_NextBlock == null)
@@ -692,21 +733,25 @@ public class EnemyControl : MonoBehaviour
                     // 上を探す
                     if (_MovePanel[3].Exist == true)
                     {
-                        if (_MovePanel[3].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[3].Direction))
+                        if (_MovePanel[3].PanelObj != null)
                         {
-                            _NextBlock = _MovePanel[3].PanelObj;
-                            _EnemyDirection = _MovePanel[3].Direction;
+                            if (_MovePanel[3].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[3].Direction))
+                            {
+                                _NextBlock = _MovePanel[3].PanelObj;
+                                _EnemyDirection = _MovePanel[3].Direction;
+                            }
+
                         }
+
                     }
                 }
-
+                if (_NextBlock != null)
+                    _EnemyState = EnemyState.MOVE;
+                else
+                    _EnemyState = EnemyState.STAY;
             }
 
 
-            if (_NextBlock == true)
-                _EnemyState = EnemyState.MOVE;
-            else
-                _EnemyState = EnemyState.STAY;
         }
     }
 
