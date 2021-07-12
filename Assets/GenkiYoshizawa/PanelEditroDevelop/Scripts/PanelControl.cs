@@ -6,7 +6,7 @@ using UnityEngine;
 public class PanelControl : MonoBehaviour
 {
     [Header("マーカーか光らすか調べる用フラグ(ゲーム完成時には消す)")]
-    [SerializeField] private bool _isMarker = false;
+    //[SerializeField] private bool _isMarker = false;
     [Header("点滅もしくは拡大の周期(秒)")]
     [SerializeField] private float _CycleTime = 1.0f;
     [Header("点滅もしくは拡大の変化の仕方(tureがサイン波、falseがのこぎり派)")]
@@ -55,7 +55,8 @@ public class PanelControl : MonoBehaviour
     private void Update()
     {
         // ネストが一時的に深いけどゲーム完成時には見やすくなる（はず）
-        if (_isMarker)
+        
+        /*if (_isMarker)
         {
             if (_isMarkerCreate && !_isCurMarkerCreate)
             {//マーカーを生成する処理
@@ -82,8 +83,11 @@ public class PanelControl : MonoBehaviour
             _isCurMarkerCreate = _isMarkerCreate;
         }
         else
+        */
+
         {
-            if (_isBright)
+            //if (_isBright)
+            if (false)
             {
                 _PassedTime += Time.deltaTime;
                 while (true)
