@@ -14536,8 +14536,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2495966968017578207}
+  - component: {fileID: -3494273142269792170}
   m_Layer: 0
-  m_Name: FX_Exchange
+  m_Name: FX_Exchange_yellow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14560,6 +14561,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-3494273142269792170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2495966968017578206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7a24655212fadc49b56b10f2124dc3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2495966968303077315
 GameObject:
   m_ObjectHideFlags: 0
