@@ -19,6 +19,7 @@ public class PauseManager : MonoBehaviour
 
     private float _FadeCount = 0;
 
+    private GameObject _GameManager;
 
     [SerializeField] private GameObject _Image;
     [SerializeField] private Animator _StageModelAnimator;
@@ -46,6 +47,8 @@ public class PauseManager : MonoBehaviour
 
     void Start()
     {
+        _GameManager = GameObject.FindGameObjectWithTag("Manager");
+
         _FadeType = FadeType.NONE;
         // 画面サイズに変更する
         var targetSize = new Vector2(Screen.width, Screen.height);
@@ -101,6 +104,9 @@ public class PauseManager : MonoBehaviour
            
         }
 
+        if (_GameManager.GetComponent<GameManagerScript>().GetIsMovie() || _GameManager.GetComponent<GameManagerScript>().GetCamera().GetComponent<MainCameraScript>().GetIsGameStartCameraWork())
+            return;
+
         if (Input.GetKeyDown(KeyCode.Escape) ||(Input.GetKeyDown("joystick button 2"))
             || (_PauseOut.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Selected") && (/*Input.GetKeyDown("joystick button 1")*/Input.GetButtonDown("Controller_B") || Input.GetKeyDown(KeyCode.Return))))
         {
@@ -109,9 +115,7 @@ public class PauseManager : MonoBehaviour
                 case FadeType.NONE:
                     _FadeType = FadeType.IN;
                     PoseInAnimation();
-                    GameObject obj;
-                    obj = GameObject.FindGameObjectWithTag("Manager");
-                    obj.GetComponent<GameManagerScript>().SetPause();
+                    _GameManager.GetComponent<GameManagerScript>().SetPause();
 
                     AudioManager.Instance.SetSEVol(0.125f);
                     AudioManager.Instance.SetBGMVol(0.05f);
@@ -174,9 +178,7 @@ public class PauseManager : MonoBehaviour
         _Image.GetComponent<Image>().color = new Color(0, 0, 0,0);
         _FadeCount = 0;
         _FadeType = FadeType.NONE;
-        GameObject obj;
-        obj = GameObject.FindGameObjectWithTag("Manager");
-        obj.GetComponent<GameManagerScript>().SetUnPause();
+        _GameManager.GetComponent<GameManagerScript>().SetUnPause();
 
         return;
     }

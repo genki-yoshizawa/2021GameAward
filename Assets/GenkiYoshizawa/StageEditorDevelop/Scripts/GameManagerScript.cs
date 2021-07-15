@@ -144,7 +144,7 @@ public class GameManagerScript : MonoBehaviour
 
     public void SetPause()
     {
-        if (_isMovie)
+        if (_isMovie || GetCamera().GetComponent<MainCameraScript>().GetIsGameStartCameraWork())
             return;
 
         _TurnManager.GetComponent<TurnManager>().enabled = false;
@@ -167,7 +167,7 @@ public class GameManagerScript : MonoBehaviour
 
     public void StartEnemyMovie(bool isFront)
     {
-        if (isFront && !EnemyMovieChecker.Instance.GetIsPowerDownMovie() && EnemyMovieChecker.Instance.GetIsPowerUpMovie())// シングル音から条件判定
+        if (isFront && !EnemyMovieChecker.Instance.GetIsPowerDownMovie() && EnemyMovieChecker.Instance.GetIsPowerUpMovie())// シングルトンから条件判定
         {
             StartCoroutine(PowerDownEnemyMovie());
         }
@@ -185,7 +185,6 @@ public class GameManagerScript : MonoBehaviour
 
         Time.timeScale = 0f;
         // ポーズスタート
-        Debug.Log("パワーアップムービー始め");
         EnemyMovieChecker.Instance.SetIsMovie(true);
         EnemyMovieChecker.Instance.SetIsPowerUpMovie();
 
@@ -218,7 +217,6 @@ public class GameManagerScript : MonoBehaviour
 
         Time.timeScale = 0f;
         // ポーズスタート
-        Debug.Log("パワーダウンムービー始め");
         EnemyMovieChecker.Instance.SetIsMovie(true);
         EnemyMovieChecker.Instance.SetIsPowerDownMovie();
 
