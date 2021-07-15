@@ -29,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4017671893266659050}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: -0, y: 0.125, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -100,7 +100,7 @@ MonoBehaviour:
   _WallRebornTurn: 1
   _XAxis: 0
   _ZAxis: 0
-  _LocalOffset: 0.45
+  _LocalOffset: 0.3
 --- !u!114 &2518754741457687179
 MonoBehaviour:
   m_ObjectHideFlags: 0
