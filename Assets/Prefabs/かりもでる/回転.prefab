@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8224377004411995181}
   - component: {fileID: 8980616475152234982}
   - component: {fileID: 3847314493327519112}
-  - component: {fileID: -8057818455450027908}
+  - component: {fileID: 5661364410046339502}
   m_Layer: 0
   m_Name: "\u56DE\u8EE2"
   m_TagString: Untagged
@@ -96,7 +96,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-8057818455450027908
+--- !u!114 &5661364410046339502
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -105,12 +105,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 1225170331720868159}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 781f7c11d77b8e54081312fd382bcf8d, type: 3}
+  m_Script: {fileID: 11500000, guid: d7a24655212fadc49b56b10f2124dc3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isMarker: 0
-  _CycleTime: 1
-  _isSinPulse: 0
-  _MarkerMaxScale: 0.2
-  _MarkerOffset: 0.2
-  _MarkerPrefab: {fileID: 0}
