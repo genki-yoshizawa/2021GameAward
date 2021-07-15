@@ -203,7 +203,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 75cd020b2a58d7f448e770c14114a2b0, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 6645360633823179843, guid: cf8fc903553f98646b657de357103541, type: 3}
+      objectReference: {fileID: 2100000, guid: 064d5272f8676e8428a32192c216f09e, type: 2}
     - target: {fileID: 919132149155446097, guid: 75cd020b2a58d7f448e770c14114a2b0, type: 3}
       propertyPath: m_Name
       value: Front_Panel
