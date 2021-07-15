@@ -61,6 +61,9 @@ public class TurnManager : MonoBehaviour
 
     void Update()
     {
+        if (_GameManagerScript.GetIsMovie()&&_GameManagerScript.GetCamera().GetComponent<MainCameraScript>().GetIsGameStartCameraWork())
+            return;
+
         if (_PlayerTurn)
         {
             //ŠÔØ‚ê
