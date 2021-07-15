@@ -201,7 +201,7 @@ MonoBehaviour:
   _MaxTurn: 50
   _3Star: 5
   _2Star: 10
-  _1Star: 11
+  _1Star: 40
 --- !u!1 &2280714147886085732
 GameObject:
   m_ObjectHideFlags: 0
