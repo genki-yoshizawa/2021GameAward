@@ -78,10 +78,11 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         string curStageName = SceneManager.GetActiveScene().name;
         if(curStageName == "MenuScene")
         {
-
+            Debug.Log("メニューシーン");
             if(firstMenu)
             {
-                _DetailUI.gameObject.GetComponent<DetailUI>().DetailUIAnimation();
+                
+                _DetailUI.gameObject.GetComponent<DetailUI>().AnimationInitialize();
                 firstMenu = false;
             }
 
@@ -104,6 +105,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         }
         else
         {
+            Debug.Log("その他のシーン");
             firstMenu = true;
 
             for (int i = 0; i < _ChidCount; i++)
@@ -122,6 +124,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
 
             return;
         }
+
 
 
         float dph = Input.GetAxis("Controller_D_Pad_Horizontal");
