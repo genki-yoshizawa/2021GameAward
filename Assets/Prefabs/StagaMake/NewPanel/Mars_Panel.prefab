@@ -35,7 +35,6 @@ MonoBehaviour:
   _MarkerMaxScale: 0.2
   _MarkerOffset: 0.2
   _MarkerPrefab: {fileID: 0}
-  _DefaultMaterial: []
 --- !u!1 &6612586452748659346
 GameObject:
   m_ObjectHideFlags: 0
@@ -133,7 +132,6 @@ MonoBehaviour:
   _MarkerMaxScale: 0.2
   _MarkerOffset: 0.2
   _MarkerPrefab: {fileID: 0}
-  _DefaultMaterial: []
 --- !u!114 &9196345641202098680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -202,6 +200,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 75cd020b2a58d7f448e770c14114a2b0, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 064d5272f8676e8428a32192c216f09e, type: 2}
     - target: {fileID: 919132149155446097, guid: 75cd020b2a58d7f448e770c14114a2b0, type: 3}
       propertyPath: m_Name
       value: Front_Panel
@@ -273,6 +275,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 75cd020b2a58d7f448e770c14114a2b0, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 064d5272f8676e8428a32192c216f09e, type: 2}
     - target: {fileID: 919132149155446097, guid: 75cd020b2a58d7f448e770c14114a2b0, type: 3}
       propertyPath: m_Name
       value: Back_Panel

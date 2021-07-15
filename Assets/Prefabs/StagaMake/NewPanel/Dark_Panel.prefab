@@ -204,6 +204,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 2799535a941bec041bb82009fa8bf7f5, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 9ba8f0fa64bed3849812386caaa2365b, type: 2}
     - target: {fileID: 919132149155446097, guid: 2799535a941bec041bb82009fa8bf7f5, type: 3}
       propertyPath: m_Name
       value: Back_Panel
@@ -271,6 +275,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 2799535a941bec041bb82009fa8bf7f5, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 9ba8f0fa64bed3849812386caaa2365b, type: 2}
     - target: {fileID: 919132149155446097, guid: 2799535a941bec041bb82009fa8bf7f5, type: 3}
       propertyPath: m_Name
       value: Front_Panel

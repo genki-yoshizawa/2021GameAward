@@ -528,6 +528,7 @@ public class MainCameraScript : MonoBehaviour
     private void SetCameraIsFront(bool front) { _isFront = front; }
     public bool GetIsFront() { return _isFront; }
     public bool GetIsTop() { return _isTop; }
+    public bool GetIsGameStartCameraWork() { return _isGameStartCameraWork; }
 
     public float GetInputDeadZone() { return _InputDeadZone; }
 

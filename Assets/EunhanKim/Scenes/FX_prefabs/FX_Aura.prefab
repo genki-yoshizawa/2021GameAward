@@ -8,11 +8,20 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+<<<<<<< HEAD
   - component: {fileID: 5170948758012903155}
   - component: {fileID: 5170948758012903153}
   - component: {fileID: 5170948758012903152}
   m_Layer: 0
   m_Name: energyCollect
+=======
+  - component: {fileID: 9093939128141654610}
+  - component: {fileID: 9093939128141654611}
+  - component: {fileID: 9093939128141654636}
+  - component: {fileID: 1842504392512012780}
+  m_Layer: 0
+  m_Name: FX_Aura
+>>>>>>> b5b352a575865288b0ef45ed27d00e78b56df5be
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9763,3 +9772,15 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &1842504392512012780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9093939128141654637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7a24655212fadc49b56b10f2124dc3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
