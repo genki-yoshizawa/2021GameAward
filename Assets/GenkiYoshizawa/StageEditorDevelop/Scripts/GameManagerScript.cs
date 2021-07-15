@@ -24,6 +24,8 @@ public class GameManagerScript : MonoBehaviour
     // ブロックの配列
     private GameObject[][] _Block;
 
+    private bool _isMovie;
+
     private void Awake()
     {
         AssignBlockArray();
@@ -32,6 +34,8 @@ public class GameManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _isMovie = false;
+
         foreach (GameObject enemy in _Enemy)
         {
             enemy.GetComponent<EnemyControl>().SetLocalPosition(enemy.transform.parent.parent.GetComponent<BlockConfig>().GetBlockLocalPosition());
@@ -130,6 +134,7 @@ public class GameManagerScript : MonoBehaviour
         return _Block[pos.x][pos.y];
     }     //posにあるBlockの取得
     public GameObject GetCamera() { return _CameraWork.transform.GetChild(0).gameObject; }
+    public bool GetIsMovie() { return _isMovie; }
 
     public void KillEnemy(GameObject enemy)
     {
@@ -139,6 +144,9 @@ public class GameManagerScript : MonoBehaviour
 
     public void SetPause()
     {
+        if (_isMovie)
+            return;
+
         _TurnManager.GetComponent<TurnManager>().enabled = false;
         _GameUI.GetComponent<Canvas>().enabled = false;
         GetCamera().transform.GetComponent<MainCameraScript>().enabled = false;
@@ -173,6 +181,8 @@ public class GameManagerScript : MonoBehaviour
 
     IEnumerator PowerUpEnemyMovie()
     {
+        _isMovie = true;
+
         Time.timeScale = 0f;
         // ポーズスタート
         Debug.Log("パワーアップムービー始め");
@@ -196,14 +206,16 @@ public class GameManagerScript : MonoBehaviour
 
         Destroy(movieObj);
 
-        Debug.Log("パワーアップムービー終了");
-
         // ポーズ終了
         Time.timeScale = 1f;
+
+        _isMovie = false;
     }
 
     IEnumerator PowerDownEnemyMovie()
     {
+        _isMovie = true;
+
         Time.timeScale = 0f;
         // ポーズスタート
         Debug.Log("パワーダウンムービー始め");
@@ -226,9 +238,10 @@ public class GameManagerScript : MonoBehaviour
         }
 
         Destroy(movieObj);
-        Debug.Log("パワーダウンムービー終了");
 
         // ポーズ終了
         Time.timeScale = 1f;
+
+        _isMovie = false;
     }
 }
