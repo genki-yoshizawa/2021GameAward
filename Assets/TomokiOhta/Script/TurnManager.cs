@@ -116,7 +116,7 @@ public class TurnManager : MonoBehaviour
 
     private IEnumerator EnemyTurn()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.75f);
 
         foreach (var enemy in _EnemyScript)
             enemy.EnemyTurn();
