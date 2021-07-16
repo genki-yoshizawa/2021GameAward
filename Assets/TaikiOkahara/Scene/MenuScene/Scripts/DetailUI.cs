@@ -72,7 +72,6 @@ public class DetailUI : MonoBehaviour
     public void AnimationInitialize()
     {
         //Reset
-        Debug.Log("Reset");
         _Animator.Play("None");
     }
 }
