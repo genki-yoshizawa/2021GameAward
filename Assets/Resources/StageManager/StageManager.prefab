@@ -202,6 +202,7 @@ MonoBehaviour:
   _3Star: 5
   _2Star: 10
   _1Star: 40
+  _Lock: 0
 --- !u!1 &2280714147886085732
 GameObject:
   m_ObjectHideFlags: 0
@@ -564,6 +565,7 @@ MonoBehaviour:
   _3Star: 11
   _2Star: 20
   _1Star: 21
+  _Lock: 1
 --- !u!1 &2280714148342519858
 GameObject:
   m_ObjectHideFlags: 0
@@ -849,6 +851,7 @@ MonoBehaviour:
   _3Star: 4
   _2Star: 5
   _1Star: 6
+  _Lock: 1
 --- !u!1 &2280714148911896268
 GameObject:
   m_ObjectHideFlags: 0
@@ -900,6 +903,7 @@ MonoBehaviour:
   _3Star: 9
   _2Star: 12
   _1Star: 13
+  _Lock: 1
 --- !u!1 &2280714148988771195
 GameObject:
   m_ObjectHideFlags: 0
@@ -1211,6 +1215,7 @@ MonoBehaviour:
   _3Star: 16
   _2Star: 21
   _1Star: 22
+  _Lock: 1
 --- !u!1 &2280714149387571945
 GameObject:
   m_ObjectHideFlags: 0

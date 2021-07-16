@@ -39,6 +39,10 @@ public class Stage : MonoBehaviour
 
     bool _Clear = false;
 
+    [SerializeField]
+    bool _Lock = true;
+
+
     void Start()
     {
         _StartPos = Random.Range(0, 2 * Mathf.PI);
@@ -56,6 +60,18 @@ public class Stage : MonoBehaviour
 
 
         transform.Rotate(0.01f, 0.01f, 0.0f);
+
+
+        if (_Lock)
+        {
+            //this.transform.GetChild(0).transform.GetComponent<Material>().SetColor("_BaseColor", new Color(0, 0, 0));
+            this.transform.GetChild(0).transform.GetComponent<Renderer>().material.SetColor("_Color", Color.black);
+        }
+        else
+        {
+            //this.transform.GetChild(0).transform.;
+            this.transform.GetChild(0).transform.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
+        }
     }
 
     public string GetSceneName(){ return _SceneName;}
@@ -63,6 +79,19 @@ public class Stage : MonoBehaviour
     //public void SetClearParsentage(int clean){ _ClearPercentage = clean;}
     public int GetStageNumber(){ return _StageNumber;}
 
-    public void Clear() { _Clear = true; }
+    public void Clear() {
+        
+        _Clear = true;
+        _Lock = false;
+    }
     public bool GetClear() { return _Clear; }
+
+    public void SetLock(bool bLock)
+    {
+        _Lock = bLock;
+
+        return;
+    }
+
+    public bool GetLock() { return _Lock; }
 }

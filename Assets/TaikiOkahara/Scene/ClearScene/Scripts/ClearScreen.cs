@@ -155,8 +155,30 @@ public class ClearScreen : MonoBehaviour
         if (/*Input.GetKeyDown("joystick button 1")*/Input.GetButtonDown("Controller_B") || Input.GetKeyDown(KeyCode.Return))
         {
             this.gameObject.SetActive(false);
-            StageManager.Instance.NextStage();
-            AudioManager.Instance.StopNowBGM();
+
+            
+
+            if (StageManager.Instance.GetChoiceStageObject().GetComponent<Stage>().GetClear())
+            {
+
+                SceneManager.LoadScene("MenuScene");
+            }
+            else
+            {
+                if (StageManager.Instance.NextIsMaxStage())
+                {
+                    StageManager.Instance.GetChoiceStageObject().GetComponent<Stage>().Clear();
+                    SceneManager.LoadScene("MovieScene");
+                    return;
+                }
+
+
+                StageManager.Instance.GetChoiceStageObject().GetComponent<Stage>().Clear();
+                StageManager.Instance.NextStage();
+                AudioManager.Instance.StopNowBGM();
+            }
+
+           
         }
             
     }

@@ -134,9 +134,14 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
             InputLeftButton();
         else if ((/*Input.GetKeyDown("joystick button 1")*/Input.GetButtonDown("Controller_B") || (Input.GetKeyDown(KeyCode.Return))) && !_Move)
         {
-            this.GetComponent<AudioSource>().volume = 0.1f;
-            this.GetComponent<AudioSource>().PlayOneShot(_ButtonDecisionSound);
-            GameStart();
+            if(_ChoiceStage.GetComponent<Stage>().GetLock() == false)
+            {
+                this.GetComponent<AudioSource>().volume = 0.1f;
+                this.GetComponent<AudioSource>().PlayOneShot(_ButtonDecisionSound);
+                GameStart();
+
+            }
+
         }
 
 
@@ -215,35 +220,36 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
     
     void ChageNextStage()
     {
-        //クリーン度を100にする
-        //_ChoiceStage.GetComponent<Stage>().SetClearParsentage(100);
-        _ChoiceStage.GetComponent<Stage>().Clear();
+       
 
-        bool allStageClear = true;
-        //全てのステージが100ならムービーを流してメニューに戻る
-        for (int i = 0; i < _ChidCount; i++)
-        {
-            GameObject obj = this.gameObject.transform.GetChild(i).gameObject;
-            if (obj.GetComponent<Stage>().GetClear() == false)
-            {
-                Debug.Log(i + "がまだ未達成");
-                allStageClear = false;
-                break;
-            }
-        }
+        //bool allStageClear = true;
+        ////全てのステージが100ならムービーを流してメニューに戻る
+        //for (int i = 0; i < _ChidCount; i++)
+        //{
+        //    GameObject obj = this.gameObject.transform.GetChild(i).gameObject;
+        //    if (obj.GetComponent<Stage>().GetClear() == false)
+        //    {
+        //        Debug.Log(i + "がまだ未達成");
+        //        allStageClear = false;
+        //        break;
+        //    }
+        //}
 
-        if (allStageClear)
-        {
-            //ムービー流す
-            //Debug.Log("Movie流すよ");
-            SceneManager.LoadScene("MovieScene");
-            return;
-        }
+        //if (allStageClear)
+        //{
+        //    //ムービー流す
+        //    //Debug.Log("Movie流すよ");
+        //    SceneManager.LoadScene("MovieScene");
+        //    return;
+        //}
 
 
         int idx = _ChoiceStage.transform.GetSiblingIndex();
         idx++;
+
         _ChoiceStage = this.transform.GetChild(idx).gameObject;
+
+        _ChoiceStage.GetComponent<Stage>().SetLock(false);//ステージ開放
 
         GameStart();
 
@@ -357,6 +363,15 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         return;
     }
 
+    public bool NextIsMaxStage()
+    {
+        if(_ChoiceStage.transform.GetSiblingIndex() == 4)
+        {
+            return true;
+        }
+
+        return false;
+    }
 
 
     int Digit(int num)
