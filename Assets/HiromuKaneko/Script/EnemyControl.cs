@@ -36,12 +36,10 @@ public class EnemyControl : MonoBehaviour
     [Header("何秒間後にCapturedを再生するか")]
     [SerializeField] private float _CapturedDelayTime = 1.0f;
 
-    [Header("表世界時のテクスチャ")]
-    [SerializeField] Texture _FrontTexture;
-    [Header("裏世界時のテクスチャ")]
-    [SerializeField] Texture _BackTexture;
-    [Header("ネズミに使ってるマテリアルを入れる")]
-    public Material TargetMaterial;
+    [Header("ネズミのエフェクト")]
+    [SerializeField] private GameObject _EffectPrefab;
+
+    [SerializeField] private Transform parentTran;
 
     private EnemyState _EnemyState = EnemyState.IDLE;          // エネミーステート変数
     private List<Panel> _MovePanel = new List<Panel>();        // 逃げ先候補のブロックを保持する変数
@@ -62,6 +60,8 @@ public class EnemyControl : MonoBehaviour
     private bool _IsFront;                       // 表裏どっちにいるか
     private bool _IsMovePanel = false;           // 逃げるパネルがあるかどうかを判定
     private bool _IsTwoMax = false;
+    private bool _IsPlayerCheck = false;
+    GameObject _EffectObj;
 
     // Start is called before the first frame update
     void Start()
@@ -76,15 +76,31 @@ public class EnemyControl : MonoBehaviour
         _PassedTime = 0.0f;
 
 
+        // ゲームスタート時にエネミーが裏スタートならオーラを出す
+        if (_IsFront == false)
+        {
+            EnemyEffectCreate();
+
+        }
+
+    }
+
+    private void EnemyEffectCreate()
+    {
+        _EffectObj = Instantiate(_EffectPrefab, this.transform.position, Quaternion.identity);
+
+        _EffectObj.transform.SetParent(parentTran);
+        _EffectObj.transform.localScale = new Vector3(1.0f, -1.0f, 1.0f);
+    }
+
+    private void EffectDestroy()
+    {
+        Destroy(_EffectObj);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (_IsFront)
-            TargetMaterial.SetTexture("_MainTex", _FrontTexture);
-        else
-            TargetMaterial.SetTexture("_MainTex", _BackTexture);
 
         if (_EnemyState == EnemyState.IDLE)
         {
@@ -201,6 +217,7 @@ public class EnemyControl : MonoBehaviour
         _IsTwoMax = false;
         _AroundWallCount = 0;
         _IsAroundWall = false;
+        _IsPlayerCheck = false;
     }
 
     // 移動もかじるもしない待機モーションのみでターン終了
@@ -518,6 +535,7 @@ public class EnemyControl : MonoBehaviour
         // チーズ見つけてない
         else
         {
+            // 表
             if (_IsFront == true)
             {
                 // 経路探索　順路型右用に　右→下→左→上の順で探索
@@ -533,6 +551,7 @@ public class EnemyControl : MonoBehaviour
                 {
                     for (int i = 0; i < _MovePanel.Count; i++)
                     {
+
                         Panel _Panel = new Panel() { PanelObj = _MovePanel[i].PanelObj, Direction = _MovePanel[i].Direction, Exist = true };
                         _MovePanel[i] = _Panel;
                     }
@@ -647,7 +666,49 @@ public class EnemyControl : MonoBehaviour
 
                 }
 
-                if(_NextBlock.gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition() == _Player.gameObject.GetComponent<PlayerControl>().GetLocalPosition())
+
+                // 逃げ先の上下左右のどこかにプレイヤーがいたらMOVEしない
+                if(_NextBlock != null)
+                {
+                    GameObject NextPanelCheck;
+
+                    NextPanelCheck = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock(_NextBlock.GetComponent<BlockConfig>().GetBlockLocalPosition() + new Vector2Int(1, 0));
+                    if (NextPanelCheck != null)
+                    {
+                        if (NextPanelCheck.GetComponent<BlockConfig>().GetBlockLocalPosition() == _Player.gameObject.GetComponent<PlayerControl>().GetLocalPosition())
+                            _IsPlayerCheck = true;
+                    }
+
+
+                    NextPanelCheck = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock(_NextBlock.GetComponent<BlockConfig>().GetBlockLocalPosition() + new Vector2Int(0, -1));
+                    if (NextPanelCheck != null)
+                    {
+                        if (NextPanelCheck.GetComponent<BlockConfig>().GetBlockLocalPosition() == _Player.gameObject.GetComponent<PlayerControl>().GetLocalPosition())
+                            _IsPlayerCheck = true;
+                    }
+
+
+                    NextPanelCheck = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock(_NextBlock.GetComponent<BlockConfig>().GetBlockLocalPosition() + new Vector2Int(-1, 0));
+                    if (NextPanelCheck != null)
+                    {
+                        if (NextPanelCheck.GetComponent<BlockConfig>().GetBlockLocalPosition() == _Player.gameObject.GetComponent<PlayerControl>().GetLocalPosition())
+                            _IsPlayerCheck = true;
+                    }
+
+
+                    NextPanelCheck = _GameManager.gameObject.GetComponent<GameManagerScript>().GetBlock(_NextBlock.GetComponent<BlockConfig>().GetBlockLocalPosition() + new Vector2Int(0, 1));
+                    if (NextPanelCheck != null)
+                    {
+                        if (NextPanelCheck.GetComponent<BlockConfig>().GetBlockLocalPosition() == _Player.gameObject.GetComponent<PlayerControl>().GetLocalPosition())
+                            _IsPlayerCheck = true;
+                    }
+
+                }
+
+
+
+                // 逃げ先のパネルがない / 逃げ先にネコがいたら /　逃げ先の上下左右のどこかにネコがいたらムーブしない
+                if (_NextBlock == null || _NextBlock.gameObject.GetComponent<BlockConfig>().GetBlockLocalPosition() == _Player.gameObject.GetComponent<PlayerControl>().GetLocalPosition() || _IsPlayerCheck == true )
                 {
                     _EnemyState = EnemyState.STAY;
                 }
@@ -686,7 +747,7 @@ public class EnemyControl : MonoBehaviour
                         if (_MovePanel[0].PanelObj != null)
                         {
 
-                            if (_MovePanel[0].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[0].Direction))
+                            if (_MovePanel[0].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[0].Direction * -1))
                             {
                                 _NextBlock = _MovePanel[0].PanelObj;
                                 _EnemyDirection = _MovePanel[0].Direction;
@@ -703,7 +764,7 @@ public class EnemyControl : MonoBehaviour
                     {
                         if (_MovePanel[1].PanelObj != null)
                         {
-                            if (_MovePanel[1].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[1].Direction))
+                            if (_MovePanel[1].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[1].Direction * -1))
                             {
                                 _NextBlock = _MovePanel[1].PanelObj;
                                 _EnemyDirection = _MovePanel[1].Direction;
@@ -719,7 +780,7 @@ public class EnemyControl : MonoBehaviour
                     {
                         if (_MovePanel[2].PanelObj != null)
                         {
-                            if (_MovePanel[2].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[2].Direction))
+                            if (_MovePanel[2].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[2].Direction * -1))
                             {
                                 _NextBlock = _MovePanel[2].PanelObj;
                                 _EnemyDirection = _MovePanel[2].Direction;
@@ -735,7 +796,7 @@ public class EnemyControl : MonoBehaviour
                     {
                         if (_MovePanel[3].PanelObj != null)
                         {
-                            if (_MovePanel[3].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[3].Direction))
+                            if (_MovePanel[3].PanelObj.gameObject.GetComponent<BlockConfig>().CheckPanelMove(_IsFront, _EnemyLocalPosition, _MovePanel[3].Direction * -1))
                             {
                                 _NextBlock = _MovePanel[3].PanelObj;
                                 _EnemyDirection = _MovePanel[3].Direction;
@@ -989,10 +1050,15 @@ public class EnemyControl : MonoBehaviour
 
         //ひっくり返す
         if (_IsFront)
+        {
             _IsFront = false;
-
+            EnemyEffectCreate();
+        }
         else
+        {
             _IsFront = true;
+            EffectDestroy();
+        }
     }
 
     // ブロック側で呼び出す　自分の位置を入れ替える関数
@@ -1030,7 +1096,6 @@ public class EnemyControl : MonoBehaviour
     {
         this.GetComponent<GameOverEnemy>().StartGameOverEnemyAnimation();
 
-        yield return new WaitForSeconds(2.0f);
 
         _Player.gameObject.GetComponent<PlayerControl>().SetIsExist(false);
 
