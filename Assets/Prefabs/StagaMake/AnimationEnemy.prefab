@@ -4802,9 +4802,8 @@ MonoBehaviour:
   _BiteTime: 1
   _PanicTime: 1
   _CapturedDelayTime: 1
-  _FrontTexture: {fileID: 2800000, guid: bbf4d3b262db0984f89628270f2b6c38, type: 3}
-  _BackTexture: {fileID: 2800000, guid: 6fc84317f7a4ee84db2f30e63e63e68a, type: 3}
-  TargetMaterial: {fileID: 2100000, guid: f997916495a090f4183c3670b619fd4c, type: 2}
+  _EffectPrefab: {fileID: 3057797247982185166, guid: e06a0db54cdd79c43b5a9e3aa5ee493f, type: 3}
+  parentTran: {fileID: 8618758596643089070}
 --- !u!114 &1637879605061773830
 MonoBehaviour:
   m_ObjectHideFlags: 0
