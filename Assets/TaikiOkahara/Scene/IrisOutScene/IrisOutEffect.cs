@@ -8,11 +8,14 @@ public class IrisOutEffect : MonoBehaviour
 	[SerializeField]
 	private GameObject _Target;
 	
-	[SerializeField]
-	private Material _IrisMat;
+	//[SerializeField]
+	//private Material _IrisMat;
 
 	[SerializeField]
 	private float _OffsetY;
+
+	[SerializeField]
+	private GameObject _IrisTexture;
 
 	void Start()
 	{
@@ -26,14 +29,16 @@ public class IrisOutEffect : MonoBehaviour
 
 		Vector3 screenPos;
 		screenPos = Camera.main.WorldToScreenPoint(target);
-		screenPos /= new Vector2(Screen.width, Screen.height);
+		//screenPos /= new Vector2(Screen.width, Screen.height);
 
 		//IrisMatシェーダーに値を送る
-		_IrisMat.SetVector("_PlayerPosition", screenPos);
+		//_IrisMat.SetVector("_PlayerPosition", screenPos);
+
+		_IrisTexture.transform.position = screenPos;
 	}
 
-	void OnRenderImage(RenderTexture src, RenderTexture dest)
-	{
-		Graphics.Blit(src, dest, _IrisMat);
-	}
+	//void OnRenderImage(RenderTexture src, RenderTexture dest)
+	//{
+	//	Graphics.Blit(src, dest, _IrisMat);
+	//}
 }
