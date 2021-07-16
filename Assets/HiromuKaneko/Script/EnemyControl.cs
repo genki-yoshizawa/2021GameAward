@@ -62,7 +62,7 @@ public class EnemyControl : MonoBehaviour
     private bool _IsTwoMax = false;
     private bool _IsPlayerCheck = false;
     GameObject _EffectObj;
-
+    private bool _IsPanelAnimation;
     // Start is called before the first frame update
     void Start()
     {
@@ -74,7 +74,7 @@ public class EnemyControl : MonoBehaviour
         _CheeseBite = false;
         _IsExist = false;
         _PassedTime = 0.0f;
-
+        _IsPanelAnimation = false;
 
         // ゲームスタート時にエネミーが裏スタートならオーラを出す
         if (_IsFront == false)
@@ -316,47 +316,51 @@ public class EnemyControl : MonoBehaviour
 
     public void EnemyTurn()
     {
-        // 生きていれば動ける
-        if (_IsExist == false)
+        if(_IsPanelAnimation == false)
         {
-            _Player = _GameManager.gameObject.GetComponent<GameManagerScript>().GetPlayer();
-            if (_Player.GetComponent<PlayerControl>().GetLocalPosition() != _EnemyLocalPosition)
+            // 生きていれば動ける
+            if (_IsExist == false)
             {
-                Wait();
-
-                MoveTest();
-
-                switch (_EnemyState)
+                _Player = _GameManager.gameObject.GetComponent<GameManagerScript>().GetPlayer();
+                if (_Player.GetComponent<PlayerControl>().GetLocalPosition() != _EnemyLocalPosition)
                 {
-                    case EnemyState.IDLE:
-                        Idle();
-                        break;
-                    case EnemyState.STAY:
-                        Stay();
-                        break;
-                    case EnemyState.MOVE:
-                        Move();
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else
-            {
+                    Wait();
 
-                if (_Player.gameObject.GetComponent<PlayerControl>().GetIsFront() != _IsFront)
-                {
-                    if (_Player.gameObject.GetComponent<PlayerControl>().GetLocalPosition() == _EnemyLocalPosition)
+                    MoveTest();
+
+                    switch (_EnemyState)
                     {
-                        StartCoroutine("PlayerDown");
+                        case EnemyState.IDLE:
+                            Idle();
+                            break;
+                        case EnemyState.STAY:
+                            Stay();
+                            break;
+                        case EnemyState.MOVE:
+                            Move();
+                            break;
+                        default:
+                            break;
                     }
                 }
-                if (!_Player.gameObject.GetComponent<PlayerControl>().GetIsFront() && !_IsFront)
+                else
                 {
-                    PlayerKill();
 
+                    if (_Player.gameObject.GetComponent<PlayerControl>().GetIsFront() != _IsFront)
+                    {
+                        if (_Player.gameObject.GetComponent<PlayerControl>().GetLocalPosition() == _EnemyLocalPosition)
+                        {
+                            StartCoroutine("PlayerDown");
+                        }
+                    }
+                    if (!_Player.gameObject.GetComponent<PlayerControl>().GetIsFront() && !_IsFront)
+                    {
+                        PlayerKill();
+
+                    }
                 }
             }
+
         }
     }
 
@@ -1140,6 +1144,7 @@ public class EnemyControl : MonoBehaviour
     }
 
     public void SetIsFront(bool isfront) { _IsFront = isfront; }
+    public void SetIsPanelAnimation(bool isanimation) { _IsPanelAnimation = isanimation; }
     public bool GetIsFront() { return _IsFront; }
     public void SetLocalPosition(Vector2Int position) { _EnemyLocalPosition = position; }    // 自分のいるブロックの座標を更新する
     public Vector2Int GetLocalPosition() { return _EnemyLocalPosition; }

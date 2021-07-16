@@ -198,11 +198,10 @@ MonoBehaviour:
   _SceneName: New1-1
   _StageName: {fileID: 0}
   _StageNumber: 11
-  _MaxTurn: 50
-  _3Star: 5
-  _2Star: 10
-  _1Star: 40
-  _Lock: 0
+  _MaxTurn: 70
+  _3Star: 40
+  _2Star: 50
+  _1Star: 60
 --- !u!1 &2280714147886085732
 GameObject:
   m_ObjectHideFlags: 0
@@ -561,11 +560,10 @@ MonoBehaviour:
   _SceneName: New1-3
   _StageName: {fileID: 0}
   _StageNumber: 13
-  _MaxTurn: 31
-  _3Star: 11
-  _2Star: 20
-  _1Star: 21
-  _Lock: 1
+  _MaxTurn: 70
+  _3Star: 40
+  _2Star: 50
+  _1Star: 60
 --- !u!1 &2280714148342519858
 GameObject:
   m_ObjectHideFlags: 0
@@ -847,11 +845,10 @@ MonoBehaviour:
   _SceneName: New1-4
   _StageName: {fileID: 0}
   _StageNumber: 14
-  _MaxTurn: 16
-  _3Star: 4
-  _2Star: 5
-  _1Star: 6
-  _Lock: 1
+  _MaxTurn: 70
+  _3Star: 40
+  _2Star: 50
+  _1Star: 60
 --- !u!1 &2280714148911896268
 GameObject:
   m_ObjectHideFlags: 0
@@ -899,11 +896,10 @@ MonoBehaviour:
   _SceneName: New1-5
   _StageName: {fileID: 0}
   _StageNumber: 15
-  _MaxTurn: 23
-  _3Star: 9
-  _2Star: 12
-  _1Star: 13
-  _Lock: 1
+  _MaxTurn: 70
+  _3Star: 40
+  _2Star: 50
+  _1Star: 60
 --- !u!1 &2280714148988771195
 GameObject:
   m_ObjectHideFlags: 0
@@ -1211,11 +1207,10 @@ MonoBehaviour:
   _SceneName: New1-2
   _StageName: {fileID: 0}
   _StageNumber: 12
-  _MaxTurn: 32
-  _3Star: 16
-  _2Star: 21
-  _1Star: 22
-  _Lock: 1
+  _MaxTurn: 70
+  _3Star: 40
+  _2Star: 50
+  _1Star: 60
 --- !u!1 &2280714149387571945
 GameObject:
   m_ObjectHideFlags: 0
