@@ -53,9 +53,6 @@ public class PlayerControl : MonoBehaviour
     //前のブロック情報
     private GameObject _FrontBlock;
 
-    //どの行動が可能でどの文字を格納するかを管理する
-    private List<int> _CanActionList = new List<int>();
-
     //コマンド選択で上を選んでいるか
     private bool _CommandTop = true;  
 
@@ -338,8 +335,6 @@ public class PlayerControl : MonoBehaviour
             SetFrontBlock();
 
         //コマンドの描画
-        //Underも設定しなければいけないので要変更
-        //前にブロックはあるが何もできないときも描画したくない
         if (!_CommandScript.IsDraw() && _FrontBlock != null)
         {
             var enemy = CheckEnemy(_LocalPosition + _Direction);
@@ -364,7 +359,7 @@ public class PlayerControl : MonoBehaviour
                 SelectDirection(Vector2Int.left);
             else if (Input.GetKeyDown(KeyCode.W) || Input.GetAxis("Controller_L_Stick_Vertical") > 0.5f || Input.GetAxis("Controller_D_Pad_Vertical") > 0.5f)
                 SelectDirection(Vector2Int.up);
-            else if (Input.GetKeyDown(KeyCode.S) || Input.GetAxis("Controller_L_Stick_Vertical") < -0.5f || Input.GetAxis("Controller_D_Pad_Horizontal") < -0.5f)
+            else if (Input.GetKeyDown(KeyCode.S) || Input.GetAxis("Controller_L_Stick_Vertical") < -0.5f || Input.GetAxis("Controller_D_Pad_Vertical") < -0.5f)
                 SelectDirection(Vector2Int.down);
 
             //決定を押してコマンド選びの項目へ行く
@@ -458,7 +453,7 @@ public class PlayerControl : MonoBehaviour
     public void SetIsExist(bool isExist)
     {
         if (!isExist)
-            SetDead();
+            StartCoroutine("SetDead");
         _IsExist = isExist;
     }
 
@@ -517,8 +512,9 @@ public class PlayerControl : MonoBehaviour
         _Animator.SetBool("Tired", flag);
     }
 
-    public void SetDead()
+    public IEnumerator SetDead()
     {
+        yield return new WaitForSeconds(2.0f);
         _Animator.SetTrigger("GameOver");
     }
 
