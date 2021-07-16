@@ -2979,7 +2979,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1248544609017795807, guid: 0e9b35902ae9586489e6c3094d985f7d, type: 3}
       propertyPath: _PanelIndex
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1248544609017795807, guid: 0e9b35902ae9586489e6c3094d985f7d, type: 3}
       propertyPath: _canTurnOver
@@ -3035,7 +3035,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7362986322330178919, guid: 0e9b35902ae9586489e6c3094d985f7d, type: 3}
       propertyPath: _PanelIndex
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7362986322330178919, guid: 0e9b35902ae9586489e6c3094d985f7d, type: 3}
       propertyPath: _canTurnOver
