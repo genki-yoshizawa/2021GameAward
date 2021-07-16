@@ -78,7 +78,6 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         string curStageName = SceneManager.GetActiveScene().name;
         if(curStageName == "MenuScene")
         {
-            Debug.Log("メニューシーン");
             if(firstMenu)
             {
                 
@@ -105,7 +104,6 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         }
         else
         {
-            Debug.Log("その他のシーン");
             firstMenu = true;
 
             for (int i = 0; i < _ChidCount; i++)
@@ -228,14 +226,16 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
             GameObject obj = this.gameObject.transform.GetChild(i).gameObject;
             if (obj.GetComponent<Stage>().GetClear() == false)
             {
+                Debug.Log(i + "がまだ未達成");
                 allStageClear = false;
+                break;
             }
         }
 
         if (allStageClear)
         {
             //ムービー流す
-            Debug.Log("Movie流すよ");
+            //Debug.Log("Movie流すよ");
             SceneManager.LoadScene("MovieScene");
             return;
         }
