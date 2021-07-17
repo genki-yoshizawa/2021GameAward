@@ -161,8 +161,7 @@ public class GameManagerScript : MonoBehaviour
     
     public void SetClear()
     {
-        _TurnManager.GetComponent<TurnManager>().enabled = false;
-        _GameUI.SetActive(false);
+        SetPause();
     }
 
     public void StartEnemyMovie(bool isFront)
