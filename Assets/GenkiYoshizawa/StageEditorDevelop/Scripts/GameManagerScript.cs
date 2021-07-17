@@ -190,7 +190,7 @@ public class GameManagerScript : MonoBehaviour
 
         GameObject movieObj = Instantiate(_EnemyPowerUpMovie);
         movieObj.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
-        movieObj.transform.parent = _GameUI.transform;
+        movieObj.transform.SetParent(_GameUI.transform);
         movieObj.GetComponent<RectTransform>().localPosition = new Vector3(0f, 0f, 0f);
 
         movieObj.GetComponent<VideoPlayer>().loopPointReached += EnemyIsMovieDown;
@@ -234,7 +234,6 @@ public class GameManagerScript : MonoBehaviour
         {
             yield return null;
         }
-
         Destroy(movieObj);
 
         // ポーズ終了
