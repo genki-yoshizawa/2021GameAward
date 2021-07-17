@@ -8,6 +8,7 @@ public class ClearScreen : MonoBehaviour
 {
 
     //Gauss _Gauss;
+    [SerializeField] private RawImage _Gauss;
     GameObject _Pause = null;
     [SerializeField] private Animator _StarAnimator;
     [SerializeField] private Animator _ClearScreenAnimator;
@@ -89,6 +90,7 @@ public class ClearScreen : MonoBehaviour
         _Intencity += Time.deltaTime;
 
         //_Gauss.Resolution = (int)((_Intencity/_GaussTime) * 20);
+        _Gauss.GetComponent<GaussShaderGraphScript>().GaussStart();
     }
 
     void ClearScreenAnim()
@@ -154,8 +156,9 @@ public class ClearScreen : MonoBehaviour
 
         if (/*Input.GetKeyDown("joystick button 1")*/Input.GetButtonDown("Controller_B") || Input.GetKeyDown(KeyCode.Return))
         {
-            this.gameObject.SetActive(false);
+            _Gauss.GetComponent<GaussShaderGraphScript>().GaussReset();
 
+            this.gameObject.SetActive(false);
             
 
             if (StageManager.Instance.GetChoiceStageObject().GetComponent<Stage>().GetClear())

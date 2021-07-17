@@ -9,7 +9,7 @@ public class GameOverScreen : MonoBehaviour
 
     //[SerializeField]
     //Gauss _Gauss;
-
+    [SerializeField] private RawImage _Gauss;
     //[SerializeField]
     GameObject _Pause = null;
 
@@ -55,6 +55,8 @@ public class GameOverScreen : MonoBehaviour
         _Intencity += Time.deltaTime;
 
         //_Gauss.Resolution = (int)((_Intencity / _GaussTime) * 20);
+        _Gauss.GetComponent<GaussShaderGraphScript>().GaussStart();
+
     }
 
     void GameOverScreenAnim()
@@ -87,6 +89,9 @@ public class GameOverScreen : MonoBehaviour
 
         if (/*Input.GetKeyDown("joystick button 1")*/Input.GetButtonDown("Controller_B") || Input.GetKeyDown(KeyCode.Return))
         {
+            _Gauss.GetComponent<GaussShaderGraphScript>().GaussReset();
+
+
             string restartStageName = SceneManager.GetActiveScene().name;
             SceneManager.LoadScene(restartStageName);
         }
