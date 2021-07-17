@@ -101,6 +101,8 @@ public class BlockControl : MonoBehaviour
                 time = _SwapAnimTime - _PassedTime;
                 _PassedTime = 0.0f;
                 _isSwapAnim = false;
+                // ネズミのフラグも落とす
+                SetIsSwapAnimEnemyFlg(false);
             }
             else
                 _PassedTime += time;
@@ -252,7 +254,7 @@ public class BlockControl : MonoBehaviour
         {
             targetBlockLocalPosition.Add(target.GetComponent<BlockConfig>().GetBlockLocalPosition());
         }
-        
+
         // 配列要素入れ替え処理
         // ゲームマネージャー内の配列入れ替え
         gameManagerScript.SwapBlockArray(targetBlock);
@@ -357,8 +359,21 @@ public class BlockControl : MonoBehaviour
         return targetBlock;
     }
     
+    // エネミーの持つPanelSwapAnimフラグを上げ下げする
+    private void SetIsSwapAnimEnemyFlg(bool flg)
+    {
+        foreach(GameObject e in _GameManager.GetComponent<GameManagerScript>().GetEnemys())
+        {
+            if(e.GetComponent<EnemyControl>().GetLocalPosition() != GetComponent<BlockConfig>().GetBlockLocalPosition())
+                continue;
 
-    public void SetisSwapAnim() { _isSwapAnim = true; }
+            e.GetComponent<EnemyControl>().SetIsPanelAnimation(flg);
+        }
+    }
+
+    public void SetisSwapAnim() {
+        _isSwapAnim = true;
+    }
     public void SetSwapGlobalPosition(Vector3 pos) { _SwapGlobalPosition = pos; }
     public void SetStartGlobalPosition() { _StartGlobalPosition = transform.position; }
 

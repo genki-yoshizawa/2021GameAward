@@ -117,12 +117,24 @@ public class TurnManager : MonoBehaviour
 
     public void SetTurnLimit(int limit) { _TurnLimit = limit; }
 
+    // 吉澤弦気
+    // EnemyTurnをbool値にしてエネミーターンが終わるまで待つように処理内容を書き換えました(2021/7/17)
     private IEnumerator EnemyTurn()
     {
         yield return new WaitForSeconds(0.75f);
 
-        foreach (var enemy in _EnemyScript)
-            enemy.EnemyTurn();
+        bool enemyTurnEnd = false;
+
+        while (!enemyTurnEnd)
+        {
+            enemyTurnEnd = true;
+            foreach (var enemy in _EnemyScript)
+            {
+                if (!enemy.EnemyTurn())
+                    enemyTurnEnd = false;
+            }
+            yield return null;
+        }
 
         _BlockTurn = true;
     }

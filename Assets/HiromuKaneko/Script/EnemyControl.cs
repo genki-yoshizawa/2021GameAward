@@ -314,7 +314,9 @@ public class EnemyControl : MonoBehaviour
 
     }
 
-    public void EnemyTurn()
+    // ãg‡Vå∑ãC
+    // boolílÇï‘Ç∑ÇÊÇ§Ç…ÇµÇ‹ÇµÇΩ(2021/7/17)
+    public bool EnemyTurn()
     {
         if(_IsPanelAnimation == false)
         {
@@ -360,8 +362,9 @@ public class EnemyControl : MonoBehaviour
                     }
                 }
             }
-
+            return true;
         }
+        return false;
     }
 
     // åoòHíTçıÅ@ãﬂäÒÇÈ
@@ -1076,6 +1079,7 @@ public class EnemyControl : MonoBehaviour
             {
                 var blockConfig = transform.parent.parent.GetComponent<BlockConfig>();
                 _EnemyLocalPosition = blockConfig.GetBlockLocalPosition();
+                SetIsPanelAnimation(true);
                 return;
             }
         }
