@@ -343,6 +343,8 @@ public class PlayerControl : MonoBehaviour
             
             var blockScript = _FrontBlock.GetComponent<BlockConfig>();
 
+            _CommandTop = _CanMove;
+
             _CommandScript.SetUnder(!isUnder);
             _CommandScript.SetActPattern(blockScript, enemy, _IsFront, _CanMove);
             _CommandScript.SetDraw(true);
@@ -437,6 +439,7 @@ public class PlayerControl : MonoBehaviour
                 var enemy = CheckEnemy(_LocalPosition + _Direction);
 
                 _CommandScript.UnactiveCommand(_CommandTop, enemy);
+                _CommandTop = true;
             }
         }
 
