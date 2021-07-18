@@ -100,7 +100,7 @@ MonoBehaviour:
   _WallRebornTurn: 1
   _XAxis: 0
   _ZAxis: 0
-  _LocalOffset: 0.3
+  _LocalOffset: 0.38
 --- !u!114 &4711114392442453982
 MonoBehaviour:
   m_ObjectHideFlags: 0
